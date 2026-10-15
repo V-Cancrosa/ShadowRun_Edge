@@ -1,0 +1,2961 @@
+{
+  "TYPES": {
+    "Actor": {
+      "Critter": "Stworzenie",
+      "NPC": "Płotka/BN",
+      "Player": "Postać gracza",
+      "Spirit": "Duch",
+      "Vehicle": "Pojazd/Dron",
+      "sprite": "Sprite",
+      "host": "Host"
+    },
+    "Item": {
+      "adeptpower": "Moc adepta",
+      "critterpower": "Moc stworzenia",
+      "complexform": "Forma złożona",
+      "spritepower": "Moc sprite'a",
+      "contact": "Kontakt",
+      "echo": "Echo",
+      "focus": "Fokus",
+      "gear": "Sprzęt",
+      "lifestyle": "Styl życia",
+      "martialartstyle": "Styl sztuk walki",
+      "martialarttech": "Technika sztuk walki",
+      "metamagic": "Metamagia",
+      "quality": "Cecha",
+      "ritual": "Rytuał",
+      "sin": "SIN",
+      "skill": "Umiejętność językowa/wiedzy",
+      "software": "Oprogramowanie",
+      "spell": "Czar",
+      "weapon": "Broń",
+      "mod": "Modyfikacja sprzętu"
+    }
+  },
+  "ACTOR": {
+    "TypeCritter": "Stworzenie",
+    "TypeNpc": "Płotka/BN",
+    "TypePlayer": "Postać gracza",
+    "TypeSpirit": "Duch",
+    "TypeVehicle": "Pojazd/Dron"
+  },
+  "ITEM": {
+    "TypeAdeptpower": "Moc adepta",
+    "TypeCritterpower": "Moc stworzenia",
+    "TypeComplexform": "Forma złożona",
+    "TypeContact": "Kontakt",
+    "TypeEcho": "Echo",
+    "TypeGear": "Sprzęt",
+    "TypeLifestyle": "Styl życia",
+    "TypeMartialartstyle": "Styl sztuk walki",
+    "TypeMartialarttech": "Technika sztuk walki",
+    "TypeMetamagic": "Metamagia",
+    "TypeQuality": "Cecha",
+    "TypeRitual": "Rytuał",
+    "TypeSin": "SIN",
+    "TypeSkill": "Umiejętność językowa/wiedzy",
+    "TypeSpell": "Czar",
+    "TypeWeapon": "Broń"
+  },
+  "SYSTEM": {
+    "Sidebar": {
+      "readme": "Patreon",
+      "bugs": "Zgłoś błąd",
+      "release_notes": "Informacje o wydaniu"
+    }
+  },
+  "shadowrun6-eden": {
+    "Shadowrun6ActorSheetPC": "Karta postaci SR6",
+    "Shadowrun6ActorSheetNPC": "Karta BN SR6",
+    "Shadowrun6ActorSheetVehicle": "Karta pojazdu SR6",
+    "SR6ItemSheet": "Karta przedmiotu SR6",
+    "SR6ActiveEffectConfig": "Konfiguracja efektu SR6",
+    "PDFSheet": "Karta PDF tylko do odczytu"
+  },
+  "PDFSheet.no_src": "Najpierw zmień konfigurację karty na domyślną kartę strony PDF, ustaw adres URL pliku PDF, a następnie przełącz z powrotem na kartę PDF tylko do odczytu.",
+  "PDF": {
+    "folder": "Zasady Shadowrun 6e",
+    "page_abbr": "s.",
+    "book": {
+      "astral_ways": "Astral Ways",
+      "bestial_nature": "Bestial Nature",
+      "body_shop": "Body Shop",
+      "collapsing_now": "Collapsing Now",
+      "companion": "Sixth World Companion",
+      "core": "Podręcznik główny",
+      "core_seattle": "Podręcznik główny (Seattle)",
+      "core_berlin": "Podręcznik główny (Berlin)",
+      "de_alpen": "Datapuls Alpen",
+      "de_berlin2080": "Berlin 2080",
+      "de_bundeswehr": "Datapuls Bundeswehr",
+      "de_feuerlaeufer": "Datapuls Feuerlaeufer",
+      "de_other": "Inne źródła niemieckie",
+      "de_piraten": "Datapuls Piraten der Deutschen Bucht",
+      "de_revierbericht": "Revierbericht",
+      "de_sota2081": "Datapuls SOTA2081",
+      "de_sota2082": "Datapuls SOTA2082",
+      "de_sota2083": "Datapuls SOTA2083",
+      "de_westphalen": "Datapuls Westphalen",
+      "dealers_of_death": "Dealers of Death",
+      "double_clutch": "Double Clutch",
+      "emerald": "Emerald City",
+      "firing_squad": "Firing Squad",
+      "hack_slash": "Hack & Slash",
+      "kechibi": "Kechibi Code",
+      "krime": "Krime Katalog",
+      "lofwyr": "Lofwyr's Legions",
+      "no_future": "No Future",
+      "power_plays": "Power Plays",
+      "shadow_cast": "Shadow Cast",
+      "sif_new_orleans": "New Orleans",
+      "slip_streams": "Slip Streams",
+      "smooth_operations": "Smooth Operations",
+      "street_wyrd": "Street Wyrd",
+      "tarnished_star": "Tarnished Star"
+    },
+    "code": {
+      "astral_ways": "AW",
+      "bestial_nature": "BEST",
+      "body_shop": "BS",
+      "collapsing_now": "COLL",
+      "companion": "6WC",
+      "core": "Core",
+      "de_alpen": "Alpen",
+      "de_berlin2080": "B2080",
+      "de_bundeswehr": "Bundeswehr",
+      "de_feuerlaeufer": "FEUERL",
+      "de_other": "Inne DE",
+      "de_piraten": "PIR",
+      "de_revierbericht": "Revier",
+      "de_sota2081": "SOTA2081",
+      "de_sota2082": "SOTA2082",
+      "de_sota2083": "SOTA2083",
+      "de_westphalen": "Westphalen",
+      "dealers_of_death": "DD",
+      "double_clutch": "DC",
+      "emerald": "Emerald",
+      "firing_squad": "FS",
+      "hack_slash": "HnS",
+      "kechibi": "KC",
+      "krime": "KK",
+      "lofwyr": "LL",
+      "no_future": "NF",
+      "power_plays": "PP",
+      "shadow_cast": "SC",
+      "sif_new_orleans": "New Orleans",
+      "slip_streams": "SLIP",
+      "smooth_operations": "SO",
+      "street_wyrd": "WYRD",
+      "tarnished_star": "TS"
+    }
+  },
+  "Shadowrun6ActorSheetNPC": "Płotki",
+  "QUALITY_CATEGORIES": {
+    "ADVANTAGE": "Cecha pozytywna",
+    "DISADVANTAGE": "Cecha negatywna"
+  },
+  "attrib": {
+    "agi": "Zręczność",
+    "agi_short": "ZRĘ",
+    "bod": "Budowa",
+    "bod_short": "BUD",
+    "cha": "Charyzma",
+    "cha_short": "CHA",
+    "dr": "Wartość Obrony",
+    "dr_short": "WO",
+    "edg": "Edge",
+    "edg_short": "EDG",
+    "ess": "Esencja",
+    "essence": "Esencja",
+    "ess_short": "ESE",
+    "ini": "Inicjatywa",
+    "ini_short": "INI",
+    "inia": "Inicjatywa astralna",
+    "inia_short": "A.INI",
+    "inim": "Inicjatywa w Matrycy",
+    "inim_short": "M.INI",
+    "int": "Intuicja",
+    "int_short": "INT",
+    "log": "Logika",
+    "log_short": "LOG",
+    "mag": "Magia",
+    "mag_short": "MAG",
+    "rea": "Reakcja",
+    "rea_short": "REA",
+    "res": "Rezonans",
+    "res_short": "REZ",
+    "str": "Siła",
+    "str_short": "SIŁ",
+    "wil": "Siła Woli",
+    "wil_short": "SW",
+    "max_augment": "Twój modyfikator ze wszczepów przekracza 4. Do atrybutu stosowane jest maksymalnie 4.",
+    "initiation": "Inicjacja",
+    "submersion": "Zanurzenie",
+    "a": "Atak",
+    "s": "Podstęp",
+    "d": "Przetwarzanie danych",
+    "f": "Zapora",
+    "deviceRating": "Poziom urządzenia",
+    "encryptionRating": "Poziom szyfrowania"
+  },
+  "skill": {
+    "astral": "Astral",
+    "athletics": "Atletyka",
+    "biotech": "Biotechnologia",
+    "close_combat": "Walka wręcz",
+    "con": "Oszustwo",
+    "conjuring": "Przywoływanie",
+    "cracking": "Łamanie zabezpieczeń",
+    "electronics": "Elektronika",
+    "enchanting": "Zaklinanie",
+    "engineering": "Inżynieria",
+    "exotic_weapons": "Broń egzotyczna",
+    "firearms": "Broń palna",
+    "influence": "Wpływ",
+    "outdoors": "Przetrwanie",
+    "perception": "Percepcja",
+    "piloting": "Pilotaż",
+    "sorcery": "Czarnoksięstwo",
+    "stealth": "Skradanie",
+    "tasking": "Zadaniowanie"
+  },
+  "label.skill": "Umiejętność",
+  "section.attributes": "Atrybuty",
+  "shadowrun6": {
+    "actor": {
+      "actions": "Akcje",
+      "actions_major": "Główne",
+      "actions_minor": "Poboczne",
+      "editable": "Edytowalne",
+      "initiative": "Inicjatywa",
+      "initiative_astral": "Inicjatywa astralna",
+      "metatype": "Metatyp",
+      "name": "Imię",
+      "nav": {
+        "basics": "Podstawy",
+        "biography": "Biografia",
+        "combat": "Walka",
+        "description": "Opis",
+        "equip": "Ekwipunek",
+        "input": "Wprowadzanie",
+        "magic": "Magia",
+        "matrix": "Matryca",
+        "overview": "Przegląd",
+        "skills": "Umiejętności",
+        "vehicles": "Pojazdy",
+        "main": "Główne"
+      },
+      "skills": "Umiejętności",
+      "spells": "Czary"
+    },
+    "adeptpower": {
+      "activation": "Aktywacja",
+      "activation_major": "Akcja główna",
+      "activation_minor": "Akcja poboczna",
+      "activation_passive": "Pasywna",
+      "cost": "Koszt PM",
+      "haslevel": "Ma poziomy",
+      "pp": "PM",
+      "perLevel": "za poziom"
+    },
+    "autosoft_types": {
+      "clearsight": "Wyrazisty obraz",
+      "electronic_warfare": "Walka elektroniczna",
+      "evasion": "Unikanie",
+      "maneuver": "Manewrowanie",
+      "stealth": "Skradanie",
+      "targeting": "Celowanie"
+    },
+    "critterpower": {
+      "actiontitle": "Akcja",
+      "action": {
+        "auto": "Automatyczna",
+        "major": "Główna",
+        "minor": "Poboczna"
+      }
+    },
+    "attack_rating": {
+      "astral": "Magiczna Wartość Ataku",
+      "matrix": "Wartość Ataku w Matrycy",
+      "physical": "Fizyczna Wartość Ataku",
+      "social": "Społeczna Wartość Ataku",
+      "vehicle": "Wartość Ataku pojazdu"
+    },
+    "combat": {
+      "togglePhysical": "Użyj inicjatywy fizycznej",
+      "toggleMatrix": "Użyj inicjatywy w Matrycy",
+      "toggleAstral": "Użyj inicjatywy astralnej"
+    },
+    "complexform": {
+      "duration": "Czas trwania",
+      "fading": "Wartość zanikania",
+      "oppAttr1": "Atrybut przeciwny 1",
+      "oppAttr2": "Atrybut przeciwny 2",
+      "skill": "Umiejętność",
+      "threshold": "Próg"
+    },
+    "contact": {
+      "rating_short": "Wpł",
+      "rating": "Wpływy",
+      "loyalty": "Lojalność",
+      "loyalty_short": "Loj",
+      "favors": "Przysługi",
+      "favors_short": "Prz",
+      "legwork": "Wywiad",
+      "type": "Rodzaj",
+      "pronouns": "Zaimki"
+    },
+    "defense": {
+      "astral": "Walka astralna",
+      "drain": "Odparcie drenażu",
+      "fading": "Odparcie zanikania",
+      "damage_astral": "Odporność na obr. astralne",
+      "damage_physical": "Odporność na obr. fizyczne",
+      "physical": "Ataki",
+      "spells_direct": "Czary bezpośrednie",
+      "spells_indirect": "Czary pośrednie",
+      "spells_other": "Inne czary",
+      "toxin": "Odporność na toksyny",
+      "special": "Nakłada też status równy liczbie sukcesów netto.",
+      "vehicle": "Obrona przed atakami i taranowaniem"
+    },
+    "defense_rating": {
+      "label": "Wartość Obrony",
+      "astral": "Astralna Wartość Obrony",
+      "matrix": "Wartość Obrony w Matrycy",
+      "physical": "Fizyczna Wartość Obrony",
+      "social": "Społeczna Wartość Obrony",
+      "vehicle": "Wartość Obrony pojazdu"
+    },
+    "derived": {
+      "composure": "Opanowanie",
+      "defense_rating": "Wartość Obrony",
+      "judge_intentions": "Ocena intencji",
+      "lift_carry": "Podnoszenie / Noszenie",
+      "movement": {
+        "label": "Ruch / Sprint",
+        "sprint_result": "{name} przebiega sprintem {metersSprinted} m.",
+        "meter_short": "m"
+      },
+      "memory": "Pamięć",
+      "matrix_perception": "Percepcja w Matrycy",
+      "heal": {
+        "physical": "Leczenie fizyczne",
+        "stun": "Leczenie psychiczne"
+      }
+    },
+    "edge_action": {
+      "anticipation": "Przewidywanie",
+      "big_speech": "Wielka przemowa",
+      "bring_the_drama": "Podkręć dramatyzm",
+      "called_shot_disarm": "Strzał mierzony – rozbrojenie",
+      "called_shot_vitals": "Strzał mierzony – czułe punkty",
+      "fire_from_cover": "Ostrzał zza osłony",
+      "knockout_blow": "Nokautujący cios",
+      "shank": "Dźgnięcie"
+    },
+    "edge_boost": {
+      "add_edge_pool": "Dodaj Edge do puli kości",
+      "buy_auto_hit": "Kup jeden automatyczny sukces",
+      "count_2_glitch": "Dwójki celu liczą się jako jedynki komplikacji",
+      "create_special": "Stwórz efekt specjalny",
+      "edge_action": "Akcja Edge – (1-5)",
+      "give_ally_1_edge": "Daj sojusznikowi 1 Edge",
+      "heal_1_physic": "Wylecz 1 punkt obrażeń fizycznych",
+      "heal_1_stun": "Wylecz 1 pole obrażeń ogłuszających",
+      "negate_1_edge": "Anuluj 1 Edge przeciwnika",
+      "plus_1_roll": "+1 do wyniku kości",
+      "plus_3_ini": "Dodaj 3 do wyniku inicjatywy",
+      "reroll_failed": "Przerzuć wszystkie nieudane kości",
+      "reroll_opponent_one": "Przerzuć kość przeciwnika",
+      "reroll_one": "Przerzuć kość"
+    },
+    "gear": {
+      "subtype": {
+        "ACCESSORY": "Akcesorium",
+        "AMMUNITION": "Amunicja",
+        "ARMOR_BODY": "Pancerz",
+        "ARMOR_SOCIAL": "Ubranie opancerzone",
+        "ARMOR_CLOTHES": "Zwykłe ubranie",
+        "ARMOR_HELMET": "Hełm",
+        "ARMOR_SHIELD": "Tarcza",
+        "ASSAULT_CANNON": "Działko szturmowe",
+        "ATVS": "Quad",
+        "AUDIO": "Urządzenie audio",
+        "AUDIO_ENHANCEMENT": "Ulepszenie audio",
+        "BIKES": "Motocykl",
+        "BIOTECH": "Biotechnologia",
+        "BIOWARE_COSMETICS": "Bioware kosmetyczny",
+        "BIOWARE_CULTURED": "Bioware hodowany",
+        "BIOWARE_STANDARD": "Zwykły bioware",
+        "BIOWARE_IMPLANT_WEAPON": "Biobroń",
+        "BIOWARE_DERMAL": "Bioware skórny",
+        "BIOSENSE": "Biozmysły",
+        "SYMBIONT": "Symbiont",
+        "BLADES": "Ostrze",
+        "BOATS": "Łódź",
+        "BOWS": "Łuk",
+        "BALLISTAS": "Balista",
+        "BREAKING": "Włamywanie",
+        "BTL": "BTL",
+        "CANNONS_LAUNCHERS": "Działa i wyrzutnie",
+        "CARS": "Samochód",
+        "CLOSE_COMBAT": "Walka wręcz",
+        "CLUBS": "Pałka",
+        "COMMLINK": "Komlink",
+        "COMMUNICATION": "Łączność i zagłuszanie",
+        "CROSSBOWS": "Kusza",
+        "CYBER_BODYWARE": "Cyberware ciała",
+        "CYBER_COSMETICS": "Cyberware kosmetyczny",
+        "CYBER_EARWARE": "Cyberware uszu",
+        "CYBER_EYEWARE": "Cyberware oczu",
+        "CYBER_HEADWARE": "Cyberware głowy",
+        "CYBER_IMPLANT_WEAPON": "Wszczepiona cyberbroń",
+        "CYBER_LIMB_ACCESSORY": "Akcesorium cyberkończyny",
+        "CYBER_LIMB_ENHANCEMENT": "Ulepszenie cyberkończyny",
+        "CYBER_LIMBS": "Cyberkończyna",
+        "CYBERNETIC_RESTRAINT": "Cybernetyczne kajdany",
+        "COSMETIC": "Cyberware kosmetyczny",
+        "CYBERDECK": "Cyberdeck",
+        "CYBERJACK": "Cyberjack",
+        "ATTRIBUTE_CODEMOD": "Kodmod atrybutu",
+        "CORE_CODEMOD": "Kodmod rdzenia",
+        "PROCESSOR": "Procesor",
+        "IO": "We/Wy",
+        "DIGITAL_WEAPON": "Broń cyfrowa",
+        "DRUGS": "Narkotyk",
+        "PERFUME": "Perfumy",
+        "ESPIONAGE": "Szpiegostwo",
+        "ELECTRONIC_ACCESSORIES": "Akcesorium elektroniczne",
+        "EXPLOSIVES": "Materiał wybuchowy",
+        "FIREARMS": "Broń palna",
+        "FIREARMS_ACCESSORY": "Akcesorium do broni",
+        "FIXED_WING": "Stałopłat",
+        "FOCI_ENCHANTING": "Fokus zaklinania",
+        "FOCI_METAMAGIC": "Fokus metamagii",
+        "FOCI_POWER": "Fokus mocy",
+        "FOCI_QI": "Fokus qi",
+        "FOCI_SPELL": "Fokus czarów",
+        "FOCI_SPIRIT": "Fokus duchów",
+        "FOCI_WEAPON": "Fokus broni",
+        "GENOM_CHANGES": "Zmiana genomu",
+        "EXOTIC_METAGENETICS": "Egzotyczna metagenetyka",
+        "MICRO_ENVIRONADAPT": "Mikroadaptacja środowiskowa",
+        "COMPLEMENTAL_GENETICS": "Genetyka uzupełniająca",
+        "GRAPPLE_GUN": "Wyrzutnia kotwiczki",
+        "GRAV": "Pojazd z napędem grawitacyjnym",
+        "GRENADES": "Granat",
+        "GRENADES_MINI": "Minigranat",
+        "HOLDOUTS": "Pistolet kieszonkowy",
+        "HOVERCRAFT": "Poduszkowiec",
+        "ID_CREDIT": "Dokument lub kredstick",
+        "INDUSTRIAL_CHEMICALS": "Chemikalia przemysłowe",
+        "INSTRUMENT": "Instrument muzyczny",
+        "INSTRUMENT_ACCESSORY": "Akcesorium do instrumentu",
+        "LARGE_DRONES": "Duży dron",
+        "LAUNCHERS": "Wyrzutnia",
+        "LAV": "Pojazd niskiego pułapu",
+        "LTAV": "Pojazd lżejszy od powietrza",
+        "LIVING_PERSONA": "Żywa persona",
+        "MACHINE_GUNS": "Karabin maszynowy",
+        "MACHINE_PISTOLS": "Pistolet maszynowy",
+        "MAGICAL_FORMULA": "Formuła magiczna",
+        "MAGIC_SUPPLIES": "Zaopatrzenie magiczne",
+        "MAGIC_LODGE": "Loża magiczna",
+        "MICRODRONES": "Mikrodron",
+        "MINIDRONES": "Minidron",
+        "MEDIUM_DRONES": "Średni dron",
+        "PREPARATION": "Preparat",
+        "PREPARATION_EXTENDED": "Preparat (wzmocniona moc)",
+        "MISSILES": "Pocisk kierowany",
+        "MODIFICATION": "Modyfikacja",
+        "MOD_LAYOUT": "Mod układu",
+        "MOD_CORE": "Mod rdzenia",
+        "MOD_TIRES": "Opony",
+        "MOD_HANDLING": "Mod prowadzenia",
+        "MOD_TRAILER": "Przyczepy i koszyki boczne",
+        "MOD_INTERIOR": "Mod siedzeń i ładowni",
+        "MOD_CARGO": "Mod CF",
+        "MOD_FORM": "Kształt",
+        "MOD_ARMOR": "Podstawa",
+        "MOD_ELEMENTS": "Element",
+        "MOD_ACC": "Mod przyspieszenia",
+        "MOD_EFFICIENCY": "Mod wydajności",
+        "MOD_SPEED": "Mod prędkości",
+        "MOD_COAT": "Elektroniczna powłoka poszycia",
+        "MOD_MISC": "Inny mod elektroniczny",
+        "MOD_PILOT": "Mod pilota",
+        "MOD_MOUNT": "Stanowisko broni",
+        "MOD_RACK": "Stojak na drony",
+        "MOD_OTHERS": "Inny mod punktu montażowego",
+        "MOD_PROPULSION": "Dodatkowy układ napędowy",
+        "NANITES_COSMETIC": "Nanity kosmetyczne",
+        "NANITES_THERAPEUTIC": "Nanity terapeutyczne",
+        "NANITES_BIOAMP": "Nanity bioamplifikujące",
+        "NANITES_UTILITIES": "Nanity użytkowe",
+        "NANITES_TRANSIENT": "Nanity wyłącznie przejściowe",
+        "NANOTECH_KIT": "Zestaw nanotech",
+        "THERAPEUTIC": "Terapeutyczne",
+        "AUGMENTICS": "Augmentyka",
+        "COMPLEMENTARY_GENETIC_MODS": "Uzupełniający mod genetyczny",
+        "TRANSGENICS": "Transgenika",
+        "TRANSGENIC_BIOWARE": "Bioware transgeniczny",
+        "NANOWARE_HARD": "Twardy system nanoware",
+        "NANOWARE_SOFT": "Miękki system nanoware",
+        "NANO_CYBERWARE": "Nanocyberware",
+        "NANOTECH_EQUIPMENT": "Sprzęt nanotech",
+        "OPTICAL": "Optyka",
+        "OTHER_PROGRAMS": "Inny program",
+        "OTHER_CLOSE": "Inna broń do walki wręcz",
+        "OTHER_SPECIAL": "Broń specjalna",
+        "PISTOLS_HEAVY": "Ciężki pistolet",
+        "PISTOLS_LIGHT": "Lekki pistolet",
+        "PROJECTILES": "Pocisk miotany",
+        "RFID": "RFID",
+        "#RIFLES": "Karabin",
+        "RIFLE_ASSAULT": "Karabin szturmowy",
+        "RIFLE_HUNTING": "Sztucer myśliwski",
+        "RIFLE_SNIPER": "Karabin snajperski",
+        "RIGGER_CONSOLE": "Konsola riggera",
+        "ROCKETS": "Rakieta",
+        "ROTORCRAFT": "Wiropłat",
+        "SECURITY": "Zabezpieczenia",
+        "SENSOR": "Czujnik",
+        "SENSOR_HOUSING": "Obudowa czujnika",
+        "SHOTGUNS": "Strzelba",
+        "SKILLSOFT": "Skillsoft",
+        "SLAP_PATCHES": "Plaster medyczny",
+        "SMALL_DRONES": "Mały dron",
+        "SNIPER_RIFLES": "Karabin snajperski",
+        "SOFTWARE": "Oprogramowanie",
+        "SPACECRAFT": "Statek kosmiczny",
+        "SPECIAL_WEAPONS": "Broń specjalna",
+        "SUBMACHINE_GUNS": "Pistolet maszynowy (SMG)",
+        "SUBMARINES": "Okręt podwodny",
+        "SURVIVAL_GEAR": "Sprzęt survivalowy",
+        "WINTER_GEAR": "Sprzęt zimowy",
+        "SYMBIONTS": "Symbiont",
+        "TAC_NET": "Sieć taktyczna",
+        "DATATERM": "Terminal danych",
+        "CYBERTERM": "Cyberterminal",
+        "BTLS": "BTL",
+        "FILE_STORAGE": "Przechowywanie plików",
+        "TASERS": "Paralizator",
+        "THROWERS": "Miotacz",
+        "THROWING": "Broń miotana",
+        "DMSO": "Pneumatyczny pakiet żelu DMSO",
+        "DART": "Pneumatyczna strzałka",
+        "TRANSGENETICS": "Transgenetyka",
+        "TACNET_PROGRAM": "Program sieci taktycznej",
+        "TOOLS": "Narzędzie",
+        "SPARE_PARTS": "Część zamienna",
+        "PLACEHOLDERS": "Towar standardowy",
+        "TOXINS": "Toksyna",
+        "TRUCKS": "Pikap",
+        "TRACKED": "Pojazd gąsienicowy",
+        "SPECIAL_VEHICLES": "Pojazd specjalny",
+        "UNARMED": "Bez broni",
+        "VANS": "Furgonetka lub ciężarówka",
+        "VEHICLE_ACCESSORY": "Akcesorium pojazdu",
+        "VISION_ENHANCEMENT": "Ulepszenie wzroku",
+        "VTOL": "VTOL/VSTOL",
+        "BUS": "Autobus",
+        "PWC": "Skuter wodny",
+        "SHIPS": "Statek",
+        "AIRSHIP": "Sterowiec",
+        "WALKER": "Kroczący pojazd",
+        "WEAPON_SECURITY": "Zabezpieczenie broni",
+        "WHIPS": "Bicze",
+        "LMG": "Lekki karabin maszynowy",
+        "MMG": "Średni karabin maszynowy",
+        "HMG": "Ciężki karabin maszynowy",
+        "HACKING_PROGRAM": "Program hakerski",
+        "BASIC_PROGRAM": "Program podstawowy",
+        "RIGGER_PROGRAM": "Program riggera",
+        "AUTOSOFT": "Autosoft",
+        "DATASOFT": "Datasoft",
+        "MAPSOFT": "Mapsoft",
+        "SHOPSOFT": "Shopsoft",
+        "TALENTSOFT": "Talentsoft",
+        "TEACHSOFT": "Teachsoft",
+        "ESOFT": "E-Soft",
+        "GROUND": "Drony naziemne",
+        "ANTHRO": "Drony antropomorficzne",
+        "AIR": "Drony powietrzne",
+        "AQUATIC": "Drony wodne",
+        "AMMO_TASER": "Paralizator",
+        "AMMO_LIGHT": "Kieszonkowy/lekki pistolet/pistolet maszynowy",
+        "AMMO_HEAVY": "Ciężki pistolet/SMG",
+        "AMMO_RIFLES": "Karabin",
+        "AMMO_DARTS": "Strzałka iniekcyjna",
+        "AMMO_CANNONS": "Działko szturmowe",
+        "AMMO_DMSO": "Pakiet żelu DMSO",
+        "AMMO_MACHINE_GUN": "Karabin maszynowy",
+        "AMMO_INJECTION_BOLT": "Bełt iniekcyjny",
+        "AMMO_BOLT": "Bełt"
+      }
+    },
+    "initiative": {
+      "astral": "Astralna",
+      "physical": "Fizyczna",
+      "matrix": "Matryca"
+    },
+    "item": {
+      "accessories": "Akcesoria",
+      "strWeapon": "Używa Siły",
+      "ammunition": "Amunicja",
+      "attackvalues": "Wart. ataku",
+      "availability": "Dost.",
+      "capacity": "Pojemność",
+      "category": "Kategoria",
+      "damage": "Obrażenia",
+      "defencerating": "Wart. obrony",
+      "description": "Opis",
+      "essence": "Esencja",
+      "feature": "Właściwości",
+      "firemode": {
+        "SS": "Pojedynczy strzał",
+        "SA": "Półautomatyczny",
+        "BF": "Seria",
+        "FA": "Ogień ciągły"
+      },
+      "mastyle": {
+        "category": {
+          "grappling": "Chwyty",
+          "mobility": "Mobilność",
+          "ranged": "Dystansowe",
+          "striking": "Uderzenia",
+          "weapon": "Broń"
+        }
+      },
+      "mode": "Tryby",
+      "mode_ss": "PS",
+      "mode_sa": "PA",
+      "mode_bf": "SR",
+      "mode_fa": "OC",
+      "mode_fa_1m": "Promień 1 m",
+      "mode_fa_2m": "Promień 2 m",
+      "mode_fa_3m": "Promień 3 m",
+      "mode_fa_4m": "Promień 4 m",
+      "mode_fa_5m": "Promień 5 m",
+      "mode_fa_6m": "Promień 6 m",
+      "natural": "Pancerz nat.",
+      "physical_damage": "F",
+      "physical_special_damage": "S",
+      "price": "Cena",
+      "skill": "Umiejętność",
+      "skillspec": "Specjalizacja",
+      "social": "Społeczne",
+      "social_rating": "Wartość społeczna",
+      "stun_damage": "O",
+      "subtype": "Podtyp",
+      "type": "Typ",
+      "vehicle": {
+        "armor.long": "Pancerz",
+        "armor.short": "P",
+        "rigRating.long": "Zestaw kontrolny",
+        "sensor.long": "Czujniki",
+        "sensor.short": "C"
+      }
+    },
+    "itemtype": {
+      "ACCESSORY": "Akcesorium",
+      "AMMUNITION": "Amunicja",
+      "ARMOR": "Pancerz",
+      "ARMOR_ADDITION": "Dodatki do pancerza",
+      "BIOLOGY": "Biologia",
+      "BIOWARE": "Bioware",
+      "CHEMICALS": "Chemikalia",
+      "CYBERWARE": "Cyberware",
+      "CODEMODS": "Kodmody",
+      "DRONES": "Drony",
+      "ELECTRONICS": "Elektronika",
+      "GENETICS": "Geneware",
+      "MAGICAL": "Towary magiczne",
+      "NANOWARE": "Nanoware",
+      "SOFTWARE": "Oprogramowanie",
+      "SURVIVAL": "Sprzęt survivalowy",
+      "TOOLS": "Narzędzia",
+      "VEHICLES": "Pojazdy",
+      "WEAPON_CLOSE_COMBAT": "Broń do walki wręcz",
+      "WEAPON_FIREARMS": "Broń palna",
+      "WEAPON_RANGED": "Broń miotająca",
+      "WEAPON_SPECIAL": "Broń specjalna",
+      "IC": "IC"
+    },
+    "label": {
+      "accessories": "Akcesoria",
+      "adepts": "Adepci",
+      "action": "Akcja",
+      "actionduration": {
+        "minor.short": "Pb",
+        "major.short": "Gł"
+      },
+      "attack_rating": "Wartość Ataku",
+      "attack_rating_short": "WA",
+      "attack_rating_using_vehicle": "Wartość Ataku (pojazd jako broń)",
+      "attribute": "Atrybut",
+      "details": "Szczegóły...",
+      "trait": "Cecha",
+      "trait_pool": "Cecha / Pula",
+      "base": "Bazowo",
+      "belongs_to": "Należy do",
+      "column": {
+        "action": "Akcja",
+        "count": "#",
+        "name": "Nazwa",
+        "nameAnimate": "Imię",
+        "rating": "Poziom"
+      },
+      "attack.short": "A",
+      "attack.long": "Atak",
+      "sleaze.short": "P",
+      "sleaze.long": "Podstęp",
+      "dataproc.short": "D",
+      "dataproc.long": "Przetwarzanie danych",
+      "firewall.short": "Z",
+      "firewall.long": "Zapora",
+      "devicerating.short": "PU",
+      "devicerating.long": "Poziom urządzenia",
+      "d6": "K6",
+      "damage": "Obrażenia",
+      "damage_short": "Obr",
+      "defense": "Obrona",
+      "defense_against": "Obrona przed",
+      "defense_rating": "Wartość Obrony",
+      "delete": "Usuń",
+      "device_mode": "Tryb urządzenia",
+      "devRating": "Poziom urządzenia",
+      "dual_hand": "Oburęczna",
+      "dice": "Kości",
+      "edge_changes_combat": "Zmiany Edge w walce",
+      "edit": "Edytuj",
+      "expertise": "Ekspertyza",
+      "extended_test": "Test rozszerzony",
+      "faster": "Przyspiesz",
+      "features": "Właściwości",
+      "firemode_current": "Aktualny tryb ognia",
+      "firemodes": "Tryby ognia",
+      "force": "Moc",
+      "gender": "Płeć",
+      "legality.illegal.short": "N",
+      "legality.illegal.long": "Nielegalne",
+      "legality.legal.short": "L",
+      "legality.legal.long": "Legalne",
+      "level": "Ma poziomy",
+      "mages": "Magowie",
+      "MagicalGoods": "Towary magiczne",
+      "matrixMonitor": "Monitor Matrycy",
+      "max": "Maksimum",
+      "mode_of_operation": "Tryb działania",
+      "modifications": "Modyfikacje",
+      "modifier": "Mod",
+      "name": "Nazwa",
+      "none": "-",
+      "not_present": "brak",
+      "offroad": "Teren",
+      "onroad": "Droga",
+      "points": "Punkty",
+      "pool": "Pula",
+      "pools": "Pule",
+      "poolmod": "Modyfikator puli",
+      "programs.short": "P",
+      "progSlots": "Gniazda prog.",
+      "rating": "Poziom",
+      "rating_R": "P{rating}",
+      "rating1": "Poziom 1",
+      "rating2": "Poziom 2",
+      "rating3": "Poziom 3",
+      "slower": "Zwolnij",
+      "soak": "Odporność",
+      "soaked": "Zniwelowano {soaked} z {threshold} obrażeń",
+      "specialization": "Specjalizacja",
+      "speed_detail": "Poruszasz się z prędkością {speed} km/h ({speedPerTurn} m na turę). Twój modyfikator do testów wynosi {modifier}.",
+      "threshold": "Próg",
+      "type": "Rodzaj",
+      "value": "Wartość",
+      "wilddie": "Dzika kość"
+    },
+    "lifestyle": {
+      "cost": "Koszt",
+      "paid": "Opłacone",
+      "type": "Rodzaj",
+      "sin": "Powiązany SIN",
+      "street": "Ulica",
+      "squatter": "Dziki lokator",
+      "low": "Niski",
+      "middle": "Średni",
+      "high": "Wysoki",
+      "luxury": "Luksusowy"
+    },
+    "action": {
+      "activate_focus": {
+        "name": "Aktywuj/dezaktywuj fokus",
+        "hint": "Aktywuje lub dezaktywuje związany fokus. Zob. s. 151, SR6."
+      },
+      "avoid_incoming": {
+        "name": "Unik przed ostrzałem",
+        "hint": "Rzuć Reakcja + Atletyka – kara do uniku i przesuń się o tyle metrów, ile masz sukcesów, w wybranym kierunku. Padasz na ziemię (Leżący). W turze można użyć tylko jednej z akcji: Unik przed ostrzałem, Ruch lub Sprint."
+      },
+      "block": {
+        "name": "Blok",
+        "hint": "Dodaj umiejętność Walka wręcz do jednego testu obrony w tej turze."
+      },
+      "call_a_shot": {
+        "name": "Strzał mierzony",
+        "hint": "Twój następny atak zadaje +2 do obrażeń (DV), ale ma karę –4 do puli kości."
+      },
+      "change_device_mode": {
+        "name": "Zmień tryb urządzenia",
+        "hint": "Przełącz tryb urządzenia podłączonego przez DNI."
+      },
+      "command_drone": {
+        "name": "Wydaj polecenie dronowi",
+        "hint": "Wydaj jedno polecenie dronowi lub grupie dronów podłączonych do twojej RCC."
+      },
+      "command_spirit": {
+        "name": "Wydaj polecenie duchowi",
+        "hint": "Wydaj jedno polecenie służby duchowi lub grupie duchów. Zob. s. 146, SR6."
+      },
+      "dismiss_spirit": {
+        "name": "Odpraw ducha",
+        "hint": "Zwolnij ducha ze służby."
+      },
+      "dodge": {
+        "name": "Unik",
+        "hint": "Dodaj umiejętność Atletyka do jednego testu obrony w tej turze."
+      },
+      "drop_object": {
+        "name": "Upuść przedmiot",
+        "hint": "Upuść trzymany przedmiot."
+      },
+      "drop_prone": {
+        "name": "Połóż się",
+        "hint": "Zyskujesz status Leżący. Zob. s. 53, SR6."
+      },
+      "hit_the_dirt": {
+        "name": "Padnij!",
+        "hint": "Błyskawicznie zyskujesz status Leżący. Zob. s. 53, SR6."
+      },
+      "intercept": {
+        "name": "Przechwycenie",
+        "hint": "Jeśli cel jest w zasięgu walki wręcz, a masz niewykorzystaną akcję główną, wykonaj atak poza swoją turą."
+      },
+      "move": {
+        "name": "Ruch",
+        "hint": "Przemieść się o maks. 10 metrów. W turze można użyć tylko jednej z akcji: Unik przed ostrzałem, Ruch lub Sprint."
+      },
+      "multiple_attacks": {
+        "name": "Wiele ataków",
+        "hint": "Rozdziel następny atak na kilka celów, dzieląc pulę kości."
+      },
+      "quick_draw": {
+        "name": "Szybkie dobycie",
+        "hint": "Natychmiast dobądź broń, jeśli masz wymagany sprzęt, cechę lub wszczep."
+      },
+      "reload_smartgun": {
+        "name": "Przeładuj smartguna",
+        "hint": "Przeładuj broń wyposażoną w smartlink."
+      },
+      "shift_perception": {
+        "name": "Zmień percepcję",
+        "hint": "Przełącz się między percepcją świata fizycznego a astralną."
+      },
+      "stand_up": {
+        "name": "Wstań",
+        "hint": "Wstań i usuń status Leżący."
+      },
+      "take_aim": {
+        "name": "Celuj",
+        "hint": "Raz na rundę zyskujesz +1 kość do przyszłego ataku, kumulowane maksymalnie do wartości Siły Woli. Premia przepada, jeśli nie wykonasz potem ataku."
+      },
+      "take_cover": {
+        "name": "Schowaj się za osłoną",
+        "hint": "Zyskujesz osłonę od I do IV. Zob. s. 52, SR6."
+      },
+      "trip": {
+        "name": "Podcięcie",
+        "hint": "Cel musi wykonać test Atletyka + Zręczność z progiem (DV – 2), inaczej się przewraca (Leżący)."
+      },
+      "assist": {
+        "name": "Pomoc",
+        "hint": "Weź udział w teście zespołowym. Twoje sukcesy stają się dodatkowymi kośćmi prowadzącego. Zob. s. 36, SR6."
+      },
+      "astral_projection": {
+        "name": "Projekcja astralna",
+        "hint": "Wyślij duszę w przestrzeń astralną. Zob. s. 160, SR6."
+      },
+      "attack": {
+        "name": "Atak",
+        "hint": "Wykonaj atak. Rodzaje ataków znajdziesz w zakładkach Walka, Magia lub Matryca."
+      },
+      "banish_spirit": {
+        "name": "Wygnaj ducha",
+        "hint": "Zmniejsz liczbę usług przywołanego ducha testem Przywoływanie + Magia przeciwko Mocy × 2. Zob. s. 147, SR6."
+      },
+      "cast_spell": {
+        "name": "Rzuć czar",
+        "hint": "Rzuć czar. Zob. zakładkę Magia."
+      },
+      "cleanse": {
+        "name": "Oczyszczenie",
+        "hint": "Usuń z efektu magicznego jedną godzinę naturalnego zanikania sygnatury astralnej. Można powtarzać. Zob. s. 160, SR6."
+      },
+      "counterspell": {
+        "name": "Przeciwczar",
+        "hint": "Zmniejsz liczbę sukcesów podtrzymywanego czaru lub daj dodatkowe kości do obrony magicznej w promieniu 2 metrów. Zob. s. 143, SR6."
+      },
+      "full_defense": {
+        "name": "Pełna obrona",
+        "hint": "Do końca rundy walki dodajesz Siłę Woli do wszystkich testów obrony."
+      },
+      "manifest": {
+        "name": "Manifestacja",
+        "hint": "Ujawnij swoją formę astralną jako upiorną obecność w świecie fizycznym. Zob. s. 160, SR6."
+      },
+      "observe_in_detail": {
+        "name": "Dokładna obserwacja",
+        "hint": "Wykonaj test Percepcja + Intuicja lub Postrzeganie astralne + Intuicja, aby dokładnie coś zbadać."
+      },
+      "pick_up_put_down_object": {
+        "name": "Podnieś / odłóż przedmiot",
+        "hint": "Ostrożnie podnieś lub odłóż przedmiot. Możesz też przygotować broń."
+      },
+      "ready_weapon": {
+        "name": "Przygotuj broń",
+        "hint": "Przygotuj broń do walki. Możesz przygotować tyle małych broni, ile wynosi twoja Zręczność."
+      },
+      "reload_weapon": {
+        "name": "Przeładuj broń",
+        "hint": "Przeładuj broń bez smartlinka."
+      },
+      "rigger_jump_in": {
+        "name": "Wskoczenie riggera",
+        "hint": "Wskocz do pojazdu lub drona podłączonego do twojej RCC i steruj nim bezpośrednio."
+      },
+      "sprint": {
+        "name": "Sprint",
+        "hint": "Przemieść się o 15 metrów plus liczba sukcesów w teście Atletyka + Zręczność. W turze można użyć tylko jednej z akcji: Unik przed ostrzałem, Ruch lub Sprint."
+      },
+      "summon_spirit": {
+        "name": "Przywołaj ducha",
+        "hint": "Przywołaj ducha testem Przywoływanie + Magia przeciwko Mocy × 2. Zob. s. 146, SR6."
+      },
+      "use_simple_device": {
+        "name": "Użyj prostego urządzenia",
+        "hint": "Obsłuż proste urządzenie, które nie jest podłączone przez DNI."
+      },
+      "use_skill": {
+        "name": "Użyj umiejętności",
+        "hint": "Użyj umiejętności. Zob. zakładkę Umiejętności."
+      },
+      "thread_form": {
+        "name": "Splecenie formy złożonej",
+        "hint": "Spleć formę złożoną w Matrycy za pomocą Elektroniki. Zob. zakładkę Matryca i s. 189, SR6."
+      },
+      "compile_sprite": {
+        "name": "Skompiluj sprite'a",
+        "hint": "Skompiluj sprite'a w Matrycy za pomocą Zadaniowania. Zob. s. 191, SR6."
+      }
+    },
+    "matrix": {
+      "reference.title": "Sekcja pomocnicza",
+      "reference.tooltip": "<p>Ta sekcja służy głównie jako ściąga: które zdolności matrycowe są dostępne na jakim poziomie dostępu, do swobodnego odgrywania.</p><p>Akcje matrycowe wobec urządzeń wykonuje się przyciskiem Operacje matrycowe w sekcji PAN postaci-celu.</p>",
+      "targetActor.title": "Wybierz cel",
+      "targetActor.macro": "Otwórz personę matrycową celu",
+      "targetActor.tooltip": "<p>Otwiera ograniczony podgląd karty celu. Widać na nim personę matrycową, jeśli cel jest obecny w Matrycy przez AR lub VR.</p><p>Żeby (od)znaczyć token jako cel, najedź na niego myszą i naciśnij T.</p><p>Ten przycisk możesz przeciągnąć na pasek makr.</p>",
+      "target_persona.title": "Cel: persona",
+      "target_persona.tooltip": "<p>Ta sekcja pokazuje akcje matrycowe, które mogą bezpośrednio celować w personę.</p><p>Akcje matrycowe wobec urządzeń wykonuje się przyciskiem Operacje matrycowe w sekcji PAN postaci-celu.</p>",
+      "accessLevel": {
+        "outsider": "OBCY",
+        "user": "UŻYTKOWNIK",
+        "admin": "ADMIN",
+        "tooltip_sheetOwner_true": "Poziom dostępu {name} do {device}",
+        "tooltip_sheetOwner_false": "Twój poziom dostępu do celu {device}",
+        "switch": "Kliknij, aby przełączyć poziom dostępu i zobaczyć dostępne akcje matrycowe.",
+        "switch_persona": "<p>To twój aktualny poziom dostępu do tej persony.</p>",
+        "access_level_device": "<p>To twój aktualny poziom dostępu do tego urządzenia.</p><p>Inny poziom dostępu możesz zdobyć po użyciu <em>Wejścia tylnymi drzwiami</em>, <em>Ataku siłowego</em> lub <em>Wejścia przez znany exploit</em>.</p>",
+        "access_level_device_admin": "<p>To twój aktualny poziom dostępu do tego urządzenia.</p><p>Jesteś ADMINEM, bo to twoje urządzenie albo jesteś administratorem PAN.</p>"
+      },
+      "device": {
+        "enable": "Kliknij, aby łączyć się z Matrycą przez to urządzenie.",
+        "disable": "Kliknij, aby przestać łączyć się z Matrycą przez to urządzenie.",
+        "isOffline": "Urządzenie jest offline w Matrycy, bo jest zablokowane (bricked) lub wyłączone.",
+        "unable": "<p>Nie można włączyć tego urządzenia, ponieważ:</p><ul><li>Inne urządzenie już generuje te atrybuty matrycowe.</li><li>To cyberdeck, a masz już włączoną RCC.</li><li>To RCC, a masz już włączony cyberdeck.</li></ul>",
+        "online": "ONLINE",
+        "offline": "OFFLINE",
+        "isAccessDevice": "<p>To urządzenie dostępowe do Matrycy.</p><p>Włączysz je lub wyłączysz na karcie postaci (zakładka Matryca).</p>",
+        "notOnPan": "<p>To urządzenie jest online w Matrycy poza PAN.</p><p>Broni się przed atakami matrycowymi własną Zaporą, równą jego Poziomowi urządzenia.</p>"
+      },
+      "open_operations": "Rozpocznij operacje matrycowe na {item}.",
+      "icon": "Ikona",
+      "persona.initiating": "Persona inicjująca",
+      "persona.defending": "Persona broniąca się",
+      "chat.initiating": "inicjowanie",
+      "chat.validating": "weryfikacja",
+      "chat.defend": "obrona",
+      "roll.defended.success": "Udało ci się obronić przed zdarzeniem w Matrycy.",
+      "roll.defended.failed": "Nie udało ci się obronić przed zdarzeniem w Matrycy.",
+      "linkedAttr.modifier.a": "Ta akcja matrycowa jest powiązana z Atakiem, który masz niższy niż Podstęp. Masz karę do puli kości.",
+      "linkedAttr.modifier.s": "Ta akcja matrycowa jest powiązana z Podstępem, który masz niższy niż Atak. Masz karę do puli kości.",
+      "matrix_damage.short": "M",
+      "failedSoak": "Ikona otrzymuje obrażenia",
+      "no_target": "Ta akcja matrycowa ma zautomatyzowany przebieg testu, jeśli wybierzesz jako cel konkretną ikonę w Matrycy, zamiast rzucać z sekcji pomocniczej."
+    },
+    "matrixaction": {
+      "backdoor_entry": {
+        "name": "Wejście tylnymi drzwiami",
+        "hint": "Użyj tylnych drzwi utworzonych udanym Sondowaniem, aby zdobyć dostęp ADMIN do hosta, urządzenia lub obszaru Matrycy. Sukcesy netto z Sondowania dodają się do tego testu. Sukces nie liczy się jako nielegalny dostęp ADMIN, a porażka usuwa tylne drzwi bez alarmu, choć twój Wynik Nadzoru (OS) i tak rośnie.",
+        "onSuccess.span": "wślizgujesz się przez znalezione tylne drzwi.",
+        "onSuccess.button": "Dopinguj deckera",
+        "onFailure.span": "to włamanie cię przerasta",
+        "onFailure.button": "Każ deckerowi się postarać",
+        "onSuccesfulDefense.span": "antywirus uruchomiony",
+        "onSuccesfulDefense.button": "Poklep obrońcę po plecach",
+        "onFailedDefense.span": "wejście przez tylne drzwi",
+        "onFailedDefense.button": "Nadaj poziom dostępu ADMIN"
+      },
+      "brute_force": {
+        "name": "Atak siłowy",
+        "hint": "Zaatakuj urządzenie bezpośrednio, by szybko zdobyć nielegalny dostęp. Cel jest jednak zawsze zaalarmowany, a wynik GOD rośnie z każdym testem. Przejście od razu do dostępu ADMIN oznacza obronę Siła Woli + (Zapora + 2) i +4 do Wartości Obrony celu.",
+        "onClick": "<p>Czy chcesz zdobyć dostęp ADMIN bez wcześniejszego zdobycia dostępu UŻYTKOWNIK?</p><p>Przejście od razu do dostępu ADMIN oznacza obronę Siła Woli + (Zapora + 2) i +4 do Wartości Obrony celu.</p>",
+        "to_admin": "Inicjujący wybrał atak siłowy prosto na poziom dostępu ADMIN.",
+        "onFailedDefense.span": "atak siłowy",
+        "onFailedDefense.button": "Nadaj poziom dostępu"
+      },
+      "calibration": {
+        "name": "Kalibracja",
+        "hint": "Zwiększ wynik inicjatywy swój i członków drużyny dzielących twój kanał AR o 1 za każde 2 sukcesy. Premia nie może przekroczyć twojego Przetwarzania danych, aktywna może być tylko jedna Kalibracja, spada o 1 co turę walki, a dzielić się nią możesz z liczbą użytkowników równą Poziomowi urządzenia."
+      },
+      "change_icon": {
+        "name": "Zmień ikonę",
+        "hint": "Zastąp ikonę celu zaprojektowaną lub skopiowaną przez siebie. Zmyli to przypadkowych obserwatorów, ale nie zmienia tego, co ujawnia Percepcja matrycowa."
+      },
+      "check_os": {
+        "name": "Sprawdź OS",
+        "hint": "Udany test zdradza twój aktualny Wynik Nadzoru (OS)."
+      },
+      "control_device": {
+        "name": "Kontroluj urządzenie",
+        "hint": "Przejmij długotrwałą zdalną kontrolę nad urządzeniem i używaj go jak właściciel, w granicach swojego poziomu dostępu. Kontrola trwa, dopóki jej nie oddasz lub nie zostaniesz wyrzucony. Automatycznie zawodzi wobec urządzenia, do którego wskoczył rigger."
+      },
+      "crack_file": {
+        "name": "Złam plik",
+        "hint": "Usuń zabezpieczenie z pliku, aby dało się go odczytać."
+      },
+      "crash_program": {
+        "name": "Zawieś program",
+        "hint": "Zawieś jeden uruchomiony program na urządzeniu celu. Musisz wiedzieć, w który program celujesz, zwykle dzięki Percepcji matrycowej lub widząc go w użyciu. Program nie uruchomi się ponownie przed restartem urządzenia."
+      },
+      "data_spike": {
+        "name": "Kolec danych",
+        "hint": "Wyślij szkodliwy kod do persony lub urządzenia. Zadaje obrażenia matrycowe równe połowie twojego atrybutu Atak (w górę) plus 1 pole za każdy sukces netto."
+      },
+      "disarm_data_bomb": {
+        "name": "Rozbrój bombę danych",
+        "hint": "Rozbrój wykrytą bombę danych, zwykle dzięki Percepcji matrycowej. Każdy sukces netto ją usuwa; bez sukcesów netto bomba wybucha."
+      },
+      "device_lock": {
+        "name": "Blokada urządzenia",
+        "hint": "Uniemożliw urządzeniu przejście w tryb offline na tyle rund, ile masz sukcesów netto. Potem możesz raz przedłużyć blokadę o 1 rundę, wydając akcję poboczną."
+      },
+      "denial_of_service": {
+        "name": "Odmowa usługi (DoS)",
+        "hint": "Zalej szumem bezprzewodowe urządzenie lub personę. Do końca następnej rundy walki wszystkie testy z tym urządzeniem mają karę do puli równą sukcesom netto × 2."
+      },
+      "delayed_command": {
+        "name": "Opóźnione polecenie",
+        "hint": "Wyślij polecenie z opóźnieniem, które urządzenie uzna za pochodzące od właściciela. Po sukcesie wykona się po upływie opóźnienia, nawet przy wyłączonej łączności bezprzewodowej. Restart przed wykonaniem je kasuje."
+      },
+      "edit_file": {
+        "name": "Edytuj plik",
+        "hint": "Utwórz, zmień, skopiuj, usuń lub zabezpiecz plik. Każda akcja zmienia jeden szczegół, ciągła edycja wymaga jednej akcji na rundę walki, skopiowane pliki należą do ciebie, zabezpieczonych plików nie da się kopiować, a nierozbrojona wcześniej bomba danych wybucha."
+      },
+      "encrypt_file": {
+        "name": "Zaszyfruj plik",
+        "hint": "Zabezpiecz plik Poziomem szyfrowania równym liczbie sukcesów w tym teście. Będzie się on przeciwstawiał przyszłym próbom złamania pliku."
+      },
+      "enter_host": {
+        "name": "Wejdź/wyjdź z hosta",
+        "hint": "Wejdź do hosta lub go opuść. Wejście wymaga odpowiedniego poziomu dostępu, wyjście nie wymaga żadnego."
+      },
+      "erase_matrix_signature": {
+        "name": "Usuń sygnaturę matrycową",
+        "hint": "Usuń sygnaturę matrycową pozostawioną przez istotę rezonansową, np. technomantę lub sprite'a. Musisz mieć atrybut Rezonans, a ta nielegalna akcja matrycowa nadal może podnieść twój Wynik Nadzoru (OS)."
+      },
+      "format_device": {
+        "name": "Sformatuj urządzenie",
+        "hint": "Nadpisz kod rozruchowy urządzenia, by przy następnym restarcie wyłączyło się do czasu naprawy. Traci modyfikatory bezprzewodowe i dostęp do Matrycy, ale tam, gdzie to możliwe, nadal działa jak zwykły mechanizm."
+      },
+      "full_matrix_defense": {
+        "name": "Pełna obrona matrycowa",
+        "hint": "Do końca rundy walki dodajesz Zaporę do wszystkich matrycowych testów obrony. Akcję można wykonać w dowolnym momencie."
+      },
+      "garbage_in_out": {
+        "name": "Śmieci na wejściu, śmieci na wyjściu",
+        "hint": "Przekieruj jedno wejście lub wyjście pojedynczego urządzenia, by wywoływało inne polecenie. Nie obejdzie podstawowych zabezpieczeń, a o tym, co jest możliwe, decyduje MG."
+      },
+      "hash_check": {
+        "name": "Sprawdzenie skrótu",
+        "hint": "Przeszukaj host lub urządzenie pod kątem zaszyfrowanych plików o określonej zawartości. Próg wynosi 1, jeśli znasz wartość skrótu, lub 4, jeśli zgadujesz. Sukcesy netto zawężają liczbę możliwych trafień."
+      },
+      "hide": {
+        "name": "Ukryj się",
+        "hint": "Spraw, by cel zgubił cię w Matrycy i musiał cię ponownie wypatrzyć Percepcją matrycową. Nie ukryjesz się przed ikoną, która ma dostęp UŻYTKOWNIK lub ADMIN do czegokolwiek w twojej sieci."
+      },
+      "jack_out": {
+        "name": "Wyloguj się",
+        "hint": "Odłącz się od Matrycy, restartując urządzenie. Jeśli byłeś w VR, doznajesz dumpshocku, a jeśli twoje łącze jest zablokowane, musisz pokonać każdą blokującą cię ikonę.",
+        "link_locked": "Jeśli masz zablokowane łącze, ikony, które je zablokowały, muszą rzucić na obronę w teście przeciwstawnym.",
+        "lock_link": "Zablokowałeś łącze persony. Wynik tego rzutu decyduje, czy ci się uda.",
+        "onSuccess.span": "exit >> wylogowywanie..",
+        "onSuccess.button": "Zresetuj dostęp i nałóż dumpshock, jeśli persona była w VR",
+        "onSuccesfulDefense.span": "blokada łącza.. SUKCES. wylogowanie zatrzymane.",
+        "onFailedDefense.span": "blokada łącza.. PORAŻKA. trwa wylogowywanie."
+      },
+      "jam_signals": {
+        "name": "Zagłuszanie sygnałów",
+        "hint": "Zamień swoje urządzenie bezprzewodowe w lokalną zagłuszarkę. Dopóki nie wykonujesz nim innych akcji matrycowych, twoje sukcesy dodają się do Poziomu szumu akcji matrycowych w promieniu 100 metrów."
+      },
+      "jump_rigged": {
+        "name": "Wskocz do urządzenia riggera",
+        "hint": "Będąc w VR i używając zestawu kontrolnego, wskocz do pojazdu lub drona z adaptacją dla riggera. Potrzebujesz odpowiedniego dostępu lub zgody i nie możesz wskoczyć, jeśli ktoś już tam jest."
+      },
+      "known_exploit": {
+        "name": "Wejście przez znany exploit",
+        "hint": "Użyj znanych luk, by zdobyć dostęp ADMIN bez wcześniejszego Sondowania; załatane hosty i urządzenia są trudniejsze. Nie możesz zdobywać ani wydawać Edge, cel zyskuje 1 tymczasowy Edge. Sukces nie liczy się jako nielegalny dostęp ADMIN, a porażka nie alarmuje celu, choć twój OS i tak rośnie.",
+        "cannot_edge": "W tym rzucie nie możesz zdobywać ani wydawać Edge.",
+        "onFailedDefense.span": "wejście przez exploit",
+        "onFailedDefense.button": "Nadaj poziom dostępu ADMIN"
+      },
+      "masquerade": {
+        "name": "Maskarada",
+        "hint": "Podszywaj się pod personę w Matrycy przez 1 minutę na każdy sukces netto. Zmyli to przypadkowe systemy i obserwatorów, ale nie przeniesie własności urządzeń, poważnych operacji finansowych ani niczego, co wymaga bycia prawdziwym właścicielem."
+      },
+      "matrix_perception": {
+        "name": "Percepcja matrycowa",
+        "hint": "Wypatrz ukryte ikony lub zdobądź informacje o celu. Więcej sukcesów netto ujawnia więcej szczegółów, np. Poziom urządzenia, atrybuty matrycowe, uruchomione programy i inne informacje od MG."
+      },
+      "matrix_search": {
+        "name": "Wyszukiwanie w Matrycy",
+        "hint": "Przeszukaj publiczną Matrycę w poszukiwaniu informacji na dany temat. Więcej sukcesów daje więcej informacji; jako wskazówki użyj tabeli wyników wywiadu."
+      },
+      "metahuman_middle": {
+        "name": "Metaczłowiek pośrodku",
+        "hint": "Wstaw się między urządzenie a jego ruch w Matrycy. Po sukcesie wszystkie połączenia, komunikacja i akcje matrycowe do i od celu przechodzą przez twoje urządzenie przez tyle minut, ile masz sukcesów netto."
+      },
+      "modify_icon": {
+        "name": "Zmodyfikuj ikonę",
+        "hint": "Spraw, by ikona w Matrycy wyglądała jak inna, np. żeby broń wyglądała niegroźnie. Każde skanowanie może zdemaskować przebranie w teście przeciwstawnym."
+      },
+      "probe": {
+        "name": "Sondowanie",
+        "hint": "Szukaj słabych punktów bez automatycznego alarmowania celu, chyba że wyrzucisz komplikację. Udane Sondowanie tworzy tylne drzwi do Wejścia tylnymi drzwiami, dodaje sukcesy netto do tamtego testu i zwykle utrzymuje się przez 10 minus Poziom hosta lub urządzenia godzin albo do twojego wylogowania.",
+        "defense_test": "Musisz rzucić na obronę przy każdym rzucie Sondowania atakującego. Sondujący musi ręcznie odjąć sukcesy od swojego testu Sondowania (do minimum 0 sukcesów netto zdobytych „w tej” minucie). Za każdy sukces w tym teście obrony rośnie też jego OS."
+      },
+      "pop_up": {
+        "name": "Wyskakujące okna",
+        "hint": "Zasyp urządzenie lub personę celu wyskakującymi AROs lub oknami. Po sukcesie cel nie może wydawać Edge przez tyle rund walki, ile masz sukcesów netto."
+      },
+      "reboot_device": {
+        "name": "Zrestartuj urządzenie",
+        "hint": "Wymuś przejście urządzenia, persony lub PAN w tryb offline do końca następnej rundy walki. Resetuje to jego OS i dostępy, nie powoduje dumpshocku i nie da się tego zrobić przy zablokowanym łączu.",
+        "forced_to_reboot": "Rzuć na obronę, jeśli ktoś wymusza restart twojego urządzenia",
+        "onSuccess.span": "restartowanie..",
+        "onSuccess.button": "Zresetuj dostęp tej persony",
+        "onFailedDefense.span": "wymuszony_restart..",
+        "onFailedDefense.button": "Zresetuj dostęp tej persony"
+      },
+      "reconfigure": {
+        "name": "Przekonfiguruj atrybut matrycowy",
+        "hint": "Zamień bazowe wartości dwóch niezerowych atrybutów matrycowych swojej persony, nawet jeśli pochodzą z różnych urządzeń."
+      },
+      "relinquish_access": {
+        "name": "Zrzeknij się dostępu",
+        "hint": "Zrzekasz się dostępu do konkretnego hosta, PAN lub urządzenia. Jeśli dostęp był nielegalny, przestajesz generować OS dla tego celu.",
+        "onSuccess.span": "sudoK..",
+        "onSuccess.button": "Obniż dostęp do tej ikony do OBCY",
+        "onFailure.span": "sudoK..",
+        "onFailure.button": "Obniż dostęp do tej ikony do OBCY"
+      },
+      "send_message": {
+        "name": "Wyślij wiadomość",
+        "hint": "Wyślij przez Matrycę krótką wiadomość tekstową lub głosową, obraz, plik albo transmisję na żywo. Przez DNI możesz wysyłać dłuższe, bardziej złożone wiadomości nawet w AR."
+      },
+      "set_data_bomb": {
+        "name": "Podłóż bombę danych",
+        "hint": "Dołącz do pliku jedną bombę danych o poziomie do liczby twoich sukcesów netto, zdecyduj, czy ma usunąć plik, i ustaw hasło. Po aktywacji zadaje Poziom × 2 obrażeń matrycowych, może usunąć plik, a potem kasuje samą siebie."
+      },
+      "snoop": {
+        "name": "Podsłuch",
+        "hint": "Przechwytuj ruch w Matrycy do i od celu, dopóki masz dostęp. Możesz śledzić go na żywo lub zapisywać na później, jeśli masz gdzie."
+      },
+      "spoof_command": {
+        "name": "Fałszywe polecenie",
+        "hint": "Wyślij urządzeniu polecenie, które uzna za pochodzące od właściciela. Urządzenie spróbuje je wykonać w ramach najbliższej dostępnej akcji głównej."
+      },
+      "squelch": {
+        "name": "Wyciszenie",
+        "hint": "Uniemożliw urządzeniu celu dzwonienie i wysyłanie wiadomości przez tyle minut, ile masz sukcesów netto."
+      },
+      "subvert_infrastructure": {
+        "name": "Przejęcie infrastruktury",
+        "hint": "Lekko zmień działanie grup podobnych prostych urządzeń podpiętych do hosta, np. sygnalizacji świetlnej lub kamer. Potrzebujesz co najmniej dostępu ADMIN, wpływasz na jedną grupę na sukces netto, nie możesz tym atakować, a kontrolę podtrzymujesz akcją główną co rundę walki."
+      },
+      "switch_ifmode": {
+        "name": "Przełącz tryb interfejsu",
+        "hint": "Przełącz interfejs między AR a VR."
+      },
+      "tarpit": {
+        "name": "Smolisko",
+        "hint": "Zadaj 1 + sukcesy netto obrażeń matrycowych i obniż o tyle samo Przetwarzanie danych celu. Przetwarzanie danych odnawia się o 1 co rundę walki, a przy 0 cel nie może wykonywać akcji matrycowych."
+      },
+      "threat_analysis": {
+        "name": "Analiza zagrożeń",
+        "hint": "Oznacz zagrożenia sojusznikom dzielącym twój kanał AR. Do twojej następnej tury dostają dodatkowe kości do testów obrony równe twoim sukcesom. Działa w świecie fizycznym i w Matrycy, a dzielić się tym możesz z liczbą użytkowników równą twojemu Przetwarzaniu danych."
+      },
+      "trace_icon": {
+        "name": "Namierz ikonę",
+        "hint": "Ustal fizyczne położenie urządzenia lub persony, dopóki nadal je wykrywasz. Nie działa na IC ani na hosty bez fizycznego położenia."
+      },
+      "virtual_aim": {
+        "name": "Wirtualne celowanie",
+        "hint": "Zyskujesz +1 kość do ataku matrycowego, np. Kolca danych, Smoliska lub Kolca rezonansowego. Możesz tego użyć raz na rundę walki, premia kumuluje się maksymalnie do wartości Siły Woli i przepada, jeśli zaatakujesz lub pominiesz Wirtualne celowanie w danej rundzie."
+      },
+      "watchdog": {
+        "name": "Strażnik",
+        "hint": "Obserwuj personę lub urządzenie przez tyle rund walki, ile masz sukcesów netto. Widzisz jego akcje matrycowe, zanim ich użyje, możesz próbować interweniować i używać Analizy zagrożeń jako akcji pobocznej przeciwko atakom tego celu."
+      },
+      "acid": {
+        "name": "Kwas",
+        "hint": "Po udanym ataku w cyberwalce obniż Zaporę celu o 1 za każdy sukces netto. Utracone punkty wracają po opuszczeniu hosta, po 1 na minutę."
+      },
+      "binder": {
+        "name": "Spinacz",
+        "hint": "Po udanym ataku w cyberwalce obniż Przetwarzanie danych celu o 1 za każdy sukces netto. Przy Przetwarzaniu danych 0 cel nie może wykonywać akcji matrycowych. Utracone punkty wracają po opuszczeniu hosta, po 1 na minutę."
+      },
+      "black": {
+        "name": "Czarne IC",
+        "hint": "Po udanym ataku w cyberwalce zadaj obrażenia matrycowe i obrażenia od biofeedbacku równe poziomowi hosta plus sukcesy netto.",
+        "onFailedDefense.span": "nadchodzi atak matrycowy i biofeedback",
+        "onFailedDefense.button": "Rzuć na biofeedback"
+      },
+      "blaster": {
+        "name": "Blaster",
+        "hint": "Po udanym ataku w cyberwalce zadaj obrażenia matrycowe równe poziomowi hosta i zablokuj łącze celu.",
+        "onFailedDefense.span": "nadchodzą obrażenia matrycowe",
+        "onFailedDefense.button": "Odporność na obrażenia (3M)"
+      },
+      "crash": {
+        "name": "Zawieszacz",
+        "hint": "Po udanym ataku w cyberwalce nie zadajesz obrażeń matrycowych, ale zawieszasz jeden losowy program. Nie da się go uruchomić ponownie przed restartem urządzenia."
+      },
+      "jammer": {
+        "name": "Zagłuszacz",
+        "hint": "Po udanym ataku w cyberwalce obniż Atak celu o 1 za każdy sukces netto. Przy Ataku 0 cel nie może wykonywać akcji wykorzystujących Atak. Utracone punkty wracają po opuszczeniu hosta, po 1 na minutę."
+      },
+      "killer": {
+        "name": "Zabójca",
+        "hint": "Po udanym ataku w cyberwalce zadaj obrażenia matrycowe równe poziomowi hosta plus sukcesy netto."
+      },
+      "marker": {
+        "name": "Znacznik",
+        "hint": "Po udanym ataku w cyberwalce obniż Podstęp celu o 1 za każdy sukces netto. Przy Podstępie 0 cel nie może wykonywać akcji wykorzystujących Podstęp. Utracone punkty wracają po opuszczeniu hosta, po 1 na minutę."
+      },
+      "patrol": {
+        "name": "Patrol",
+        "hint": "Po aktywacji wykonaj test Percepcji matrycowej; jego sukcesy służą akcjom Percepcji matrycowej Patrolu. Patrol co minutę czasu gry wydaje akcję poboczną na Percepcję matrycową i raz na minutę powtarza test."
+      },
+      "scramble": {
+        "name": "Zakłócacz",
+        "hint": "Po udanym ataku w cyberwalce cel musi zrestartować się w swojej następnej turze, chyba że ma zablokowane łącze."
+      },
+      "sparky": {
+        "name": "Iskra",
+        "hint": "Po udanym ataku w cyberwalce zadaj obrażenia od biofeedbacku równe poziomowi hosta plus sukcesy netto.",
+        "onFailedDefense.span": "nadchodzi biofeedback",
+        "onFailedDefense.button": "Rzuć na biofeedback"
+      },
+      "tarbaby": {
+        "name": "Smoluch",
+        "hint": "Po udanym ataku w cyberwalce zablokuj łącze celu."
+      },
+      "track": {
+        "name": "Tropiciel",
+        "hint": "Po udanym ataku w cyberwalce ustal fizyczne położenie celu."
+      }
+    },
+    "matrixini": {
+      "ar": "AR",
+      "vrcold": "VR zimna symulacja",
+      "vrhot": "VR gorąca symulacja"
+    },
+    "monitor": {
+      "label": "Monitor",
+      "matrix": "Matryca",
+      "matrix_monitor": "Monitor Matrycy",
+      "physical": "Fizyczne",
+      "physical_monitor": "Monitor fizyczny",
+      "stun": "Ogłuszenie",
+      "stun_monitor": "Monitor ogłuszenia",
+      "overflow": "Nadmiar",
+      "overflow_monitor": "Monitor nadmiaru",
+      "dead": "MARTWY",
+      "broken": "ZEPSUTY"
+    },
+    "mortype": {
+      "adept": "Adepta",
+      "aspectedmagician": "Mag aspektowany",
+      "magician": "Mag",
+      "mundane": "Przyziemny",
+      "mysticadept": "Mistyczny adepta",
+      "technomancer": "Technomanta"
+    },
+    "newitem": {
+      "adeptpower": "Nazwij swoją moc",
+      "accessory": "Błyszczące szkiełka",
+      "ammunition": "Gorący towar",
+      "armor": "Coś modnego",
+      "armor_addition": "Twój płaszcz potrzebuje ulepszeń",
+      "biology": "Zagrożenie biologiczne",
+      "bodyware": "Jakieś fajne ulepszenie",
+      "chemicals": "Dobry towar",
+      "complexform": "Jak bardzo złożona ma być?",
+      "spritepower": "Ciasteczko",
+      "contact": "Do kogo zadzwonisz? Pogromców duchów!",
+      "critterpower": "Co w tym takiego wyjątkowego?",
+      "cyberware": "Jakieś fajne cyberulepszenie",
+      "drones": "Moje latające oko",
+      "echo": "Echooooooo",
+      "electronics": "Zabawka nerda",
+      "genetics": "Każdy chce mieć niebieskie oczy",
+      "focus": "Coś do skupienia",
+      "lifestyle": "Karton czy apartament?",
+      "magical": "Pióra mojo",
+      "martialartstyle": "Jaki jest twój styl?",
+      "martialarttech": "Technika? Która technika?",
+      "matrix": "Zobacz mój deck!",
+      "rcc": "Dominator Sługusów X2000",
+      "metamagic": "Czego się nauczyłeś?",
+      "nanoware": "Siedem lub dziewięć maszynek",
+      "quality": "Czym się wyróżniasz?",
+      "ritual": "Śpiewając Alleluja",
+      "sin": "Kim jesteś? Kim, kim, kim?",
+      "skill": {
+        "knowledge": "Na jaki temat jesteś nerdem?",
+        "language": "Bełkot"
+      },
+      "spell": "Abrakadabra",
+      "software": "Podejrzany pirat",
+      "survival": "Poręczny scyzoryk",
+      "tools": "Twoje ulubione narzędzie",
+      "vehicles": "Odlotowa fura",
+      "weapon": "Bronie z imieniem są dużo fajniejsze",
+      "weaponclose": "Coś ciężkiego",
+      "weaponspecial": "Dziwna broń",
+      "mod": "Mod: różowa farba"
+    },
+    "npc": {
+      "subtype": {
+        "npc": "BN",
+        "critter": "Stworzenie",
+        "spirit": "Duch",
+        "sprite": "Sprite"
+      },
+      "gruntrules": "Używa zasad płotek",
+      "mortype": "Magia/Rezonans",
+      "grunt_group": "Grupa płotek",
+      "grunt_group_id": "G{groupId}",
+      "grunt_group_attack": "Atakuj jako grupa płotek (x{numberGrunts})"
+    },
+    "numerical": {
+      "base": "baza",
+      "baseString": "Wartość bazowa",
+      "max": "Maks.",
+      "mod": "mod"
+    },
+    "programtype": {
+      "basic": "Programy podstawowe",
+      "hacking": "Programy hakerskie"
+    },
+    "program": {
+      "baby_monitor": {
+        "name": "Elektroniczna niania",
+        "desc": "Podaje twój aktualny Wynik Nadzoru (OS) bez wydawania akcji."
+      },
+      "browse": {
+        "name": "Przeglądarka",
+        "desc": "Przy wyszukiwaniu w Matrycy zyskujesz 1 Edge, który musisz od razu wydać na tę akcję, inaczej przepada."
+      },
+      "configurator": {
+        "name": "Konfigurator",
+        "desc": "Przechowuje alternatywną konfigurację decku; przełączasz się na nią zamiast zamieniać dwa atrybuty."
+      },
+      "edit": {
+        "name": "Edytor",
+        "desc": "Przy akcji Edytuj plik zyskujesz 1 Edge, który musisz od razu wydać, inaczej przepada."
+      },
+      "encryption": {
+        "name": "Szyfrowanie",
+        "desc": "+2 kości przy akcji Zaszyfruj plik"
+      },
+      "signal_scrubber": {
+        "name": "Oczyszczacz sygnału",
+        "desc": "Zmniejsza poziom szumu o 2"
+      },
+      "toolbox": {
+        "name": "Skrzynka z narzędziami",
+        "desc": "+1 do Przetwarzania danych"
+      },
+      "virtual_machine": {
+        "name": "Maszyna wirtualna",
+        "desc": "2 dodatkowe gniazda programów; po trafieniu otrzymujesz 1 dodatkowe pole obrażeń matrycowych, na które nie ma odporności"
+      },
+      "armor": {
+        "name": "Pancerz",
+        "desc": "+2 do Wartości Obrony."
+      },
+      "biofeedback": {
+        "name": "Biofeedback",
+        "desc": "Atak matrycowy zadaje obrażenia ogłuszające (cel w zimnej symulacji) lub fizyczne (cel w gorącej symulacji). Ten program jest powiązany z atrybutem Atak."
+      },
+      "biofeedback_filter": {
+        "name": "Filtr biofeedbacku",
+        "desc": "Pozwala rzucić Poziomem urządzenia lub Budową na odporność na obrażenia matrycowe."
+      },
+      "blackout": {
+        "name": "Zaciemnienie",
+        "desc": "Jak Biofeedback, ale tylko obrażenia ogłuszające. Ten program jest powiązany z atrybutem Atak."
+      },
+      "decryption": {
+        "name": "Deszyfrowanie",
+        "desc": "+2 kości przy akcji Złam plik"
+      },
+      "defuse": {
+        "name": "Rozbrajacz",
+        "desc": "Pozwala rzucić Poziomem urządzenia lub Budową na odporność na obrażenia od bomby danych."
+      },
+      "exploit": {
+        "name": "Exploit",
+        "desc": "Obniża Wartość Obrony hakowanego celu o 2."
+      },
+      "fork": {
+        "name": "Rozwidlenie",
+        "desc": "Traf dwa cele jedną akcją matrycową bez dzielenia puli kości."
+      },
+      "lockdown": {
+        "name": "Blokada",
+        "desc": "Zadanie obrażeń matrycowych blokuje łącze celu."
+      },
+      "overclock": {
+        "name": "Podkręcenie",
+        "desc": "Dodaj dwie kości do akcji matrycowej. Jedna z nich musi być dziką kością."
+      },
+      "stealth": {
+        "name": "Kamuflaż",
+        "desc": "Przy akcji Ukryj się zyskujesz 1 Edge, który musisz wydać w ramach tej akcji, inaczej przepada. Ten program jest powiązany z atrybutem Podstęp."
+      },
+      "trace": {
+        "name": "Namierzanie",
+        "desc": "Przy akcji Namierz ikonę zyskujesz 1 Edge, który musisz wydać w ramach tej akcji, inaczej przepada. Ten program jest powiązany z atrybutem Podstęp."
+      }
+    },
+    "qualityedit": {
+      "category": "Kategoria",
+      "description": "Opis",
+      "explain": "Wyjaśnienie",
+      "name": "Nazwa",
+      "new": "Nowa"
+    },
+    "ritualfeatures": {
+      "anchored": "Zakotwiczony",
+      "material_link": "Więź materialna",
+      "minion": "Sługa",
+      "spell": "Czar",
+      "spotter": "Obserwator"
+    },
+    "roll": {
+      "accumulated": "Skumulowane",
+      "actionText": {
+        "attack_target_multiple": "Atak na wiele celów: {name}",
+        "attack_target_none": "Atak na cel: {name}",
+        "attack_target_one": "Atak na {target}: {name}",
+        "cast_target_multiple": "Rzucanie {name} na wiele celów",
+        "cast_target_none": "Rzucanie {name}",
+        "cast_target_one": "Rzucanie {name} na {target}",
+        "thread_target_none": "Splatanie {name}",
+        "thread_target_one": "Splatanie {name} na {target}",
+        "thread_target_multiple": "Splatanie {name} na wiele celów",
+        "using_target_none": "Użycie: {name}",
+        "using_target_one": "Użycie {name} na {target}",
+        "using_target_multiple": "Użycie {name} na wielu celach",
+        "skill": "Wykonaj test umiejętności",
+        "thread": "Splatanie {name}",
+        "bio_feedback": "Obrażenia od biofeedbacku",
+        "defense": {
+          "physical": "Obrona przed atakiem fizycznym",
+          "spells_direct": "Obrona przed bezpośrednimi czarami bojowymi",
+          "spells_indirect": "Obrona przed pośrednimi czarami bojowymi",
+          "matrix": "Obrona przed zdarzeniem w Matrycy"
+        },
+        "soak": {
+          "drain": "Odparcie drenażu {damage}",
+          "fading": "Odparcie zanikania {damage}",
+          "damage_matrix": "Odporność na {damage} obrażeń matrycowych",
+          "damage_phys": "Odporność na {damage} obrażeń fizycznych",
+          "damage_stun": "Odporność na {damage} obrażeń ogłuszających",
+          "bio_feedback": "Odporność na {damage} obrażeń ({monitor})"
+        }
+      },
+      "apply_damage": "Zadaj obrażenia",
+      "create": "Stwórz własną pulę kości Shadowrun",
+      "click_chat": "Kliknij, aby zobaczyć wyrzucone kości i wydać Edge",
+      "damage_applied": "Obrażenia zadane",
+      "damage_revert": "Cofnąć obrażenia?",
+      "ar_0": "Bliski",
+      "ar_1": "Krótki",
+      "ar_2": "Średni",
+      "ar_3": "Daleki",
+      "ar_4": "Ekstremalny",
+      "ar_0_hint": "Bliski (0-3 metry)",
+      "ar_1_hint": "Krótki (4-50 metrów)",
+      "ar_2_hint": "Średni (51-250 metrów)",
+      "ar_3_hint": "Daleki (251-500 metrów)",
+      "ar_4_hint": "Ekstremalny (500+ metrów)",
+      "attackRating": "Wartość Ataku",
+      "bf_type": "Rodzaj",
+      "bf": {
+        "narrow_burst": "Wąska seria",
+        "wide_burst": "Szeroka seria"
+      },
+      "button": {
+        "defense": "Rzuć na obronę",
+        "drain": "Odeprzyj drenaż",
+        "soak": "Odporność na obrażenia"
+      },
+      "cantDodgeBullets": "Po ustawieniu dystansu zwiększ próg zależnie od okoliczności",
+      "configure": "Skonfiguruj rzut",
+      "wound-modifier": "Uwzględnij modyfikator ran",
+      "sustained-spell-modifier": "Uwzględnij modyfikator podtrzymywania",
+      "criticalglitch": "Krytyczna komplikacja",
+      "hardenedArmor": "Zastosowano utwardzony pancerz",
+      "heal_apply": "Wylecz",
+      "damage": "Obrażenia: ",
+      "damage_apply": "Zadaj obrażenia",
+      "defRating": "Wartość Obrony",
+      "edge": {
+        "add_manually_to_target": "(Dodaj ręcznie) Cel",
+        "gain_player": "{name} otrzymuje {value} Edge",
+        "gain_player_capped": "{name} otrzymał(a)by {value} Edge, ale nie może mieć więcej niż {capped}.",
+        "getting": "Zdobywanie Edge",
+        "no_gain": "Nikt nie dostaje Edge",
+        "situational": "Edge sytuacyjny",
+        "spending": "Wydawanie Edge",
+        "spend_edge": "Wydaj Edge",
+        "edge_spent": "Wzmocnienie Edge: {boostTitle}",
+        "edge_action_spent": "Akcja Edge: {actionTitle}",
+        "opponent": "Przeciwnik",
+        "opponent_edge_boost": "Wzmocnienie Edge przeciwnika",
+        "spend": "Wydaj!",
+        "original_test": "Pierwotny test wykonał(a):",
+        "boost": "Wzmocnienie",
+        "noEdgeGain": "W tym rzucie nie możesz zdobyć Edge.",
+        "noEdgeSpend": "W tym rzucie nie możesz wydać Edge.",
+        "noEdgeUse": "W tym rzucie nie możesz zdobywać ani wydawać Edge.",
+        "situationalEdgeA": "Zdobyłeś jeden Edge, który musisz wydać na ten rzut (w tym oknie albo na czacie, przerzucając kość).",
+        "tempEdge": "Zdobyłeś jeden tymczasowy Edge, który musisz wydać na ten rzut."
+      },
+      "edge_perform": "Zrób to",
+      "edgegain": "Zdobyty Edge (maks.): ",
+      "edgegain_player": " (gracz)",
+      "exp": "Ekspertyza",
+      "explode": "Eksplodujące",
+      "extended": "Test rozszerzony",
+      "interval": "Interwał",
+      "fa_area": "Obszar",
+      "firemode": "Tryb ognia",
+      "failure": "Porażka",
+      "failedDefense": "Oberwałeś i zaraz zaboli",
+      "failedDefenseGeneral": "Nie udało ci się obronić",
+      "failedSoak": "Otrzymujesz obrażenia",
+      "gettingHurt": "Twoje ciało musi to wytrzymać",
+      "bio_feedback.description": "Jesteś też zdezorientowany i przez (10 – Siła Woli) minut nie możesz zdobywać ani używać Edge w akcjach, nawet jeśli zniwelujesz wszystkie obrażenia.",
+      "glitch": "Komplikacja",
+      "hits_bought": "Kupione sukcesy",
+      "hits": "sukcesy",
+      "mode": "Tryb",
+      "modifier": "Modyfikator puli",
+      "noedgegain": "Bez zdobywania Edge",
+      "nosuccess": "sukcesy, próg: ",
+      "notarget": "Nie wybrano celu",
+      "pool": "Pula",
+      "range": "Dystans",
+      "spec": "Specjalizacja",
+      "spell": {
+        "ampUp": {
+          "1": "Obrażenia+1 / Drenaż+2",
+          "2": "Obrażenia+2 / Drenaż+4",
+          "3": "Obrażenia+3 / Drenaż+6",
+          "4": "Obrażenia+4 / Drenaż+8",
+          "title": "Wzmocnienie"
+        },
+        "incArea": {
+          "1": "Promień +2 m / Drenaż+1",
+          "2": "Promień +4 m / Drenaż+2",
+          "3": "Promień +6 m / Drenaż+3",
+          "4": "Promień +8 m / Drenaż+4",
+          "5": "Promień +10 m / Drenaż+6",
+          "6": "Promień +12 m / Drenaż+8",
+          "title": "Zwiększ obszar"
+        },
+        "title": "Dostosuj czar"
+      },
+      "subject": "Wiadomość na czacie",
+      "success": "Sukces",
+      "successes": "sukcesy",
+      "manualResult": "Wynik",
+      "netHits": "sukcesy netto",
+      "successfulDefense": "Udało ci się uniknąć trafienia",
+      "successfulDefenseGeneral": "Udało ci się obronić",
+      "successfulSoak": "Udało ci się zignorować obrażenia",
+      "missedAttack": "Pudło, chummer!",
+      "succesfulHit": "Trafiłeś go, chummer!",
+      "target": "Cel",
+      "threshold": "Próg",
+      "weapon": "Określ atak",
+      "wilddie": "Zastąp jedną kość dziką kością",
+      "with": "z"
+    },
+    "rollType": {
+      "bought": "Kup sukcesy",
+      "normal": "Rzuć kośćmi"
+    },
+    "section": {
+      "adeptpowers": {
+        "add": "Dodaj nową moc",
+        "column.points": "PM",
+        "title": "Moce adepta",
+        "level": "Poziom"
+      },
+      "ammo": "Amunicja",
+      "ammo_add": "Dodaj amunicję",
+      "armor": {
+        "add": "Dodaj nowy pancerz",
+        "enable": "Załóż pancerz",
+        "disable": "Zdejmij pancerz",
+        "column": {
+          "action": "Akcja",
+          "defense": "WO",
+          "name": "Nazwa",
+          "social": "Społ."
+        },
+        "title": "Pancerz"
+      },
+      "armor_adds": "Modyfikacje pancerza",
+      "biology": "Biologia",
+      "bodyware": {
+        "add": "Dodaj nowy bioware lub cyberware",
+        "column.capacity": "Poj.",
+        "column.essence": "Ese.",
+        "footer.total_essence": "Pozostała Esencja",
+        "title": "Wszczepy"
+      },
+      "chemicals": "Chemikalia",
+      "combat_actions": {
+        "title": "Akcje bojowe",
+        "tooltip": "<p>Ta sekcja służy głównie jako ściąga, jakie akcje możesz wykonać.</p><p>Liczbę akcji i to, które wykonujesz w każdej rundzie, musisz nadal pilnować sam.</p>",
+        "anytime.minor_one": "<p>Akcja poboczna w dowolnym momencie</p><p>Tę akcję można wykonać w dowolnym momencie rundy, o ile masz jeszcze akcję poboczną, nawet poza swoją turą.</p>",
+        "anytime.major_one": "<p>Akcja główna w dowolnym momencie</p><p>Tę akcję można wykonać w dowolnym momencie rundy, o ile masz jeszcze akcję główną, nawet poza swoją turą.</p>",
+        "minor_one": "Akcja poboczna",
+        "minor_many": "Akcje poboczne",
+        "major_one": "Akcja główna",
+        "major_many": "Akcje główne"
+      },
+      "complexforms": {
+        "add": "Dodaj nową formę złożoną",
+        "column.duration": "Czas",
+        "column.fade": "Zanik.",
+        "title": "Formy złożone"
+      },
+      "spritepowers": {
+        "title": "Moce sprite'ów"
+      },
+      "contacts": {
+        "add": "Dodaj nowy kontakt",
+        "title": "Kontakty"
+      },
+      "critterpowers": {
+        "add": "Dodaj moc stworzenia",
+        "title": "Moce"
+      },
+      "defense": "Obrona i odporności",
+      "derived": "Wartości pochodne",
+      "drones": {
+        "add": "Dodaj nowego drona",
+        "title": "Drony"
+      },
+      "electronics": "Elektronika",
+      "echo": {
+        "add": "Dodaj nowe echo",
+        "title": "Echa"
+      },
+      "initiative": "Inicjatywa",
+      "martialarts": {
+        "add": "Dodaj nowy styl",
+        "tech_add": "Dodaj nową technikę",
+        "title": "Sztuki walki"
+      },
+      "focus": {
+        "add": "Dodaj nowy fokus",
+        "column.rating": "Moc",
+        "title": "Fokusy"
+      },
+      "gear": {
+        "add": "Dodaj nowy sprzęt",
+        "title": "Sprzęt"
+      },
+      "karma": {
+        "title": "Karma, Gorączka, Reputacja",
+        "karma": "Karma",
+        "heat": "Gorączka",
+        "reputation": "Reputacja",
+        "total": "Łącznie"
+      },
+      "lifestyles": {
+        "add": "Dodaj nowy styl życia",
+        "title": "Style życia"
+      },
+      "magical": "Magiczne",
+      "matrix_base": {
+        "overwatch": "Nadzór"
+      },
+      "matrix_actions": {
+        "title": "Akcje matrycowe"
+      },
+      "matrix_combat": {
+        "title": "Cyberwalka"
+      },
+      "matrix_devices": {
+        "label": "Urządzenie matrycowe",
+        "add": "Dodaj nowe urządzenie matrycowe",
+        "add_rcc": "Dodaj nową konsolę dowodzenia riggera (RCC)",
+        "column": {
+          "action": "Akcja",
+          "devRating": "Poziom urządzenia",
+          "name": "Nazwa"
+        },
+        "title": "Urządzenia dostępowe do Matrycy",
+        "title_rcc": "RCC"
+      },
+      "rigger": {
+        "title": "Rigging"
+      },
+      "persona": {
+        "title": "Persona",
+        "accessDevice": "Urządzenie dostępowe do Matrycy",
+        "distribute": "Rozdziel",
+        "silent": "Tryb cichy",
+        "description": "Opis ikony",
+        "description_toggle": "Pokaż/ukryj opis",
+        "image.tooltip": "Lewy klik pokazuje obraz, prawy klik pozwala go edytować"
+      },
+      "pan": {
+        "title": "Osobista sieć (PAN)",
+        "administrator": "Persona administratora",
+        "name": "Nazwa PAN",
+        "living_network_name": "Nazwa żywej sieci",
+        "share": "Udostępnij swoją PAN towarzyszom przez wiadomość na czacie.",
+        "share_flavor": "//ZASZYFROWANA WIADOMOŚĆ//",
+        "share_message1": "{name} chce udostępnić ci swoją osobistą sieć (PAN).",
+        "share_message2": "Akceptujesz?",
+        "share_message3": "Przeciągnij ten efekt na swoją kartę postaci lub token.",
+        "share_tooltip": "Przeciągnięcie tego na kartę postaci lub token tworzy efekt dołączenia do PAN.",
+        "share_join_pan": "Dołącz do PAN: {name}",
+        "share_pan_joined": "Dołączono do PAN: {name}",
+        "deviceLimit": "Limit zdalnych urządzeń",
+        "slavedTo": "Podporządkowane",
+        "column": {
+          "nodes": "Węzły PAN",
+          "access": "Dostęp"
+        },
+        "role": {
+          "external-master-pan": "Zewnętrzna nadrzędna PAN",
+          "master-pan": "Nadrzędna PAN",
+          "slaved-pan": "Podporządkowana PAN",
+          "primary-access-device": "Główne urządzenie dostępowe",
+          "secondary-access-device": "Dodatkowe urządzenie dostępowe",
+          "slaved-device": "Urządzenie podporządkowane",
+          "device": "Urządzenie"
+        }
+      },
+      "metamagic": {
+        "add": "Dodaj nową metamagię",
+        "title": "Metamagie"
+      },
+      "notes": {
+        "title": "Notatki"
+      },
+      "description": {
+        "title": "Wygląd"
+      },
+      "qualities": "Cechy",
+      "qualities_add": "Dodaj",
+      "rigging": {
+        "title": "Rigging"
+      },
+      "rituals": {
+        "add": "Dodaj nowy rytuał",
+        "column.threshold": "Próg",
+        "title": "Rytuały"
+      },
+      "sins": {
+        "add": "Dodaj nowy SIN",
+        "title": "SIN-y"
+      },
+      "skills.action": "Umiejętności",
+      "skills.knowledge": "Umiejętności wiedzy",
+      "skills.knowledge_add": "Dodaj nową wiedzę",
+      "skills.language": "Języki",
+      "skills.level": "Poziom języka",
+      "skills.language-level": {
+        "expert": "Ekspert",
+        "native": "Ojczysty",
+        "normal": "Zwykły",
+        "special": "Specjalista"
+      },
+      "skills.language_add": "Dodaj nowy język",
+      "software": {
+        "add": "Dodaj nowe oprogramowanie",
+        "title": "Oprogramowanie"
+      },
+      "spells": {
+        "add": "Dodaj nowy czar",
+        "column.alchemic": "Alch.",
+        "column.drain": "Drenaż",
+        "column.range": "Zasięg",
+        "column.sustained": "Podtrz.",
+        "title": "Czary"
+      },
+      "sustained": {
+        "add": "Dodaj nowy czar",
+        "title": "Podtrzymywane czary",
+        "toggle": "Włącz/wyłącz podtrzymywanie"
+      },
+      "survival": "Przetrwanie",
+      "vehicles": {
+        "add": "Dodaj nowy pojazd",
+        "column": {
+          "handling": "Prow",
+          "acc": "Przysp",
+          "spdi": "Int",
+          "tspd": "Prędkość",
+          "bod": "Budowa",
+          "arm": "Pancerz",
+          "pil": "Pilot",
+          "sen": "Czuj",
+          "sea": "Miejsca",
+          "vtype": "Typ"
+        },
+        "title": "Pojazdy"
+      },
+      "vehicleskills": {
+        "brain": "Mózg elektroniczny",
+        "operations": "Operacje"
+      },
+      "weapon": {
+        "add": "Dodaj nową broń",
+        "close": "Broń do walki wręcz",
+        "ranged": "Broń dystansowa",
+        "special": "Broń specjalna",
+        "title": "Broń"
+      }
+    },
+    "settings": {
+      "shadowrunCursors": {
+        "hint": "Po włączeniu kursory myszy zmieniają się na styl neonowej poświaty.",
+        "name": "Kursory w stylu Shadowrun",
+        "disabled": "Wyłączone",
+        "black": "Czarny neon",
+        "transparent": "Przezroczysty neon"
+      },
+      "tokensLimitedOwnership": {
+        "hint": "Po włączeniu: gdy upuścisz na scenę aktora, który w prototypie ma wyłączone „Połącz dane aktora” i nie ma żadnych uprawnień, jego token dostanie uprawnienie Ograniczone. Gracze mogą wtedy kliknąć go i zobaczyć kartę tylko do odczytu z informacjami o personie matrycowej i PAN. Dzięki temu możesz ukryć aktorów w zakładce Aktorzy, a gracze nadal widzą ich karty tylko do odczytu.",
+        "name": "Tokeny: karty tylko do odczytu i Matryca"
+      },
+      "maxEdgePerRound": {
+        "hint": "Określa maksymalną liczbę Edge, jaką gracz lub BN może zdobyć w turze.",
+        "name": "Maksymalny Edge zdobyty w turze"
+      },
+      "importToCompendium": {
+        "hint": "Określa, czy importowani BN mają trafiać do aktorów, czy do kompendium BN",
+        "name": "Importuj do kompendium"
+      },
+      "defaultThreshold": {
+        "hint": "Określa domyślny próg każdego testu umiejętności",
+        "name": "Domyślny próg"
+      },
+      "hardDiceCap": {
+        "hint": "W standardowej grze każdy test ma limit 20 kości. Żadna kombinacja zdolności, umiejętności, efektów ani wszczepów nie może go przekroczyć. Wyjątek: wydanie Edge przed rzutem pozwala przekroczyć limit 20 kości o kości dodane przez Edge.",
+        "name": "Twardy limit kości"
+      },
+      "matrixSoakByPanLeader": {
+        "hint": "Domyślnie odporność na obrażenia matrycowe zapewnia Zapora celu (CRB s. 179). Po włączeniu tej opcji obrażenia matrycowe wszystkich członków PAN niweluje Zapora lidera PAN.",
+        "name": "Lider PAN niweluje obrażenia matrycowe"
+      },
+      "hackSlashMatrix": {
+        "hint": "Włącz, aby na kartach postaci pokazywać akcje matrycowe z podręcznika Hack & Slash (HS s. 28).",
+        "name": "Akcje matrycowe z Hack & Slash"
+      },
+      "dosPopupMatrix": {
+        "hint": "Zmienia Odmowę usługi, Wyskakujące okna i Wyciszenie na OBCY/UŻYTKOWNIK/ADMIN zamiast tylko OBCY, tak jak Kolec danych i Smolisko. To najpewniej przeoczenie w H&S. (Zalecane w FoundryVTT ze względu na implementację PAN<>Persona.)",
+        "name": "Errata akcji matrycowych dla FoundryVTT"
+      },
+      "controlRigPerception": {
+        "hint": "Użyj tej zasady, jeśli pozwalasz dodawać poziom zestawu kontrolnego do testów Percepcji w pojazdach, do których wskoczono.",
+        "name": "Percepcja z zestawem kontrolnym"
+      },
+      "bleeding": {
+        "hint": "Użyj tej zasady, aby odzwierciedlić trwające obrażenia od poważnych ran (SWC s. 145).",
+        "name": "Krwawienie"
+      },
+      "armorLessensDmg": {
+        "hint": "Użyj tej zasady, aby zmniejszyć otrzymywane obrażenia fizyczne. Po teście odporności (na obrażenia z innych źródeł niż toksyny lub statusy) zamień jedno pole obrażeń fizycznych na ogłuszające za każde pełne 8 punktów WO (SWC s. 149).",
+        "name": "Pancerz zmniejsza obrażenia fizyczne"
+      },
+      "rollStrengthCombat": {
+        "hint": "Ataki w walce wręcz mogą używać Siły zamiast Zręczności przy atakach bez broni lub jeśli broń opiera się na masie i pędzie. W takim wypadku do Wartości Ataku dodaje się Zręczność zamiast Siły. Jeśli ma to znaczenie dla broni, trzeba trzymać ją oburącz (SWC s. 150).",
+        "name": "Siła zamiast Zręczności w walce wręcz"
+      },
+      "highStrengthAddsDamage": {
+        "hint": "Przy Sile co najmniej 7 zwiększ DV w walce wręcz o 1, a przy Sile 10 lub wyższej o 2. Bronie, które nie korzystają z dużej siły, nie zwiększają DV (SWC s. 150).",
+        "name": "Duża Siła zwiększa obrażenia"
+      },
+      "highStrengthReducesRecoil": {
+        "hint": "Kary do WA za tryby ognia maleją o 1, jeśli atakujący ma Siłę 7 lub wyższą, i o 2 przy Sile 10 lub wyższej. Broń trzeba kontrolować oburącz (SWC s. 150).",
+        "name": "Duża Siła zmniejsza odrzut"
+      },
+      "cantDodgeBullets": {
+        "hint": "Każdy test przeciwstawny ataku staje się testem prostym z progiem zależnym od dystansu i wielkości puli obrony celu. Cel ataku nadal może używać wzmocnień Edge na kościach atakującego (SWC s. 151).",
+        "name": "Przed kulami nie da się uskoczyć"
+      },
+      "expandedSpecializations": {
+        "hint": "Brak limitu liczby specjalizacji w umiejętności. Przed kolejnymi specjalizacjami nie trzeba kupować ekspertyzy. Ekspertyza nadal może być tylko jedna na umiejętność (SWC s. 153).",
+        "name": "Rozszerzone specjalizacje"
+      },
+      "pdf": {
+        "hint": "Skonfiguruj dziennik PDF dla tego podręcznika Shadowrun Sixth World.",
+        "offset.name": "Przesunięcie",
+        "offset.hint": "Ustaw przesunięcie stron. Przykład: jeśli strona 12 to w rzeczywistości strona 11, przesunięcie wynosi 1."
+      },
+      "dataEntry": {
+        "hint": "Włącz, aby na karcie przedmiotu móc zmieniać ID z GENESIS/Commlink oraz podręcznik Shadowrun i numer strony, z których pochodzi przedmiot.",
+        "name": "Wprowadzanie danych przedmiotów"
+      }
+    },
+    "sin": {
+      "quality": "Jakość",
+      "real_sin": "Prawdziwy SIN",
+      "anyone": "(P1) Ktokolwiek",
+      "rough_match": "(P2) Z grubsza pasuje",
+      "good_match": "(P3) Dobrze pasuje",
+      "superficially_plausible": "(P4) Wiarygodny na pierwszy rzut oka",
+      "highly_plausible": "(P5) Bardzo wiarygodny",
+      "second_life": "(P6) Drugie życie"
+    },
+    "softwareedit": {
+      "description": "Opis",
+      "category": "Kategoria",
+      "basic": "Standardowe",
+      "hacking": "Hakerskie"
+    },
+    "special": {
+      "astral": {
+        "astral_combat": "Walka astralna",
+        "astral_signatures": "Sygnatury astralne",
+        "emotional_stress": "Stres emocjonalny",
+        "spirit_types": "Rodzaje duchów"
+      },
+      "athletics": {
+        "archery": "Łucznictwo",
+        "climbing": "Wspinaczka",
+        "flying": "Latanie",
+        "free_fall": "Swobodne spadanie",
+        "gymnastics": "Gimnastyka",
+        "sprinting": "Sprint",
+        "swimming": "Pływanie",
+        "throwing": "Rzucanie"
+      },
+      "biotech": {
+        "biotechnology": "Biotechnologia",
+        "cybertechnology": "Cybertechnologia",
+        "first_aid": "Pierwsza pomoc",
+        "medicine": "Medycyna"
+      },
+      "close_combat": {
+        "blades": "Ostrza",
+        "clubs": "Pałki",
+        "unarmed": "Walka bez broni"
+      },
+      "con": {
+        "acting": "Aktorstwo",
+        "disguise": "Przebranie",
+        "impersonation": "Podszywanie się",
+        "performance": "Występy"
+      },
+      "conjuring": {
+        "banishing": "Wyganianie",
+        "summoning": "Przywoływanie"
+      },
+      "cracking": {
+        "cybercombat": "Cyberwalka",
+        "electronic_warfare": "Walka elektroniczna",
+        "hacking": "Hakowanie"
+      },
+      "electronics": {
+        "computer": "Komputery",
+        "hardware": "Sprzęt komputerowy",
+        "software": "Oprogramowanie",
+        "complex_forms": "Formy złożone"
+      },
+      "enchanting": {
+        "alchemy": "Alchemia",
+        "artificing": "Wytwarzanie artefaktów",
+        "disenchanting": "Odczarowywanie"
+      },
+      "engineering": {
+        "aeronautics_mechanic": "Mechanika lotnicza",
+        "armorer": "Rusznikarstwo",
+        "automotive_mechanic": "Mechanika samochodowa",
+        "demolitions": "Materiały wybuchowe",
+        "gunnery": "Artyleria",
+        "industrial_mechanic": "Mechanika przemysłowa",
+        "lockpicking": "Otwieranie zamków",
+        "nautical_mechanic": "Mechanika okrętowa"
+      },
+      "exotic_weapons": {
+        "chainsaws": "Piły łańcuchowe",
+        "brawling": "Walka wręcz",
+        "air": "Sprężone powietrze",
+        "emitter": "Broń energetyczna",
+        "laser": "Broń laserowa",
+        "launchers": "Wyrzutnie",
+        "spray": "Broń rozpylająca",
+        "whips": "Bicze",
+        "other": "Inne"
+      },
+      "firearms": {
+        "assault_cannons": "Działka szturmowe",
+        "holdouts": "Pistolety kieszonkowe",
+        "machine_pistols": "Pistolety maszynowe",
+        "pistols_heavy": "Ciężkie pistolety",
+        "pistols_light": "Lekkie pistolety",
+        "rifles": "Karabiny",
+        "shotguns": "Strzelby",
+        "submachine_guns": "Pistolety maszynowe (SMG)",
+        "machine_guns": "Karabiny maszynowe",
+        "tasers": "Paralizatory"
+      },
+      "influence": {
+        "etiquette": "Etykieta",
+        "instruction": "Nauczanie",
+        "intimidation": "Zastraszanie",
+        "leadership": "Przywództwo",
+        "negotiation": "Negocjacje"
+      },
+      "outdoors": {
+        "navigation": "Nawigacja",
+        "survival": "Survival",
+        "tracking": "Tropienie",
+        "tracking_desert": "Środowisko: pustynia",
+        "tracking_other": "Środowisko: inne",
+        "tracking_urban": "Środowisko: miasto",
+        "tracking_woods": "Środowisko: las"
+      },
+      "perception": {
+        "aural": "Słuch",
+        "perception_desert": "Środowisko: pustynia",
+        "perception_other": "Środowisko: inne",
+        "perception_urban": "Środowisko: miasto",
+        "perception_woods": "Środowisko: las",
+        "scent": "Węch",
+        "tactile": "Dotyk",
+        "taste": "Smak",
+        "visual": "Wzrok"
+      },
+      "piloting": {
+        "aircraft": "Statki powietrzne",
+        "ground_craft": "Pojazdy naziemne",
+        "watercraft": "Jednostki pływające"
+      },
+      "sorcery": {
+        "counterspelling": "Przeciwczary",
+        "ritual_spellcasting": "Rytualne rzucanie czarów",
+        "spellcasting": "Rzucanie czarów"
+      },
+      "stealth": {
+        "camouflage": "Kamuflaż",
+        "disguise": "Przebranie",
+        "palming": "Zręczne palce",
+        "sneaking": "Skradanie"
+      },
+      "tasking": {
+        "compiling": "Kompilowanie",
+        "decompiling": "Dekompilowanie",
+        "registering": "Rejestrowanie"
+      }
+    },
+    "spell": {
+      "area": "Obszar",
+      "category": "Kategoria",
+      "category_combat": "Bojowe",
+      "category_detection": "Wykrywanie",
+      "category_health": "Zdrowie",
+      "category_illusion": "Iluzja",
+      "category_manipulation": "Manipulacja",
+      "damage": "Obrażenia",
+      "damage_physical": "Fizyczne",
+      "damage_physical_short": "F",
+      "damage_physical_special": "Fizyczne, specjalne",
+      "damage_physical_special_short": "F, spec.",
+      "damage_short": "Obr",
+      "damage_stun": "Ogłuszające",
+      "damage_stun_short": "O",
+      "damage_stun_special": "Ogłuszające, specjalne",
+      "damage_stun_special_short": "O, spec.",
+      "direct": "Bezpośredni",
+      "drain": "Drenaż",
+      "drain_short": "DV",
+      "duration": "Czas trwania",
+      "duration_instantaneous": "Natychmiastowy",
+      "duration_instantaneous_short": "N",
+      "duration_immediate": "Natychmiastowy",
+      "duration_immediate_short": "N",
+      "duration_limited": "Ograniczony",
+      "duration_permanent": "Trwały",
+      "duration_permanent_short": "T",
+      "duration_short": "Czas",
+      "duration_special": "Specjalny",
+      "duration_special_short": "Spec",
+      "duration_sustained": "Podtrzymywany",
+      "duration_sustained_short": "P",
+      "duration_always": "Zawsze",
+      "duration_always_short": "Z",
+      "isOpposed": "Przeciwstawny",
+      "range": "Zasięg",
+      "range_line_of_sight": "Pole widzenia",
+      "range_line_of_sight_area": "Pole widzenia (obszar)",
+      "range_line_of_sight_area_short": "PW(O)",
+      "range_line_of_sight_short": "PW",
+      "range_self": "Na siebie",
+      "range_self_area": "Na siebie (obszar)",
+      "range_self_area_short": "S(O)",
+      "range_self_short": "Siebie",
+      "range_touch": "Dotyk",
+      "range_touch_short": "D",
+      "type": "Typ",
+      "type_mana": "Mana",
+      "type_mana_short": "Mana",
+      "type_physical": "Fizyczny",
+      "type_physical_short": "Fiz",
+      "withEssence": "Przeciw Esencji",
+      "combatSpellType": "Rodzaj czaru bojowego"
+    },
+    "spellfeatures": {
+      "area": "Obszarowy",
+      "direct": "Bojowy bezpośredni",
+      "indirect": "Bojowy pośredni",
+      "sense_multi": "Wielozmysłowy",
+      "sense_single": "Jednozmysłowy"
+    },
+    "spirittype": {
+      "label": "Rodzaj ducha",
+      "air": "Powietrza",
+      "beasts": "Zwierząt",
+      "earth": "Ziemi",
+      "fire": "Ognia",
+      "kin": "Ludzi",
+      "water": "Wody",
+      "plant": "Roślin",
+      "guardian": "Strażnik",
+      "guidance": "Przewodnik",
+      "task": "Zadaniowy",
+      "blood": "Krwi",
+      "caretaker": "Owad: opiekun",
+      "nymph": "Owad: nimfa",
+      "scout": "Owad: zwiadowca",
+      "soldier": "Owad: żołnierz",
+      "worker": "Owad: robotnik",
+      "queen": "Owad: królowa",
+      "alpha": "Owad: alfa",
+      "abomination": "Toksyczny: plugastwo",
+      "barren": "Toksyczny: jałowy",
+      "noxious": "Toksyczny: trujący",
+      "nuclear": "Toksyczny: nuklearny",
+      "plague": "Toksyczny: zarazy",
+      "sludge": "Toksyczny: szlamu",
+      "shadow": "Cienia",
+      "shedim": "Szedim",
+      "masterShedim": "Mistrz szedim",
+      "zonbi": "Zonbi l'Astral"
+    },
+    "tradition": {
+      "label": "Tradycja",
+      "placeholder": "Wpisz swoją tradycję",
+      "attribute": "Atrybut tradycji"
+    },
+    "vehicle": {
+      "action_label": "Prowadzenie / atak lub obrona pojazdu",
+      "has_no_owner": "Pojazd/dron nie ma przypisanego właściciela",
+      "initiative": "Inicjatywa pojazdu",
+      "mode_label": "Tryb",
+      "perception_vr_norig": "<p>Domyślnie zestaw kontrolny nie dodaje się do puli Percepcji.</p><p>MG może włączyć tę zasadę ustawieniem „Percepcja z zestawem kontrolnym”.</p>",
+      "perception_vr_rig": "Do puli Percepcji dodaje się poziom twojego zestawu kontrolnego: {rating}.",
+      "mode": {
+        "manual": "Ręczny",
+        "riggedAR": "Wskoczony (AR)",
+        "riggedVR": "Wskoczony (VR)",
+        "rcc": "Przez RCC (do zrobienia)",
+        "autonomous": "Autonomiczny"
+      },
+      "skill": {
+        "cracking": "Łamanie zabezpieczeń",
+        "evasion": "Unikanie",
+        "perception": "Percepcja",
+        "piloting": "Pilotaż",
+        "stealth": "Skradanie"
+      },
+      "type": {
+        "groundcraft": "Pojazd naziemny",
+        "watercraft": "Jednostka pływająca",
+        "aircraft": "Statek powietrzny"
+      }
+    },
+    "weapon": {
+      "damage": "DV",
+      "attackRating": "Wart. ataku",
+      "firemodes": "Tryby",
+      "ammo": "Amunicja",
+      "ammo_loaded": "Załadowana amunicja",
+      "reload_ammo": "Przeładuj amunicję",
+      "ammo_changes_combat": "Zmiany amunicji w walce",
+      "ammo_cap": "Pojemność magazynka",
+      "ammo_cap_short": "Magazynek"
+    },
+    "ui": {
+      "notifications": {
+        "You_are_not_owner_of_the_target": "Nie możesz tego użyć, bo nie jesteś właścicielem celu.",
+        "You_are_not_owner_of_the_token": "Nie jesteś właścicielem tokena.",
+        "Select_a_single_token": "Masz zaznaczonych kilka tokenów. Do tej akcji zaznacz tylko jeden.",
+        "You_can_only_choose_Wide_Burst_when_you_target_two_tokens": "Szeroką serię możesz wybrać tylko wtedy, gdy celujesz (T) w dwa tokeny.",
+        "Target_or_select_a_token_before_rolling": "Przed rzutem wybierz cel lub zaznacz token. Żeby (od)znaczyć token jako cel, najedź na niego myszą i naciśnij T",
+        "Select_a_token_first": "Najpierw zaznacz token albo ustaw swoją postać gracza w konfiguracji użytkownika.",
+        "Target_a_token_before_rolling": "Przed rzutem wybierz token jako cel (T). Żeby (od)znaczyć token jako cel, najedź na niego myszą i naciśnij T",
+        "Target_a_token_first": "Zanim tego użyjesz, wybierz token jako cel (T). Żeby (od)znaczyć token jako cel, najedź na niego myszą i naciśnij T",
+        "defaulting_spell_to_self": "Nie wybrano celu, czar zostanie rzucony na ciebie.",
+        "Dice_roll_evaluation_failed": "Nie udało się obliczyć rzutu kośćmi",
+        "two_targets_but_wrong_fire_mode": "Masz dwa cele, więc możesz strzelać tylko szeroką serią albo ogniem ciągłym.",
+        "many_targets_but_not_autofire_fire_mode": "Masz więcej niż dwa cele, więc możesz strzelać tylko ogniem ciągłym.",
+        "attack_with_no_AR": "Próbujesz atakować, choć twoja Wartość Ataku wynosi 0, np. z powodu dystansu.",
+        "apply_manually": "Nanieś obrażenia ręcznie.",
+        "Target_is_not_a_life_form": "Cel nie jest formą życia.",
+        "do_not_revert_damage": "Nadmiar przechodzi na monitor fizyczny. Nie cofaj tych obrażeń przyciskiem na czacie, bo nie zostaną poprawnie przeliczone.",
+        "No_actor_or_tokens_selected": "Przed rzutem przypisz sobie postać gracza albo zaznacz tokeny.",
+        "You_are_not_owner_of_the_tokens": "Nie jesteś właścicielem zaznaczonych tokenów.",
+        "no_weapon_skill_set": "Przed rzutem edytuj broń i przypisz jej powiązaną umiejętność.",
+        "vehicle_has_no_owner": "Pojazd nie ma przypisanego właściciela.",
+        "only_owner_is_allowed_to_spend_edge": "Tylko właściciel postaci może wydać Edge na to wzmocnienie.",
+        "owner_not_logged_in": "Wzmocnienie Edge nie jest możliwe, np. dlatego, że osoba, która wykonała test, nie jest online.",
+        "edge_boost_is_not_post_edge": "„{boostTitle}” nie jest wzmocnieniem Edge używanym po rzucie",
+        "you_require_more_edge": "Za mało Edge. Do tego wzmocnienia potrzebujesz jeszcze {edge}.",
+        "no_die_with_a_1_or_4": "W twoim rzucie nie ma 1 ani 4, więc to wzmocnienie Edge nic nie da.",
+        "cant_increase_die": "Nie możesz zwiększyć tej kości tym wzmocnieniem Edge, bo nic by to nie dało.",
+        "all_dice_are_successes": "Wszystkie kości są już sukcesami.",
+        "character_has_spent_edge": "{actor} wydaje {edge} Edge na wzmocnienie <b>{edgeBoost}</b>.",
+        "reduce_edge_from_actor": "Zmniejsz Edge postaci o {edge}.",
+        "reroll_failed_requires_index": "Zaznacz jedną lub więcej kości, zanim klikniesz przycisk `Wydaj`.",
+        "edge_boost_cannot_be_used_glitch": "Tego wzmocnienia Edge nie można użyć, jeśli wypadła komplikacja lub krytyczna komplikacja.",
+        "reopen_dice_tooltip": "Zmieniłeś zaznaczone tokeny. Otwórz ponownie sekcję kości na czacie, aby użyć wzmocnienia Edge.",
+        "extended_test_validation": "W teście rozszerzonym próg i interwał muszą wynosić 0 lub więcej.",
+        "migration": {
+          "start": "Trwa migracja systemu. Nie zamykaj ani nie odświeżaj okna!",
+          "in_progress": "Migracja dokumentów systemu..",
+          "completed": "Migracja systemu zakończona!"
+        },
+        "wrong_import_file": "Nie można zaimportować pliku json w formacie Generic/Roll20! Użyj eksportu FoundryVTT JSON w GENESIS lub COMMLINK6.",
+        "statblock_import": {
+          "error": "Coś poszło nie tak przy imporcie statystyk BN. Użyj innego czytnika PDF; możliwe też, że ten blok statystyk nie jest obsługiwany.",
+          "success": "Blok statystyk `{actor}` zaimportowano do: ",
+          "actor_tab": "zakładka Aktorzy.",
+          "npc_compendium": "kompendium BN."
+        },
+        "not_enough_ammo": "Masz za mało amunicji w broni. Zmień tryb ognia albo najpierw przeładuj broń.",
+        "character_has_reloaded": "{character} przeładowuje broń {weaponName} amunicją {ammoType}.",
+        "character_has_switched_ammo": "{character} zmienia amunicję w broni {weaponName} na {ammoType}.",
+        "character_has_changed_edge": "{character} ręcznie zmienia Edge z {oldEdge} na {edge}",
+        "matrix_check_os": "Twój aktualny Wynik Nadzoru wynosi {os}.",
+        "bind_control_group": "Przypisano zaznaczone tokeny do grupy kontrolnej {controlGroup}.",
+        "select_control_group": "Zaznaczono tokeny z grupy kontrolnej {controlGroup}.",
+        "form_grunt_group": "Utworzono grupę płotek z zaznaczonych tokenów.",
+        "dismantle_grunt_group": "Rozwiązano grupę płotek zaznaczonych tokenów.",
+        "form_grunt_group_failed": "Zaznaczone tokeny nie mogą tworzyć grupy płotek. W konfiguracji tokena nie mogą mieć włączonego „Połącz dane aktora”.",
+        "grunt_group_takes_two": "Do utworzenia grupy płotek musisz zaznaczyć więcej niż jeden token.",
+        "edge_has_been_reset": "MG zresetował cały Edge.",
+        "accessLevels_have_been_reset": "G.O.D. zresetował wszystkie poziomy dostępu.",
+        "one_accessLevel_has_been_reset": "G.O.D. zresetował poziomy dostępu jednej postaci.",
+        "effect_migration_to_v2": "Zmigrowano klucze aktywnych efektów, aby działały z ActorV2",
+        "deviceRatingMigration": "<p>Ustawiono cały sprzęt na domyślny Poziom urządzenia 2, a cyberware na klasę standardową.</p><p>Cała elektronika ma włączoną łączność bezprzewodową.</p><p>Poinformuj graczy, że muszą ustawić właściwe poziomy swojego sprzętu i cyberware.<p><p>Każdy powinien też sprawdzić, czy ma sprzęt (np. niektóre pancerze), który trzeba w konfiguracji przedmiotu oznaczyć jako „Urządzenie matrycowe”, jeśli ma interaktywne funkcje w grze, np. elektrochromię.",
+        "tokensLimitedOwnership": "Upuszczone niepołączone tokeny dostają co najmniej uprawnienie Ograniczone. Aby to zmienić, usuń token i upuść go na scenę ponownie. ",
+        "notificationOnce": "Ta wiadomość pojawi się tylko raz w tej sesji przeglądarki.",
+        "importStatblock": "W to pole możesz wkleić całe bloki statystyk z PDF, aby zaimportować je do FoundryVTT.",
+        "item_not_allowed_to_be_dropped": "Nie można dodać tego przedmiotu do tego aktora, bo nie są ze sobą zgodne.",
+        "needs_token_on_canvas": "Ta akcja wymaga tokena, który już jest na scenie.",
+        "docName_docType": "{name} {type}"
+      }
+    },
+    "EFFECT": {
+      "chilled": "Wychłodzony",
+      "confused": "Zdezorientowany",
+      "corrosive": "Żrący",
+      "cover": "Osłona",
+      "dazed": "Oszołomiony",
+      "deafened": "Ogłuszony (słuch)",
+      "fatigued": "Zmęczony",
+      "frightened": "Przestraszony",
+      "hazed": "Zamglony",
+      "hobbled": "Spętany",
+      "immobilized": "Unieruchomiony",
+      "invisible_improved": "Niewidzialny (ulepszony)",
+      "nauseated": "Mdłości",
+      "panicked": "Spanikowany",
+      "petrified": "Skamieniały",
+      "poisoned": "Zatruty",
+      "silent": "Bezgłośny",
+      "silent_improved": "Bezgłośny (ulepszony)",
+      "stilled": "Znieruchomiały",
+      "wet": "Mokry",
+      "zapped": "Porażony",
+      "sensorLock": "Namierzony czujnikami",
+      "cerebropathy": "Matryca: cerebropatia",
+      "cybervirus": "Matryca: cyberwirus",
+      "psychotropic": "Matryca: psychotropowy",
+      "bleeding": "Krwawienie",
+      "disabled": "Unieszkodliwiony",
+      "muted": "Wyciszony",
+      "offbalance": "Wytrącony z równowagi",
+      "aceinthehand": "Społeczne: as w rękawie",
+      "fishoutofwater": "Społeczne: ryba bez wody",
+      "misdirected": "Społeczne: zmylony",
+      "follower": "Społeczne: naśladowca",
+      "smitten": "Społeczne: zauroczony",
+      "suckered": "Społeczne: nabity w butelkę",
+      "irradiated": "Napromieniowany"
+    },
+    "dice": {
+      "hit": "Sukces!",
+      "failed": "Porażka!",
+      "wild": "Dzika kość – 3 sukcesy!",
+      "wild_ignored": "Sukces anulowany, bo na dzikiej kości wypadła 1.",
+      "edge_rerolled": "Przerzucono za Edge.",
+      "edge_rolled": "Rzut kośćmi Edge.",
+      "extended_success": "Łącznie upłynęło {timePassed} {intervalScale} i udało ci się wykonać zadanie.",
+      "extended_failure": "Łącznie upłynęło {timePassed} {intervalScale}, ale nie udało ci się wykonać zadania.",
+      "extended_first_interval": "Pierwszy interwał",
+      "extended_next_interval": "Następny interwał",
+      "extended": {
+        "continue": "Kontynuuj test rozszerzony",
+        "desc": "Łącznie upłynęło {timePassed} {intervalScale}, a masz w sumie {hits} sukcesów.",
+        "intervalScale": {
+          "round_short": "r",
+          "round_long_zero": "rund",
+          "round_long_one": "runda",
+          "round_long_two": "rundy",
+          "round_long_few": "rundy",
+          "round_long_many": "rund",
+          "round_long_other": "rundy",
+          "minute_short": "min",
+          "minute_long_zero": "minut",
+          "minute_long_one": "minuta",
+          "minute_long_two": "minuty",
+          "minute_long_few": "minuty",
+          "minute_long_many": "minut",
+          "minute_long_other": "minuty",
+          "hour_short": "godz.",
+          "hour_long_zero": "godzin",
+          "hour_long_one": "godzina",
+          "hour_long_two": "godziny",
+          "hour_long_few": "godziny",
+          "hour_long_many": "godzin",
+          "hour_long_other": "godziny",
+          "day_short": "d",
+          "day_long_zero": "dni",
+          "day_long_one": "dzień",
+          "day_long_two": "dni",
+          "day_long_few": "dni",
+          "day_long_many": "dni",
+          "day_long_other": "dnia",
+          "week_short": "tydz.",
+          "week_long_zero": "tygodni",
+          "week_long_one": "tydzień",
+          "week_long_two": "tygodnie",
+          "week_long_few": "tygodnie",
+          "week_long_many": "tygodni",
+          "week_long_other": "tygodnia",
+          "month_short": "mies.",
+          "month_long_zero": "miesięcy",
+          "month_long_one": "miesiąc",
+          "month_long_two": "miesiące",
+          "month_long_few": "miesiące",
+          "month_long_many": "miesięcy",
+          "month_long_other": "miesiąca"
+        }
+      }
+    },
+    "legwork": {
+      "legwork_rolltext": "Wywiad // Wpływy",
+      "loyalty_rolltext": "Wywiad // Lojalność",
+      "legwork_description": "Ile {name} wie albo może się dowiedzieć przez swoje kontakty?",
+      "loyalty_description": "Na ile {name} jest skłonny podzielić się z tobą tym, co wie lub może ustalić?",
+      "payformore": "«Wiesz, mam wydatki do pokrycia. Za trochę nuyenów mogę ci powiedzieć więcej..»",
+      "results": {
+        "0": "Brak przydatnych informacji.",
+        "1": "Podstawowe, ogólnodostępne informacje.",
+        "2": "Kilka okruchów informacji z pobieżnych poszukiwań.",
+        "3": "Informacje z dawnej nauki lub ogólnej wiedzy zawodowej.",
+        "4": "Bardziej hermetyczna wiedza, trochę zasłyszanych plotek.",
+        "5": "Głęboka wiedza akademicka, solidna wiedza zawodowa, znajomość kulis.",
+        "6": "Wiedza o sekretach i ukrytych informacjach.",
+        "7": "Informacje z najwyższego szczebla, solidne rozeznanie w historii.",
+        "8": "Niemal encyklopedyczna wiedza, w tym niektóre głęboko skrywane sekrety.",
+        "9": "Rzadka wiedza dostępna tylko nielicznym.",
+        "10": "Głębokie sekrety, które inni aktywnie próbują ukryć."
+      }
+    },
+    "ammotypes": {
+      "regular": "Zwykła",
+      "apds": "APDS",
+      "explosive": "Wybuchowa",
+      "flechette": "Strzałkowa",
+      "gel": "Żelowa",
+      "sticknshock": "Stick-n-Shock"
+    },
+    "effect": {
+      "Label": "Efekty",
+      "Label_one": "Efekt",
+      "Create": "Utwórz nowy efekt",
+      "New": "Nowy efekt",
+      "Duration": "Czas trwania",
+      "Source": "Źródło",
+      "Toggle": "Włącz/wyłącz efekt",
+      "Temporary": "Efekty tymczasowe",
+      "Passive": "Efekty pasywne",
+      "Inactive": "Efekty nieaktywne",
+      "CantDelete": "Ten efekt możesz usunąć tylko z poziomu jego przedmiotu."
+    },
+    "active_effect": {
+      "explanation": "Aktywne efekty mogą zmieniać modyfikatory atrybutów i pule postaci lub przedmiotu. Jeśli brakuje automatyzacji potrzebnej dla jakiegoś przedmiotu lub cechy z Shadowrun, zgłoś prośbę o funkcję (Feature Request).",
+      "usage_tips": {
+        "1": "Do zmiany atrybutu, puli lub poziomu zwykle używaj klucza modyfikatora.",
+        "2": "Klucza puli używaj tylko wtedy, gdy musisz <em>nadpisać</em> cały atrybut, np. przy cyberkończynach lub skillwire'ach.",
+        "3": "Jak zwykle w Shadowrun 6E modyfikatory atrybutów i umiejętności są automatycznie ograniczane do +4.",
+        "4": "W polu Wartość możesz użyć '<strong>@actor</strong>' i `<strong>@item</strong>`, aby odwołać się do atrybutu aktora lub przedmiotu, z którym powiązany jest ten efekt. Możesz np. dodać klucz <em>Modyfikator Reakcji</em> z wartością `@item.system.rating` i włączyć <em>Zastosuj efekt do aktora</em> w zakładce <em>Szczegóły</em>, a modyfikator Reakcji postaci wzrośnie o Poziom tego przedmiotu."
+      },
+      "item_tip": "Jeśli chcesz zmienić statystykę samego przedmiotu, <strong>musisz</strong> wyłączyć pole <em>Zastosuj efekt do aktora</em> w zakładce Szczegóły. Aktywny efekt może działać <em>albo</em> na aktora, <em>albo</em> na przedmiot. <strong>NIE</strong> używaj na aktorach kluczy atrybutów przeznaczonych dla modyfikacji sprzętu i odwrotnie.",
+      "gear_mod_tip": "To aktywny efekt <strong>modyfikacji sprzętu</strong>. Wszystkie efekty działają na przedmiot, w którym jest zainstalowana. <strong>NIE</strong> używaj w modyfikacjach sprzętu kluczy atrybutów przeznaczonych dla aktorów i odwrotnie.",
+      "more_info": "Więcej informacji pod linkiem:",
+      "advanced": "Zaawansowane?",
+      "advanced_hint": "Po zaznaczeniu możesz wpisywać własne klucze atrybutów systemu zamiast wybierać tylko z listy zalecanej przez system Shadowrun 6E.",
+      "Modifier": "{attribute} – modyfikator",
+      "Skill": "{skill} – umiejętność",
+      "Pool": "{pool} – pula (tylko nadpisanie)",
+      "defensepool.physical.mod": "Modyfikator puli obrony fizycznej",
+      "defensepool.astral.mod": "Modyfikator puli obrony magicznej",
+      "defensepool.fading.mod": "Modyfikator puli odparcia zanikania",
+      "defensepool.spells_direct.mod": "Modyfikator puli obrony przed czarami bezpośrednimi",
+      "defensepool.spells_indirect.mod": "Modyfikator puli obrony przed czarami pośrednimi",
+      "defensepool.toxin.mod": "Modyfikator puli odporności na toksyny",
+      "defensepool.drain.mod": "Modyfikator puli odparcia drenażu",
+      "defensepool.damage_physical.mod": "Modyfikator puli odporności na obrażenia fizyczne",
+      "defensepool.damage_astral.mod": "Modyfikator puli odporności na obrażenia astralne",
+      "initiative.physical.diceMod": "Modyfikator kości inicjatywy fizycznej",
+      "initiative.astral.diceMod": "Modyfikator kości inicjatywy astralnej",
+      "initiative.matrix.diceMod": "Modyfikator kości inicjatywy w Matrycy",
+      "armor.mod": "Mod pancerza:",
+      "weapon.mod": "Mod broni:",
+      "stunOrPhysical": "Obrażenia ogłuszające (true) lub fizyczne (false)",
+      "dicePoolMod": "Modyfikator puli kości",
+      "wild": "Użyj dzikiej kości (ustaw Nadpisanie: true)",
+      "badLuck": "Pech przy komplikacjach (ustaw Nadpisanie: true)",
+      "painTolerance": "Tolerancja bólu (ustaw Nadpisanie: 'high' lub 'low')",
+      "movementRate": "Tempo ruchu",
+      "movementSprintBase": "Podstawa sprintu",
+      "movementSprintMultiplier": "Mnożnik sprintu",
+      "hardenedArmor": "Utwardzony pancerz",
+      "immunityNormalWeapons": "Odporność na zwykłą broń (Nadpisanie: true)",
+      "importedModifier": "Zaimportowany modyfikator"
+    },
+    "KEYBINDINGS": {
+      "bindTokenControlGroup": "Przypisz zaznaczone tokeny do grupy kontrolnej",
+      "selectTokenControlGroup": "Zaznacz tokeny z grupy kontrolnej",
+      "formGruntGroup": "Utwórz grupę płotek z zaznaczonych tokenów"
+    },
+    "resetEdge": "Zresetuj Edge",
+    "resetEdgeDescription": "Czy zresetować Edge wszystkich aktorów i zaznaczonych tokenów?",
+    "resetAccessLevels": "Zresetuj poziomy dostępu",
+    "resetAccessLevelsDescription": "Czy zresetować poziomy dostępu wszystkich aktorów i tokenów w grze?",
+    "resetOneAccessLevelDescription": "Czy zresetować poziomy dostępu tego aktora?"
+  },
+  "SR6": {
+    "Common": {
+      "FIELDS": {
+        "name": {
+          "label": "Nazwa"
+        },
+        "effects": {
+          "label": "Efekty"
+        },
+        "description": {
+          "label": "Opis"
+        },
+        "rating": {
+          "label": "Poziom"
+        },
+        "type": {
+          "label": "Typ"
+        },
+        "subtype": {
+          "label": "Podtyp"
+        }
+      }
+    },
+    "Actor": {
+      "Tabs": {
+        "summary": "Podsumowanie",
+        "features": "Właściwości",
+        "network": "Sieć",
+        "description": "Opis",
+        "effects": "Efekty",
+        "matrixTarget": "Matryca"
+      },
+      "base": {
+        "FIELDS": {
+          "notes": {
+            "label": "Notatki"
+          },
+          "attributes": {
+            "body": {
+              "label": "Budowa"
+            },
+            "agility": {
+              "label": "Zręczność"
+            },
+            "reaction": {
+              "label": "Reakcja"
+            },
+            "strength": {
+              "label": "Siła"
+            },
+            "willpower": {
+              "label": "Siła Woli"
+            },
+            "logic": {
+              "label": "Logika"
+            },
+            "intuition": {
+              "label": "Intuicja"
+            },
+            "charisma": {
+              "label": "Charyzma"
+            },
+            "edge": {
+              "label": "Edge"
+            },
+            "magic": {
+              "label": "Magia"
+            },
+            "resonance": {
+              "label": "Rezonans"
+            },
+            "essence": {
+              "label": "Esencja"
+            }
+          },
+          "matrix": {
+            "attributes": {
+              "attack": {
+                "label": "Atak"
+              },
+              "sleaze": {
+                "label": "Podstęp"
+              },
+              "dataProcessing": {
+                "label": "Przetwarzanie danych"
+              },
+              "firewall": {
+                "label": "Zapora"
+              }
+            },
+            "overwatchScore": {
+              "label": "Wynik Nadzoru",
+              "label_short": "OS"
+            }
+          },
+          "initiative": {
+            "label": "Inicjatywa",
+            "astral": {
+              "label": "Inicjatywa astralna"
+            },
+            "physical": {
+              "label": "Inicjatywa fizyczna"
+            },
+            "matrix": {
+              "label": "Inicjatywa w Matrycy"
+            }
+          },
+          "skills": {
+            "astral": {
+              "label": "Astral"
+            },
+            "athletics": {
+              "label": "Atletyka"
+            },
+            "biotech": {
+              "label": "Biotechnologia"
+            },
+            "close_combat": {
+              "label": "Walka wręcz"
+            },
+            "con": {
+              "label": "Oszustwo"
+            },
+            "conjuring": {
+              "label": "Przywoływanie"
+            },
+            "cracking": {
+              "label": "Łamanie zabezpieczeń"
+            },
+            "electronics": {
+              "label": "Elektronika"
+            },
+            "engineering": {
+              "label": "Inżynieria"
+            },
+            "exotic_weapons": {
+              "label": "Broń egzotyczna"
+            },
+            "firearms": {
+              "label": "Broń palna"
+            },
+            "influence": {
+              "label": "Wpływ"
+            },
+            "outdoors": {
+              "label": "Przetrwanie"
+            },
+            "perception": {
+              "label": "Percepcja"
+            },
+            "piloting": {
+              "label": "Pilotaż"
+            },
+            "sorcery": {
+              "label": "Czarnoksięstwo"
+            },
+            "stealth": {
+              "label": "Skradanie"
+            },
+            "tasking": {
+              "label": "Zadaniowanie"
+            }
+          }
+        }
+      },
+      "matrixBase": {
+        "FIELDS": {
+          "description": {
+            "label": "Opis ikony"
+          }
+        }
+      },
+      "sprite": {
+        "TYPES": {
+          "courier": "//KURIER//",
+          "crack": "//WŁAMYWACZ//",
+          "data": "//DANE//",
+          "fault": "//USTERKA//",
+          "machine": "//MASZYNA//",
+          "assassin": "//ZABÓJCA//",
+          "defender": "//OBROŃCA//",
+          "modular": "//MODUŁOWY//",
+          "music": "//MUZYKA//",
+          "primal": "//PIERWOTNY//"
+        },
+        "FIELDS": {
+          "level": {
+            "label": "Poziom"
+          },
+          "tasksOwned": {
+            "label": "Posiadane zadania"
+          },
+          "compiledBy": {
+            "label": "Skompilowany przez"
+          },
+          "registered": {
+            "label": "Zarejestrowany"
+          }
+        },
+        "notes": {
+          "music": "Umiejętność Oszustwo: tylko Występy"
+        }
+      },
+      "host": {
+        "TYPES": {
+          "foundation": "Fundament",
+          "framework": "Szkielet"
+        },
+        "FIELDS": {
+          "rating": {
+            "label": "Poziom hosta",
+            "error.foundation": "Atrybuty hosta typu Fundament muszą użyć każdej z wartości: Poziom, Poziom +1, Poziom +2 i Poziom +3 dokładnie raz.",
+            "error.framework": "<div>Host typu Szkielet ma łącznie 6 punktów na ulepszenie atrybutów; jeden atrybut może osiągnąć Poziom +4, a pozostałe najwyżej Poziom +3.</div><div>Opcjonalnie jeden atrybut można ustawić na Poziom −1, co zwiększa pulę punktów do 7.</div>",
+            "error.undefined": "Wybierz typ hosta. Potem skonfiguruj jego atrybuty matrycowe."
+          },
+          "resolutionGrade": {
+            "label": "Klasa rozdzielczości",
+            "choices": {
+              "1": "Klasa 1: minimalna",
+              "2": "Klasa 2: domyślna",
+              "3": "Klasa 3: standardowa",
+              "4": "Klasa 4: niestandardowa",
+              "5": "Klasa 5: rzeźbiona",
+              "6": "Klasa 6: ultrafiolet"
+            }
+          },
+          "scale": {
+            "label": "Skala",
+            "choices": {
+              "1": "Skala 1: mikro (osobista)",
+              "2": "Skala 2: baza (obiekt)",
+              "3": "Skala 3: sieć (lokalna)",
+              "4": "Skala 4: makro (metropolia)",
+              "5": "Skala 5: mega (krajowa)",
+              "6": "Skala 6: eksa (globalna)"
+            }
+          },
+          "convergenceThreshold": {
+            "label": "Próg konwergencji"
+          },
+          "sculpting": {
+            "label": "Rzeźba"
+          },
+          "outsiderAccess": {
+            "label": "Dostęp dla obcych"
+          },
+          "notes": {
+            "label": "Reakcja ochrony"
+          }
+        },
+        "ic": {
+          "label": "Zainstalowane IC",
+          "icAction": "Środek przeciwdziałania włamaniom (IC)"
+        },
+        "matrixItems": {
+          "label": "Ikony w sieci",
+          "editTitle": "Edytuj tę ikonę w sieci",
+          "deployTitle": "Rozmieść tę ikonę matrycową",
+          "retrieveTitle": "Wycofaj tę ikonę matrycową",
+          "rollTitle": "Rzuć {name}, używając atrybutów hosta",
+          "deployed": "Rozmieszczone",
+          "installedIn": "Zainstalowane w",
+          "deviceAction": "Kontroluj urządzenie",
+          "tipTitle": "<p>Do tego hosta możesz dodać urządzenia matrycowe.</p><p>Przykłady:</p><ul><li>Dodaj <strong>broń</strong>, aby stworzyć wieżyczki sterowane przez hosta.</li><li>Dodaj urządzenia <em>elektroniczne</em>, np. podtyp <strong>Optyka</strong> jako czujnik kamery.</li><li>Dodaj <em>elektroniczne</em> <strong>Przechowywanie plików</strong>, aby stworzyć systemy plików do zhakowania.</li></ul>"
+        },
+        "spider": {
+          "assigned": "Przydzieleni pająki",
+          "assign": "Przydziel do służby pająka",
+          "assign_tooltip": "Przeciągnięcie tego na kartę postaci lub token tworzy efekt przydzielający tę postać jako pająka tego hosta.",
+          "assigned_to_host": "Przydzielony do służby pająka w {host}",
+          "open_sheet": "Kliknij, aby otworzyć kartę pająka {name}",
+          "unassign_tooltip": "Usuń ze służby pająka"
+        }
+      }
+    },
+    "Item": {
+      "base": {
+        "FIELDS": {
+          "genesisID": {
+            "label": "GenesisID"
+          },
+          "availDef": {
+            "label": "Dost."
+          },
+          "price": {
+            "label": "Cena"
+          },
+          "isElectronicMatrixDevice": {
+            "label": "Urządzenie matrycowe",
+            "hint": "Po włączeniu ten sprzęt jest traktowany jako elektroniczne urządzenie matrycowe, ma Poziom urządzenia i można go używać przez DNI, AR lub VR."
+          },
+          "hasWirelessInterface": {
+            "label": "Interfejs bezprzewodowy",
+            "hint": "Po włączeniu ten sprzęt jest elektronicznym urządzeniem matrycowym z interfejsem bezprzewodowym. Przy aktywnej łączności bezprzewodowej można go używać przez AR lub VR. Zwykle ma premię bezprzewodową."
+          },
+          "hasDataCableInterface": {
+            "label": "Złącze kablowe",
+            "hint": "Po włączeniu ten sprzęt ma złącze kablowe i można go używać przez DNI w połączeniu bezpośrednim."
+          },
+          "deviceRating": {
+            "label": "Poziom urządzenia",
+            "tooltip": "<p>Poziom elektronicznego urządzenia matrycowego. Od Poziomu urządzenia zależy jego monitor stanu w Matrycy.</p><p>Większość istotnych urządzeń ma Poziom podany w podręczniku, a jeśli nie, użyj tych wskazówek:</p><p><strong>1: Proste urządzenia</strong>, np. sprzęt AGD, publiczne terminale, systemy rozrywki.</p><p><strong>2: Przeciętne urządzenia</strong>, np. osobista elektronika, podstawowy cyberware, broń, domowe zabezpieczenia, zwykłe pojazdy.</p><p><strong>3: Inteligentne urządzenia</strong>, np. pojazdy ochrony, alphaware, korporacyjne zabezpieczenia.</p><p><strong>4: Zaawansowane urządzenia</strong>, np. sprzęt z najwyższej półki, betaware, pojazdy i zabezpieczenia wojskowe.</p><p><strong>5: Najnowocześniejsze urządzenia</strong>, np. kredsticki, pojazdy i zabezpieczenia czarnych operacji.</p><p><strong>6+: Prototypowe urządzenia</strong>, np. deltaware, gammaware, eksperymentalne urządzenia za miliardy nuyenów, statki kosmiczne.</p>"
+          },
+          "wirelessActive": {
+            "label": "Bezprzewodowo",
+            "hint": "Gdy włączone, ten sprzęt jest używany przez interfejs bezprzewodowy. Niektóre przedmioty, np. kredstick, działają tylko z aktywnym interfejsem bezprzewodowym. Gdy to jest aktywne, działa premia bezprzewodowa sprzętu."
+          },
+          "cyberwareGrade": {
+            "label": "Klasa cyberware",
+            "hint": "<p>Klasa cyberware wpływa nie tylko na koszt w Esencji i nuyenach, ale też na Poziom urządzenia.<p>Od Poziomu urządzenia zależy monitor stanu w Matrycy.</p>"
+          },
+          "ammoLoaded": {
+            "label": "Załadowana amunicja",
+            "hint": "Wybierz rodzaj amunicji załadowanej obecnie do broni dystansowej."
+          }
+        },
+        "label": {
+          "encryption_rating": "Poziom szyfrowania"
+        }
+      },
+      "mod": {
+        "FIELDS": {
+          "embeddedInUuid": {
+            "label": "Modyfikowany przedmiot"
+          },
+          "rating": {
+            "label": "Poziom",
+            "tooltip": "<p>Poziom modyfikacji sprzętu (0, jeśli nie ma Poziomu).</p><p>Czasem nazywa się go też kosztem pojemności.</p><p>W rozdziale o sprzęcie w podręczniku głównym może być oznaczony jako [Rating].</p>"
+          }
+        },
+        "TYPES": {
+          "accessory_weapon": "Akcesorium do broni",
+          "weapon_mod": "Modyfikacja broni",
+          "armor_mod": "Modyfikacja pancerza",
+          "accessory_electronics": "Akcesorium elektroniczne",
+          "visual_enhancement": "Ulepszenie wzroku",
+          "audio_enhancement": "Ulepszenie audio"
+        },
+        "label": {
+          "section": "Modyfikacje sprzętu",
+          "not_installed": "(niezainstalowana)",
+          "uninstall": "Odinstaluj tę modyfikację"
+        }
+      },
+      "software": {
+        "FIELDS": {
+          "price": {
+            "label": "Cena bazowa"
+          },
+          "installedCost": {
+            "label": "Koszt instalacji"
+          },
+          "embeddedInUuid": {
+            "label": "Zainstalowane w"
+          },
+          "multiTypes": {
+            "label": "Program IC"
+          }
+        },
+        "TYPES": {
+          "IC": "IC"
+        },
+        "MULTITYPES": {
+          "acid": "Kwas",
+          "binder": "Spinacz",
+          "black": "Czarne IC",
+          "blaster": "Blaster",
+          "crash": "Zawieszacz",
+          "jammer": "Zagłuszacz",
+          "killer": "Zabójca",
+          "marker": "Znacznik",
+          "patrol": "Patrol",
+          "scramble": "Zakłócacz",
+          "sparky": "Iskra",
+          "tarbaby": "Smoluch",
+          "track": "Tropiciel"
+        }
+      }
+    },
+    "label": {
+      "name": "Nazwa",
+      "template": "SZABLON",
+      "unique": "UNIKAT",
+      "token": "TOKEN",
+      "CM.phys.short": "FIZ",
+      "CM.stun.short": "OGŁ",
+      "CM.matrix.short": "MTRX",
+      "RIP": "R.I.P.",
+      "viewTemplateActor": "Pokaż aktora-szablon",
+      "activeSkills": "Umiejętności aktywne",
+      "knowledgeSkills": "Umiejętności wiedzy",
+      "languages": "Języki",
+      "qualities": "Cechy",
+      "powers": "Moce",
+      "untrained": "Bez wyszkolenia",
+      "deviceRating": "Poziom urządzenia",
+      "lifespan": "Czas życia",
+      "lifespan_hours": "{number} {hourScale}",
+      "yes": "Tak",
+      "no": "Nie",
+      "unknown": "<nieznane>",
+      "matrixCM": "Monitor stanu w Matrycy",
+      "matrixCmPenalty": "Modyfikator obrażeń matrycowych",
+      "system_message": "//KOMUNIKAT SYSTEMU//",
+      "programSlots": "Gniazda programów",
+      "gm_do_something": "MG: "
+    },
+    "title": {
+      "editButton": "Edytuj aktora",
+      "editImage": "Kliknij, aby zmienić obraz",
+      "showImage": "Kliknij, aby pokazać obraz",
+      "increaseOS": "Kliknij, aby zwiększyć Wynik Nadzoru",
+      "decreaseOS": "Kliknij, aby zmniejszyć Wynik Nadzoru",
+      "showOS": "Kliknij, aby pokazać Wynik Nadzoru",
+      "CM.phys.dmg": "Obrażenia na monitorze fizycznym",
+      "CM.stun.dmg": "Obrażenia na monitorze ogłuszenia",
+      "CM.matrix.dmg": "Obrażenia na monitorze Matrycy",
+      "personaModeToggle": "Przełącz tryb persony (publiczny/cichy)",
+      "changeEdge": "Zwiększ (lewy klik) lub zmniejsz (prawy klik) Edge",
+      "onlyGmCanRevive": "Tylko MG może wskrzesić martwą postać.",
+      "attributeHint": "Baza {rank} + mod {mod} = pula {pool}",
+      "skillHint": "Baza {rank} + mod {mod} + {attr} {attrPool}{untrained} = pula {pool}",
+      "clickItemName": "Pokaż opis (lewy klik) lub wyślij na czat (prawy klik)",
+      "showDescription": "Pokaż opis",
+      "sendToChat": "Wyślij opis na czat",
+      "useItem": "Użyj: {name}",
+      "noRollNeeded": "Rzut niepotrzebny. Kliknij, aby wysłać opis na czat.",
+      "rollSomething": "Rzuć: {typeOfRoll}",
+      "matrixCmPenalty": "Twoje elektroniczne urządzenie matrycowe jest uszkodzone przez Matrycę.",
+      "createsPersona": "Twoją personę tworzy główne urządzenie, przez które łączysz się z Matrycą.",
+      "running_silent": "Przełącz tryb cichy",
+      "pan": "Osobista sieć (PAN) to sieć dowolnej liczby urządzeń matrycowych należących do tej samej osoby, które razem nosi, ma wszczepione, przy sobie lub w inny sposób na sobie.",
+      "living_network": "<p>Twoja żywa persona może tworzyć PAN i w niej uczestniczyć.</p><p>Osobista sieć (PAN) to sieć dowolnej liczby urządzeń matrycowych należących do tej samej osoby, które razem nosi, ma wszczepione, przy sobie lub w inny sposób na sobie.</p><p>W SR6e dla FoundryVTT zakłada się, że każdy technomanta ma już echo Żywa sieć.</p>",
+      "pan_admin": "Lider PAN, czyli jej administrator, kontroluje całą sieć. Statystyki matrycowe i mentalne tej persony tworzą pulę obrony przed akcjami matrycowymi wymierzonymi w całą sieć drużyny",
+      "deviceLimit": "<p>PAN może obejmować ograniczoną liczbę urządzeń sterowanych zdalnie; ta zasada nazywa się limitem urządzeń.</p><p>Pojazdy, drony, podsłuchy danych, inteligentne platformy strzeleckie i znaczniki czujników to typowe przykłady urządzeń, które zużywają limit urządzeń PAN, jeśli są używane w znacznej odległości od użytkownika.</p><p>Ten limit urządzeń pozostaje zarezerwowany dla twojej podsieci PAN.</p>",
+      "notGM": "Tylko MG może tego użyć.",
+      "ownerOnlySection": "Ta sekcja jest widoczna tylko dla właściciela tej postaci i MG."
+    },
+    "statblock": {
+      "system.rating": "POZIOM",
+      "system.matrix.attributes.attack": "ATAK",
+      "system.matrix.attributes.sleaze": "PODSTĘP",
+      "system.matrix.attributes.dataProcessing": "PRZETW. DANYCH",
+      "system.matrix.attributes.firewall": "ZAPORA",
+      "system.initiative.astral": "INI",
+      "system.initiative.physical": "INI",
+      "system.initiative.matrix": "INI",
+      "system.attributes.willpower": "SW",
+      "system.attributes.logic": "L",
+      "system.attributes.intuition": "I",
+      "system.attributes.charisma": "C",
+      "system.attributes.resonance": "REZ"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+# Publishing a GitHub release builds shadowrun-edge.zip and attaches it together with module.json,
+# so Foundry can install the module from the manifest URL.
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set version and download URL from the release tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          jq --arg v "$VERSION" \
+             --arg d "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/shadowrun-edge.zip" \
+             '.version = $v | .download = $d' module.json > module.tmp && mv module.tmp module.json
+
+      - name: Build zip
+        run: zip -r shadowrun-edge.zip module.json scripts lang README.md
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" module.json shadowrun-edge.zip --clobber
