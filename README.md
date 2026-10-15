@@ -60,5 +60,12 @@ w których nie zgadzają się `{placeholdery}` lub znaczniki HTML.
 
 ## Wydanie nowej wersji
 
-Opublikuj wydanie na GitHubie z tagiem np. `v0.1.0`. Workflow `.github/workflows/release.yml`
-sam zbuduje `shadowrun-edge.zip` i dołączy go razem z `module.json`.
+Podnieś `version` w `module.json`, zrób commit i wypchnij tag z tym numerem:
+
+```bash
+git tag v0.1.1
+git push origin v0.1.1
+```
+
+Workflow `.github/workflows/release.yml` sam utworzy wydanie na GitHubie i dołączy do niego
+`shadowrun-edge.zip` oraz `module.json`. Foundry zobaczy aktualizację przez adres manifestu.
