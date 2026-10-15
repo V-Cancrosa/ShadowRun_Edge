@@ -3,3 +3,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+# Rulebooks stay local (copyrighted)
+*.pdf
