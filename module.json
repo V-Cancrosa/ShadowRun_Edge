@@ -1,14 +1,16 @@
 {
   "id": "shadowrun-edge",
   "title": "Shadowrun Edge",
-  "description": "Moduł współpracujący z systemem Shadowrun 6th Edition (shadowrun6-eden): pełne polskie tłumaczenie i usprawnienia, bez zmian w kodzie systemu.",
-  "version": "0.1.2",
+  "description": "Moduł współpracujący z systemem Shadowrun 6th Edition (shadowrun6-eden): pełne polskie tłumaczenie i kreator przedmiotów według tabel z podręcznika, bez zmian w kodzie systemu.",
+  "version": "0.2.0",
   "compatibility": {
     "minimum": "13",
     "verified": "14"
   },
   "authors": [
-    { "name": "V_Cancrosa" }
+    {
+      "name": "V_Cancrosa"
+    }
   ],
   "relationships": {
     "systems": [
@@ -22,7 +24,12 @@
       }
     ]
   },
-  "esmodules": ["scripts/shadowrun-edge.mjs"],
+  "esmodules": [
+    "scripts/shadowrun-edge.mjs"
+  ],
+  "styles": [
+    "styles/shadowrun-edge.css"
+  ],
   "languages": [
     {
       "lang": "pl",

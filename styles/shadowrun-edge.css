@@ -1,0 +1,60 @@
+.sre-item-wizard .window-content {
+  overflow-y: auto;
+}
+
+.sre-wizard fieldset {
+  margin-bottom: 0.5rem;
+}
+
+.sre-wizard .sre-target {
+  margin: 0 0 0.5rem;
+  font-style: italic;
+}
+
+.sre-wizard .form-fields {
+  gap: 0.25rem;
+}
+
+.sre-wizard input.sre-short {
+  flex: 0 0 5rem;
+  width: 5rem;
+}
+
+.sre-wizard .sre-ar input {
+  width: 3rem;
+  text-align: center;
+}
+
+.sre-wizard label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  white-space: nowrap;
+}
+
+.sre-wizard .sre-preview {
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.sre-wizard .sre-parse-result {
+  margin: 0.25rem 0 0;
+}
+
+.sre-wizard .sre-warn {
+  color: var(--color-level-warning, #ee9b3a);
+}
+
+.sre-wizard .form-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.sre-wizard .form-footer button {
+  flex: 1 1 auto;
+}
+
+.directory .header-actions .sre-wizard-button {
+  flex-basis: 100%;
+}
