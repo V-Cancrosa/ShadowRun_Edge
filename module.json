@@ -2,7 +2,7 @@
   "id": "shadowrun-edge",
   "title": "Shadowrun Edge",
   "description": "Moduł współpracujący z systemem Shadowrun 6th Edition (shadowrun6-eden): pełne polskie tłumaczenie i usprawnienia, bez zmian w kodzie systemu.",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "compatibility": {
     "minimum": "13",
     "verified": "14"
@@ -33,12 +33,12 @@
     {
       "lang": "pl",
       "name": "Polski",
-      "path": "lang/pl/module.json"
+      "path": "lang/pl/shadowrun-edge.json"
     },
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en/module.json"
+      "path": "lang/en/shadowrun-edge.json"
     }
   ],
   "url": "https://github.com/V-Cancrosa/ShadowRun_Edge",
