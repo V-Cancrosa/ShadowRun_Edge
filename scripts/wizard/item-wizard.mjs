@@ -205,8 +205,8 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     super(options);
     this.actor = options.actor ?? null;
     this.target = this.actor ? "actor" : (options.target ?? (game.user.isGM ? "catalog" : "world"));
-    this.state = emptyState();
-    this.state.subtype = this.#subtypes()[0]?.value ?? "";
+    this.wizardState = emptyState();
+    this.wizardState.subtype = this.#subtypes()[0]?.value ?? "";
     this.lastParse = null;
     this.bulk = null;
   }
@@ -242,10 +242,10 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   get category() {
-    return CATEGORIES[this.state.category];
+    return CATEGORIES[this.wizardState.category];
   }
 
-  #subtypes(type = this.state.type) {
+  #subtypes(type = this.wizardState.type) {
     if (this.category.itemType === "mod") return [];
     const subtypes = CONFIG.SR6?.GEAR_SUBTYPES?.[type] ?? {};
     return Object.entries(subtypes).map(([value, label]) => ({ value, label: game.i18n.localize(label) }));
@@ -253,15 +253,15 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   async #presets() {
     const all = [...(await loadBuiltinPresets()), ...worldPresets()];
-    return all.filter((p) => p.state?.category === this.state.category);
+    return all.filter((p) => p.state?.category === this.wizardState.category);
   }
 
   /** Catalog folder path for the current kind, e.g. ["Broń palna", "Ciężkie pistolety"]. */
   #folderPath() {
     const category = this.category;
     const path = [game.i18n.localize(category.label)];
-    if (category.types.length > 1) path.push(game.i18n.localize(typeLabel(category, this.state.type)));
-    const subtype = this.#subtypes().find((s) => s.value === this.state.subtype);
+    if (category.types.length > 1) path.push(game.i18n.localize(typeLabel(category, this.wizardState.type)));
+    const subtype = this.#subtypes().find((s) => s.value === this.wizardState.subtype);
     if (subtype) path.push(subtype.label);
     return path;
   }
@@ -270,19 +270,19 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const category = this.category;
     const show = Object.fromEntries(category.fields.map((f) => [f, true]));
     const presets = await this.#presets();
-    const [skill, spec] = WEAPON_SKILLS[this.state.subtype] ?? [];
+    const [skill, spec] = WEAPON_SKILLS[this.wizardState.subtype] ?? [];
     const targets = [];
     if (this.actor) targets.push({ value: "actor", label: game.i18n.format("SRE.Wizard.TargetActor", { name: this.actor.name }) });
     targets.push({ value: "world", label: game.i18n.localize("SRE.Wizard.TargetWorld") });
     if (game.user.isGM) targets.push({ value: "catalog", label: game.i18n.localize("SRE.Wizard.TargetCatalog") });
     return {
-      state: this.state,
+      state: this.wizardState,
       show,
       isMod: category.itemType === "mod",
       weapon: !!category.weapon,
       hasRating: !!category.rating,
       countable: !!category.countable,
-      isCyberdeck: this.state.subtype === "CYBERDECK",
+      isCyberdeck: this.wizardState.subtype === "CYBERDECK",
       example: category.example,
       categories: Object.entries(CATEGORIES).map(([value, c]) => ({ value, label: game.i18n.localize(c.label) })),
       multiType: category.types.length > 1,
@@ -344,13 +344,13 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       if (typeof value === "number") s[key] = String(value);
       else if (value === null || value === undefined) s[key] = "";
     }
-    Object.assign(this.state, s);
+    Object.assign(this.wizardState, s);
   }
 
   /** Values calculated from rating formulas, shown next to their inputs. */
   #previews() {
-    const rating = int(this.state.rating);
-    const { avail, legality, price, essence } = this.state;
+    const rating = int(this.wizardState.rating);
+    const { avail, legality, price, essence } = this.wizardState;
     return {
       avail: avail ? `= ${int(avail, rating)}${legality ? `(${legality})` : ""}` : "",
       price: price ? `= ${evaluate(price, rating)}¥` : "",
@@ -360,16 +360,16 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   #onChange(event) {
     const name = event.target?.name ?? "";
-    const before = { category: this.state.category, type: this.state.type };
+    const before = { category: this.wizardState.category, type: this.wizardState.type };
     this.#readForm();
-    if (name === "state.category" && this.state.category !== before.category) {
-      const keep = { name: this.state.name, description: this.state.description, statLine: this.state.statLine };
-      this.state = Object.assign(emptyState(this.state.category), keep);
-      this.state.subtype = this.#subtypes()[0]?.value ?? "";
+    if (name === "state.category" && this.wizardState.category !== before.category) {
+      const keep = { name: this.wizardState.name, description: this.wizardState.description, statLine: this.wizardState.statLine };
+      this.wizardState = Object.assign(emptyState(this.wizardState.category), keep);
+      this.wizardState.subtype = this.#subtypes()[0]?.value ?? "";
       this.lastParse = null;
       this.bulk = null;
-    } else if (name === "state.type" && this.state.type !== before.type) {
-      this.state.subtype = this.#subtypes()[0]?.value ?? "";
+    } else if (name === "state.type" && this.wizardState.type !== before.type) {
+      this.wizardState.subtype = this.#subtypes()[0]?.value ?? "";
     }
     // Only layout changes re-render; re-rendering on every input would swallow a click on "Create".
     if (["state.category", "state.type", "state.subtype", "target"].includes(name)) {
@@ -395,20 +395,20 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       return;
     }
     this.#readForm();
-    this.state.mods = [...(this.state.mods ?? []), { uuid: item.uuid, name: item.name }];
+    this.wizardState.mods = [...(this.wizardState.mods ?? []), { uuid: item.uuid, name: item.name }];
     this.render();
   }
 
   /** Parses every non-empty line of the paste field as one table row. */
   #parseBulk() {
-    const lines = String(this.state.statLine ?? "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+    const lines = String(this.wizardState.statLine ?? "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
     this.bulk = lines.map((line) => {
-      const { name, fields, unparsed } = parseStatLine(line, this.category, this.state.subtype);
-      const state = Object.assign(emptyState(this.state.category), {
-        type: this.state.type,
-        subtype: this.state.subtype,
-        mods: [...(this.state.mods ?? [])],
-        effects: foundry.utils.deepClone(this.state.effects ?? []),
+      const { name, fields, unparsed } = parseStatLine(line, this.category, this.wizardState.subtype);
+      const state = Object.assign(emptyState(this.wizardState.category), {
+        type: this.wizardState.type,
+        subtype: this.wizardState.subtype,
+        mods: [...(this.wizardState.mods ?? [])],
+        effects: foundry.utils.deepClone(this.wizardState.effects ?? []),
       }, fields, { name: name || line });
       return { state, summary: summarize(state), unparsed: unparsed.join(" ") };
     });
@@ -416,14 +416,14 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static #onParse() {
     this.#readForm();
-    const lines = String(this.state.statLine ?? "").split(/\r?\n/).filter((l) => l.trim());
+    const lines = String(this.wizardState.statLine ?? "").split(/\r?\n/).filter((l) => l.trim());
     if (lines.length > 1) {
       this.#parseBulk();
       this.lastParse = null;
     } else {
-      const { name, fields, unparsed } = parseStatLine(this.state.statLine, this.category, this.state.subtype);
-      if (name && !this.state.name) this.state.name = name;
-      Object.assign(this.state, fields);
+      const { name, fields, unparsed } = parseStatLine(this.wizardState.statLine, this.category, this.wizardState.subtype);
+      if (name && !this.wizardState.name) this.wizardState.name = name;
+      Object.assign(this.wizardState, fields);
       this.lastParse = { count: Object.keys(fields).length, unparsed: unparsed.join(" ") };
       this.bulk = null;
     }
@@ -440,7 +440,7 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const id = this.element.querySelector("[name='preset']")?.value;
     const preset = (await this.#presets()).find((p) => p.id === id);
     if (!preset) return;
-    this.state = foundry.utils.mergeObject(emptyState(preset.state.category), foundry.utils.deepClone(preset.state));
+    this.wizardState = foundry.utils.mergeObject(emptyState(preset.state.category), foundry.utils.deepClone(preset.state));
     this.lastParse = null;
     this.bulk = null;
     this.render();
@@ -452,13 +452,13 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       ui.notifications.warn(game.i18n.localize("SRE.Wizard.PresetGMOnly"));
       return;
     }
-    const label = this.state.name.trim();
+    const label = this.wizardState.name.trim();
     if (!label) {
       ui.notifications.warn(game.i18n.localize("SRE.Wizard.PresetNeedsName"));
       return;
     }
-    const presets = worldPresets().filter((p) => p.label !== label || p.state.category !== this.state.category);
-    const state = foundry.utils.deepClone(this.state);
+    const presets = worldPresets().filter((p) => p.label !== label || p.state.category !== this.wizardState.category);
+    const state = foundry.utils.deepClone(this.wizardState);
     delete state.statLine;
     presets.push({ id: foundry.utils.randomID(), label, state });
     await game.settings.set(MODULE_ID, "presets", presets);
@@ -479,27 +479,27 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   static #onAddEffect() {
     this.#readForm();
     const target = this.category.actorEffects ? "str" : "ar";
-    this.state.effects = [...(this.state.effects ?? []), { label: "", target, value: "", toggle: false }];
+    this.wizardState.effects = [...(this.wizardState.effects ?? []), { label: "", target, value: "", toggle: false }];
     this.render();
   }
 
   static #onRemoveEffect(event, target) {
     this.#readForm();
     const index = Number(target.dataset.index);
-    this.state.effects = this.state.effects.filter((_, i) => i !== index);
+    this.wizardState.effects = this.wizardState.effects.filter((_, i) => i !== index);
     this.render();
   }
 
   static #onRemoveMod(event, target) {
     this.#readForm();
     const index = Number(target.dataset.index);
-    this.state.mods = this.state.mods.filter((_, i) => i !== index);
+    this.wizardState.mods = this.wizardState.mods.filter((_, i) => i !== index);
     this.render();
   }
 
   static #onReset() {
-    this.state = emptyState(this.state.category);
-    this.state.subtype = this.#subtypes()[0]?.value ?? "";
+    this.wizardState = emptyState(this.wizardState.category);
+    this.wizardState.subtype = this.#subtypes()[0]?.value ?? "";
     this.lastParse = null;
     this.bulk = null;
     this.render();
@@ -540,14 +540,14 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const created = await this.#create(this.bulk.map((row) => row.state));
     if (created.length) {
       this.bulk = null;
-      this.state.statLine = "";
+      this.wizardState.statLine = "";
       this.render();
     }
   }
 
   static async #onSubmit(event) {
     this.#readForm();
-    const [item] = await this.#create([this.state]);
+    const [item] = await this.#create([this.wizardState]);
     if (item && event.submitter?.dataset.open === "true") {
       item.sheet.render(true);
       this.close();
