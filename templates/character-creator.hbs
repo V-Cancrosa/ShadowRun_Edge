@@ -1,105 +1,159 @@
-<div class="sre-cc">
-  <div class="sre-cc-head">
+<div class="sre-cc {{#if errors.length}}sre-cc-has-errors{{/if}}">
+  {{!-- Header: who the character is, budget meters, steps --}}
+  <header class="sre-cc-head">
+    <div class="sre-cc-hero">
+      <div class="sre-cc-avatar"><span class="sre-cc-avatar-initial" data-header-initial>{{header.initial}}</span></div>
+      <div class="sre-cc-identity">
+        <h2 data-header-name>{{header.name}}</h2>
+        <div class="sre-cc-tags">
+          <span class="sre-cc-tag">{{header.metatype}}</span>
+          <span class="sre-cc-tag sre-cc-tag-magic">{{header.magic}}</span>
+          <span class="sre-cc-tag sre-cc-tag-level">{{header.level}}</span>
+        </div>
+      </div>
+    </div>
     <div class="sre-cc-budgets">
       {{#each budgets}}
-      <span class="sre-cc-budget {{#if over}}sre-cc-over{{/if}}" data-budget="{{id}}">{{label}}: <strong class="sre-cc-budget-value">{{text}}</strong></span>
+      <div class="sre-cc-meter" data-budget="{{id}}" data-state="{{state}}">
+        <span class="sre-cc-meter-label">{{label}}</span>
+        <strong class="sre-cc-budget-value">{{text}}</strong>
+        <span class="sre-cc-meter-bar"><span class="sre-cc-meter-fill" style="width: {{pct}}%"></span></span>
+      </div>
       {{/each}}
     </div>
-    <nav class="sre-cc-tabs">
+    <nav class="sre-cc-steps">
       {{#each tabs}}
-      <button type="button" class="{{#if active}}active{{/if}}" data-action="showTab" data-tab="{{id}}">{{label}}</button>
+      <button type="button" class="sre-cc-step {{#if active}}active{{/if}} {{#if errors}}sre-cc-step-error{{/if}} {{#if done}}sre-cc-step-done{{/if}}"
+              data-action="showTab" data-tab="{{id}}">
+        <span class="sre-cc-step-number">{{number}}</span>
+        <span class="sre-cc-step-label">{{label}}</span>
+        <span class="sre-cc-step-badge">{{#if errors}}{{errors}}{{/if}}</span>
+      </button>
       {{/each}}
     </nav>
-  </div>
+  </header>
 
   <div class="sre-cc-body">
     {{!-- 1. Priorities, metatype, magic --}}
     <section class="sre-cc-tab {{#if active.priorities}}active{{/if}}" data-tab="priorities">
-      <div class="form-group">
-        <label>{{localize "SRE.Chargen.Name"}}</label>
-        <input type="text" name="draft.name" value="{{draft.name}}">
+      <div class="sre-cc-panel sre-cc-basics">
+        <label class="sre-cc-field sre-cc-field-wide">
+          <span>{{localize "SRE.Chargen.Name"}}</span>
+          <input type="text" name="draft.name" value="{{draft.name}}" placeholder="{{localize "SRE.Chargen.Unnamed"}}">
+        </label>
+        <label class="sre-cc-field sre-cc-field-wide">
+          <span>{{localize "SRE.Chargen.Concept"}}</span>
+          <input type="text" name="draft.concept" value="{{draft.concept}}" placeholder="{{localize "SRE.Chargen.ConceptHint"}}">
+        </label>
+        <label class="sre-cc-field">
+          <span>{{localize "SRE.Chargen.LevelLabel"}}</span>
+          <select name="draft.level">{{selectOptions levels selected=draft.level valueAttr="value" labelAttr="label"}}</select>
+        </label>
       </div>
-      <div class="form-group">
-        <label>{{localize "SRE.Chargen.Concept"}}</label>
-        <input type="text" name="draft.concept" value="{{draft.concept}}" placeholder="{{localize "SRE.Chargen.ConceptHint"}}">
-      </div>
-      <div class="form-group">
-        <label>{{localize "SRE.Chargen.LevelLabel"}}</label>
-        <select name="draft.level">{{selectOptions levels selected=draft.level valueAttr="value" labelAttr="label"}}</select>
-      </div>
+
+      <h3 class="sre-cc-title"><i class="fas fa-table-cells"></i> {{localize "SRE.Chargen.PriorityTable"}}</h3>
       <p class="hint">{{localize "SRE.Chargen.PriorityHint"}}</p>
-      {{#each priorityColumns}}
-      <div class="form-group">
-        <label>{{label}}</label>
-        <select name="draft.priorities.{{column}}">{{selectOptions options selected=value valueAttr="value" labelAttr="label"}}</select>
+      <div class="sre-cc-grid">
+        <div class="sre-cc-grid-corner"></div>
+        {{#each columns}}<div class="sre-cc-grid-head">{{label}}</div>{{/each}}
+        {{#each priorityGrid}}
+        <div class="sre-cc-grid-row">{{letter}}</div>
+        {{#each cells}}
+        <label class="sre-cc-cell {{#if selected}}selected{{/if}} {{#if taken}}taken{{/if}}">
+          <input type="radio" name="draft.priorities.{{column}}" value="{{letter}}" {{checked selected}}>
+          <span>{{text}}</span>
+        </label>
+        {{/each}}
+        {{/each}}
       </div>
-      {{/each}}
-      <div class="form-group">
-        <label>{{localize "SRE.Chargen.MetatypeLabel"}}</label>
-        <select name="draft.metatype">{{selectOptions metatypes selected=draft.metatype valueAttr="value" labelAttr="label"}}</select>
+
+      <h3 class="sre-cc-title"><i class="fas fa-dna"></i> {{localize "SRE.Chargen.MetatypeLabel"}}</h3>
+      <div class="sre-cc-cards">
+        {{#each metatypeCards}}
+        <label class="sre-cc-card {{#if selected}}selected{{/if}} {{#if disabled}}disabled{{/if}}">
+          <input type="radio" name="draft.metatype" value="{{value}}" {{checked selected}} {{#if disabled}}disabled{{/if}}>
+          <strong>{{label}}</strong>
+          <small>{{specials}}</small>
+        </label>
+        {{/each}}
       </div>
-      {{#if racial.length}}<p class="hint">{{localize "SRE.Chargen.RacialQualities"}}: {{#each racial}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>{{/if}}
-      <div class="form-group">
-        <label>{{localize "SRE.Chargen.MagicLabel"}}</label>
-        <select name="draft.magicType">{{selectOptions magicTypes selected=draft.magicType valueAttr="value" labelAttr="label"}}</select>
+      {{#if racial.length}}
+      <p class="sre-cc-chips"><span class="hint">{{localize "SRE.Chargen.RacialQualities"}}:</span>
+        {{#each racial}}<span class="sre-cc-chip">{{this}}</span>{{/each}}</p>
+      {{/if}}
+
+      <h3 class="sre-cc-title"><i class="fas fa-hat-wizard"></i> {{localize "SRE.Chargen.MagicLabel"}}</h3>
+      <div class="sre-cc-cards">
+        {{#each magicCards}}
+        <label class="sre-cc-card {{#if selected}}selected{{/if}} {{#if disabled}}disabled{{/if}}">
+          <input type="radio" name="draft.magicType" value="{{value}}" {{checked selected}} {{#if disabled}}disabled{{/if}}>
+          <i class="fas {{icon}}"></i>
+          <strong>{{label}}</strong>
+          {{#if rating}}<small>{{rating}}</small>{{/if}}
+        </label>
+        {{/each}}
       </div>
-      {{#if magicNote}}<p class="hint">{{magicNote}}</p>{{/if}}
+      {{#if magicNote}}<p class="hint"><i class="fas fa-circle-info"></i> {{magicNote}}</p>{{/if}}
     </section>
 
     {{!-- 2. Attributes --}}
     <section class="sre-cc-tab {{#if active.attributes}}active{{/if}}" data-tab="attributes">
       <p class="hint">{{localize "SRE.Chargen.AttributeHint"}}</p>
-      <table class="sre-cc-table">
-        <thead><tr>
-          <th>{{localize "SRE.Chargen.Attribute"}}</th><th>{{localize "SRE.Chargen.Points"}}</th>
-          <th>{{localize "SRE.Chargen.Adjustment"}}</th><th>{{localize "SRE.Chargen.KarmaRanks"}}</th>
-          <th>{{localize "SRE.Chargen.Final"}}</th><th>{{localize "SRE.Chargen.Max"}}</th>
-        </tr></thead>
-        <tbody>
-          {{#each attributes}}
-          <tr>
-            <td>{{label}}</td>
-            <td>{{#if hasPoints}}<input type="number" name="draft.attrPoints.{{id}}" value="{{points}}" min="0" max="10">{{else}}—{{/if}}</td>
-            <td>{{#if canAdjust}}<input type="number" name="draft.adjust.{{id}}" value="{{adjust}}" min="0" max="13">{{else}}—{{/if}}</td>
-            <td><input type="number" name="draft.attrKarma.{{id}}" value="{{karma}}" min="0" max="10"></td>
-            <td class="sre-cc-final {{#if atMax}}sre-cc-atmax{{/if}}" data-final="{{id}}">{{final}}</td>
-            <td>{{max}}</td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
+      <div class="sre-cc-list">
+        <div class="sre-cc-list-head sre-cc-attr">
+          <span>{{localize "SRE.Chargen.Attribute"}}</span><span>{{localize "SRE.Chargen.Points"}}</span>
+          <span data-tooltip="SRE.Chargen.Adjustment">{{localize "SRE.Chargen.AdjustmentShort"}}</span><span>{{localize "SRE.Chargen.KarmaRanks"}}</span>
+          <span>{{localize "SRE.Chargen.Final"}}</span><span></span>
+        </div>
+        {{#each attributes}}
+        <div class="sre-cc-list-row sre-cc-attr {{#if atMax}}sre-cc-atmax{{/if}} {{#if over}}sre-cc-overmax{{/if}}" data-row="{{id}}">
+          <span class="sre-cc-name"><abbr>{{short}}</abbr> {{label}}</span>
+          <span>{{#if hasPoints}}<input type="number" name="draft.attrPoints.{{id}}" value="{{points}}" min="0" max="10">{{else}}<span class="sre-cc-na">—</span>{{/if}}</span>
+          <span>{{#if canAdjust}}<input type="number" class="sre-cc-adjust" name="draft.adjust.{{id}}" value="{{adjust}}" min="0" max="13">{{else}}<span class="sre-cc-na">—</span>{{/if}}</span>
+          <span><input type="number" class="sre-cc-karma" name="draft.attrKarma.{{id}}" value="{{karma}}" min="0" max="10"></span>
+          <span class="sre-cc-final" data-final="{{id}}">{{final}}</span>
+          <span class="sre-cc-dots" data-tooltip="{{localize "SRE.Chargen.Max"}} {{max}}">{{#each dots}}<span class="sre-cc-dot {{#if filled}}filled{{/if}} {{#if over}}over{{/if}}"></span>{{/each}}</span>
+        </div>
+        {{/each}}
+      </div>
     </section>
 
     {{!-- 3. Skills --}}
     <section class="sre-cc-tab {{#if active.skills}}active{{/if}}" data-tab="skills">
       <p class="hint">{{localize "SRE.Chargen.SkillHint"}}</p>
-      <table class="sre-cc-table">
-        <thead><tr>
-          <th>{{localize "SRE.Chargen.Skill"}}</th><th>{{localize "SRE.Chargen.Points"}}</th>
-          <th>{{localize "SRE.Chargen.KarmaRanks"}}</th><th>{{localize "SRE.Chargen.Rank"}}</th>
-          <th>{{localize "SRE.Chargen.Specialization"}}</th><th>{{localize "SRE.Chargen.SpecKarma"}}</th>
-        </tr></thead>
-        <tbody>
-          {{#each skills}}
-          <tr>
-            <td>{{label}}</td>
-            <td><input type="number" name="draft.skills.{{id}}.points" value="{{points}}" min="0" max="7"></td>
-            <td><input type="number" name="draft.skills.{{id}}.karma" value="{{karma}}" min="0" max="7"></td>
-            <td class="sre-cc-final" data-rank="{{id}}">{{rank}}</td>
-            <td><select name="draft.skills.{{id}}.spec">{{selectOptions specs selected=spec valueAttr="value" labelAttr="label"}}</select></td>
-            <td><input type="checkbox" name="draft.skills.{{id}}.specKarma" {{checked specKarma}}></td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
+      <div class="sre-cc-list">
+        <div class="sre-cc-list-head sre-cc-skill">
+          <span>{{localize "SRE.Chargen.Skill"}}</span><span>{{localize "SRE.Chargen.Points"}}</span>
+          <span>{{localize "SRE.Chargen.KarmaRanks"}}</span><span></span>
+          <span>{{localize "SRE.Chargen.Specialization"}}</span><span>{{localize "SRE.Chargen.SpecKarma"}}</span>
+        </div>
+        {{#each skills}}
+        <div class="sre-cc-list-row sre-cc-skill {{#if trained}}sre-cc-trained{{/if}}" data-row="{{id}}">
+          <span class="sre-cc-name">{{label}} <b class="sre-cc-rank" data-rank="{{id}}">{{rank}}</b></span>
+          <span><input type="number" name="draft.skills.{{id}}.points" value="{{points}}" min="0" max="7"></span>
+          <span><input type="number" class="sre-cc-karma" name="draft.skills.{{id}}.karma" value="{{karma}}" min="0" max="7"></span>
+          <span class="sre-cc-dots">{{#each dots}}<span class="sre-cc-dot {{#if filled}}filled{{/if}} {{#if over}}over{{/if}}"></span>{{/each}}</span>
+          <span><select name="draft.skills.{{id}}.spec">{{selectOptions specs selected=spec valueAttr="value" labelAttr="label"}}</select></span>
+          <span class="sre-cc-center"><input type="checkbox" name="draft.skills.{{id}}.specKarma" {{checked specKarma}}></span>
+        </div>
+        {{/each}}
+      </div>
     </section>
 
     {{!-- 4. Qualities --}}
     <section class="sre-cc-tab {{#if active.qualities}}active{{/if}}" data-tab="qualities">
       <p class="hint">{{localize "SRE.Chargen.QualityHint"}}</p>
-      {{#if racial.length}}<p>{{localize "SRE.Chargen.RacialQualities"}}: {{#each racial}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>{{/if}}
+      <div class="sre-cc-karma-split">
+        <div class="sre-cc-stat sre-cc-stat-pos"><span>{{localize "SRE.Chargen.Positive"}}</span><strong>−{{result.positive}}</strong></div>
+        <div class="sre-cc-stat sre-cc-stat-neg"><span>{{localize "SRE.Chargen.Negative"}}</span><strong>+{{result.negative}}</strong></div>
+      </div>
+      {{#if racial.length}}
+      <p class="sre-cc-chips"><span class="hint">{{localize "SRE.Chargen.RacialQualities"}}:</span>
+        {{#each racial}}<span class="sre-cc-chip">{{this}}</span>{{/each}}</p>
+      {{/if}}
       {{#each qualities}}
-      <div class="form-fields sre-cc-row">
+      <div class="sre-cc-quality {{#if positive}}positive{{/if}} {{#if negative}}negative{{/if}}">
+        <span class="sre-cc-quality-badge">{{badge}}</span>
         <select name="draft.qualities.{{index}}.id">{{selectOptions ../qualityOptions selected=id valueAttr="value" labelAttr="label"}}</select>
         {{#if levels}}<input type="number" name="draft.qualities.{{index}}.level" value="{{level}}" min="{{levels.[0]}}" max="{{levels.[1]}}" data-tooltip="SRE.Chargen.QualityLevel">{{/if}}
         {{#if variable}}<input type="number" name="draft.qualities.{{index}}.karma" value="{{karma}}" min="{{def.min}}" max="{{def.max}}" data-tooltip="SRE.Chargen.VariableKarma">{{/if}}
@@ -112,74 +166,116 @@
         {{else}}
         <input type="hidden" name="draft.qualities.{{index}}.detail" value="">
         {{/if}}
-        {{#if def}}<span class="hint">s. {{def.page}}</span>{{/if}}
-        <button type="button" data-action="removeRow" data-list="qualities" data-index="{{index}}"><i class="fas fa-trash"></i></button>
+        {{#if def}}<span class="sre-cc-page">s. {{def.page}}</span>{{/if}}
+        <button type="button" class="sre-cc-icon" data-action="removeRow" data-list="qualities" data-index="{{index}}" data-tooltip="SRE.Chargen.Remove"><i class="fas fa-xmark"></i></button>
       </div>
       {{/each}}
-      <button type="button" data-action="addRow" data-list="qualities"><i class="fas fa-plus"></i> {{localize "SRE.Chargen.AddQuality"}}</button>
+      <button type="button" class="sre-cc-add" data-action="addRow" data-list="qualities"><i class="fas fa-plus"></i> {{localize "SRE.Chargen.AddQuality"}}</button>
     </section>
 
     {{!-- 5. Karma, contacts, knowledge, languages --}}
     <section class="sre-cc-tab {{#if active.extras}}active{{/if}}" data-tab="extras">
-      <h3>{{localize "SRE.Chargen.KarmaHeading"}}</h3>
-      <div class="form-group">
-        <label>{{localize "SRE.Chargen.KarmaToNuyen"}}</label>
-        <input type="number" name="draft.karmaToNuyen" value="{{draft.karmaToNuyen}}" min="0" max="100">
+      <div class="sre-cc-panel">
+        <h3 class="sre-cc-title"><i class="fas fa-coins"></i> {{localize "SRE.Chargen.KarmaHeading"}}</h3>
+        <div class="sre-cc-inline">
+          <input type="number" name="draft.karmaToNuyen" value="{{draft.karmaToNuyen}}" min="0" max="100">
+          <span>× {{nuyenPerKarma}}¥</span>
+          <span class="sre-cc-arrow"><i class="fas fa-arrow-right"></i></span>
+          <strong>{{nuyenText}}¥</strong>
+        </div>
         <p class="hint">{{#if inDebt}}{{localize "SRE.Chargen.KarmaToNuyenDebt"}}{{else}}{{localize "SRE.Chargen.KarmaToNuyenHint"}}{{/if}}</p>
       </div>
 
-      <h3>{{localize "SRE.Chargen.Contacts"}}</h3>
-      <p class="hint">{{localize "SRE.Chargen.ContactHint"}}</p>
-      {{#each contacts}}
-      <div class="form-fields sre-cc-row">
-        <input type="text" name="draft.contacts.{{index}}.name" value="{{name}}" placeholder="{{localize "SRE.Chargen.ContactName"}}">
-        <input type="text" name="draft.contacts.{{index}}.type" value="{{type}}" placeholder="{{localize "SRE.Chargen.ContactType"}}">
-        <input type="number" name="draft.contacts.{{index}}.connection" value="{{connection}}" min="1" max="12" data-tooltip="SRE.Chargen.Connection">
-        <input type="number" name="draft.contacts.{{index}}.loyalty" value="{{loyalty}}" min="1" max="12" data-tooltip="SRE.Chargen.Loyalty">
-        <button type="button" data-action="removeRow" data-list="contacts" data-index="{{index}}"><i class="fas fa-trash"></i></button>
+      <div class="sre-cc-panel">
+        <h3 class="sre-cc-title"><i class="fas fa-address-book"></i> {{localize "SRE.Chargen.Contacts"}}</h3>
+        <p class="hint">{{localize "SRE.Chargen.ContactHint"}}</p>
+        {{#if contacts.length}}
+        <div class="sre-cc-contact sre-cc-contact-head">
+          <span>{{localize "SRE.Chargen.ContactName"}}</span><span>{{localize "SRE.Chargen.ContactType"}}</span>
+          <span>{{localize "SRE.Chargen.ConnectionShort"}}</span><span>{{localize "SRE.Chargen.LoyaltyShort"}}</span><span></span>
+        </div>
+        {{/if}}
+        {{#each contacts}}
+        <div class="sre-cc-contact">
+          <input type="text" name="draft.contacts.{{index}}.name" value="{{name}}" placeholder="{{localize "SRE.Chargen.ContactName"}}">
+          <input type="text" name="draft.contacts.{{index}}.type" value="{{type}}" placeholder="{{localize "SRE.Chargen.ContactType"}}">
+          <input type="number" name="draft.contacts.{{index}}.connection" value="{{connection}}" min="1" max="12" data-tooltip="SRE.Chargen.Connection">
+          <input type="number" name="draft.contacts.{{index}}.loyalty" value="{{loyalty}}" min="1" max="12" data-tooltip="SRE.Chargen.Loyalty">
+          <button type="button" class="sre-cc-icon" data-action="removeRow" data-list="contacts" data-index="{{index}}" data-tooltip="SRE.Chargen.Remove"><i class="fas fa-xmark"></i></button>
+        </div>
+        {{/each}}
+        <button type="button" class="sre-cc-add" data-action="addRow" data-list="contacts"><i class="fas fa-plus"></i> {{localize "SRE.Chargen.AddContact"}}</button>
       </div>
-      {{/each}}
-      <button type="button" data-action="addRow" data-list="contacts"><i class="fas fa-plus"></i> {{localize "SRE.Chargen.AddContact"}}</button>
 
-      <h3>{{localize "SRE.Chargen.Knowledge"}}</h3>
-      <p class="hint">{{localize "SRE.Chargen.KnowledgeHint"}}</p>
-      {{#each knowledge}}
-      <div class="form-fields sre-cc-row">
-        <input type="text" name="draft.knowledge.{{index}}.name" value="{{name}}" placeholder="{{localize "SRE.Chargen.KnowledgeName"}}">
-        <button type="button" data-action="removeRow" data-list="knowledge" data-index="{{index}}"><i class="fas fa-trash"></i></button>
+      <div class="sre-cc-columns">
+        <div class="sre-cc-panel">
+          <h3 class="sre-cc-title"><i class="fas fa-book"></i> {{localize "SRE.Chargen.Knowledge"}}</h3>
+          <p class="hint">{{localize "SRE.Chargen.KnowledgeHint"}}</p>
+          {{#each knowledge}}
+          <div class="sre-cc-line">
+            <input type="text" name="draft.knowledge.{{index}}.name" value="{{name}}" placeholder="{{localize "SRE.Chargen.KnowledgeName"}}">
+            <button type="button" class="sre-cc-icon" data-action="removeRow" data-list="knowledge" data-index="{{index}}" data-tooltip="SRE.Chargen.Remove"><i class="fas fa-xmark"></i></button>
+          </div>
+          {{/each}}
+          <button type="button" class="sre-cc-add" data-action="addRow" data-list="knowledge"><i class="fas fa-plus"></i> {{localize "SRE.Chargen.AddKnowledge"}}</button>
+        </div>
+        <div class="sre-cc-panel">
+          <h3 class="sre-cc-title"><i class="fas fa-language"></i> {{localize "SRE.Chargen.Languages"}}</h3>
+          {{#each languages}}
+          <div class="sre-cc-line">
+            <input type="text" name="draft.languages.{{index}}.name" value="{{name}}" placeholder="{{localize "SRE.Chargen.LanguageName"}}">
+            <label class="sre-cc-toggle"><input type="checkbox" name="draft.languages.{{index}}.native" {{checked native}}> {{localize "SRE.Chargen.Native"}}</label>
+            <button type="button" class="sre-cc-icon" data-action="removeRow" data-list="languages" data-index="{{index}}" data-tooltip="SRE.Chargen.Remove"><i class="fas fa-xmark"></i></button>
+          </div>
+          {{/each}}
+          <button type="button" class="sre-cc-add" data-action="addRow" data-list="languages"><i class="fas fa-plus"></i> {{localize "SRE.Chargen.AddLanguage"}}</button>
+        </div>
       </div>
-      {{/each}}
-      <button type="button" data-action="addRow" data-list="knowledge"><i class="fas fa-plus"></i> {{localize "SRE.Chargen.AddKnowledge"}}</button>
-
-      <h3>{{localize "SRE.Chargen.Languages"}}</h3>
-      {{#each languages}}
-      <div class="form-fields sre-cc-row">
-        <input type="text" name="draft.languages.{{index}}.name" value="{{name}}" placeholder="{{localize "SRE.Chargen.LanguageName"}}">
-        <label class="checkbox"><input type="checkbox" name="draft.languages.{{index}}.native" {{checked native}}> {{localize "SRE.Chargen.Native"}}</label>
-        <button type="button" data-action="removeRow" data-list="languages" data-index="{{index}}"><i class="fas fa-trash"></i></button>
-      </div>
-      {{/each}}
-      <button type="button" data-action="addRow" data-list="languages"><i class="fas fa-plus"></i> {{localize "SRE.Chargen.AddLanguage"}}</button>
     </section>
 
-    {{!-- 6. Summary --}}
+    {{!-- 6. Summary: a preview of the character --}}
     <section class="sre-cc-tab {{#if active.summary}}active{{/if}}" data-tab="summary">
-      <p>{{localize "SRE.Chargen.KarmaLeft"}}: <strong data-karma-left>{{result.karmaLeft}}</strong> ·
-        {{localize "SRE.Chargen.Budget.nuyen"}}: <strong>{{result.nuyen}}¥</strong></p>
-      <p class="hint">{{localize "SRE.Chargen.SummaryHint"}}</p>
-      {{#if magicNote}}<p class="hint">{{magicNote}}</p>{{/if}}
-      {{#if isGM}}
-      <label class="checkbox"><input type="checkbox" name="skipChecks" {{checked skipChecks}}> {{localize "SRE.Chargen.SkipChecks"}}</label>
-      {{/if}}
+      <div class="sre-cc-sheet">
+        <div class="sre-cc-sheet-attrs">
+          {{#each summary.attributes}}<div class="sre-cc-sheet-attr"><span>{{short}}</span><strong>{{value}}</strong></div>{{/each}}
+        </div>
+        <div class="sre-cc-columns">
+          <div class="sre-cc-panel">
+            <h3 class="sre-cc-title"><i class="fas fa-crosshairs"></i> {{localize "SRE.Chargen.Tab.skills"}}</h3>
+            {{#each summary.skills}}
+            <div class="sre-cc-sheet-line"><span>{{label}}{{#if spec}} <em>({{spec}})</em>{{/if}}</span><strong>{{rank}}</strong></div>
+            {{else}}<p class="hint">—</p>{{/each}}
+          </div>
+          <div class="sre-cc-panel">
+            <h3 class="sre-cc-title"><i class="fas fa-star-half-stroke"></i> {{localize "SRE.Chargen.Tab.qualities"}}</h3>
+            <p class="sre-cc-chips">
+              {{#each summary.qualities}}<span class="sre-cc-chip {{#if positive}}positive{{else}}negative{{/if}}">{{name}}</span>{{else}}<span class="hint">—</span>{{/each}}
+            </p>
+            <h3 class="sre-cc-title"><i class="fas fa-address-book"></i> {{localize "SRE.Chargen.Contacts"}}</h3>
+            {{#each summary.contacts}}
+            <div class="sre-cc-sheet-line"><span>{{name}}{{#if type}} <em>({{type}})</em>{{/if}}</span><strong>{{connection}}/{{loyalty}}</strong></div>
+            {{else}}<p class="hint">—</p>{{/each}}
+          </div>
+        </div>
+        <div class="sre-cc-karma-split">
+          <div class="sre-cc-stat"><span>{{localize "SRE.Chargen.KarmaLeft"}}</span><strong data-karma-left>{{result.karmaLeft}}</strong></div>
+          <div class="sre-cc-stat"><span>{{localize "SRE.Chargen.Budget.nuyen"}}</span><strong>{{nuyenText}}¥</strong></div>
+        </div>
+        <p class="hint"><i class="fas fa-cart-shopping"></i> {{localize "SRE.Chargen.SummaryHint"}}</p>
+        {{#if magicNote}}<p class="hint"><i class="fas fa-circle-info"></i> {{magicNote}}</p>{{/if}}
+        {{#if isGM}}
+        <label class="sre-cc-toggle"><input type="checkbox" name="skipChecks" {{checked skipChecks}}> {{localize "SRE.Chargen.SkipChecks"}}</label>
+        {{/if}}
+      </div>
     </section>
   </div>
 
   <ul class="sre-cc-errors">
-    {{#each errors}}<li>{{this}}</li>{{else}}<li class="sre-cc-ok">{{localize "SRE.Chargen.AllGood"}}</li>{{/each}}
+    {{#each errors}}<li><i class="fas fa-triangle-exclamation"></i> {{text}}</li>{{else}}<li class="sre-cc-ok"><i class="fas fa-circle-check"></i> {{localize "SRE.Chargen.AllGood"}}</li>{{/each}}
   </ul>
 
-  <footer class="form-footer">
-    <button type="button" data-action="reset"><i class="fas fa-eraser"></i> {{localize "SRE.Chargen.Reset"}}</button>
-    <button type="submit"><i class="fas fa-user-check"></i> {{localize "SRE.Chargen.Create"}}</button>
+  <footer class="sre-cc-footer">
+    <button type="button" class="sre-cc-ghost" data-action="reset"><i class="fas fa-rotate-left"></i> {{localize "SRE.Chargen.Reset"}}</button>
+    <button type="submit" class="sre-cc-primary"><i class="fas fa-user-check"></i> {{localize "SRE.Chargen.Create"}}</button>
   </footer>
 </div>

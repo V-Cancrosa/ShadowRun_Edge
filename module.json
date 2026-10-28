@@ -29,7 +29,8 @@
     "scripts/shadowrun-edge.mjs"
   ],
   "styles": [
-    "styles/shadowrun-edge.css"
+    "styles/shadowrun-edge.css",
+    "styles/character-creator.css"
   ],
   "languages": [
     {

@@ -235,12 +235,12 @@
       "Unnamed": "Nowy runner",
       "Racial": "rasowa",
       "Tab": {
-        "priorities": "1. Priorytety",
-        "attributes": "2. Atrybuty",
-        "skills": "3. Umiejętności",
-        "qualities": "4. Cechy",
-        "extras": "5. Karma i kontakty",
-        "summary": "6. Podsumowanie"
+        "priorities": "Priorytety",
+        "attributes": "Atrybuty",
+        "skills": "Umiejętności",
+        "qualities": "Cechy",
+        "extras": "Karma i kontakty",
+        "summary": "Podsumowanie"
       },
       "Budget": {
         "attributes": "Atrybuty",
@@ -248,7 +248,7 @@
         "skills": "Umiejętności",
         "karma": "Karma",
         "contacts": "Kontakty",
-        "knowledge": "Wiedza/języki",
+        "knowledge": "Wiedza",
         "nuyen": "Nuyeny"
       },
       "Name": "Imię / ksywka",
@@ -298,7 +298,7 @@
       "Attribute": "Atrybut",
       "Points": "Punkty",
       "Adjustment": "Dostosowanie",
-      "KarmaRanks": "+ za Karmę",
+      "KarmaRanks": "Karma",
       "Final": "Razem",
       "Max": "Maks.",
       "SkillHint": "Maks. 6 (7 z Aptitude), tylko jedna umiejętność na maksimum. Specjalizacja kosztuje 1 punkt umiejętności albo 5 Karmy (zaznacz „za Karmę”); najwyżej jedna na umiejętność.",
@@ -364,7 +364,38 @@
         "ContactOver": "Punkty kontaktów: {used} z {total}.",
         "ContactOverCha": "{name}: oceny kontaktu nie mogą przekraczać Charyzmy ({cha})."
       },
-      "QualityLevel": "Poziom cechy"
+      "QualityLevel": "Poziom cechy",
+      "PriorityTable": "Tabela priorytetów",
+      "PickQuality": "— wybierz cechę —",
+      "Remove": "Usuń",
+      "ConnectionShort": "Kontakt",
+      "LoyaltyShort": "Lojal.",
+      "LevelShort": {
+        "standard": "Standard",
+        "street": "Uliczny",
+        "prime": "Prime"
+      },
+      "Short": {
+        "bod": "BUD",
+        "agi": "ZRĘ",
+        "rea": "REA",
+        "str": "SIŁ",
+        "wil": "WOL",
+        "log": "LOG",
+        "int": "INT",
+        "cha": "CHA",
+        "edge": "EDGE",
+        "magic": "MAG"
+      },
+      "MagicShort": {
+        "full": "Mag",
+        "aspected": "Asp.",
+        "mystic": "Myst.",
+        "adept": "Adept",
+        "techno": "Techno",
+        "mundane": "Brak magii"
+      },
+      "AdjustmentShort": "Dostos."
     }
   }
 }

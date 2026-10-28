@@ -205,7 +205,7 @@ export function evaluateDraft(draft) {
       if (entry.specKarma) karmaSpent += 5;
       else skillUsed += 1;
     }
-    skills[s] = { rank, spec: rank ? entry.spec ?? "" : "" };
+    skills[s] = { rank, max: skillMax, spec: rank ? entry.spec ?? "" : "" };
   }
   if (skillUsed > skillTotal) err("SkillOver", { used: skillUsed, total: skillTotal });
   if (skillsAtMax > 1) err("SkillTwoAtMax");

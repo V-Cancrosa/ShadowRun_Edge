@@ -235,12 +235,12 @@
       "Unnamed": "New runner",
       "Racial": "racial",
       "Tab": {
-        "priorities": "1. Priorities",
-        "attributes": "2. Attributes",
-        "skills": "3. Skills",
-        "qualities": "4. Qualities",
-        "extras": "5. Karma & contacts",
-        "summary": "6. Summary"
+        "priorities": "Priorities",
+        "attributes": "Attributes",
+        "skills": "Skills",
+        "qualities": "Qualities",
+        "extras": "Karma & contacts",
+        "summary": "Summary"
       },
       "Budget": {
         "attributes": "Attributes",
@@ -248,7 +248,7 @@
         "skills": "Skills",
         "karma": "Karma",
         "contacts": "Contacts",
-        "knowledge": "Knowledge/languages",
+        "knowledge": "Knowledge",
         "nuyen": "Nuyen"
       },
       "Name": "Name / handle",
@@ -298,7 +298,7 @@
       "Attribute": "Attribute",
       "Points": "Points",
       "Adjustment": "Adjustment",
-      "KarmaRanks": "+ with Karma",
+      "KarmaRanks": "Karma",
       "Final": "Total",
       "Max": "Max",
       "SkillHint": "Max 6 (7 with Aptitude), only one skill at the maximum. A specialization costs 1 skill point or 5 Karma (tick \"with Karma\"); at most one per skill.",
@@ -364,7 +364,38 @@
         "ContactOver": "Contact points: {used} of {total}.",
         "ContactOverCha": "{name}: contact ratings cannot exceed Charisma ({cha})."
       },
-      "QualityLevel": "Quality level"
+      "QualityLevel": "Quality level",
+      "PriorityTable": "Priority table",
+      "PickQuality": "— pick a quality —",
+      "Remove": "Remove",
+      "ConnectionShort": "Conn.",
+      "LoyaltyShort": "Loy.",
+      "LevelShort": {
+        "standard": "Standard",
+        "street": "Street",
+        "prime": "Prime"
+      },
+      "Short": {
+        "bod": "BOD",
+        "agi": "AGI",
+        "rea": "REA",
+        "str": "STR",
+        "wil": "WIL",
+        "log": "LOG",
+        "int": "INT",
+        "cha": "CHA",
+        "edge": "EDG",
+        "magic": "MAG"
+      },
+      "MagicShort": {
+        "full": "Mage",
+        "aspected": "Asp.",
+        "mystic": "Myst.",
+        "adept": "Adept",
+        "techno": "Techno",
+        "mundane": "Mundane"
+      },
+      "AdjustmentShort": "Adj."
     }
   }
 }

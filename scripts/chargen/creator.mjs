@@ -3,7 +3,9 @@
  * knowledge and languages. Budgets and rule checks update live; "Create" makes a shadowrun6-eden Player actor.
  * Gear is bought afterwards from the catalog (the purchase dialog takes the character's nuyen).
  */
-import { ATTRIBUTES, COLUMNS, MAGIC_TYPES, METATYPES, PRIORITY, ROWS, SKILLS, effectiveRow, emptyDraft, evaluateDraft } from "./rules.mjs";
+import {
+  ATTRIBUTES, COLUMNS, MAGIC_TYPES, METATYPES, PRIORITY, ROWS, SKILLS, effectiveRow, emptyDraft, evaluateDraft, qualityKarma,
+} from "./rules.mjs";
 import { QUALITIES } from "./qualities.mjs";
 import { buildCharacter } from "./build.mjs";
 
@@ -14,6 +16,24 @@ const TABS = ["priorities", "attributes", "skills", "qualities", "extras", "summ
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
 const attrLabel = (a) => ({ edge: L("SRE.Chargen.Edge"), magic: L("SRE.Chargen.MagicRes") }[a] ?? L(`attrib.${a}`));
 const skillLabel = (s) => L(`skill.${s}`);
+
+/** Which step an error belongs to, by its key (see evaluateDraft). */
+const ERROR_TABS = [
+  [/^(Priority|Metatype|Magic)/, "priorities"],
+  [/^(Adjust|Attr)/, "attributes"],
+  [/^(Skill|Spec)/, "skills"],
+  [/^Qualit/, "qualities"],
+  [/^(Karma|Contact|Native)/, "extras"],
+];
+
+/** Rank dots like on SR sheets: filled up to the value, empty up to the maximum, marked when over it. */
+function dots(value, max) {
+  const count = Math.max(max, value);
+  return Array.from({ length: count }, (_, i) => ({ filled: i < value, over: i >= max }));
+}
+function dotsHTML(value, max) {
+  return dots(value, max).map((d) => `<span class="sre-cc-dot${d.filled ? " filled" : ""}${d.over ? " over" : ""}"></span>`).join("");
+}
 
 /** Copies form values into the draft, turning numbered objects back into arrays. */
 export function mergeForm(draft, form) {
@@ -70,7 +90,16 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
       case "metatype": return `${row.metatypes.map((m) => L(`SRE.Chargen.Metatype.${m}`)).join(", ")} (${row.adjustment})`;
       case "attributes": return String(row.attributes);
       case "skills": return String(row.skills);
-      case "magic": return Object.entries(row.magic).map(([t, v]) => (t === "mundane" ? L("SRE.Chargen.MagicType.mundane") : `${L(`SRE.Chargen.MagicType.${t}`)} ${v}`)).join(", ");
+      case "magic": {
+        // Group types sharing a rating: "Mag/Myst./Adept/Techno 4 · Asp. 5"
+        const groups = new Map();
+        for (const [t, v] of Object.entries(row.magic)) {
+          if (t === "mundane") continue;
+          groups.set(v, [...(groups.get(v) ?? []), L(`SRE.Chargen.MagicShort.${t}`)]);
+        }
+        const parts = [...groups].map(([v, names]) => `${names.join("/")} ${v}`);
+        return parts.length ? parts.join(" · ") : L("SRE.Chargen.MagicShort.mundane");
+      }
       case "resources": return `${row.resources.toLocaleString()}¥`;
       default: return "";
     }
@@ -80,42 +109,59 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
     const d = this.draft;
     const r = this.result;
     const p = d.priorities;
-    const metaRow = p.metatype ? PRIORITY[p.metatype] : null;
+    const metaRow = p.metatype ? PRIORITY[effectiveRow(p.metatype, d.level)] : null;
     const magicRow = p.magic ? PRIORITY[effectiveRow(p.magic, d.level)] : null;
     const adjustable = new Set(r.adjustable);
     const special = CONFIG.SR6?.skill_special ?? {};
+    const errors = this.#errors(r);
+    const errorCount = (tab) => errors.filter((e) => e.tab === tab).length;
 
-    const attrRow = (a, base) => ({
-      id: a, label: attrLabel(a), points: d.attrPoints[a] ?? 0, adjust: d.adjust[a] ?? 0, karma: d.attrKarma[a] ?? 0,
-      final: r.final[a], max: r.max[a], base, hasPoints: ATTRIBUTES.includes(a), canAdjust: adjustable.has(a),
-      atMax: r.final[a] >= r.max[a],
+    const attrRow = (a) => ({
+      id: a, label: attrLabel(a), short: L(`SRE.Chargen.Short.${a}`),
+      points: d.attrPoints[a] ?? 0, adjust: d.adjust[a] ?? 0, karma: d.attrKarma[a] ?? 0,
+      final: r.final[a], max: r.max[a], hasPoints: ATTRIBUTES.includes(a), canAdjust: adjustable.has(a),
+      atMax: r.final[a] >= r.max[a], over: r.final[a] > r.max[a], dots: dots(r.final[a], r.max[a]),
     });
+    const tabs = TABS.map((id, i) => ({
+      id, number: i + 1, label: L(`SRE.Chargen.Tab.${id}`), active: id === this.tab,
+      errors: id === "summary" ? 0 : errorCount(id), done: id !== "summary" && !errorCount(id),
+    }));
 
     return {
       draft: d,
       tab: this.tab,
-      tabs: TABS.map((id) => ({ id, label: L(`SRE.Chargen.Tab.${id}`), active: id === this.tab })),
+      tabs,
       active: Object.fromEntries(TABS.map((id) => [id, id === this.tab])),
       levels: ["standard", "street", "prime"].map((value) => ({ value, label: L(`SRE.Chargen.Level.${value}`) })),
-      priorityColumns: COLUMNS.map((column) => ({
-        column,
-        label: L(`SRE.Chargen.Column.${column}`),
-        value: p[column],
-        options: [{ value: "", label: "—" }, ...ROWS.map((letter) => ({ value: letter, label: `${letter}: ${this.#rowLabel(column, letter)}` }))],
+      columns: COLUMNS.map((column) => ({ column, label: L(`SRE.Chargen.Column.${column}`) })),
+      priorityGrid: ROWS.map((letter) => ({
+        letter,
+        cells: COLUMNS.map((column) => ({
+          column, letter, text: this.#rowLabel(column, letter),
+          selected: p[column] === letter,
+          taken: COLUMNS.some((c) => c !== column && p[c] === letter),
+        })),
       })),
-      metatypes: (metaRow?.metatypes ?? Object.keys(METATYPES)).map((value) => ({ value, label: L(`SRE.Chargen.Metatype.${value}`) })),
-      magicTypes: Object.keys(magicRow?.magic ?? MAGIC_TYPES).map((value) => ({ value, label: L(`SRE.Chargen.MagicType.${value}`) })),
-      attributes: [
-        ...ATTRIBUTES.map((a) => attrRow(a, 1)),
-        attrRow("edge", 1),
-        ...(r.awakened ? [attrRow("magic", r.magicBase)] : []),
-      ],
+      metatypeCards: Object.keys(METATYPES).map((value) => ({
+        value, label: L(`SRE.Chargen.Metatype.${value}`), selected: d.metatype === value,
+        disabled: !!metaRow && !metaRow.metatypes.includes(value),
+        specials: Object.entries(METATYPES[value].max).filter(([a, m]) => m !== 6 || (a === "edge" && m !== 6))
+          .map(([a, m]) => `${L(`SRE.Chargen.Short.${a}`)} ${m}`).join(" · ") || "—",
+      })),
+      magicCards: Object.keys(MAGIC_TYPES).map((value) => ({
+        value, label: L(`SRE.Chargen.MagicType.${value}`), selected: d.magicType === value,
+        disabled: !!magicRow && !(value in magicRow.magic),
+        rating: magicRow?.magic[value],
+        icon: { full: "fa-hat-wizard", aspected: "fa-wand-sparkles", mystic: "fa-yin-yang", adept: "fa-hand-fist", techno: "fa-microchip", mundane: "fa-user" }[value],
+      })),
+      attributes: [...ATTRIBUTES.map(attrRow), attrRow("edge"), ...(r.awakened ? [attrRow("magic")] : [])],
       skills: SKILLS.map((s) => ({
-        id: s, label: skillLabel(s), ...d.skills[s], rank: r.skills[s].rank,
+        id: s, label: skillLabel(s), ...d.skills[s], rank: r.skills[s].rank, max: r.skills[s].max,
+        dots: dots(r.skills[s].rank, r.skills[s].max), trained: r.skills[s].rank > 0,
         specs: [{ value: "", label: "—" }, ...Object.entries(special[s] ?? {}).map(([value, key]) => ({ value, label: L(key) }))],
       })),
       qualityOptions: [
-        { value: "", label: "—" },
+        { value: "", label: L("SRE.Chargen.PickQuality") },
         ...Object.values(QUALITIES).filter((q) => q.positive).map((q) => ({ value: q.id, label: `+ ${q.name} (${q.karma}${q.levels ? "/" + L("SRE.Chargen.PerLevel") : ""})` })),
         ...Object.values(QUALITIES).filter((q) => !q.positive).map((q) => ({ value: q.id, label: `− ${q.name} (${q.variable ? `${q.min}–${q.max}` : q.karma}${q.levels ? "/" + L("SRE.Chargen.PerLevel") : ""})` })),
       ],
@@ -123,8 +169,11 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
       skillOptions: SKILLS.map((s) => ({ value: s, label: skillLabel(s) })),
       qualities: d.qualities.map((q, i) => {
         const def = QUALITIES[q.id];
+        const karma = def ? qualityKarma({ def, level: Math.max(1, Number(q.level) || 1), karma: q.karma, racial: false }) : 0;
         return {
           ...q, index: i, def, levels: def?.levels, variable: def?.variable,
+          positive: def?.positive, negative: def && !def.positive,
+          badge: def ? `${def.positive ? "−" : "+"}${karma}` : "",
           isAttr: def?.detail === "attribute", isSkill: def?.detail === "skill", isText: def?.detail === "text",
         };
       }),
@@ -133,36 +182,53 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
       knowledge: d.knowledge.map((k, i) => ({ ...k, index: i })),
       languages: d.languages.map((l, i) => ({ ...l, index: i })),
       inDebt: d.qualities.some((q) => q.id === "in_debt"),
+      nuyenPerKarma: (d.qualities.some((q) => q.id === "in_debt") ? 5000 : 2000).toLocaleString(),
       result: r,
+      nuyenText: r.nuyen.toLocaleString(),
       budgets: this.#budgets(r),
-      errors: this.#errors(r),
+      errors,
       magicNote: this.#magicNote(r),
+      header: {
+        name: d.name?.trim() || L("SRE.Chargen.Unnamed"),
+        initial: (d.name?.trim() || L(`SRE.Chargen.Metatype.${d.metatype}`)).charAt(0),
+        metatype: L(`SRE.Chargen.Metatype.${d.metatype}`),
+        magic: L(`SRE.Chargen.MagicType.${d.magicType}`),
+        level: L(`SRE.Chargen.LevelShort.${d.level}`),
+      },
+      summary: {
+        attributes: [...ATTRIBUTES, "edge", ...(r.awakened ? ["magic"] : [])].map((a) => ({ short: L(`SRE.Chargen.Short.${a}`), value: r.final[a] })),
+        skills: SKILLS.filter((s) => r.skills[s].rank).sort((a, b) => r.skills[b].rank - r.skills[a].rank)
+          .map((s) => ({ label: skillLabel(s), rank: r.skills[s].rank, spec: r.skills[s].spec ? L(special[s]?.[r.skills[s].spec] ?? r.skills[s].spec) : "" })),
+        qualities: r.qualities.map((q) => ({ name: `${q.def.name}${q.def.levels ? ` ${q.level}` : ""}`, positive: q.def.positive, racial: q.racial })),
+        contacts: d.contacts.filter((c) => c.name?.trim()),
+      },
       isGM: game.user.isGM,
       skipChecks: this.skipChecks,
     };
   }
 
+  /** Budget meters: used/total, fill percentage and state (partial, full, over). */
   #budgets(r) {
     const b = r.budgets;
-    const chip = (id, used, total, suffix = "") => ({ id, label: L(`SRE.Chargen.Budget.${id}`), text: `${used}/${total}${suffix}`, over: used > total });
+    const meter = (id) => {
+      const { used, total } = b[id];
+      const state = used > total ? "over" : used === total && total > 0 ? "full" : "partial";
+      return { id, label: L(`SRE.Chargen.Budget.${id}`), text: `${used}/${total}`, pct: total ? Math.min(100, Math.round((used / total) * 100)) : used ? 100 : 0, state };
+    };
     return [
-      chip("attributes", b.attributes.used, b.attributes.total),
-      chip("adjustment", b.adjustment.used, b.adjustment.total),
-      chip("skills", b.skills.used, b.skills.total),
-      chip("karma", b.karma.used, b.karma.total),
-      chip("contacts", b.contacts.used, b.contacts.total),
-      chip("knowledge", b.knowledge.used, b.knowledge.total),
-      { id: "nuyen", label: L("SRE.Chargen.Budget.nuyen"), text: `${r.nuyen.toLocaleString()}¥`, over: false },
+      ...["attributes", "adjustment", "skills", "karma", "contacts", "knowledge"].map(meter),
+      { id: "nuyen", label: L("SRE.Chargen.Budget.nuyen"), text: `${r.nuyen.toLocaleString()}¥`, pct: 100, state: "info" },
     ];
   }
 
+  /** Error messages with the step they belong to (shown as a badge on that step's tab). */
   #errors(r) {
     return r.errors.map(({ key, data }) => {
       const d = { ...data };
       if (d.attribute) d.attribute = attrLabel(d.attribute);
       if (d.skill) d.skill = skillLabel(d.skill);
       if (d.quality) d.quality = QUALITIES[d.quality]?.name ?? d.quality;
-      return L(`SRE.Chargen.Error.${key}`, d);
+      return { text: L(`SRE.Chargen.Error.${key}`, d), tab: ERROR_TABS.find(([re]) => re.test(key))?.[1] ?? "summary" };
     });
   }
 
@@ -194,7 +260,8 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
     if (structural) {
       // Keep the metatype and magic type valid for the chosen rows.
       const p = this.draft.priorities;
-      if (p.metatype && !PRIORITY[p.metatype].metatypes.includes(this.draft.metatype)) this.draft.metatype = PRIORITY[p.metatype].metatypes[0];
+      const metaRow = p.metatype ? PRIORITY[effectiveRow(p.metatype, this.draft.level)] : null;
+      if (metaRow && !metaRow.metatypes.includes(this.draft.metatype)) this.draft.metatype = metaRow.metatypes[0];
       const magicRow = p.magic ? PRIORITY[effectiveRow(p.magic, this.draft.level)] : null;
       if (magicRow && !(this.draft.magicType in magicRow.magic)) this.draft.magicType = Object.keys(magicRow.magic)[0];
       this.render();
@@ -203,36 +270,60 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
     this.#refresh();
   }
 
-  /** Updates budgets, final values and errors in place, so typing does not re-render (and lose a click). */
+  /** Updates meters, rank dots, step badges and errors in place, so typing does not re-render (and lose a click). */
   #refresh() {
     const r = this.result;
     const root = this.element;
-    for (const chip of this.#budgets(r)) {
-      const el = root.querySelector(`[data-budget="${chip.id}"]`);
+    for (const meter of this.#budgets(r)) {
+      const el = root.querySelector(`[data-budget="${meter.id}"]`);
       if (!el) continue;
-      el.querySelector(".sre-cc-budget-value").textContent = chip.text;
-      el.classList.toggle("sre-cc-over", chip.over);
+      el.querySelector(".sre-cc-budget-value").textContent = meter.text;
+      const bar = el.querySelector(".sre-cc-meter-fill");
+      if (bar) bar.style.width = `${meter.pct}%`;
+      el.dataset.state = meter.state;
     }
     for (const [a, v] of Object.entries(r.final)) {
       const el = root.querySelector(`[data-final="${a}"]`);
-      if (el) {
-        el.textContent = v;
-        el.classList.toggle("sre-cc-atmax", v >= r.max[a]);
-      }
+      if (!el) continue;
+      el.textContent = v;
+      const row = el.closest("[data-row]");
+      row?.classList.toggle("sre-cc-atmax", v >= r.max[a]);
+      row?.classList.toggle("sre-cc-overmax", v > r.max[a]);
+      const dotBox = row?.querySelector(".sre-cc-dots");
+      if (dotBox) dotBox.innerHTML = dotsHTML(v, r.max[a]);
     }
     for (const s of SKILLS) {
       const el = root.querySelector(`[data-rank="${s}"]`);
-      if (el) el.textContent = r.skills[s].rank;
+      if (!el) continue;
+      el.textContent = r.skills[s].rank;
+      const row = el.closest("[data-row]");
+      row?.classList.toggle("sre-cc-trained", r.skills[s].rank > 0);
+      const dotBox = row?.querySelector(".sre-cc-dots");
+      if (dotBox) dotBox.innerHTML = dotsHTML(r.skills[s].rank, r.skills[s].max);
     }
-    const errors = root.querySelector(".sre-cc-errors");
-    if (errors) {
-      const list = this.#errors(r);
-      errors.innerHTML = list.length
-        ? list.map((e) => `<li>${Handlebars.escapeExpression(e)}</li>`).join("")
-        : `<li class="sre-cc-ok">${Handlebars.escapeExpression(L("SRE.Chargen.AllGood"))}</li>`;
+    const errors = this.#errors(r);
+    const list = root.querySelector(".sre-cc-errors");
+    if (list) {
+      list.innerHTML = errors.length
+        ? errors.map((e) => `<li><i class="fas fa-triangle-exclamation"></i> ${Handlebars.escapeExpression(e.text)}</li>`).join("")
+        : `<li class="sre-cc-ok"><i class="fas fa-circle-check"></i> ${Handlebars.escapeExpression(L("SRE.Chargen.AllGood"))}</li>`;
     }
+    for (const tab of root.querySelectorAll(".sre-cc-step[data-tab]")) {
+      const id = tab.dataset.tab;
+      if (id === "summary") continue;
+      const count = errors.filter((e) => e.tab === id).length;
+      const badge = tab.querySelector(".sre-cc-step-badge");
+      if (badge) badge.textContent = count || "";
+      tab.classList.toggle("sre-cc-step-error", count > 0);
+      tab.classList.toggle("sre-cc-step-done", !count);
+    }
+    root.querySelector(".sre-cc")?.classList.toggle("sre-cc-has-errors", errors.length > 0);
     const karmaLeft = root.querySelector("[data-karma-left]");
     if (karmaLeft) karmaLeft.textContent = r.karmaLeft;
+    const name = root.querySelector("[data-header-name]");
+    if (name) name.textContent = this.draft.name?.trim() || L("SRE.Chargen.Unnamed");
+    const initial = root.querySelector("[data-header-initial]");
+    if (initial) initial.textContent = (this.draft.name?.trim() || L(`SRE.Chargen.Metatype.${this.draft.metatype}`)).charAt(0);
   }
 
   static #onTab(event, target) {
