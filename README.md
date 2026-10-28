@@ -31,12 +31,21 @@ są ułożone w folderach jak w rozdziale *Gear* (s. 245–301): np. *Broń paln
   w WA broni, więc daje tylko premię bezprzewodową.
 - **Przedmioty ze Stopniem** (medkit, skilljack, mięśnie zastępcze, odporność na ogień…) przeliczają
   cenę, Esencję, dostępność i pojemność, gdy zmienisz Stopień na karcie przedmiotu.
+- **Wszczepy działają na postać.** Mięśnie zastępcze dodają Stopień do Siły i Zręczności, wired reflexes —
+  Reakcję i kości inicjatywy, płytki skórne i orthoskin — WO, bone lacing — WO i odporność na obrażenia,
+  cyberjack — inicjatywę w Matrycy itd. Premia ze Stopniem rośnie razem ze Stopniem przedmiotu; system
+  sam ogranicza premię do atrybutu do +4. Wszczepy działające tylko w pewnych sytuacjach (pompa adrenaliny,
+  edytor bólu, feromony, synthacardium, filtr tchawicy) mają efekt **do włączenia** na karcie przedmiotu.
+- **Klasy wszczepów (s. 282).** Po przeciągnięciu cyberware lub bioware na postać moduł pyta o klasę:
+  standardowa, używana, alfa, beta, delta — i przelicza Esencję, cenę i dostępność (np. datajack alfa:
+  Esencja 0,08). Klasę zmienisz później przyciskiem **Klasa** w nagłówku karty przedmiotu. Przy imporcie
+  wielu przedmiotów naraz moduł nie pyta. Pytanie można wyłączyć w ustawieniach modułu.
 - Modyfikacje pancerza (odporność na ogień, zimno, prąd, chemię) i akcesoria do broni montujesz,
   przeciągając je na kartę pancerza/broni postaci.
 
 Katalog zawiera tylko statystyki, nazwy i numery stron — bez opisów z podręcznika. Krótkie notatki przy
-przedmiotach (np. „Montaż: lufa”) są streszczeniami zasad. Atrybuty z wszczepów (np. +Siła z mięśni) nie są
-jeszcze naliczane automatycznie — opisuje je notatka przy przedmiocie.
+przedmiotach (np. „Montaż: lufa”) są streszczeniami zasad. Premie, na które system nie ma pola (dodatkowe akcje
+poboczne z wired reflexes, obrażenia bez broni z bone lacing), opisuje notatka przy przedmiocie.
 
 Kompendium jest zablokowane do edycji, a przy aktualizacji modułu zostaje nadpisane. Własne przedmioty
 twórz kreatorem w **Katalogu własnym (świat)**.
@@ -73,7 +82,9 @@ postaci — trafia do ekwipunku z kompletem statystyk.
 
 - **Nowy dodatek:** kategoria *Dodatki i modyfikacje* tworzy przedmiot typu `mod` systemu
   (akcesorium broni, modyfikacja broni, modyfikacja pancerza, akcesorium elektroniki…). Dodajesz mu
-  efekty: WA (wszystkie zasięgi lub wybrany), DV, WO pancerza, Społeczne, magazynek. Wartość może
+  efekty: WA (wszystkie zasięgi lub wybrany), DV, WO pancerza, Społeczne, magazynek. Premia do WA
+  nie dodaje się do zasięgów, na których broń nie strzela („—”) — pilnuje tego system.
+  W kategoriach *Cyberware* i *Bioware* efekty działają na postać (atrybuty, inicjatywa, WO, odporności). Wartość może
   zależeć od Stopnia (`R`). Efekt **włączany** startuje wyłączony i włącza się go na karcie przedmiotu,
   gdy ma zastosowanie — np. rozłożony dwójnóg albo odporność na ogień tylko przeciw atakom ogniem.
 - **Montowanie:** dodatek przeciągnięty na kartę broni/pancerza **należącego do postaci** montuje

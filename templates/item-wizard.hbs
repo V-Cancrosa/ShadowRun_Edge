@@ -212,10 +212,10 @@
         <span class="sre-preview" data-preview="price">{{preview.price}}</span>
       </div>
     </div>
-    {{#if isMod}}
+    {{#if showEffects}}
     <div class="form-group stacked">
       <label>{{localize "SRE.Wizard.Effect.Title"}}</label>
-      <p class="hint">{{localize "SRE.Wizard.Effect.Hint"}}</p>
+      <p class="hint">{{#if isMod}}{{localize "SRE.Wizard.Effect.Hint"}}{{else}}{{localize "SRE.Wizard.Effect.ActorHint"}}{{/if}}</p>
       {{#each state.effects as |effect i|}}
       <div class="form-fields sre-effect">
         <input type="text" name="state.effects.{{i}}.label" value="{{effect.label}}" placeholder="{{localize "SRE.Wizard.Effect.Label"}}">
@@ -229,7 +229,8 @@
       {{/each}}
       <button type="button" data-action="addEffect"><i class="fas fa-plus"></i> {{localize "SRE.Wizard.Effect.Add"}}</button>
     </div>
-    {{else}}
+    {{/if}}
+    {{#unless isMod}}
     <div class="form-group stacked sre-mods">
       <label>{{localize "SRE.Wizard.Mods.Title"}}</label>
       <div class="sre-dropzone">
@@ -243,7 +244,7 @@
       </div>
       <p class="hint">{{localize "SRE.Wizard.Mods.Hint"}}</p>
     </div>
-    {{/if}}
+    {{/unless}}
 
     <div class="form-group stacked">
       <label>{{localize "SRE.Wizard.Description"}}</label>

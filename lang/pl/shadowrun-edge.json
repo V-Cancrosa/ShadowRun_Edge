@@ -103,8 +103,23 @@
           "dmg": "DV",
           "defense": "WO pancerza",
           "social": "Społeczne",
-          "ammocap": "Magazynek"
-        }
+          "ammocap": "Magazynek",
+          "bod": "Budowa",
+          "agi": "Zręczność",
+          "rea": "Reakcja",
+          "str": "Siła",
+          "wil": "Siła Woli",
+          "log": "Logika",
+          "int": "Intuicja",
+          "cha": "Charyzma",
+          "iniDice": "Kości inicjatywy",
+          "matrixIni": "Inicjatywa w Matrycy",
+          "defenseRating": "Wartość Obrony (WO)",
+          "damageResist": "Pula odporności na obrażenia fizyczne",
+          "toxinResist": "Pula odporności na toksyny",
+          "athletics": "Atletyka (modyfikator)"
+        },
+        "ActorHint": "Wszczep zmienia postać, która go nosi. Wartość „R” podąża za Stopniem przedmiotu. Efekt „włączany” (np. pompa adrenaliny) włącza się na karcie przedmiotu."
       },
       "Note": {
         "CapacityCost": "Zajmuje pojemności: [{value}]"
@@ -116,6 +131,31 @@
       "Locked": "Kompendium „{name}” jest zablokowane — odblokuj je, aby dodawać przedmioty.",
       "BuiltInMods": "Wbudowane dodatki",
       "BuiltInModsHint": "Zostaną zamontowane, gdy przeciągniesz ten przedmiot na postać."
+    },
+    "Grade": {
+      "Title": "Klasa wszczepu: {name}",
+      "Button": "Klasa: {grade}",
+      "Apply": "Zastosuj",
+      "Hint": "Klasy z podręcznika (s. 282) zmieniają Esencję, cenę i dostępność. Klasę można później zmienić przyciskiem w nagłówku karty przedmiotu.",
+      "Details": "Esencja {essence} · {price}¥ · dostępność {avail}",
+      "Name": {
+        "standard": "Standardowa",
+        "used": "Używana",
+        "alpha": "Alfa",
+        "beta": "Beta",
+        "delta": "Delta"
+      },
+      "Short": {
+        "standard": "standard",
+        "used": "używane",
+        "alpha": "alfa",
+        "beta": "beta",
+        "delta": "delta"
+      },
+      "Setting": {
+        "Name": "Pytaj o klasę wszczepu",
+        "Hint": "Po przeciągnięciu cyberware lub bioware na postać kreator pyta o klasę (używane, alfa, beta, delta)."
+      }
     }
   }
 }

@@ -103,8 +103,23 @@
           "dmg": "DV",
           "defense": "Armor Defense Rating",
           "social": "Social",
-          "ammocap": "Ammo capacity"
-        }
+          "ammocap": "Ammo capacity",
+          "bod": "Body",
+          "agi": "Agility",
+          "rea": "Reaction",
+          "str": "Strength",
+          "wil": "Willpower",
+          "log": "Logic",
+          "int": "Intuition",
+          "cha": "Charisma",
+          "iniDice": "Initiative dice",
+          "matrixIni": "Matrix initiative",
+          "defenseRating": "Defense Rating",
+          "damageResist": "Physical damage resistance pool",
+          "toxinResist": "Toxin resistance pool",
+          "athletics": "Athletics (modifier)"
+        },
+        "ActorHint": "The augmentation changes the character carrying it. A value of \"R\" follows the item Rating. A \"toggled\" effect (e.g. adrenaline pump) is switched on on the item sheet."
       },
       "Note": {
         "CapacityCost": "Takes up capacity: [{value}]"
@@ -116,6 +131,31 @@
       "Locked": "The compendium \"{name}\" is locked; unlock it to add items.",
       "BuiltInMods": "Built-in mods",
       "BuiltInModsHint": "They are installed when you drag this item onto a character."
+    },
+    "Grade": {
+      "Title": "Implant grade: {name}",
+      "Button": "Grade: {grade}",
+      "Apply": "Apply",
+      "Hint": "Rulebook grades (p. 282) change Essence, cost and Availability. The grade can be changed later with the button in the item sheet header.",
+      "Details": "Essence {essence} · {price}¥ · Availability {avail}",
+      "Name": {
+        "standard": "Standard",
+        "used": "Used",
+        "alpha": "Alphaware",
+        "beta": "Betaware",
+        "delta": "Deltaware"
+      },
+      "Short": {
+        "standard": "standard",
+        "used": "used",
+        "alpha": "alpha",
+        "beta": "beta",
+        "delta": "delta"
+      },
+      "Setting": {
+        "Name": "Ask for implant grade",
+        "Hint": "When cyberware or bioware is dropped on a character, ask for its grade (used, alpha, beta, delta)."
+      }
     }
   }
 }

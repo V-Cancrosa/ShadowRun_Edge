@@ -45,6 +45,7 @@ export const CATEGORIES = {
   },
   cyberware: {
     label: "SRE.Wizard.Category.cyberware",
+    actorEffects: true,
     types: ["CYBERWARE"],
     rating: true,
     fields: ["essence", "capacity"],
@@ -53,6 +54,7 @@ export const CATEGORIES = {
   },
   bioware: {
     label: "SRE.Wizard.Category.bioware",
+    actorEffects: true,
     types: ["BIOWARE", "GENETICS", "NANOWARE"],
     rating: true,
     fields: ["essence"],
@@ -148,6 +150,28 @@ export const EFFECT_TARGETS = {
   defense: ["system.defense"],
   social: ["system.social"],
   ammocap: ["system.ammocap"],
+};
+
+/**
+ * Character stats an augmentation changes while it is in the character's inventory (Active Effects with
+ * transfer, mode ADD). Paths are the ones the system's own effect editor offers (CONFIG.SR6.ACTIVE_EFFECT_OPTIONS);
+ * the system caps attribute bonuses at +4.
+ */
+export const ACTOR_EFFECT_TARGETS = {
+  bod: ["system.attributes.bod.mod"],
+  agi: ["system.attributes.agi.mod"],
+  rea: ["system.attributes.rea.mod"],
+  str: ["system.attributes.str.mod"],
+  wil: ["system.attributes.wil.mod"],
+  log: ["system.attributes.log.mod"],
+  int: ["system.attributes.int.mod"],
+  cha: ["system.attributes.cha.mod"],
+  iniDice: ["system.initiative.physical.diceMod"],
+  matrixIni: ["system.initiative.matrix.mod"],
+  defenseRating: ["system.defenserating.physical.mod"],
+  damageResist: ["system.defensepool.damage_physical.mod"],
+  toxinResist: ["system.defensepool.toxin.mod"],
+  athletics: ["system.skills.athletics.modifier"],
 };
 
 /** Label key of an item type shown in the wizard. */

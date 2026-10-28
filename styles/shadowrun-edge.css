@@ -97,3 +97,22 @@
   padding: 0.25rem 0.5rem;
   border: 1px dashed var(--color-border, #888);
 }
+
+.sre-grades {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+}
+
+.sre-grades .sre-grade {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sre-grades .sre-grade span {
+  margin-left: auto;
+  opacity: 0.8;
+  white-space: nowrap;
+}

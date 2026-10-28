@@ -1,4 +1,4 @@
-import { CATEGORIES, EFFECT_TARGETS, WEAPON_SKILLS, emptyState, typeLabel } from "./categories.mjs";
+import { ACTOR_EFFECT_TARGETS, CATEGORIES, EFFECT_TARGETS, WEAPON_SKILLS, emptyState, typeLabel } from "./categories.mjs";
 import { parseStatLine, evaluate } from "./parser.mjs";
 import { collectFormulas } from "./formulas.mjs";
 import { addToCatalog, modsToFlagData } from "../catalog.mjs";
@@ -38,21 +38,33 @@ function availDef(state, rating) {
 }
 
 /**
- * Active Effects that change the item they sit on (or, for a mod, the item it is installed in).
- * Toggled effects (bipod deployed, smartgun with a smartlink) start off, like the system's own mods.
+ * Active Effects from wizard effect rows.
+ * - Item targets (EFFECT_TARGETS) change the item they sit on, or for a mod the item it is installed in.
+ *   Toggled effects (bipod deployed, smartgun with a smartlink) start off, like the system's own mods.
+ * - Character targets (ACTOR_EFFECT_TARGETS) apply to the character carrying the item (augmentations).
+ *   A value of "R" becomes "@item.system.rating", which the system resolves, so it follows the Rating.
  */
 export function buildEffects(effects, rating, fallbackName) {
+  // `target` may also be a list (catalog data), so one switch covers e.g. all adrenaline pump bonuses.
+  const targetsOf = (e) => [].concat(e.target ?? []);
   return (effects ?? [])
-    .filter((e) => EFFECT_TARGETS[e.target] && String(e.value ?? "").trim())
-    .map((e) => ({
-      name: e.label?.trim() || fallbackName,
-      img: "icons/svg/upgrade.svg",
-      type: "base",
-      disabled: !!e.toggle,
-      transfer: false,
-      changes: EFFECT_TARGETS[e.target].map((key) => ({ key, mode: 2, value: String(evaluate(e.value, rating)) })),
-      system: { level: 1, advanced: false },
-    }));
+    .filter((e) => targetsOf(e).length && targetsOf(e).every((t) => EFFECT_TARGETS[t] || ACTOR_EFFECT_TARGETS[t])
+      && String(e.value ?? "").trim())
+    .map((e) => {
+      const onActor = targetsOf(e).every((t) => ACTOR_EFFECT_TARGETS[t]);
+      const raw = String(e.value).trim();
+      const value = onActor && /^R$/i.test(raw) ? "@item.system.rating" : String(evaluate(raw, rating));
+      const keys = targetsOf(e).flatMap((t) => (onActor ? ACTOR_EFFECT_TARGETS[t] : EFFECT_TARGETS[t]) ?? []);
+      return {
+        name: e.label?.trim() || fallbackName,
+        img: "icons/svg/upgrade.svg",
+        type: "base",
+        disabled: !!e.toggle,
+        transfer: onActor,
+        changes: keys.map((key) => ({ key, mode: 2, value })),
+        system: { level: 1, advanced: false },
+      };
+    });
 }
 
 /** Source book and page, plus the rating formulas the item recalculates from. */
@@ -277,7 +289,8 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         { value: "L", label: game.i18n.localize("SRE.Wizard.Licensed") },
         { value: "I", label: game.i18n.localize("SRE.Wizard.Illegal") },
       ],
-      effectTargets: Object.keys(EFFECT_TARGETS).map((value) => ({
+      showEffects: category.itemType === "mod" || !!category.actorEffects,
+      effectTargets: Object.keys(category.actorEffects ? ACTOR_EFFECT_TARGETS : EFFECT_TARGETS).map((value) => ({
         value,
         label: game.i18n.localize(`SRE.Wizard.Effect.Target.${value}`),
       })),
@@ -457,7 +470,8 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static #onAddEffect() {
     this.#readForm();
-    this.state.effects = [...(this.state.effects ?? []), { label: "", target: "ar", value: "", toggle: false }];
+    const target = this.category.actorEffects ? "str" : "ar";
+    this.state.effects = [...(this.state.effects ?? []), { label: "", target, value: "", toggle: false }];
     this.render();
   }
 

@@ -1027,3 +1027,37 @@ function vehicleSections() {
     }),
   }));
 }
+
+/**
+ * What augmentations do to the character carrying them (Active Effects on the actor, see ACTOR_EFFECT_TARGETS).
+ * "R" follows the item Rating. toggle: starts off, switched on on the item sheet when it applies.
+ * Bonuses the system has no field for (extra Minor Actions, unarmed DV) stay in the item notes.
+ */
+const on = (label, target, value, toggle = false) => ({ label, target, value: String(value), toggle });
+const wired = (n) => [on(`Wired reflexes ${n}: Reakcja i kości inicjatywy`, ["rea", "iniDice"], n)];
+const jack = (n) => [on("Cyberjack: inicjatywa w Matrycy", "matrixIni", n)];
+
+export const AUGMENT_EFFECTS = {
+  "Cyberjack (Rating 1)": jack(1), "Cyberjack (Rating 2)": jack(1), "Cyberjack (Rating 3)": jack(2),
+  "Cyberjack (Rating 4)": jack(2), "Cyberjack (Rating 5)": jack(3), "Cyberjack (Rating 6)": jack(3),
+  "Bone lacing (plastic)": [on("Bone lacing: odporność na obrażenia", "damageResist", 1), on("Bone lacing: obrona", "defenseRating", 1)],
+  "Bone lacing (aluminum)": [on("Bone lacing: odporność na obrażenia", "damageResist", 2), on("Bone lacing: obrona", "defenseRating", 1)],
+  "Bone lacing (titanium)": [on("Bone lacing: odporność na obrażenia", "damageResist", 2), on("Bone lacing: obrona", "defenseRating", 2)],
+  "Dermal plating": [on("Płytki skórne: obrona", "defenseRating", "R")],
+  "Muscle replacement": [on("Mięśnie zastępcze: Siła i Zręczność", ["str", "agi"], "R")],
+  "Reaction enhancers": [on("Wzmacniacze reakcji: Reakcja", "rea", "R")],
+  "Wired reflexes 1": wired(1), "Wired reflexes 2": wired(2), "Wired reflexes 3": wired(3), "Wired reflexes 4": wired(4),
+  "Adrenaline pump": [on("Pompa adrenaliny aktywna", ["str", "agi", "rea", "wil"], "R", true)],
+  "Bone density augmentation": [on("Gęstość kości: odporność na obrażenia", "damageResist", "R")],
+  "Enhanced articulation": [on("Ulepszona artykulacja: Zręczność", "agi", 1)],
+  "Muscle augmentation": [on("Wzmocnienie mięśni: Siła", "str", "R")],
+  "Muscle toner": [on("Tonizer mięśni: Zręczność", "agi", "R")],
+  "Orthoskin": [on("Orthoskin: obrona", "defenseRating", "R")],
+  "Suprathyroid gland": [on("Gruczoł nadtarczycowy", ["agi", "bod", "rea", "str"], 1)],
+  "Synthacardium": [on("Synthacardium: bieg, pływanie, wspinaczka", "athletics", "R", true)],
+  "Tailored pheromones": [on("Feromony: test Oszustwa lub Wpływu w zasięgu rozmowy", "cha", "R", true)],
+  "Tracheal filter": [on("Filtr tchawicy: toksyna wziewna", "toxinResist", "R", true)],
+  "Cerebral booster": [on("Wzmacniacz mózgowy: Logika", "log", "R")],
+  "Pain editor": [on("Edytor bólu aktywny: Siła Woli +1", "wil", 1, true), on("Edytor bólu aktywny: Intuicja −1", "int", -1, true)],
+  "Synaptic booster": [on("Wzmacniacz synaptyczny: Reakcja i kości inicjatywy", ["rea", "iniDice"], "R")],
+};

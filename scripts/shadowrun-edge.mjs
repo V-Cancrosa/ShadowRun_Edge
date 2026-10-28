@@ -3,6 +3,7 @@
  * It never patches the system's code; it only adds translations and its own features on top.
  */
 import { openItemWizard } from "./wizard/item-wizard.mjs";
+import "./grades.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SYSTEM_ID = "shadowrun6-eden";
@@ -16,6 +17,15 @@ Hooks.once("init", () => {
     config: false,
     type: Array,
     default: [],
+  });
+
+  game.settings.register(MODULE_ID, "askImplantGrade", {
+    name: "SRE.Grade.Setting.Name",
+    hint: "SRE.Grade.Setting.Hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true,
   });
 
   game.modules.get(MODULE_ID).api = { openItemWizard };
