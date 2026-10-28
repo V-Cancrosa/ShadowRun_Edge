@@ -7,7 +7,7 @@ import {
   ATTRIBUTES, COLUMNS, MAGIC_TYPES, METATYPES, PRIORITY, ROWS, SKILLS, effectiveRow, emptyDraft, evaluateDraft, qualityKarma,
 } from "./rules.mjs";
 import { QUALITIES } from "./qualities.mjs";
-import { buildCharacter } from "./build.mjs";
+import { buildCharacter, repairUpdate } from "./build.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -402,4 +402,19 @@ Hooks.on("renderActorDirectory", (app, html) => {
   button.innerHTML = `<i class="fas fa-user-plus"></i> ${L("SRE.Chargen.Button")}`;
   button.addEventListener("click", () => openCharacterCreator());
   actions.append(button);
+});
+
+/**
+ * Characters made by creator versions up to 0.5.0 lack the attributes' "mod" and the skills' "modifier",
+ * which makes the system's pools NaN (rolls of 0d6). The GM's client fills the gaps once on load.
+ */
+Hooks.once("ready", async () => {
+  if (game.system.id !== "shadowrun6-eden" || !game.users.activeGM?.isSelf) return;
+  const updates = game.actors
+    .filter((a) => a.getFlag("shadowrun-edge", "chargen"))
+    .map((a) => ({ _id: a.id, ...repairUpdate(a._source.system) }))
+    .filter((u) => Object.keys(u).length > 1);
+  if (!updates.length) return;
+  await Actor.updateDocuments(updates);
+  ui.notifications.info(game.i18n.format("SRE.Chargen.Repaired", { count: updates.length }));
 });

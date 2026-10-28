@@ -395,7 +395,8 @@
         "techno": "Techno",
         "mundane": "Brak magii"
       },
-      "AdjustmentShort": "Dostos."
+      "AdjustmentShort": "Dostos.",
+      "Repaired": "Shadowrun Edge: naprawiono {count} postać/postaci z kreatora (brakujące modyfikatory atrybutów i umiejętności dawały rzuty 0d6)."
     },
     "Theme": {
       "Setting": {

@@ -395,7 +395,8 @@
         "techno": "Techno",
         "mundane": "Mundane"
       },
-      "AdjustmentShort": "Adj."
+      "AdjustmentShort": "Adj.",
+      "Repaired": "Shadowrun Edge: repaired {count} character(s) from the creator (missing attribute and skill modifiers caused 0d6 rolls)."
     },
     "Theme": {
       "Setting": {

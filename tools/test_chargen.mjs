@@ -1,7 +1,7 @@
 // Character creation rules (SR6 core pp. 62–69). Run: node tools/test_chargen.mjs
 import assert from "node:assert/strict";
 import { advancementCost, emptyDraft, evaluateDraft, effectiveRow } from "../scripts/chargen/rules.mjs";
-import { buildCharacter } from "../scripts/chargen/build.mjs";
+import { buildCharacter, repairUpdate } from "../scripts/chargen/build.mjs";
 
 const keys = (r) => r.errors.map((e) => e.key);
 
@@ -120,5 +120,20 @@ const built = items.find((i) => i.name.startsWith("Built Tough"));
 assert.equal(built.effects[0].changes[0].key, "system.physical.mod");
 assert.equal(built.effects[0].changes[0].value, "2");
 assert.equal(items.filter((i) => i.type === "quality").length, 3);
+
+// The system's pool formulas (actor.js): a missing field must not turn a pool into NaN (0d6 rolls).
+for (const [id, a] of Object.entries(actor.system.attributes)) {
+  assert.ok(Number.isFinite(Math.max(0, parseInt(a.base) + Math.min(4, parseInt(a.mod)))), `attribute ${id}`);
+}
+for (const [id, sk] of Object.entries(actor.system.skills)) {
+  assert.ok(Number.isFinite(3 + sk.points + sk.modifier), `skill ${id}`);
+}
+assert.deepEqual(repairUpdate(actor.system), {}, "freshly built actor needs no repair");
+// Actors from creator <= 0.5.0 only had { base } / { points, specialization }.
+const old = repairUpdate({ attributes: { bod: { base: 9 }, mag: { base: 0 } }, skills: { firearms: { points: 2, specialization: "" } } });
+assert.equal(old["system.attributes.bod.mod"], 0);
+assert.equal(old["system.attributes.mag.mod"], 0);
+assert.equal(old["system.skills.firearms.modifier"], 0);
+assert.equal(old["system.attributes.bod.base"], undefined, "existing values are kept");
 
 console.log("chargen OK");

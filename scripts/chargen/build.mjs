@@ -14,6 +14,29 @@ const QUALITY_EFFECT_KEYS = {
   defenseRating: "system.defenserating.physical.mod",
 };
 
+const ATTRIBUTE_DEFAULTS = { mod: 0, modString: "", augment: 0 };
+const SPECIAL_DEFAULTS = { mod: 0, min: 0 };
+const SKILL_DEFAULTS = { expertise: "", modifier: 0, augment: 0, expandedSpecializations: [] };
+
+/**
+ * Fields an actor made by creator versions up to 0.5.0 may lack (they were written without mod/modifier).
+ * @param {object} system  the actor's source system data
+ * @returns {object} a flat update ({ "system.attributes.bod.mod": 0, ... }), empty when nothing is missing
+ */
+export function repairUpdate(system) {
+  const update = {};
+  const fill = (path, obj, defaults) => {
+    for (const [k, v] of Object.entries(defaults)) {
+      const ok = typeof v === "number" ? Number.isFinite(obj?.[k]) : obj?.[k] !== undefined;
+      if (!ok) update[`system.${path}.${k}`] = v;
+    }
+  };
+  for (const a of ATTRIBUTES) if (system?.attributes?.[a]) fill(`attributes.${a}`, system.attributes[a], ATTRIBUTE_DEFAULTS);
+  for (const a of ["mag", "res"]) if (system?.attributes?.[a]) fill(`attributes.${a}`, system.attributes[a], SPECIAL_DEFAULTS);
+  for (const s of SKILLS) if (system?.skills?.[s]) fill(`skills.${s}`, system.skills[s], SKILL_DEFAULTS);
+  return update;
+}
+
 function qualityItem(q, karma, label) {
   const def = q.def;
   const level = def.levels ? q.level : null;
@@ -52,10 +75,14 @@ function qualityItem(q, karma, label) {
  */
 export function buildCharacter(draft, result, label) {
   const magic = MAGIC_TYPES[draft.magicType] ?? MAGIC_TYPES.mundane;
-  const attributes = Object.fromEntries(ATTRIBUTES.map((a) => [a, { base: result.final[a] }]));
-  attributes.mag = { base: magic.attribute === "mag" ? result.final.magic : 0 };
-  attributes.res = { base: magic.attribute === "res" ? result.final.magic : 0 };
+  // Write complete entries: the system computes pools as base + mod (points + modifier), so a missing
+  // field gives NaN and every roll ends up as 0d6.
+  const attributes = Object.fromEntries(ATTRIBUTES.map((a) => [a, { ...ATTRIBUTE_DEFAULTS, base: result.final[a], pool: result.final[a] }]));
+  const magicValue = (a) => (magic.attribute === a ? result.final.magic : 0);
+  attributes.mag = { ...SPECIAL_DEFAULTS, base: magicValue("mag"), pool: magicValue("mag") };
+  attributes.res = { ...SPECIAL_DEFAULTS, base: magicValue("res"), pool: magicValue("res") };
   const skills = Object.fromEntries(SKILLS.map((s) => [s, {
+    ...SKILL_DEFAULTS,
     points: result.skills[s].rank,
     specialization: result.skills[s].spec ?? "",
   }]));
