@@ -25,6 +25,33 @@ karty postaci, NPC i pojazdu (przedmiot trafia od razu do ekwipunku).
 3. **Parametry:** popraw lub uzupełnij pola. Wartości zależne od Stopnia wpisuj jak w podręczniku,
    np. esencja `R*0.1`, cena `R*1000`, dostępność `R+2`; kreator przeliczy je dla wybranego Stopnia.
 
+**Cel:** na górze kreatora wybierasz, gdzie powstanie przedmiot: ekwipunek postaci, zakładka *Przedmioty*
+albo **Katalog** (tylko MG).
+
+**Cała tabela naraz:** wklej kilka wierszy (każdy przedmiot w osobnej linii) i kliknij *Rozpoznaj*.
+Kreator pokaże podgląd wszystkich pozycji, a *Utwórz wszystkie* doda je jednym kliknięciem.
+
+### Katalog
+
+Katalog to kompendium świata **Katalog Shadowrun Edge**, tworzone przy pierwszym dodaniu przedmiotu.
+Kreator sam układa przedmioty w folderach według kategorii i podtypu z podręcznika
+(np. *Broń palna / Ciężkie pistolety*). Gotowy przedmiot wystarczy przeciągnąć z katalogu na kartę
+postaci — trafia do ekwipunku z kompletem statystyk.
+
+### Dodatki (mody)
+
+- **Nowy dodatek:** kategoria *Dodatek / modyfikacja* tworzy przedmiot typu `mod` systemu
+  (akcesorium broni, modyfikacja broni, modyfikacja pancerza, akcesorium elektroniki…). Dodajesz mu
+  efekty: WA (wszystkie zasięgi lub wybrany), DV, WO pancerza, Społeczne, magazynek. Wartość może
+  zależeć od Stopnia (`R`). Efekt **włączany** startuje wyłączony i włącza się go na karcie przedmiotu,
+  gdy ma zastosowanie — np. rozłożony dwójnóg albo odporność na ogień tylko przeciw atakom ogniem.
+- **Montowanie:** dodatek przeciągnięty na kartę broni/pancerza **należącego do postaci** montuje
+  system `shadowrun6-eden`; efekty od razu zmieniają przedmiot (np. WA +2).
+- **Wbudowane dodatki:** w kreatorze przeciągnij dodatki (tłumik, celownik, modyfikacje pancerza) do pola
+  *Wbudowane dodatki*. Gdy taki przedmiot trafi na postać (z katalogu albo prosto z kreatora), moduł sam
+  utworzy i zamontuje te dodatki. System ma też własne kompendium *Gear Mods* z częścią dodatków
+  z podręcznika podstawowego.
+
 **Wzorce:** MG może zapisać wypełniony formularz przyciskiem *Zapisz jako wzorzec*. Wzorce są zapisywane
 w świecie i dostępne dla wszystkich graczy w kreatorze, więc wystarczy raz przepisać sprzęt z podręcznika.
 

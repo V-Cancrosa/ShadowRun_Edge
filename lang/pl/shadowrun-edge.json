@@ -4,8 +4,8 @@
     "Wizard": {
       "Title": "Kreator przedmiotów",
       "Button": "Kreator przedmiotów",
-      "TargetWorld": "Przedmiot trafi do zakładki Przedmioty.",
-      "TargetActor": "Przedmiot trafi do ekwipunku: {name}.",
+      "TargetWorld": "Zakładka Przedmioty",
+      "TargetActor": "Ekwipunek: {name}",
       "Step": {
         "Kind": "1. Rodzaj",
         "Paste": "2. Wiersz z podręcznika (opcjonalnie)",
@@ -23,7 +23,8 @@
         "electronics": "Elektronika (komlinki, cyberdeki)",
         "software": "Oprogramowanie i kodmody",
         "ammo": "Amunicja",
-        "gear": "Pozostały sprzęt"
+        "gear": "Pozostały sprzęt",
+        "mod": "Dodatek / modyfikacja (do broni, pancerza, elektroniki)"
       },
       "Type": "Typ",
       "Subtype": "Podtyp",
@@ -67,7 +68,51 @@
       "Reset": "Wyczyść",
       "Create": "Utwórz",
       "CreateOpen": "Utwórz i otwórz",
-      "Created": "Utworzono przedmiot „{name}”."
+      "Created": "Utworzono przedmiot „{name}”.",
+      "Target": "Gdzie utworzyć",
+      "TargetCatalog": "Katalog (kompendium)",
+      "CatalogFolder": "Folder w katalogu",
+      "BulkHint": "Możesz wkleić całą tabelę — każdy wiersz w osobnej linii — i dodać wszystkie przedmioty naraz.",
+      "Bulk": {
+        "Recognized": "Rozpoznane",
+        "Cancel": "Anuluj",
+        "Create": "Utwórz wszystkie"
+      },
+      "CreatedMany": "Utworzono {count} przedmiotów.",
+      "Mods": {
+        "Title": "Wbudowane dodatki",
+        "Empty": "Przeciągnij tutaj dodatek (np. tłumik, celownik, modyfikację pancerza) z kompendium lub zakładki Przedmioty.",
+        "Hint": "Po przeciągnięciu przedmiotu na postać dodatki zostaną zamontowane automatycznie i ich efekty zadziałają od razu.",
+        "OnlyMods": "Tu można upuszczać tylko dodatki (typ „mod”).",
+        "Missing": "Nie znaleziono części dodatków — zostały pominięte."
+      },
+      "Effect": {
+        "Title": "Efekty dodatku",
+        "Hint": "Dodatek zmienia przedmiot, na którym jest zamontowany. Wartość może zależeć od Stopnia, np. R lub +2.",
+        "Label": "Nazwa efektu (np. Rozłożony dwójnóg)",
+        "Add": "Dodaj efekt",
+        "Toggle": "włączany",
+        "ToggleHint": "Efekt startuje wyłączony i włącza się go na karcie przedmiotu, gdy ma zastosowanie (np. tylko przeciw ogniowi).",
+        "Target": {
+          "ar": "WA (wszystkie zasięgi)",
+          "ar0": "WA bliski",
+          "ar1": "WA krótki",
+          "ar2": "WA średni",
+          "ar3": "WA daleki",
+          "ar4": "WA ekstremalny",
+          "dmg": "DV",
+          "defense": "WO pancerza",
+          "social": "Społeczne",
+          "ammocap": "Magazynek"
+        }
+      }
+    },
+    "Catalog": {
+      "Label": "Katalog Shadowrun Edge",
+      "GMOnly": "Tylko MG może dodawać przedmioty do katalogu.",
+      "Locked": "Kompendium „{name}” jest zablokowane — odblokuj je, aby dodawać przedmioty.",
+      "BuiltInMods": "Wbudowane dodatki",
+      "BuiltInModsHint": "Zostaną zamontowane, gdy przeciągniesz ten przedmiot na postać."
     }
   }
 }

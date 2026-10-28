@@ -4,8 +4,8 @@
     "Wizard": {
       "Title": "Item Wizard",
       "Button": "Item Wizard",
-      "TargetWorld": "The item goes to the Items directory.",
-      "TargetActor": "The item goes to the inventory of {name}.",
+      "TargetWorld": "Items directory",
+      "TargetActor": "Inventory: {name}",
       "Step": {
         "Kind": "1. Kind",
         "Paste": "2. Rulebook row (optional)",
@@ -23,7 +23,8 @@
         "electronics": "Electronics (commlinks, cyberdecks)",
         "software": "Software and codemods",
         "ammo": "Ammunition",
-        "gear": "Other gear"
+        "gear": "Other gear",
+        "mod": "Mod / accessory (weapon, armor, electronics)"
       },
       "Type": "Type",
       "Subtype": "Subtype",
@@ -67,7 +68,51 @@
       "Reset": "Clear",
       "Create": "Create",
       "CreateOpen": "Create and open",
-      "Created": "Created item \"{name}\"."
+      "Created": "Created item \"{name}\".",
+      "Target": "Create in",
+      "TargetCatalog": "Catalog (compendium)",
+      "CatalogFolder": "Catalog folder",
+      "BulkHint": "You can paste a whole table, one row per line, and create all items at once.",
+      "Bulk": {
+        "Recognized": "Recognized",
+        "Cancel": "Cancel",
+        "Create": "Create all"
+      },
+      "CreatedMany": "Created {count} items.",
+      "Mods": {
+        "Title": "Built-in mods",
+        "Empty": "Drop a mod here (e.g. silencer, scope, armor modification) from a compendium or the Items directory.",
+        "Hint": "When the item is dragged onto a character, the mods are installed automatically and their effects apply right away.",
+        "OnlyMods": "Only mods (type \"mod\") can be dropped here.",
+        "Missing": "Some mods were not found and were skipped."
+      },
+      "Effect": {
+        "Title": "Mod effects",
+        "Hint": "A mod changes the item it is installed in. The value may depend on the Rating, e.g. R or +2.",
+        "Label": "Effect name (e.g. Bipod deployed)",
+        "Add": "Add effect",
+        "Toggle": "toggled",
+        "ToggleHint": "The effect starts disabled and is switched on on the item sheet when it applies (e.g. only against fire).",
+        "Target": {
+          "ar": "AR (all ranges)",
+          "ar0": "AR close",
+          "ar1": "AR near",
+          "ar2": "AR medium",
+          "ar3": "AR far",
+          "ar4": "AR extreme",
+          "dmg": "DV",
+          "defense": "Armor Defense Rating",
+          "social": "Social",
+          "ammocap": "Ammo capacity"
+        }
+      }
+    },
+    "Catalog": {
+      "Label": "Shadowrun Edge Catalog",
+      "GMOnly": "Only the GM can add items to the catalog.",
+      "Locked": "The compendium \"{name}\" is locked; unlock it to add items.",
+      "BuiltInMods": "Built-in mods",
+      "BuiltInModsHint": "They are installed when you drag this item onto a character."
     }
   }
 }

@@ -58,3 +58,42 @@
 .directory .header-actions .sre-wizard-button {
   flex-basis: 100%;
 }
+
+.sre-wizard textarea[name="state.statLine"] {
+  width: 100%;
+  font-family: monospace;
+}
+
+.sre-wizard table.sre-bulk {
+  margin: 0.25rem 0;
+  font-size: 0.9em;
+}
+
+.sre-wizard .sre-effect {
+  margin-bottom: 0.25rem;
+}
+
+.sre-wizard .sre-dropzone {
+  min-height: 2.5rem;
+  padding: 0.25rem;
+  border: 1px dashed var(--color-border, #888);
+  border-radius: 4px;
+}
+
+.sre-wizard .sre-mod {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.sre-wizard .sre-mod button {
+  flex: 0 0 auto;
+  width: auto;
+  margin-left: auto;
+}
+
+.sre-builtin-mods {
+  margin: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px dashed var(--color-border, #888);
+}

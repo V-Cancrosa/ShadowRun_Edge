@@ -1,5 +1,13 @@
 <div class="sre-wizard">
-  <p class="sre-target"><i class="fas fa-box-open"></i> {{target}}</p>
+  <div class="form-group sre-target">
+    <label><i class="fas fa-box-open"></i> {{localize "SRE.Wizard.Target"}}</label>
+    <div class="form-fields">
+      <select name="target">
+        {{selectOptions targets selected=target valueAttr="value" labelAttr="label"}}
+      </select>
+    </div>
+  </div>
+  {{#if isCatalog}}<p class="hint">{{localize "SRE.Wizard.CatalogFolder"}}: <strong>{{folderPath}}</strong></p>{{/if}}
 
   <fieldset>
     <legend>{{localize "SRE.Wizard.Step.Kind"}}</legend>
@@ -44,11 +52,28 @@
 
   <fieldset>
     <legend>{{localize "SRE.Wizard.Step.Paste"}}</legend>
+    <textarea name="state.statLine" rows="3" placeholder="{{example}}">{{state.statLine}}</textarea>
     <div class="form-fields">
-      <input type="text" name="state.statLine" value="{{state.statLine}}" placeholder="{{example}}">
       <button type="button" data-action="parse"><i class="fas fa-magnifying-glass"></i> {{localize "SRE.Wizard.Parse"}}</button>
     </div>
-    <p class="hint">{{localize "SRE.Wizard.PasteHint"}}</p>
+    <p class="hint">{{localize "SRE.Wizard.PasteHint"}} {{localize "SRE.Wizard.BulkHint"}}</p>
+    {{#if bulk}}
+    <table class="sre-bulk">
+      <thead><tr><th>{{localize "SRE.Wizard.Name"}}</th><th>{{localize "SRE.Wizard.Bulk.Recognized"}}</th></tr></thead>
+      <tbody>
+        {{#each bulk}}
+        <tr>
+          <td>{{state.name}}</td>
+          <td>{{summary}}{{#if unparsed}}<br><span class="sre-warn">{{localize "SRE.Wizard.Unparsed"}}: {{unparsed}}</span>{{/if}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="form-fields">
+      <button type="button" data-action="clearBulk"><i class="fas fa-xmark"></i> {{localize "SRE.Wizard.Bulk.Cancel"}}</button>
+      <button type="button" data-action="createBulk"><i class="fas fa-layer-group"></i> {{localize "SRE.Wizard.Bulk.Create"}} ({{bulk.length}})</button>
+    </div>
+    {{/if}}
     {{#if lastParse}}
     <p class="sre-parse-result">
       {{localize "SRE.Wizard.ParseResult" }} {{lastParse.count}}
@@ -187,6 +212,39 @@
         <span class="sre-preview" data-preview="price">{{preview.price}}</span>
       </div>
     </div>
+    {{#if isMod}}
+    <div class="form-group stacked">
+      <label>{{localize "SRE.Wizard.Effect.Title"}}</label>
+      <p class="hint">{{localize "SRE.Wizard.Effect.Hint"}}</p>
+      {{#each state.effects as |effect i|}}
+      <div class="form-fields sre-effect">
+        <input type="text" name="state.effects.{{i}}.label" value="{{effect.label}}" placeholder="{{localize "SRE.Wizard.Effect.Label"}}">
+        <select name="state.effects.{{i}}.target">
+          {{selectOptions ../effectTargets selected=effect.target valueAttr="value" labelAttr="label"}}
+        </select>
+        <input type="text" name="state.effects.{{i}}.value" value="{{effect.value}}" class="sre-short" placeholder="+2 / R">
+        <label class="checkbox" data-tooltip="SRE.Wizard.Effect.ToggleHint"><input type="checkbox" name="state.effects.{{i}}.toggle" {{checked effect.toggle}}> {{localize "SRE.Wizard.Effect.Toggle"}}</label>
+        <button type="button" data-action="removeEffect" data-index="{{i}}"><i class="fas fa-trash"></i></button>
+      </div>
+      {{/each}}
+      <button type="button" data-action="addEffect"><i class="fas fa-plus"></i> {{localize "SRE.Wizard.Effect.Add"}}</button>
+    </div>
+    {{else}}
+    <div class="form-group stacked sre-mods">
+      <label>{{localize "SRE.Wizard.Mods.Title"}}</label>
+      <div class="sre-dropzone">
+        {{#each state.mods as |mod i|}}
+        <div class="sre-mod"><i class="fas fa-puzzle-piece"></i> {{mod.name}}
+          <button type="button" data-action="removeMod" data-index="{{i}}"><i class="fas fa-xmark"></i></button>
+        </div>
+        {{else}}
+        <p class="hint">{{localize "SRE.Wizard.Mods.Empty"}}</p>
+        {{/each}}
+      </div>
+      <p class="hint">{{localize "SRE.Wizard.Mods.Hint"}}</p>
+    </div>
+    {{/if}}
+
     <div class="form-group stacked">
       <label>{{localize "SRE.Wizard.Description"}}</label>
       <textarea name="state.description" rows="3">{{state.description}}</textarea>

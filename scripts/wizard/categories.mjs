@@ -83,6 +83,15 @@ export const CATEGORIES = {
     columns: ["avail", "price"],
     example: "Amunicja 3(L) 100¥",
   },
+  mod: {
+    label: "SRE.Wizard.Category.mod",
+    itemType: "mod",
+    types: ["accessory_weapon", "weapon_mod", "armor_mod", "accessory_electronics", "visual_enhancement", "audio_enhancement"],
+    rating: true,
+    fields: ["effects"],
+    columns: ["rating", "avail", "price"],
+    example: "Celownik 2 300¥",
+  },
   gear: {
     label: "SRE.Wizard.Category.gear",
     types: ["CHEMICALS", "BIOLOGY", "SURVIVAL", "TOOLS", "MAGICAL", "ACCESSORY", "ARMOR_ADDITION"],
@@ -126,6 +135,25 @@ export const WEAPON_SKILLS = {
 };
 
 /** Empty wizard state for a category; every value is a string so rating formulas can be typed in. */
+/** Item fields a mod effect can change on the item it is installed in (Active Effect keys, mode ADD). */
+export const EFFECT_TARGETS = {
+  ar: ["system.attackRating.0", "system.attackRating.1", "system.attackRating.2", "system.attackRating.3", "system.attackRating.4"],
+  ar0: ["system.attackRating.0"],
+  ar1: ["system.attackRating.1"],
+  ar2: ["system.attackRating.2"],
+  ar3: ["system.attackRating.3"],
+  ar4: ["system.attackRating.4"],
+  dmg: ["system.dmg"],
+  defense: ["system.defense"],
+  social: ["system.social"],
+  ammocap: ["system.ammocap"],
+};
+
+/** Label key of an item type shown in the wizard. */
+export function typeLabel(category, type) {
+  return category.itemType === "mod" ? `SR6.Item.mod.TYPES.${type}` : `shadowrun6.itemtype.${type}`;
+}
+
 export function emptyState(categoryId = "firearm") {
   const category = CATEGORIES[categoryId];
   return {
@@ -155,5 +183,9 @@ export function emptyState(categoryId = "firearm") {
     count: "1",
     description: "",
     statLine: "",
+    // Mods installed automatically when the item lands on an actor: [{ uuid, name }]
+    mods: [],
+    // Effects of a mod: [{ label, target, value, toggle }]
+    effects: [],
   };
 }

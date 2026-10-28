@@ -1,5 +1,6 @@
-import { CATEGORIES, WEAPON_SKILLS, emptyState } from "./categories.mjs";
+import { CATEGORIES, EFFECT_TARGETS, WEAPON_SKILLS, emptyState, typeLabel } from "./categories.mjs";
 import { parseStatLine, evaluate } from "./parser.mjs";
+import { addToCatalog, modsToFlagData } from "../catalog.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -25,27 +26,63 @@ function worldPresets() {
 
 const int = (value, rating) => Math.trunc(evaluate(value, rating));
 
+function toHTML(text) {
+  if (!text) return "";
+  return text.split(/\n\s*\n/).map((p) => `<p>${Handlebars.escapeExpression(p).replace(/\n/g, "<br>")}</p>`).join("");
+}
+
+function availDef(state, rating) {
+  if (!state.avail) return "";
+  return `${int(state.avail, rating)}${state.legality ? `(${state.legality})` : ""}`;
+}
+
+/** Turns the wizard state of the "mod" category into a shadowrun6-eden mod item with its Active Effects. */
+export function buildModData(state) {
+  const rating = int(state.rating);
+  const effects = (state.effects ?? [])
+    .filter((e) => EFFECT_TARGETS[e.target] && String(e.value ?? "").trim())
+    .map((e) => ({
+      name: e.label?.trim() || `${state.name.trim() || game.i18n.localize("SRE.Wizard.Category.mod")}`,
+      img: "icons/svg/upgrade.svg",
+      type: "base",
+      // Toggled effects (bipod deployed, fire resistance against fire) start off, like the system's own mods.
+      disabled: !!e.toggle,
+      transfer: false,
+      changes: EFFECT_TARGETS[e.target].map((key) => ({ key, mode: 2, value: String(evaluate(e.value, rating)) })),
+      system: { level: 1, advanced: false },
+    }));
+  return {
+    name: state.name.trim() || game.i18n.localize("SRE.Wizard.Category.mod"),
+    type: "mod",
+    system: {
+      type: state.type,
+      rating,
+      availDef: availDef(state, rating),
+      price: evaluate(state.price, rating),
+      description: toHTML(state.description),
+    },
+    effects,
+  };
+}
+
 /**
  * Turns the wizard state into Item data for the shadowrun6-eden "gear" type.
  * Field names follow the system's template.json.
  */
 export function buildItemData(state) {
   const category = CATEGORIES[state.category];
+  if (category.itemType === "mod") return buildModData(state);
   const rating = int(state.rating);
-  const avail = int(state.avail, rating);
-  const price = evaluate(state.price, rating);
   const system = {
     type: state.type,
     subtype: state.subtype,
     rating,
     needsRating: !!category.rating && rating > 0,
-    avail,
-    availDef: state.avail ? `${avail}${state.legality ? `(${state.legality})` : ""}` : "",
-    price,
+    avail: int(state.avail, rating),
+    availDef: availDef(state, rating),
+    price: evaluate(state.price, rating),
     priceDef: state.price && /R/i.test(state.price) ? state.price : "",
-    description: state.description
-      ? state.description.split(/\n\s*\n/).map((p) => `<p>${Handlebars.escapeExpression(p).replace(/\n/g, "<br>")}</p>`).join("")
-      : "",
+    description: toHTML(state.description),
   };
 
   if (category.weapon) {
@@ -95,18 +132,40 @@ export function buildItemData(state) {
   };
 }
 
+/** One-line summary of a parsed table row for the bulk preview. */
+function summarize(state) {
+  const category = CATEGORIES[state.category];
+  const parts = [];
+  if (category.weapon) {
+    if (state.dv) parts.push(`${state.dv}${state.stun ? "S" : "P"}`);
+    const modes = Object.entries(state.modes).filter(([, on]) => on).map(([m]) => m).join("/");
+    if (modes) parts.push(modes);
+    if (state.ar.some(Boolean)) parts.push(state.ar.map((v) => v || "—").join("/"));
+    if (state.ammo) parts.push(`${state.ammo}`);
+  }
+  for (const key of ["rating", "defense", "capacity", "essence", "a", "s", "d", "f", "progSlots"]) {
+    if (state[key]) parts.push(`${key}: ${state[key]}`);
+  }
+  if (state.avail) parts.push(`${state.avail}${state.legality ? `(${state.legality})` : ""}`);
+  if (state.price) parts.push(`${state.price}¥`);
+  return parts.join(" · ");
+}
+
 /**
- * Creates gear the way the rulebook lists it: pick a category, paste a table row or fill the columns,
- * and the wizard fills the shadowrun6-eden item fields (skill, specialization, attack ratings, etc.).
+ * Creates gear the way the rulebook lists it: pick a category, paste a table row (or a whole table) or fill
+ * the columns, and the wizard fills the shadowrun6-eden item fields (skill, specialization, attack ratings, etc.).
+ * Items go to an actor, the Items directory, or the catalog compendium.
  */
 export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
-  /** @param {{actor?: Actor, folder?: string}} options */
+  /** @param {{actor?: Actor, target?: "actor"|"world"|"catalog"}} options */
   constructor(options = {}) {
     super(options);
     this.actor = options.actor ?? null;
+    this.target = this.actor ? "actor" : (options.target ?? (game.user.isGM ? "catalog" : "world"));
     this.state = emptyState();
     this.state.subtype = this.#subtypes()[0]?.value ?? "";
     this.lastParse = null;
+    this.bulk = null;
   }
 
   static DEFAULT_OPTIONS = {
@@ -114,13 +173,18 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     classes: ["sre-item-wizard"],
     tag: "form",
     window: { title: "SRE.Wizard.Title", icon: "fas fa-wand-magic-sparkles", resizable: true },
-    position: { width: 560, height: "auto" },
+    position: { width: 600, height: "auto" },
     form: { handler: ItemWizard.#onSubmit, submitOnChange: false, closeOnSubmit: false },
     actions: {
       parse: ItemWizard.#onParse,
+      createBulk: ItemWizard.#onCreateBulk,
+      clearBulk: ItemWizard.#onClearBulk,
       applyPreset: ItemWizard.#onApplyPreset,
       savePreset: ItemWizard.#onSavePreset,
       deletePreset: ItemWizard.#onDeletePreset,
+      addEffect: ItemWizard.#onAddEffect,
+      removeEffect: ItemWizard.#onRemoveEffect,
+      removeMod: ItemWizard.#onRemoveMod,
       reset: ItemWizard.#onReset,
     },
   };
@@ -134,7 +198,12 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     return this.actor ? `${title}: ${this.actor.name}` : title;
   }
 
+  get category() {
+    return CATEGORIES[this.state.category];
+  }
+
   #subtypes(type = this.state.type) {
+    if (this.category.itemType === "mod") return [];
     const subtypes = CONFIG.SR6?.GEAR_SUBTYPES?.[type] ?? {};
     return Object.entries(subtypes).map(([value, label]) => ({ value, label: game.i18n.localize(label) }));
   }
@@ -144,14 +213,29 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     return all.filter((p) => p.state?.category === this.state.category);
   }
 
+  /** Catalog folder path for the current kind, e.g. ["Broń palna", "Ciężkie pistolety"]. */
+  #folderPath() {
+    const category = this.category;
+    const path = [game.i18n.localize(category.label)];
+    if (category.types.length > 1) path.push(game.i18n.localize(typeLabel(category, this.state.type)));
+    const subtype = this.#subtypes().find((s) => s.value === this.state.subtype);
+    if (subtype) path.push(subtype.label);
+    return path;
+  }
+
   async _prepareContext() {
-    const category = CATEGORIES[this.state.category];
+    const category = this.category;
     const show = Object.fromEntries(category.fields.map((f) => [f, true]));
     const presets = await this.#presets();
     const [skill, spec] = WEAPON_SKILLS[this.state.subtype] ?? [];
+    const targets = [];
+    if (this.actor) targets.push({ value: "actor", label: game.i18n.format("SRE.Wizard.TargetActor", { name: this.actor.name }) });
+    targets.push({ value: "world", label: game.i18n.localize("SRE.Wizard.TargetWorld") });
+    if (game.user.isGM) targets.push({ value: "catalog", label: game.i18n.localize("SRE.Wizard.TargetCatalog") });
     return {
       state: this.state,
       show,
+      isMod: category.itemType === "mod",
       weapon: !!category.weapon,
       hasRating: !!category.rating,
       countable: !!category.countable,
@@ -159,37 +243,55 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       example: category.example,
       categories: Object.entries(CATEGORIES).map(([value, c]) => ({ value, label: game.i18n.localize(c.label) })),
       multiType: category.types.length > 1,
-      types: category.types.map((value) => ({ value, label: game.i18n.localize(`shadowrun6.itemtype.${value}`) })),
+      types: category.types.map((value) => ({ value, label: game.i18n.localize(typeLabel(category, value)) })),
       subtypes: this.#subtypes(),
       legalities: [
         { value: "", label: game.i18n.localize("SRE.Wizard.Legal") },
         { value: "L", label: game.i18n.localize("SRE.Wizard.Licensed") },
         { value: "I", label: game.i18n.localize("SRE.Wizard.Illegal") },
       ],
-      presets: presets.map((p) => ({ id: p.id, label: p.label ?? p.state.name, custom: !p.builtin })),
+      effectTargets: Object.keys(EFFECT_TARGETS).map((value) => ({
+        value,
+        label: game.i18n.localize(`SRE.Wizard.Effect.Target.${value}`),
+      })),
+      presets: presets.map((p) => ({ id: p.id, label: p.label ?? p.state.name })),
       skillHint: skill ? [
         game.i18n.localize(`skill.${skill}`),
         spec ? game.i18n.localize(`shadowrun6.special.${skill}.${spec}`) : null,
       ].filter(Boolean).join(" / ") : "",
       preview: this.#previews(),
       lastParse: this.lastParse,
-      target: this.actor
-        ? game.i18n.format("SRE.Wizard.TargetActor", { name: this.actor.name })
-        : game.i18n.localize("SRE.Wizard.TargetWorld"),
+      bulk: this.bulk,
+      target: this.target,
+      isCatalog: this.target === "catalog",
+      targets,
+      folderPath: this.#folderPath().join(" / "),
     };
   }
 
   _onFirstRender(context, options) {
     super._onFirstRender(context, options);
     this.element.addEventListener("change", (event) => this.#onChange(event));
+    // Mods dragged from a compendium or the Items directory become built-in mods of the item.
+    this.element.addEventListener("dragover", (event) => event.preventDefault());
+    this.element.addEventListener("drop", (event) => this.#onDrop(event));
   }
 
-  /** Reads the form into the state; switching category or type re-renders the visible columns. */
+  /** Reads the form into the state. */
   #readForm() {
     const data = foundry.utils.expandObject(new foundry.applications.ux.FormDataExtended(this.element).object);
+    if (data.target) this.target = data.target;
     const s = data.state ?? {};
     s.ar = [0, 1, 2, 3, 4].map((i) => s.ar?.[i] ?? "");
     s.modes = { SS: !!s.modes?.SS, SA: !!s.modes?.SA, BF: !!s.modes?.BF, FA: !!s.modes?.FA };
+    if (s.effects) {
+      s.effects = Object.values(s.effects).map((e) => ({
+        label: e.label ?? "",
+        target: e.target ?? "ar",
+        value: e.value == null ? "" : String(e.value),
+        toggle: !!e.toggle,
+      }));
+    }
     for (const [key, value] of Object.entries(s)) {
       if (typeof value === "number") s[key] = String(value);
       else if (value === null || value === undefined) s[key] = "";
@@ -213,15 +315,17 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const before = { category: this.state.category, type: this.state.type };
     this.#readForm();
     if (name === "state.category" && this.state.category !== before.category) {
-      const keep = { name: this.state.name, description: this.state.description };
+      const keep = { name: this.state.name, description: this.state.description, statLine: this.state.statLine };
       this.state = Object.assign(emptyState(this.state.category), keep);
       this.state.subtype = this.#subtypes()[0]?.value ?? "";
       this.lastParse = null;
+      this.bulk = null;
     } else if (name === "state.type" && this.state.type !== before.type) {
       this.state.subtype = this.#subtypes()[0]?.value ?? "";
     }
     // Only layout changes re-render; re-rendering on every input would swallow a click on "Create".
-    if (["state.category", "state.type", "state.subtype"].includes(name)) {
+    if (["state.category", "state.type", "state.subtype", "target"].includes(name)) {
+      if (this.bulk) this.#parseBulk();
       this.render();
       return;
     }
@@ -231,26 +335,66 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
   }
 
-  static #onParse() {
+  async #onDrop(event) {
+    if (this.category.itemType === "mod") return;
+    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+    if (data?.type !== "Item") return;
+    event.preventDefault();
+    const item = await fromUuid(data.uuid);
+    if (!item) return;
+    if (item.type !== "mod") {
+      ui.notifications.warn(game.i18n.localize("SRE.Wizard.Mods.OnlyMods"));
+      return;
+    }
     this.#readForm();
-    const category = CATEGORIES[this.state.category];
-    const { name, fields, unparsed } = parseStatLine(this.state.statLine, category, this.state.subtype);
-    if (name && !this.state.name) this.state.name = name;
-    Object.assign(this.state, fields);
-    this.lastParse = {
-      count: Object.keys(fields).length,
-      unparsed: unparsed.join(" "),
-    };
+    this.state.mods = [...(this.state.mods ?? []), { uuid: item.uuid, name: item.name }];
     this.render();
   }
 
-  static async #onApplyPreset(event, target) {
-    const id = target.closest("[data-preset-id]")?.dataset.presetId
-      ?? this.element.querySelector("[name='preset']")?.value;
+  /** Parses every non-empty line of the paste field as one table row. */
+  #parseBulk() {
+    const lines = String(this.state.statLine ?? "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+    this.bulk = lines.map((line) => {
+      const { name, fields, unparsed } = parseStatLine(line, this.category, this.state.subtype);
+      const state = Object.assign(emptyState(this.state.category), {
+        type: this.state.type,
+        subtype: this.state.subtype,
+        mods: [...(this.state.mods ?? [])],
+        effects: foundry.utils.deepClone(this.state.effects ?? []),
+      }, fields, { name: name || line });
+      return { state, summary: summarize(state), unparsed: unparsed.join(" ") };
+    });
+  }
+
+  static #onParse() {
+    this.#readForm();
+    const lines = String(this.state.statLine ?? "").split(/\r?\n/).filter((l) => l.trim());
+    if (lines.length > 1) {
+      this.#parseBulk();
+      this.lastParse = null;
+    } else {
+      const { name, fields, unparsed } = parseStatLine(this.state.statLine, this.category, this.state.subtype);
+      if (name && !this.state.name) this.state.name = name;
+      Object.assign(this.state, fields);
+      this.lastParse = { count: Object.keys(fields).length, unparsed: unparsed.join(" ") };
+      this.bulk = null;
+    }
+    this.render();
+  }
+
+  static #onClearBulk() {
+    this.#readForm();
+    this.bulk = null;
+    this.render();
+  }
+
+  static async #onApplyPreset() {
+    const id = this.element.querySelector("[name='preset']")?.value;
     const preset = (await this.#presets()).find((p) => p.id === id);
     if (!preset) return;
     this.state = foundry.utils.mergeObject(emptyState(preset.state.category), foundry.utils.deepClone(preset.state));
     this.lastParse = null;
+    this.bulk = null;
     this.render();
   }
 
@@ -284,26 +428,77 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
+  static #onAddEffect() {
+    this.#readForm();
+    this.state.effects = [...(this.state.effects ?? []), { label: "", target: "ar", value: "", toggle: false }];
+    this.render();
+  }
+
+  static #onRemoveEffect(event, target) {
+    this.#readForm();
+    const index = Number(target.dataset.index);
+    this.state.effects = this.state.effects.filter((_, i) => i !== index);
+    this.render();
+  }
+
+  static #onRemoveMod(event, target) {
+    this.#readForm();
+    const index = Number(target.dataset.index);
+    this.state.mods = this.state.mods.filter((_, i) => i !== index);
+    this.render();
+  }
+
   static #onReset() {
     this.state = emptyState(this.state.category);
     this.state.subtype = this.#subtypes()[0]?.value ?? "";
     this.lastParse = null;
+    this.bulk = null;
     this.render();
+  }
+
+  /** Item data for a state, with the built-in mods stored in a flag until the item lands on an actor. */
+  async #itemData(state) {
+    const data = buildItemData(state);
+    if (data.type !== "mod" && state.mods?.length) {
+      const mods = (await Promise.all(state.mods.map((m) => fromUuid(m.uuid)))).filter(Boolean);
+      if (mods.length < state.mods.length) ui.notifications.warn(game.i18n.localize("SRE.Wizard.Mods.Missing"));
+      data.flags = { [MODULE_ID]: { mods: modsToFlagData(mods) } };
+    }
+    return data;
+  }
+
+  /** Creates the items in the chosen place and reports how many were made. */
+  async #create(states) {
+    const data = await Promise.all(states.map((s) => this.#itemData(s)));
+    let created;
+    try {
+      if (this.target === "actor" && this.actor) created = await this.actor.createEmbeddedDocuments("Item", data);
+      else if (this.target === "catalog") created = await addToCatalog(data, this.#folderPath());
+      else created = await Item.implementation.createDocuments(data);
+    } catch (err) {
+      ui.notifications.error(err.message);
+      return [];
+    }
+    if (created?.length === 1) ui.notifications.info(game.i18n.format("SRE.Wizard.Created", { name: created[0].name }));
+    else if (created?.length) ui.notifications.info(game.i18n.format("SRE.Wizard.CreatedMany", { count: created.length }));
+    return created ?? [];
+  }
+
+  static async #onCreateBulk() {
+    this.#readForm();
+    if (!this.bulk?.length) return;
+    const created = await this.#create(this.bulk.map((row) => row.state));
+    if (created.length) {
+      this.bulk = null;
+      this.state.statLine = "";
+      this.render();
+    }
   }
 
   static async #onSubmit(event) {
     this.#readForm();
-    const data = buildItemData(this.state);
-    const openSheet = event.submitter?.dataset.open === "true";
-    let item;
-    if (this.actor) {
-      [item] = await this.actor.createEmbeddedDocuments("Item", [data]);
-    } else {
-      item = await Item.implementation.create(data);
-    }
-    if (!item) return;
-    ui.notifications.info(game.i18n.format("SRE.Wizard.Created", { name: item.name }));
-    if (openSheet) {
+    const [item] = await this.#create([this.state]);
+    if (item && event.submitter?.dataset.open === "true") {
       item.sheet.render(true);
       this.close();
     }
