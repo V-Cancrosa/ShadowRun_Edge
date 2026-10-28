@@ -212,6 +212,19 @@
         <span class="sre-preview" data-preview="price">{{preview.price}}</span>
       </div>
     </div>
+    {{#if isMod}}
+    <div class="form-group">
+      <label>{{localize "SRE.Mount.Label"}}</label>
+      <select name="state.mount">
+        {{selectOptions mountOptions selected=state.mount valueAttr="value" labelAttr="label"}}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>{{localize "SRE.Mount.CapacityCost"}}</label>
+      <input type="text" name="state.capacityCost" value="{{state.capacityCost}}" class="sre-short" placeholder="2 / R">
+      <p class="hint">{{localize "SRE.Mount.CapacityCostHint"}}</p>
+    </div>
+    {{/if}}
     {{#if showEffects}}
     <div class="form-group stacked">
       <label>{{localize "SRE.Wizard.Effect.Title"}}</label>

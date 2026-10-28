@@ -40,6 +40,18 @@ są ułożone w folderach jak w rozdziale *Gear* (s. 245–301): np. *Broń paln
   standardowa, używana, alfa, beta, delta — i przelicza Esencję, cenę i dostępność (np. datajack alfa:
   Esencja 0,08). Klasę zmienisz później przyciskiem **Klasa** w nagłówku karty przedmiotu. Przy imporcie
   wielu przedmiotów naraz moduł nie pyta. Pytanie można wyłączyć w ustawieniach modułu.
+- **Zakupy.** Po przeciągnięciu przedmiotu z ceną na postać gracza pojawia się okno zakupu: cena,
+  dostępność, ostrzeżenie o licencji (L) lub nielegalności (I), ilość paczek (amunicja, plastry), dopłata
+  +10% za rozmiar (troll za wszystko, krasnolud za pancerz i ubrania — moduł rozpoznaje to z pola
+  metatypu) i stan nuyenów. **Kup** odejmuje nuyeny i wysyła MG wiadomość na czacie, **Za darmo** zostawia
+  przedmiot bez płacenia (sprzęt startowy, łup), **Nie dodawaj** usuwa przedmiot. Wszczepy najpierw pytają
+  o klasę, bo zmienia ona cenę. Przy przenoszeniu wielu przedmiotów naraz moduł nie pyta.
+- **Mocowania i pojemność.** Każde mocowanie broni (góra, lufa, pod lufą) mieści jedno akcesorium, a liczba
+  mocowań zależy od rodzaju broni (s. 251–258; np. paralizator — tylko góra, Colt M23 — trzy pod lufą,
+  pistolety bez spodu). Akcesorium „góra lub pod lufą” zajmuje pierwsze wolne. Modyfikacje pancerza
+  i ulepszenia urządzeń nie mogą przekroczyć ich pojemności. Na karcie broni lub pancerza postaci widać,
+  co jest zamontowane i ile pojemności zostało. W ustawieniach modułu: blokuj montaż / tylko ostrzegaj /
+  wyłącz. Mody z kompendium systemu nie mają zapisanych mocowań, więc nie są sprawdzane.
 - Modyfikacje pancerza (odporność na ogień, zimno, prąd, chemię) i akcesoria do broni montujesz,
   przeciągając je na kartę pancerza/broni postaci.
 

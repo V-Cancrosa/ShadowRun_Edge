@@ -75,4 +75,29 @@ assert.equal(gradeUpdates(base, "delta")["system.essence"], 0.15);
 assert.equal(gradedName("Datajack (alfa)", "beta", "beta"), "Datajack (beta)");
 assert.equal(gradedName("Datajack (beta)", "standard", "standard"), "Datajack");
 
+// Weapon mounts and Capacity (pp. 259–266).
+const { checkFit, weaponMounts } = await import("../scripts/mounts.mjs");
+const pistol = { top: 1, barrel: 1 };
+assert.deepEqual(checkFit(pistol, 0, [], ["top", "under"], 0), { ok: true, slot: "top" });
+assert.equal(checkFit(pistol, 0, [{ slot: "top" }], ["top", "under"], 0).reason, "mountTaken");
+assert.equal(checkFit(pistol, 0, [], ["under"], 0).reason, "noMount");
+assert.deepEqual(checkFit({ top: 1, barrel: 1, under: 3 }, 0, [{ slot: "under" }, { slot: "under" }], ["under"], 0), { ok: true, slot: "under" });
+assert.deepEqual(checkFit(pistol, 0, [], [], 0), { ok: true, slot: null });
+assert.equal(checkFit(null, 8, [{ cost: 6 }], [], 3).reason, "capacity");
+assert.equal(checkFit(null, 8, [{ cost: 5 }], [], 3).ok, true);
+assert.deepEqual(weaponMounts({ system: { type: "WEAPON_FIREARMS", subtype: "SHOTGUNS" }, flags: {} }), { top: 1, barrel: 1, under: 1 });
+assert.equal(weaponMounts({ system: { type: "ARMOR" }, flags: {} }), null);
+
+// Purchases (pp. 245–246).
+const { sizeClass, sizeMarkup, purchaseTotal, legalityOf } = await import("../scripts/purchase.mjs");
+assert.equal(sizeClass("Troll"), "troll");
+assert.equal(sizeClass("krasnolud"), "dwarf");
+assert.equal(sizeClass("Elf"), null);
+assert.equal(sizeMarkup("dwarf", "ARMOR"), 0.1);
+assert.equal(sizeMarkup("dwarf", "WEAPON_FIREARMS"), 0);
+assert.equal(sizeMarkup("troll", "ELECTRONICS"), 0.1);
+assert.equal(purchaseTotal(750, 1, 0.1), 825);
+assert.equal(purchaseTotal(30, 3), 90);
+assert.equal(legalityOf("4(L)"), "L");
+
 console.log("parser OK");

@@ -210,6 +210,7 @@ for (const section of SECTIONS) {
     items.push(doc);
     if (doc.type === "mod") modsByName.set(doc.name, doc);
     if (opts.mods?.length) pendingMods.push([doc, opts.mods]);
+    if (opts.mounts) (doc.flags[MODULE_ID] ??= {}).mounts = opts.mounts;
   }
 }
 

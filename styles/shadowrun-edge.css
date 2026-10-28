@@ -116,3 +116,18 @@
   opacity: 0.8;
   white-space: nowrap;
 }
+
+.sre-mounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: center;
+  margin: 0.25rem 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px dashed var(--color-border, #888);
+  font-size: 0.9em;
+}
+
+.sre-purchase .sre-warn {
+  margin: 0.25rem 0;
+}

@@ -72,6 +72,10 @@ function withCommon(data, state) {
   if (state.page) Object.assign(data.system, { product: state.product || "core", page: Number(state.page) });
   const formulas = collectFormulas(state);
   if (formulas) foundry.utils.setProperty(data, `flags.${MODULE_ID}.formulas`, formulas);
+  // Mount and Capacity cost, checked when the mod is installed (scripts/mounts.mjs).
+  const mount = (Array.isArray(state.mount) ? state.mount : String(state.mount ?? "").split(",")).filter(Boolean);
+  if (data.type === "mod" && mount.length) foundry.utils.setProperty(data, `flags.${MODULE_ID}.mount`, mount);
+  if (state.capacityCost) foundry.utils.setProperty(data, `flags.${MODULE_ID}.capacityCost`, state.capacityCost);
   return data;
 }
 
@@ -290,6 +294,10 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         { value: "I", label: game.i18n.localize("SRE.Wizard.Illegal") },
       ],
       showEffects: category.itemType === "mod" || !!category.actorEffects,
+      mountOptions: ["", "top", "barrel", "under", "top,under"].map((value) => ({
+        value,
+        label: game.i18n.localize(`SRE.Mount.Option.${value.replace(",", "_") || "none"}`),
+      })),
       effectTargets: Object.keys(category.actorEffects ? ACTOR_EFFECT_TARGETS : EFFECT_TARGETS).map((value) => ({
         value,
         label: game.i18n.localize(`SRE.Wizard.Effect.Target.${value}`),
@@ -513,7 +521,8 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const data = await Promise.all(states.map((s) => this.#itemData(s)));
     let created;
     try {
-      if (this.target === "actor" && this.actor) created = await this.actor.createEmbeddedDocuments("Item", data);
+      // The wizard sets every value itself, so no purchase or grade prompt afterwards.
+      if (this.target === "actor" && this.actor) created = await this.actor.createEmbeddedDocuments("Item", data, { sreSkipAcquire: true });
       else if (this.target === "catalog") created = await addToCatalog(data, this.#folderPath());
       else created = await Item.implementation.createDocuments(data);
     } catch (err) {

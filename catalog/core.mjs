@@ -11,6 +11,7 @@
  *   fields: {...}        wizard state overrides (e.g. ammo, dv), for cells the parser cannot read
  *   set: {...}           system data overrides (e.g. vehicle stats)
  *   effects: [...]       Active Effects on the item itself ({ label, target, value, toggle })
+ *   mounts: {...}        weapon mounts when they differ from the subtype (scripts/mounts.mjs), e.g. { top: 1, under: 3 }
  */
 
 const AR_ALL = "ar";
@@ -159,10 +160,10 @@ export const SECTIONS = [
     category: "firearm", subtype: "RIFLE_ASSAULT", page: 257,
     rows: [
       "AK-97 5P SA/BF/FA 4/11/9/7/1 38(c) 2(L) 2,100¥",
-      ["Ares Alpha 4P SA/BF/FA 4/10/9/7/2 42(c) 5(L) 3,400¥", { mods: ["Smartgun system, internal"], notes: "Zintegrowany granatnik podlufowy (osobny przedmiot w katalogu)." }],
-      ["Colt M23 4P SA/BF/FA 5/8/8/8/4 40(c) 2(L) 5,100¥", { notes: "Przyjmuje dwa dodatkowe akcesoria podlufowe." }],
+      ["Ares Alpha 4P SA/BF/FA 4/10/9/7/2 42(c) 5(L) 3,400¥", { mounts: { top: 1, barrel: 1 }, mods: ["Smartgun system, internal"], notes: "Zintegrowany granatnik podlufowy (osobny przedmiot w katalogu)." }],
+      ["Colt M23 4P SA/BF/FA 5/8/8/8/4 40(c) 2(L) 5,100¥", { mounts: { top: 1, barrel: 1, under: 3 }, notes: "Przyjmuje dwa dodatkowe akcesoria podlufowe." }],
       ["FN-HAR 5P SA/BF/FA 3/11/10/6/1 35(c) 3(L) 2,100¥", { mods: ["Laser sight (built-in)", "Gas-vent system"] }],
-      ["Yamaha Raiden 4P SA/BF/FA 4/11/10/7/2 60(c) 5(L) 3,200¥", { mods: ["Silencer/suppressor", "Smartgun system, internal"], notes: "Zintegrowany granatnik i strzelba podlufowa (osobne przedmioty w katalogu)." }],
+      ["Yamaha Raiden 4P SA/BF/FA 4/11/10/7/2 60(c) 5(L) 3,200¥", { mounts: { top: 1, barrel: 1 }, mods: ["Silencer/suppressor", "Smartgun system, internal"], notes: "Zintegrowany granatnik i strzelba podlufowa (osobne przedmioty w katalogu)." }],
     ],
   },
   {
@@ -177,7 +178,7 @@ export const SECTIONS = [
   {
     category: "firearm", subtype: "RIFLE_HUNTING", page: 257,
     rows: [
-      ["Remington 900 5P SA 2/7/10/12/11 5(m) 3(L) 12,000¥", { mods: ["Imaging scope"], notes: "Nie przyjmuje akcesoriów podlufowych." }],
+      ["Remington 900 5P SA 2/7/10/12/11 5(m) 3(L) 12,000¥", { mounts: { top: 1, barrel: 1 }, mods: ["Imaging scope"], notes: "Nie przyjmuje akcesoriów podlufowych." }],
       ["Ruger 101 5P SA 2/6/10/12/11 8(m) 2(L) 11,100¥", { mods: ["Imaging scope", "Shock pad"] }],
     ],
   },
@@ -217,7 +218,7 @@ export const SECTIONS = [
     category: "special", subtype: "DART", page: 258,
     rows: [
       ["Parashield DART Pistol 1P SS 9/10/8/—/— 5(c) 2 510¥", { notes: "+ ładunek toksyny/narkotyku." }],
-      ["Parashield DART Rifle 1P SS 5/8/11/3/— 6(m) 3 710¥", { mods: ["Imaging scope"], notes: "+ ładunek toksyny/narkotyku." }],
+      ["Parashield DART Rifle 1P SS 5/8/11/3/— 6(m) 3 710¥", { mounts: { top: 1, under: 1 }, mods: ["Imaging scope"], notes: "+ ładunek toksyny/narkotyku." }],
     ],
   },
   {
@@ -244,36 +245,36 @@ export const SECTIONS = [
     category: "mod", type: "accessory_weapon", page: 261,
     rows: [
       ["Airburst link 3 600¥", { notes: "Do granatników i wyrzutni rakiet; wymaga trybu bezprzewodowego." }],
-      ["Bipod 1 200¥", { notes: "Montaż: pod lufą.", effects: [
+      ["Bipod 1 200¥", { fields: { mount: ["under"] }, notes: "Montaż: pod lufą.", effects: [
         { label: "Dwójnóg rozłożony", target: AR_ALL, value: "2", toggle: true },
         { label: "Dwójnóg: bezprzewodowo, leżąc lub siedząc", target: AR_ALL, value: "1", toggle: true },
       ] }],
       "Concealable holster 1 150¥",
-      ["Gas-vent system 3 500¥", { notes: "Montaż: lufa. Usuwa karę WA za ogień półautomatyczny, za serię zmniejsza do 2." }],
-      ["Gyro mount 3 1,400¥", { notes: "Montaż: pod lufą. Znosi karę WA za SA i BF, +3 WA przy FA." }],
+      ["Gas-vent system 3 500¥", { fields: { mount: ["barrel"] }, notes: "Montaż: lufa. Usuwa karę WA za ogień półautomatyczny, za serię zmniejsza do 2." }],
+      ["Gyro mount 3 1,400¥", { fields: { mount: ["under"] }, notes: "Montaż: pod lufą. Znosi karę WA za SA i BF, +3 WA przy FA." }],
       "Hidden arm slide 2 350¥",
-      ["Imaging scope 1 350¥", { notes: "Montaż: góra. Pojemność 3 na ulepszenia wizji." }],
-      ["Laser sight 1 125¥", { notes: "Montaż: góra lub pod lufą. Nie sumuje się ze smartlinkiem.", effects: [
+      ["Imaging scope 1 350¥", { fields: { mount: ["top"] }, notes: "Montaż: góra. Pojemność 3 na ulepszenia wizji." }],
+      ["Laser sight 1 125¥", { fields: { mount: ["top", "under"] }, notes: "Montaż: góra lub pod lufą. Nie sumuje się ze smartlinkiem.", effects: [
         { label: "Celownik laserowy", target: AR_ALL, value: "1" },
         { label: "Celownik laserowy (bezprzewodowo)", target: AR_ALL, value: "1", toggle: true },
       ] }],
-      ["Laser sight (built-in) 1 0¥", { notes: "Wbudowany celownik laserowy: premia +1 WA jest już wliczona w WA broni.", effects: [
+      ["Laser sight (built-in) 1 0¥", { fields: { mount: ["top", "under"] }, notes: "Wbudowany celownik laserowy: premia +1 WA jest już wliczona w WA broni.", effects: [
         { label: "Celownik laserowy (bezprzewodowo)", target: AR_ALL, value: "1", toggle: true },
       ] }],
-      ["Periscope 2 70¥", { notes: "Montaż: góra." }],
+      ["Periscope 2 70¥", { fields: { mount: ["top"] }, notes: "Montaż: góra." }],
       "Quick-draw holster 2 175¥",
       "Shock pad 2 50¥",
-      ["Silencer/suppressor 4 500¥", { notes: "Montaż: lufa. +2 do progu testów Percepcji, by zauważyć strzał. Nie dla rewolwerów i strzelb." }],
-      ["Smart firing platform 5 2,500¥", { notes: "Montaż: pod lufą." }],
+      ["Silencer/suppressor 4 500¥", { fields: { mount: ["barrel"] }, notes: "Montaż: lufa. +2 do progu testów Percepcji, by zauważyć strzał. Nie dla rewolwerów i strzelb." }],
+      ["Smart firing platform 5 2,500¥", { fields: { mount: ["under"] }, notes: "Montaż: pod lufą." }],
       ["Smartgun system, internal 1(L) 500¥", { notes: "Wewnętrzny: +500¥ do ceny broni.", effects: [
         { label: "Smartgun ze smartlinkiem", target: AR_ALL, value: "2", toggle: true },
       ] }],
-      ["Smartgun system, external 2(L) 200¥", { notes: "Montaż: góra lub pod lufą.", effects: [
+      ["Smartgun system, external 2(L) 200¥", { fields: { mount: ["top", "under"] }, notes: "Montaż: góra lub pod lufą.", effects: [
         { label: "Smartgun ze smartlinkiem", target: AR_ALL, value: "2", toggle: true },
       ] }],
       "Spare clip 2 5¥",
       "Speed loader 1 25¥",
-      ["Tripod 2 500¥", { notes: "Montaż: pod lufą. Znosi karę WA za SA i BF, +3 WA przy FA." }],
+      ["Tripod 2 500¥", { fields: { mount: ["under"] }, notes: "Montaż: pod lufą. Znosi karę WA za SA i BF, +3 WA przy FA." }],
     ],
   },
 

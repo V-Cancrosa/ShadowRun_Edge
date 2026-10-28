@@ -156,6 +156,58 @@
         "Name": "Ask for implant grade",
         "Hint": "When cyberware or bioware is dropped on a character, ask for its grade (used, alpha, beta, delta)."
       }
+    },
+    "Mount": {
+      "Label": "Mount (weapon)",
+      "CapacityCost": "Capacity cost",
+      "CapacityCostHint": "Capacity it takes up in armor or a device, e.g. 2, or R (= Rating).",
+      "Free": "free",
+      "Slot": {
+        "top": "Top",
+        "barrel": "Barrel",
+        "under": "Under"
+      },
+      "Option": {
+        "none": "no mount",
+        "top": "top",
+        "barrel": "barrel",
+        "under": "under",
+        "top_under": "top or under"
+      },
+      "Error": {
+        "noMount": "{item} has no mount ({mounts}) for \"{mod}\".",
+        "mountTaken": "The mount ({mounts}) on {item} is taken; uninstall that accessory to install \"{mod}\".",
+        "capacity": "\"{mod}\" does not fit {item}: capacity {used} + {cost} > {capacity}."
+      },
+      "Setting": {
+        "Name": "Mount and Capacity rules",
+        "Hint": "What to do when a mod has no free mount or exceeds the item's Capacity.",
+        "block": "Block installation",
+        "warn": "Warn only",
+        "off": "Off"
+      }
+    },
+    "Purchase": {
+      "Title": "Purchase: {name}",
+      "Quantity": "Quantity (packs)",
+      "Markup": "Size markup (+10%)",
+      "Balance": "Character nuyen: {nuyen}¥",
+      "Hint": "\"Free\": starting or found gear. \"Don't add\" removes the item from the inventory.",
+      "Buy": "Buy",
+      "Free": "Free",
+      "Remove": "Don't add",
+      "Licensed": "(L) Needs a license attached to a SIN.",
+      "Illegal": "(I) Illegal, usually black market only.",
+      "Size": {
+        "troll": "Troll: +10% on all gear (p. 246).",
+        "dwarf": "Dwarf: +10% on fitted gear, armor and clothing (p. 246)."
+      },
+      "NotEnough": "Not enough nuyen: the purchase costs {total}¥, the character has {nuyen}¥. The item stays in the inventory unpaid.",
+      "Chat": "<strong>{actor}</strong> buys <strong>{item}</strong> for {total}¥ (Availability {avail}). {left}¥ left.",
+      "Setting": {
+        "Name": "Ask to purchase",
+        "Hint": "When an item with a price is dropped on a player character, offer to buy it with the character's nuyen."
+      }
     }
   }
 }

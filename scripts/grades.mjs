@@ -92,25 +92,11 @@ export async function promptGrade(item) {
   }).then((result) => (result && result !== "cancel" ? result : null));
 }
 
-async function chooseAndApply(item) {
+/** Asks for a grade and applies it; resolves once the item is updated (or the player cancelled). */
+export async function chooseAndApply(item) {
   const gradeId = await promptGrade(item);
   if (gradeId && gradeId !== (item.getFlag(MODULE_ID, "grade")?.id ?? "standard")) await applyGrade(item, gradeId);
 }
-
-// Ask for the grade when a single augmentation lands on a character. Items created together (importing a
-// character, dropping a folder) are left at standard grade instead of opening a dialog for each one.
-let pending = [];
-Hooks.on("createItem", (item, options, userId) => {
-  if (userId !== game.user.id || !(item.parent instanceof Actor) || !isAugmentation(item)) return;
-  if (item.getFlag(MODULE_ID, "grade") || !game.settings.get(MODULE_ID, "askImplantGrade")) return;
-  pending.push(item);
-  if (pending.length > 1) return;
-  setTimeout(() => {
-    const batch = pending;
-    pending = [];
-    if (batch.length === 1) chooseAndApply(batch[0]);
-  }, 0);
-});
 
 /** "Grade" button in the header of augmentation sheets, to change the grade later. */
 Hooks.on("getItemSheetHeaderButtons", (sheet, buttons) => {

@@ -212,5 +212,8 @@ export function emptyState(categoryId = "firearm") {
     mods: [],
     // Effects of a mod: [{ label, target, value, toggle }]
     effects: [],
+    // Weapon mounts a mod may use, e.g. ["top", "under"]; Capacity it takes up ("2" or "R")
+    mount: "",
+    capacityCost: "",
   };
 }

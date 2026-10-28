@@ -69,7 +69,8 @@ Hooks.on("createItem", async (item, options, userId) => {
     copy.system = { ...copy.system, embeddedInUuid: item.uuid };
     return copy;
   });
-  await item.parent.createEmbeddedDocuments("Item", data);
+  // Built-in mods are part of the item: no purchase or grade prompt for them.
+  await item.parent.createEmbeddedDocuments("Item", data, { sreSkipAcquire: true });
   // The mods now live on the actor; the flag would otherwise install them again on every copy.
   await item.unsetFlag(MODULE_ID, "mods");
 });

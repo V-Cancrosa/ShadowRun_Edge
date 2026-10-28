@@ -156,6 +156,58 @@
         "Name": "Pytaj o klasę wszczepu",
         "Hint": "Po przeciągnięciu cyberware lub bioware na postać kreator pyta o klasę (używane, alfa, beta, delta)."
       }
+    },
+    "Mount": {
+      "Label": "Mocowanie (broń)",
+      "CapacityCost": "Zajmuje pojemności",
+      "CapacityCostHint": "Ile pojemności zajmuje w pancerzu lub urządzeniu, np. 2, albo R (= Stopień).",
+      "Free": "wolne",
+      "Slot": {
+        "top": "Góra",
+        "barrel": "Lufa",
+        "under": "Pod lufą"
+      },
+      "Option": {
+        "none": "bez mocowania",
+        "top": "góra",
+        "barrel": "lufa",
+        "under": "pod lufą",
+        "top_under": "góra lub pod lufą"
+      },
+      "Error": {
+        "noMount": "{item} nie ma mocowania ({mounts}) dla „{mod}”.",
+        "mountTaken": "Mocowanie ({mounts}) w {item} jest już zajęte — zdemontuj najpierw akcesorium, by zamontować „{mod}”.",
+        "capacity": "„{mod}” nie zmieści się w {item}: pojemność {used} + {cost} > {capacity}."
+      },
+      "Setting": {
+        "Name": "Zasady mocowań i pojemności",
+        "Hint": "Co robić, gdy dodatek nie ma wolnego mocowania albo przekracza pojemność przedmiotu.",
+        "block": "Blokuj montaż",
+        "warn": "Tylko ostrzegaj",
+        "off": "Wyłączone"
+      }
+    },
+    "Purchase": {
+      "Title": "Zakup: {name}",
+      "Quantity": "Ilość (paczek)",
+      "Markup": "Dopłata za rozmiar (+10%)",
+      "Balance": "Nuyeny postaci: {nuyen}¥",
+      "Hint": "„Za darmo” — sprzęt startowy albo zdobyty. „Nie dodawaj” usuwa przedmiot z ekwipunku.",
+      "Buy": "Kup",
+      "Free": "Za darmo",
+      "Remove": "Nie dodawaj",
+      "Licensed": "(L) Wymaga licencji przypisanej do SIN-u.",
+      "Illegal": "(I) Nielegalne — zwykle tylko z czarnego rynku.",
+      "Size": {
+        "troll": "Troll: +10% do ceny całego sprzętu (s. 246).",
+        "dwarf": "Krasnolud: +10% do ceny dopasowanego sprzętu — pancerza i ubrań (s. 246)."
+      },
+      "NotEnough": "Za mało nuyenów: zakup kosztuje {total}¥, postać ma {nuyen}¥. Przedmiot został w ekwipunku bez zapłaty.",
+      "Chat": "<strong>{actor}</strong> kupuje <strong>{item}</strong> za {total}¥ (dostępność {avail}). Zostaje {left}¥.",
+      "Setting": {
+        "Name": "Pytaj o zakup",
+        "Hint": "Po przeciągnięciu przedmiotu z ceną na postać gracza proponuj zakup za jej nuyeny."
+      }
     }
   }
 }
