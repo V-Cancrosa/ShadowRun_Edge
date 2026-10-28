@@ -24,7 +24,7 @@
         "software": "Software and codemods",
         "ammo": "Ammunition",
         "gear": "Other gear",
-        "mod": "Mod / accessory (weapon, armor, electronics)"
+        "mod": "Mods and accessories"
       },
       "Type": "Type",
       "Subtype": "Subtype",
@@ -105,10 +105,13 @@
           "social": "Social",
           "ammocap": "Ammo capacity"
         }
+      },
+      "Note": {
+        "CapacityCost": "Takes up capacity: [{value}]"
       }
     },
     "Catalog": {
-      "Label": "Shadowrun Edge Catalog",
+      "Label": "Custom catalog (world)",
       "GMOnly": "Only the GM can add items to the catalog.",
       "Locked": "The compendium \"{name}\" is locked; unlock it to add items.",
       "BuiltInMods": "Built-in mods",

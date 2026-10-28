@@ -1,5 +1,6 @@
 import { CATEGORIES, EFFECT_TARGETS, WEAPON_SKILLS, emptyState, typeLabel } from "./categories.mjs";
 import { parseStatLine, evaluate } from "./parser.mjs";
+import { collectFormulas } from "./formulas.mjs";
 import { addToCatalog, modsToFlagData } from "../catalog.mjs";
 
 const MODULE_ID = "shadowrun-edge";
@@ -36,33 +37,56 @@ function availDef(state, rating) {
   return `${int(state.avail, rating)}${state.legality ? `(${state.legality})` : ""}`;
 }
 
-/** Turns the wizard state of the "mod" category into a shadowrun6-eden mod item with its Active Effects. */
-export function buildModData(state) {
-  const rating = int(state.rating);
-  const effects = (state.effects ?? [])
+/**
+ * Active Effects that change the item they sit on (or, for a mod, the item it is installed in).
+ * Toggled effects (bipod deployed, smartgun with a smartlink) start off, like the system's own mods.
+ */
+export function buildEffects(effects, rating, fallbackName) {
+  return (effects ?? [])
     .filter((e) => EFFECT_TARGETS[e.target] && String(e.value ?? "").trim())
     .map((e) => ({
-      name: e.label?.trim() || `${state.name.trim() || game.i18n.localize("SRE.Wizard.Category.mod")}`,
+      name: e.label?.trim() || fallbackName,
       img: "icons/svg/upgrade.svg",
       type: "base",
-      // Toggled effects (bipod deployed, fire resistance against fire) start off, like the system's own mods.
       disabled: !!e.toggle,
       transfer: false,
       changes: EFFECT_TARGETS[e.target].map((key) => ({ key, mode: 2, value: String(evaluate(e.value, rating)) })),
       system: { level: 1, advanced: false },
     }));
-  return {
-    name: state.name.trim() || game.i18n.localize("SRE.Wizard.Category.mod"),
+}
+
+/** Source book and page, plus the rating formulas the item recalculates from. */
+function withCommon(data, state) {
+  if (state.page) Object.assign(data.system, { product: state.product || "core", page: Number(state.page) });
+  const formulas = collectFormulas(state);
+  if (formulas) foundry.utils.setProperty(data, `flags.${MODULE_ID}.formulas`, formulas);
+  return data;
+}
+
+/** Notes the item sheet has no field for (capacity taken, damage element), placed before the description. */
+function notesHTML(state) {
+  const notes = [];
+  if (state.capacityCost) notes.push(game.i18n.format("SRE.Wizard.Note.CapacityCost", { value: state.capacityCost }));
+  if (state.notes) notes.push(Handlebars.escapeExpression(state.notes));
+  return notes.length ? `<p><em>${notes.join("<br>")}</em></p>` : "";
+}
+
+/** Turns the wizard state of the "mod" category into a shadowrun6-eden mod item with its Active Effects. */
+export function buildModData(state) {
+  const rating = int(state.rating);
+  const name = state.name.trim() || game.i18n.localize("SRE.Wizard.Category.mod");
+  return withCommon({
+    name,
     type: "mod",
     system: {
       type: state.type,
       rating,
       availDef: availDef(state, rating),
       price: evaluate(state.price, rating),
-      description: toHTML(state.description),
+      description: notesHTML(state) + toHTML(state.description),
     },
-    effects,
-  };
+    effects: buildEffects(state.effects, rating, name),
+  }, state);
 }
 
 /**
@@ -82,7 +106,7 @@ export function buildItemData(state) {
     availDef: availDef(state, rating),
     price: evaluate(state.price, rating),
     priceDef: state.price && /R/i.test(state.price) ? state.price : "",
-    description: toHTML(state.description),
+    description: notesHTML(state) + toHTML(state.description),
   };
 
   if (category.weapon) {
@@ -91,7 +115,7 @@ export function buildItemData(state) {
     Object.assign(system, {
       dmg,
       stun: !!state.stun,
-      dmgDef: state.dv ? `${dmg}${state.stun ? "S" : "P"}` : "",
+      dmgDef: state.dv ? `${dmg}${state.stun ? "S" : "P"}${state.element ? `(${state.element})` : ""}` : "",
       attackRating: state.ar.map((v) => int(v, rating)),
       skill,
       skillSpec,
@@ -120,16 +144,19 @@ export function buildItemData(state) {
     });
     if (rating > 0) system.matrix = { deviceRating: rating };
   }
+  // Columns some tables share across categories (cyberjacks have Essence, optical devices have Capacity).
+  if (state.essence && system.essence === undefined) system.essence = evaluate(state.essence, rating);
+  if (state.capacity && system.capacity === undefined) system.capacity = int(state.capacity, rating);
   if (category.countable) {
     system.countable = true;
     system.count = Math.max(1, int(state.count, rating));
   }
 
-  return {
-    name: state.name.trim() || game.i18n.localize(category.label),
-    type: "gear",
-    system,
-  };
+  const name = state.name.trim() || game.i18n.localize(category.label);
+  const data = { name, type: "gear", system };
+  const effects = buildEffects(state.effects, rating, name);
+  if (effects.length) data.effects = effects;
+  return withCommon(data, state);
 }
 
 /** One-line summary of a parsed table row for the bulk preview. */

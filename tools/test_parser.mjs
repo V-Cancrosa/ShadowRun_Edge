@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { parseStatLine, evaluate } from "../scripts/wizard/parser.mjs";
 import { CATEGORIES } from "../scripts/wizard/categories.mjs";
+import { collectFormulas, ratingUpdates } from "../scripts/wizard/formulas.mjs";
 
 const parse = (category, line, subtype) => parseStatLine(line, CATEGORIES[category], subtype);
 
@@ -46,5 +47,18 @@ assert.equal(evaluate("R*0.1", 3), 0.3);
 assert.equal(evaluate("R+2", 4), 6);
 assert.equal(evaluate("Rating x 1000", 2), 2000);
 assert.equal(evaluate("alert(1)"), 0);
+
+r = parse("firearm", "Slivergun 4P(f) SA/BF 12/8/6/—/— 30(c) 4(L) 610¥");
+assert.equal(r.fields.element, "f");
+
+r = parse("cyberware", "Internal air tank 0.25 [R] 2 R*4,500¥");
+assert.deepEqual([r.fields.capacityCost, r.fields.essence, r.fields.avail], ["R", "0.25", "2"]);
+
+// Rating formulas follow the Rating when it changes on the item sheet.
+const formulas = collectFormulas({ price: "R*1000", essence: "R*0.1", avail: "R+2", legality: "L", ar: ["", "", "", "", ""] });
+assert.deepEqual(ratingUpdates(formulas, 3), {
+  "system.price": 3000, "system.essence": 0.3, "system.avail": 5, "system.availDef": "5(L)",
+});
+assert.equal(collectFormulas({ price: "750", ar: ["10", "", "", "", ""] }), null);
 
 console.log("parser OK");

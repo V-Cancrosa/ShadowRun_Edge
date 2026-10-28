@@ -6,3 +6,6 @@ Thumbs.db
 
 # Rulebooks stay local (copyrighted)
 *.pdf
+
+# Built by `npm run build` (tools/build_catalog.mjs); the release workflow builds it too
+packs/

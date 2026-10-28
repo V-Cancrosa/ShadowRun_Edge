@@ -127,7 +127,8 @@ export const WEAPON_SKILLS = {
   BOWS: ["athletics", "archery"],
   CROSSBOWS: ["athletics", "archery"],
   THROWING: ["athletics", "throwing"],
-  LAUNCHERS: ["engineering", "gunnery"],
+  // SR6 core p. 258: launchers use Exotic Weapons.
+  LAUNCHERS: ["exotic_weapons", "launchers"],
   THROWERS: ["exotic_weapons", "spray"],
   DMSO: ["exotic_weapons", ""],
   DART: ["exotic_weapons", ""],

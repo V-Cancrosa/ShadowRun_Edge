@@ -2,6 +2,8 @@
  * The catalog is a world compendium of ready-made items, sorted into folders by rulebook category.
  * Dragging an item from it onto a character sheet gives a complete item, including built-in mods.
  */
+import { ratingUpdates } from "./wizard/formulas.mjs";
+
 const MODULE_ID = "shadowrun-edge";
 const PACK_NAME = "sre-katalog";
 
@@ -93,4 +95,16 @@ Hooks.on("renderItemSheet", (sheet, html) => {
   hint.textContent = game.i18n.localize("SRE.Catalog.BuiltInModsHint");
   box.append(title, list, hint);
   (root.querySelector(".sheet-body") ?? root).append(box);
+});
+
+/** Changing the Rating of an item made from a rulebook formula recalculates its cost, Essence, etc. */
+Hooks.on("preUpdateItem", (item, changes) => {
+  const rating = foundry.utils.getProperty(changes, "system.rating");
+  const formulas = item.getFlag(MODULE_ID, "formulas");
+  if (rating === undefined || !formulas) return;
+  const updates = ratingUpdates(formulas, Number(rating) || 0);
+  // Only fields that exist on the item type (mods and software have no plain Availability number, for example).
+  for (const [path, value] of Object.entries(updates)) {
+    if (foundry.utils.hasProperty(item._source, path)) foundry.utils.setProperty(changes, path, value);
+  }
 });

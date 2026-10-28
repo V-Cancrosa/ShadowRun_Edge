@@ -24,7 +24,7 @@
         "software": "Oprogramowanie i kodmody",
         "ammo": "Amunicja",
         "gear": "Pozostały sprzęt",
-        "mod": "Dodatek / modyfikacja (do broni, pancerza, elektroniki)"
+        "mod": "Dodatki i modyfikacje"
       },
       "Type": "Typ",
       "Subtype": "Podtyp",
@@ -105,10 +105,13 @@
           "social": "Społeczne",
           "ammocap": "Magazynek"
         }
+      },
+      "Note": {
+        "CapacityCost": "Zajmuje pojemności: [{value}]"
       }
     },
     "Catalog": {
-      "Label": "Katalog Shadowrun Edge",
+      "Label": "Katalog własny (świat)",
       "GMOnly": "Tylko MG może dodawać przedmioty do katalogu.",
       "Locked": "Kompendium „{name}” jest zablokowane — odblokuj je, aby dodawać przedmioty.",
       "BuiltInMods": "Wbudowane dodatki",

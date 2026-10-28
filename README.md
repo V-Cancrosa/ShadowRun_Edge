@@ -8,7 +8,38 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
 
 - **Pełne polskie tłumaczenie systemu:** wszystkie 2125 tekstów z `shadowrun6-eden` 4.0.11.
   Zastępuje automatyczne tłumaczenie z systemu, które pokrywa tylko ok. 34% tekstów.
+- **Katalog sprzętu z podręcznika podstawowego** (kompendium *Katalog Shadowrun Edge*, ok. 500 pozycji):
+  broń, akcesoria, amunicja, materiały wybuchowe, pancerze i ich modyfikacje, elektronika, oprogramowanie,
+  cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
+
+## Katalog sprzętu
+
+W zakładce *Kompendia* jest folder **Shadowrun Edge** z kompendium **Katalog Shadowrun Edge**. Przedmioty
+są ułożone w folderach jak w rozdziale *Gear* (s. 245–301): np. *Broń palna / Ciężki pistolet*,
+*Cyberware / Cyberware ciała*, *Pojazdy i drony / Pojazdy / Motocykl*.
+
+- **Przeciągnij na kartę postaci** — przedmiot trafia do ekwipunku z kompletem statystyk: DV, tryby ognia,
+  WA na pięciu zasięgach, magazynek, umiejętność i specjalizacja do rzutu, WO pancerza, Esencja, atrybuty
+  Matrycy, statystyki pojazdów, dostępność i cena.
+- **Wyposażenie standardowe montuje się samo.** Np. Ares Predator VI po przeciągnięciu na postać dostaje
+  zamontowany smartgun, Ingram Smartgun XI — gas-vent, smartgun i tłumik. Na karcie broni widać je w sekcji
+  modyfikacji systemu.
+- **Efekty dodatków:** celownik laserowy daje +1 WA (a w trybie bezprzewodowym kolejne +1 do włączenia),
+  smartgun +2 WA do włączenia, gdy postać ma smartlink, dwójnóg +2 WA po rozłożeniu. Efekty włączane
+  przełącza się na karcie przedmiotu (zakładka efektów). Wbudowany celownik laserowy ma już premię wliczoną
+  w WA broni, więc daje tylko premię bezprzewodową.
+- **Przedmioty ze Stopniem** (medkit, skilljack, mięśnie zastępcze, odporność na ogień…) przeliczają
+  cenę, Esencję, dostępność i pojemność, gdy zmienisz Stopień na karcie przedmiotu.
+- Modyfikacje pancerza (odporność na ogień, zimno, prąd, chemię) i akcesoria do broni montujesz,
+  przeciągając je na kartę pancerza/broni postaci.
+
+Katalog zawiera tylko statystyki, nazwy i numery stron — bez opisów z podręcznika. Krótkie notatki przy
+przedmiotach (np. „Montaż: lufa”) są streszczeniami zasad. Atrybuty z wszczepów (np. +Siła z mięśni) nie są
+jeszcze naliczane automatycznie — opisuje je notatka przy przedmiocie.
+
+Kompendium jest zablokowane do edycji, a przy aktualizacji modułu zostaje nadpisane. Własne przedmioty
+twórz kreatorem w **Katalogu własnym (świat)**.
 
 ## Kreator przedmiotów
 
@@ -26,21 +57,21 @@ karty postaci, NPC i pojazdu (przedmiot trafia od razu do ekwipunku).
    np. esencja `R*0.1`, cena `R*1000`, dostępność `R+2`; kreator przeliczy je dla wybranego Stopnia.
 
 **Cel:** na górze kreatora wybierasz, gdzie powstanie przedmiot: ekwipunek postaci, zakładka *Przedmioty*
-albo **Katalog** (tylko MG).
+albo **Katalog własny** (tylko MG).
 
 **Cała tabela naraz:** wklej kilka wierszy (każdy przedmiot w osobnej linii) i kliknij *Rozpoznaj*.
 Kreator pokaże podgląd wszystkich pozycji, a *Utwórz wszystkie* doda je jednym kliknięciem.
 
-### Katalog
+### Katalog własny
 
-Katalog to kompendium świata **Katalog Shadowrun Edge**, tworzone przy pierwszym dodaniu przedmiotu.
+Katalog własny to kompendium świata **Katalog własny (świat)**, tworzone przy pierwszym dodaniu przedmiotu.
 Kreator sam układa przedmioty w folderach według kategorii i podtypu z podręcznika
 (np. *Broń palna / Ciężkie pistolety*). Gotowy przedmiot wystarczy przeciągnąć z katalogu na kartę
 postaci — trafia do ekwipunku z kompletem statystyk.
 
 ### Dodatki (mody)
 
-- **Nowy dodatek:** kategoria *Dodatek / modyfikacja* tworzy przedmiot typu `mod` systemu
+- **Nowy dodatek:** kategoria *Dodatki i modyfikacje* tworzy przedmiot typu `mod` systemu
   (akcesorium broni, modyfikacja broni, modyfikacja pancerza, akcesorium elektroniki…). Dodajesz mu
   efekty: WA (wszystkie zasięgi lub wybrany), DV, WO pancerza, Społeczne, magazynek. Wartość może
   zależeć od Stopnia (`R`). Efekt **włączany** startuje wyłączony i włącza się go na karcie przedmiotu,
@@ -108,6 +139,21 @@ Skrypt pokazuje nowe klucze do przetłumaczenia, klucze usunięte z systemu i t�
 w których nie zgadzają się `{placeholdery}` lub znaczniki HTML.
 
 Test rozpoznawania wierszy z podręcznika: `node tools/test_parser.mjs`.
+
+## Budowanie katalogu
+
+Dane katalogu są w `catalog/core.mjs`, zapisane jak wiersze tabel z podręcznika. Skrypt
+`tools/build_catalog.mjs` przepuszcza je przez parser i kreator, więc przerywa budowanie, jeśli któregoś
+wiersza nie rozpozna w całości. Wymaga Node.js 20+:
+
+```bash
+npm ci
+npm test        # testy parsera + sprawdzenie wszystkich wierszy katalogu
+npm run build   # buduje kompendium w packs/katalog
+```
+
+Przy wydaniu (tag `v*`) GitHub Actions buduje kompendium samo. Przy pracy na podlinkowanym folderze
+uruchom `npm run build` raz, żeby kompendium pojawiło się w Foundry.
 
 ## Wydanie nowej wersji
 

@@ -15,6 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build the catalog compendium
+        run: |
+          npm ci
+          npm test
+          npm run build
+
       - name: Set version and download URL from the tag
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
@@ -24,7 +34,7 @@ jobs:
 
       - name: Build zip
         run: |
-          zip -r shadowrun-edge.zip module.json scripts templates styles data lang README.md
+          zip -r shadowrun-edge.zip module.json scripts templates styles data lang packs/katalog README.md
           # The Forge rejects packages with more than one file named module.json.
           count=$(unzip -Z1 shadowrun-edge.zip | grep -c '\(^\|/\)module\.json$')
           [ "$count" -eq 1 ] || { echo "Expected one module.json in the zip, found $count"; exit 1; }

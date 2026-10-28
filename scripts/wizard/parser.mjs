@@ -13,16 +13,18 @@ const TOKEN_PATTERNS = [
   ["pair", /\d+\s*\/\s*\d+(?=\s|$)/y],
   // Firing modes, e.g. SA/BF or SS, SA
   ["modes", /(?:SS|SA|BF|FA)(?:\s*[\/,]\s*(?:SS|SA|BF|FA))*(?=[\s,]|$)/y],
-  // Damage value, e.g. 3P, 4S(e)
-  ["dv", /\d+\s*[PS](?:\s*\(e\))?(?=\s|$)/y],
+  // Damage value, e.g. 3P, 4S(e), 4P(f)
+  ["dv", /\d+\s*[PS](?:\s*\([ef]\))?(?=\s|$)/y],
   // Ammo with the loading type, e.g. 15(c), 100(belt)
-  ["ammo", /\d+\s*\((?:c|m|b|cy|d|ml|belt|s)\)(?=\s|$)/iy],
+  ["ammo", /\d+\s*\((?:c|m|b|cy|d|ml|z|belt|s)\)(?=\s|$)/iy],
   // Availability with legality, e.g. 2(L), R+2(I)
-  ["avail", /(?:\d+|R(?:[*+]\d+(?:\.\d+)?)?)\s*\(\s*[LI]\s*\)(?=\s|$)/y],
+  ["avail", /(?:\d+|R(?:[*+\/]\d+(?:\.\d+)?)?)\s*\(\s*[LI]\s*\)(?=\s|$)/y],
+  // Capacity an add-on takes up, e.g. [2] or [R]
+  ["capacityCost", /\[(?:\d+(?:\.\d+)?|R)\](?=\s|$)/y],
   // Cost in nuyen, e.g. 750¥, R*2000¥
   ["price", /(?:R\*)?\d+(?:\.\d+)?\s*(?:¥|nuyen\b)/iy],
   // Value depending on the rating, e.g. R*0.1
-  ["expr", /R(?:\s*[*+\-]\s*\d+(?:\.\d+)?)?(?=\s|$)/y],
+  ["expr", /R(?:\s*[*+\-\/]\s*\d+(?:\.\d+)?)?(?=\s|$)/y],
   ["number", /[+\-]?\d+(?:\.\d+)?(?=\s|$)/y],
   ["dash", /—(?=\s|$)/y],
   ["word", /\S+/y],
@@ -34,6 +36,8 @@ const VALUE_KINDS = new Set(["expr", "number", "dash"]);
 export function normalize(text) {
   return String(text ?? "")
     .replace(/[‒–—―−]/g, DASH)
+    // Footnote marks after numbers, e.g. "8/2*/—" or "9/9†"
+    .replace(/(\d|—)[*†‡]+(?=[\s\/]|$)/g, "$1")
     .replace(/(?<=\s|^)-(?=\s|$|\/)|(?<=\/)-/g, DASH)
     .replace(/(?:Rating|Stopień|Stopien)\s*[x×*]\s*/gi, "R*")
     .replace(/\bR\s*[x×]\s*/g, "R*")
@@ -63,8 +67,11 @@ export function tokenize(text) {
 }
 
 function parseDV(raw) {
-  const m = raw.match(/(\d+)\s*([PS])/);
-  return { dv: m[1], stun: m[2] === "S" };
+  const m = raw.match(/(\d+)\s*([PS])(?:\s*\(([ef])\))?/);
+  const fields = { dv: m[1], stun: m[2] === "S" };
+  // (e) electricity, (f) fire
+  if (m[3]) fields.element = m[3];
+  return fields;
 }
 
 function parseModes(raw) {
@@ -113,6 +120,11 @@ export function parseStatLine(text, category, subtype = "") {
       case "ammo": fields.ammo = token.raw.match(/\d+/)[0]; break;
       case "avail": Object.assign(fields, parseAvail(token.raw)); break;
       case "price": fields.price = token.raw.replace(/\s*(?:¥|nuyen)$/i, ""); break;
+      case "capacityCost":
+        fields.capacityCost = token.raw.slice(1, -1);
+        // The bracketed value sits in the Capacity column of the table.
+        if (category.columns.includes("capacity")) fields.capacity = "";
+        break;
       case "pair": {
         const [a, b] = token.raw.split("/").map((v) => v.trim());
         if (subtype === "CYBERDECK") Object.assign(fields, { a, s: b });
