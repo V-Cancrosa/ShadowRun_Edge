@@ -3,6 +3,7 @@
  * Dragging an item from it onto a character sheet gives a complete item, including built-in mods.
  */
 import { ratingUpdates } from "./wizard/formulas.mjs";
+import { GRADES, gradeUpdates } from "./grades.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const PACK_NAME = "sre-katalog";
@@ -68,7 +69,8 @@ Hooks.on("createItem", async (item, options, userId) => {
     copy.system = { ...copy.system, embeddedInUuid: item.uuid };
     return copy;
   });
-  await item.parent.createEmbeddedDocuments("Item", data);
+  // Built-in mods are part of the item: no purchase or grade prompt for them.
+  await item.parent.createEmbeddedDocuments("Item", data, { sreSkipAcquire: true });
   // The mods now live on the actor; the flag would otherwise install them again on every copy.
   await item.unsetFlag(MODULE_ID, "mods");
 });
@@ -103,6 +105,16 @@ Hooks.on("preUpdateItem", (item, changes) => {
   const formulas = item.getFlag(MODULE_ID, "formulas");
   if (rating === undefined || !formulas) return;
   const updates = ratingUpdates(formulas, Number(rating) || 0);
+  // A graded implant: the formulas give the standard values, the grade is applied on top of them.
+  const grade = item.getFlag(MODULE_ID, "grade");
+  if (grade && GRADES[grade.id] && grade.id !== "standard") {
+    const base = { ...grade.base };
+    if ("system.essence" in updates) base.essence = updates["system.essence"];
+    if ("system.price" in updates) base.price = updates["system.price"];
+    if ("system.avail" in updates) Object.assign(base, { avail: updates["system.avail"], availDef: updates["system.availDef"] });
+    Object.assign(updates, gradeUpdates(base, grade.id));
+    foundry.utils.setProperty(changes, `flags.${MODULE_ID}.grade.base`, base);
+  }
   // Only fields that exist on the item type (mods and software have no plain Availability number, for example).
   for (const [path, value] of Object.entries(updates)) {
     if (foundry.utils.hasProperty(item._source, path)) foundry.utils.setProperty(changes, path, value);

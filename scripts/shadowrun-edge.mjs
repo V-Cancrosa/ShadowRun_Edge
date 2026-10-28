@@ -3,6 +3,9 @@
  * It never patches the system's code; it only adds translations and its own features on top.
  */
 import { openItemWizard } from "./wizard/item-wizard.mjs";
+import "./acquire.mjs";
+import "./mounts.mjs";
+import { startKarmaVote } from "./karma-vote.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SYSTEM_ID = "shadowrun6-eden";
@@ -18,7 +21,35 @@ Hooks.once("init", () => {
     default: [],
   });
 
-  game.modules.get(MODULE_ID).api = { openItemWizard };
+  game.settings.register(MODULE_ID, "askImplantGrade", {
+    name: "SRE.Grade.Setting.Name",
+    hint: "SRE.Grade.Setting.Hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
+  game.settings.register(MODULE_ID, "askPurchase", {
+    name: "SRE.Purchase.Setting.Name",
+    hint: "SRE.Purchase.Setting.Hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
+  game.settings.register(MODULE_ID, "mountRules", {
+    name: "SRE.Mount.Setting.Name",
+    hint: "SRE.Mount.Setting.Hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: { block: "SRE.Mount.Setting.block", warn: "SRE.Mount.Setting.warn", off: "SRE.Mount.Setting.off" },
+    default: "block",
+  });
+
+  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote };
 });
 
 Hooks.once("ready", () => {

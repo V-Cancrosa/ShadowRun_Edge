@@ -31,15 +31,51 @@ są ułożone w folderach jak w rozdziale *Gear* (s. 245–301): np. *Broń paln
   w WA broni, więc daje tylko premię bezprzewodową.
 - **Przedmioty ze Stopniem** (medkit, skilljack, mięśnie zastępcze, odporność na ogień…) przeliczają
   cenę, Esencję, dostępność i pojemność, gdy zmienisz Stopień na karcie przedmiotu.
+- **Wszczepy działają na postać.** Mięśnie zastępcze dodają Stopień do Siły i Zręczności, wired reflexes —
+  Reakcję i kości inicjatywy, płytki skórne i orthoskin — WO, bone lacing — WO i odporność na obrażenia,
+  cyberjack — inicjatywę w Matrycy itd. Premia ze Stopniem rośnie razem ze Stopniem przedmiotu; system
+  sam ogranicza premię do atrybutu do +4. Wszczepy działające tylko w pewnych sytuacjach (pompa adrenaliny,
+  edytor bólu, feromony, synthacardium, filtr tchawicy) mają efekt **do włączenia** na karcie przedmiotu.
+- **Klasy wszczepów (s. 282).** Po przeciągnięciu cyberware lub bioware na postać moduł pyta o klasę:
+  standardowa, używana, alfa, beta, delta — i przelicza Esencję, cenę i dostępność (np. datajack alfa:
+  Esencja 0,08). Klasę zmienisz później przyciskiem **Klasa** w nagłówku karty przedmiotu. Przy imporcie
+  wielu przedmiotów naraz moduł nie pyta. Pytanie można wyłączyć w ustawieniach modułu.
+- **Zakupy.** Po przeciągnięciu przedmiotu z ceną na postać gracza pojawia się okno zakupu: cena,
+  dostępność, ostrzeżenie o licencji (L) lub nielegalności (I), ilość paczek (amunicja, plastry), dopłata
+  +10% za rozmiar (troll za wszystko, krasnolud za pancerz i ubrania — moduł rozpoznaje to z pola
+  metatypu) i stan nuyenów. **Kup** odejmuje nuyeny i wysyła MG wiadomość na czacie, **Za darmo** zostawia
+  przedmiot bez płacenia (sprzęt startowy, łup), **Nie dodawaj** usuwa przedmiot. Wszczepy najpierw pytają
+  o klasę, bo zmienia ona cenę. Przy przenoszeniu wielu przedmiotów naraz moduł nie pyta.
+- **Mocowania i pojemność.** Każde mocowanie broni (góra, lufa, pod lufą) mieści jedno akcesorium, a liczba
+  mocowań zależy od rodzaju broni (s. 251–258; np. paralizator — tylko góra, Colt M23 — trzy pod lufą,
+  pistolety bez spodu). Akcesorium „góra lub pod lufą” zajmuje pierwsze wolne. Modyfikacje pancerza
+  i ulepszenia urządzeń nie mogą przekroczyć ich pojemności. Na karcie broni lub pancerza postaci widać,
+  co jest zamontowane i ile pojemności zostało. W ustawieniach modułu: blokuj montaż / tylko ostrzegaj /
+  wyłącz. Mody z kompendium systemu nie mają zapisanych mocowań, więc nie są sprawdzane.
 - Modyfikacje pancerza (odporność na ogień, zimno, prąd, chemię) i akcesoria do broni montujesz,
   przeciągając je na kartę pancerza/broni postaci.
 
 Katalog zawiera tylko statystyki, nazwy i numery stron — bez opisów z podręcznika. Krótkie notatki przy
-przedmiotach (np. „Montaż: lufa”) są streszczeniami zasad. Atrybuty z wszczepów (np. +Siła z mięśni) nie są
-jeszcze naliczane automatycznie — opisuje je notatka przy przedmiocie.
+przedmiotach (np. „Montaż: lufa”) są streszczeniami zasad. Premie, na które system nie ma pola (dodatkowe akcje
+poboczne z wired reflexes, obrażenia bez broni z bone lacing), opisuje notatka przy przedmiocie.
 
 Kompendium jest zablokowane do edycji, a przy aktualizacji modułu zostaje nadpisane. Własne przedmioty
 twórz kreatorem w **Katalogu własnym (świat)**.
+
+## Głosowanie Karmy
+
+MG ma w zakładce *Aktorzy* przycisk **Głosowanie Karmy** (albo makro:
+`game.modules.get("shadowrun-edge").api.startKarmaVote()`).
+
+1. MG wybiera postacie graczy, maksimum Karmy w jednym głosie i czy gracze mogą głosować na własną postać
+   (domyślnie nie).
+2. Na czacie pojawia się karta z postaciami. Każdy klika, ile Karmy proponuje każdej postaci. Głos można
+   zmieniać do końca, a wybrana wartość jest podświetlona. Gracze widzą tylko liczbę głosów, MG widzi też
+   średnią.
+3. **Zakończ i przyznaj** (tylko MG): okno z propozycją dla każdej postaci (zaokrąglona średnia), którą MG
+   może zmienić. Karma dopisuje się do bieżącej i łącznej Karmy postaci, a karta pokazuje wynik.
+
+Głosy graczy trafiają do MG przez gniazdo modułu, więc MG musi być zalogowany.
 
 ## Kreator przedmiotów
 
@@ -73,7 +109,9 @@ postaci — trafia do ekwipunku z kompletem statystyk.
 
 - **Nowy dodatek:** kategoria *Dodatki i modyfikacje* tworzy przedmiot typu `mod` systemu
   (akcesorium broni, modyfikacja broni, modyfikacja pancerza, akcesorium elektroniki…). Dodajesz mu
-  efekty: WA (wszystkie zasięgi lub wybrany), DV, WO pancerza, Społeczne, magazynek. Wartość może
+  efekty: WA (wszystkie zasięgi lub wybrany), DV, WO pancerza, Społeczne, magazynek. Premia do WA
+  nie dodaje się do zasięgów, na których broń nie strzela („—”) — pilnuje tego system.
+  W kategoriach *Cyberware* i *Bioware* efekty działają na postać (atrybuty, inicjatywa, WO, odporności). Wartość może
   zależeć od Stopnia (`R`). Efekt **włączany** startuje wyłączony i włącza się go na karcie przedmiotu,
   gdy ma zastosowanie — np. rozłożony dwójnóg albo odporność na ogień tylko przeciw atakom ogniem.
 - **Montowanie:** dodatek przeciągnięty na kartę broni/pancerza **należącego do postaci** montuje

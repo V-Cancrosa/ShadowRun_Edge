@@ -103,8 +103,23 @@
           "dmg": "DV",
           "defense": "WO pancerza",
           "social": "Społeczne",
-          "ammocap": "Magazynek"
-        }
+          "ammocap": "Magazynek",
+          "bod": "Budowa",
+          "agi": "Zręczność",
+          "rea": "Reakcja",
+          "str": "Siła",
+          "wil": "Siła Woli",
+          "log": "Logika",
+          "int": "Intuicja",
+          "cha": "Charyzma",
+          "iniDice": "Kości inicjatywy",
+          "matrixIni": "Inicjatywa w Matrycy",
+          "defenseRating": "Wartość Obrony (WO)",
+          "damageResist": "Pula odporności na obrażenia fizyczne",
+          "toxinResist": "Pula odporności na toksyny",
+          "athletics": "Atletyka (modyfikator)"
+        },
+        "ActorHint": "Wszczep zmienia postać, która go nosi. Wartość „R” podąża za Stopniem przedmiotu. Efekt „włączany” (np. pompa adrenaliny) włącza się na karcie przedmiotu."
       },
       "Note": {
         "CapacityCost": "Zajmuje pojemności: [{value}]"
@@ -116,6 +131,103 @@
       "Locked": "Kompendium „{name}” jest zablokowane — odblokuj je, aby dodawać przedmioty.",
       "BuiltInMods": "Wbudowane dodatki",
       "BuiltInModsHint": "Zostaną zamontowane, gdy przeciągniesz ten przedmiot na postać."
+    },
+    "Grade": {
+      "Title": "Klasa wszczepu: {name}",
+      "Button": "Klasa: {grade}",
+      "Apply": "Zastosuj",
+      "Hint": "Klasy z podręcznika (s. 282) zmieniają Esencję, cenę i dostępność. Klasę można później zmienić przyciskiem w nagłówku karty przedmiotu.",
+      "Details": "Esencja {essence} · {price}¥ · dostępność {avail}",
+      "Name": {
+        "standard": "Standardowa",
+        "used": "Używana",
+        "alpha": "Alfa",
+        "beta": "Beta",
+        "delta": "Delta"
+      },
+      "Short": {
+        "standard": "standard",
+        "used": "używane",
+        "alpha": "alfa",
+        "beta": "beta",
+        "delta": "delta"
+      },
+      "Setting": {
+        "Name": "Pytaj o klasę wszczepu",
+        "Hint": "Po przeciągnięciu cyberware lub bioware na postać kreator pyta o klasę (używane, alfa, beta, delta)."
+      }
+    },
+    "Mount": {
+      "Label": "Mocowanie (broń)",
+      "CapacityCost": "Zajmuje pojemności",
+      "CapacityCostHint": "Ile pojemności zajmuje w pancerzu lub urządzeniu, np. 2, albo R (= Stopień).",
+      "Free": "wolne",
+      "Slot": {
+        "top": "Góra",
+        "barrel": "Lufa",
+        "under": "Pod lufą"
+      },
+      "Option": {
+        "none": "bez mocowania",
+        "top": "góra",
+        "barrel": "lufa",
+        "under": "pod lufą",
+        "top_under": "góra lub pod lufą"
+      },
+      "Error": {
+        "noMount": "{item} nie ma mocowania ({mounts}) dla „{mod}”.",
+        "mountTaken": "Mocowanie ({mounts}) w {item} jest już zajęte — zdemontuj najpierw akcesorium, by zamontować „{mod}”.",
+        "capacity": "„{mod}” nie zmieści się w {item}: pojemność {used} + {cost} > {capacity}."
+      },
+      "Setting": {
+        "Name": "Zasady mocowań i pojemności",
+        "Hint": "Co robić, gdy dodatek nie ma wolnego mocowania albo przekracza pojemność przedmiotu.",
+        "block": "Blokuj montaż",
+        "warn": "Tylko ostrzegaj",
+        "off": "Wyłączone"
+      }
+    },
+    "Purchase": {
+      "Title": "Zakup: {name}",
+      "Quantity": "Ilość (paczek)",
+      "Markup": "Dopłata za rozmiar (+10%)",
+      "Balance": "Nuyeny postaci: {nuyen}¥",
+      "Hint": "„Za darmo” — sprzęt startowy albo zdobyty. „Nie dodawaj” usuwa przedmiot z ekwipunku.",
+      "Buy": "Kup",
+      "Free": "Za darmo",
+      "Remove": "Nie dodawaj",
+      "Licensed": "(L) Wymaga licencji przypisanej do SIN-u.",
+      "Illegal": "(I) Nielegalne — zwykle tylko z czarnego rynku.",
+      "Size": {
+        "troll": "Troll: +10% do ceny całego sprzętu (s. 246).",
+        "dwarf": "Krasnolud: +10% do ceny dopasowanego sprzętu — pancerza i ubrań (s. 246)."
+      },
+      "NotEnough": "Za mało nuyenów: zakup kosztuje {total}¥, postać ma {nuyen}¥. Przedmiot został w ekwipunku bez zapłaty.",
+      "Chat": "<strong>{actor}</strong> kupuje <strong>{item}</strong> za {total}¥ (dostępność {avail}). Zostaje {left}¥.",
+      "Setting": {
+        "Name": "Pytaj o zakup",
+        "Hint": "Po przeciągnięciu przedmiotu z ceną na postać gracza proponuj zakup za jej nuyeny."
+      }
+    },
+    "KarmaVote": {
+      "Button": "Głosowanie Karmy",
+      "Title": "Głosowanie Karmy",
+      "TitleField": "Tytuł (np. nazwa runu)",
+      "Max": "Maks. Karmy w jednym głosie",
+      "NoSelf": "Gracze nie głosują na własną postać",
+      "Start": "Rozpocznij",
+      "Karma": "Karmy",
+      "Votes": "głosy: {count}",
+      "Hint": "Kliknij, ile Karmy proponujesz dla każdej postaci (0–{max}). Głos można zmienić do końca głosowania.",
+      "HintNoSelf": "Kliknij, ile Karmy proponujesz dla każdej postaci (0–{max}) — oprócz własnej. Głos można zmienić do końca głosowania.",
+      "Close": "Zakończ i przyznaj",
+      "Closed": "Głosowanie zakończone, Karma przyznana.",
+      "Average": "średnia {average} z {count} głosów",
+      "AverageShort": "śr. {average}",
+      "AwardHint": "Proponowana wartość to zaokrąglona średnia głosów. Możesz ją zmienić przed przyznaniem.",
+      "Award": "Przyznaj Karmę",
+      "NoCharacters": "Brak postaci graczy (typ „Gracz” z właścicielem-graczem).",
+      "NoGM": "Głos dociera do MG — poczekaj, aż MG będzie zalogowany."
     }
   }
 }

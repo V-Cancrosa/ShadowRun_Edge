@@ -53,7 +53,7 @@ const { CATEGORIES, emptyState, typeLabel } = await import("../scripts/wizard/ca
 const { parseStatLine, evaluate } = await import("../scripts/wizard/parser.mjs");
 const { collectFormulas } = await import("../scripts/wizard/formulas.mjs");
 const { buildItemData } = await import("../scripts/wizard/item-wizard.mjs");
-const { SECTIONS } = await import("../catalog/core.mjs");
+const { SECTIONS, AUGMENT_EFFECTS } = await import("../catalog/core.mjs");
 
 const L = (key) => game.i18n.localize(key);
 
@@ -136,7 +136,7 @@ function rowState(section, category, { line, opts }) {
   if (opts.rating) notes.push(`Stopień ${opts.rating[0]}–${opts.rating[1]}.`);
   if (opts.notes) notes.push(opts.notes);
   state.notes = notes.join(" ");
-  state.effects = opts.effects ?? [];
+  state.effects = [...(opts.effects ?? []), ...(AUGMENT_EFFECTS[state.name] ?? [])];
   return state;
 }
 
@@ -210,7 +210,13 @@ for (const section of SECTIONS) {
     items.push(doc);
     if (doc.type === "mod") modsByName.set(doc.name, doc);
     if (opts.mods?.length) pendingMods.push([doc, opts.mods]);
+    if (opts.mounts) (doc.flags[MODULE_ID] ??= {}).mounts = opts.mounts;
   }
+}
+
+// Every augmentation effect must match a catalog item, so a renamed row cannot silently lose its effects.
+for (const name of Object.keys(AUGMENT_EFFECTS)) {
+  if (!items.some((i) => i.name === name)) throw new Error(`AUGMENT_EFFECTS: no catalog item named "${name}"`);
 }
 
 // Built-in accessories: stored on the item, installed by the module when the item lands on an actor.
