@@ -208,6 +208,26 @@
         "Name": "Ask to purchase",
         "Hint": "When an item with a price is dropped on a player character, offer to buy it with the character's nuyen."
       }
+    },
+    "KarmaVote": {
+      "Button": "Karma vote",
+      "Title": "Karma vote",
+      "TitleField": "Title (e.g. run name)",
+      "Max": "Max Karma per vote",
+      "NoSelf": "Players do not vote for their own character",
+      "Start": "Start",
+      "Karma": "Karma",
+      "Votes": "votes: {count}",
+      "Hint": "Click how much Karma you suggest for each character (0–{max}). You can change your vote until it closes.",
+      "HintNoSelf": "Click how much Karma you suggest for each character (0–{max}) except your own. You can change your vote until it closes.",
+      "Close": "Close and award",
+      "Closed": "Vote closed, Karma awarded.",
+      "Average": "average {average} of {count} votes",
+      "AverageShort": "avg {average}",
+      "AwardHint": "The suggested value is the rounded average vote. You can change it before awarding.",
+      "Award": "Award Karma",
+      "NoCharacters": "No player characters (type \"Player\" owned by a player).",
+      "NoGM": "Votes go to the GM; wait until a GM is logged in."
     }
   }
 }

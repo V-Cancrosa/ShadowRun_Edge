@@ -49,6 +49,7 @@
       "path": "lang/en/shadowrun-edge.json"
     }
   ],
+  "socket": true,
   "packs": [
     {
       "name": "katalog",

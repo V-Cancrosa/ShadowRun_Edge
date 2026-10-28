@@ -62,6 +62,21 @@ poboczne z wired reflexes, obrażenia bez broni z bone lacing), opisuje notatka 
 Kompendium jest zablokowane do edycji, a przy aktualizacji modułu zostaje nadpisane. Własne przedmioty
 twórz kreatorem w **Katalogu własnym (świat)**.
 
+## Głosowanie Karmy
+
+MG ma w zakładce *Aktorzy* przycisk **Głosowanie Karmy** (albo makro:
+`game.modules.get("shadowrun-edge").api.startKarmaVote()`).
+
+1. MG wybiera postacie graczy, maksimum Karmy w jednym głosie i czy gracze mogą głosować na własną postać
+   (domyślnie nie).
+2. Na czacie pojawia się karta z postaciami. Każdy klika, ile Karmy proponuje każdej postaci. Głos można
+   zmieniać do końca, a wybrana wartość jest podświetlona. Gracze widzą tylko liczbę głosów, MG widzi też
+   średnią.
+3. **Zakończ i przyznaj** (tylko MG): okno z propozycją dla każdej postaci (zaokrąglona średnia), którą MG
+   może zmienić. Karma dopisuje się do bieżącej i łącznej Karmy postaci, a karta pokazuje wynik.
+
+Głosy graczy trafiają do MG przez gniazdo modułu, więc MG musi być zalogowany.
+
 ## Kreator przedmiotów
 
 Przycisk **Kreator przedmiotów** jest w zakładce *Przedmioty* (przedmiot trafia do świata) i w nagłówku

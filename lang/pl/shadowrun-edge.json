@@ -208,6 +208,26 @@
         "Name": "Pytaj o zakup",
         "Hint": "Po przeciągnięciu przedmiotu z ceną na postać gracza proponuj zakup za jej nuyeny."
       }
+    },
+    "KarmaVote": {
+      "Button": "Głosowanie Karmy",
+      "Title": "Głosowanie Karmy",
+      "TitleField": "Tytuł (np. nazwa runu)",
+      "Max": "Maks. Karmy w jednym głosie",
+      "NoSelf": "Gracze nie głosują na własną postać",
+      "Start": "Rozpocznij",
+      "Karma": "Karmy",
+      "Votes": "głosy: {count}",
+      "Hint": "Kliknij, ile Karmy proponujesz dla każdej postaci (0–{max}). Głos można zmienić do końca głosowania.",
+      "HintNoSelf": "Kliknij, ile Karmy proponujesz dla każdej postaci (0–{max}) — oprócz własnej. Głos można zmienić do końca głosowania.",
+      "Close": "Zakończ i przyznaj",
+      "Closed": "Głosowanie zakończone, Karma przyznana.",
+      "Average": "średnia {average} z {count} głosów",
+      "AverageShort": "śr. {average}",
+      "AwardHint": "Proponowana wartość to zaokrąglona średnia głosów. Możesz ją zmienić przed przyznaniem.",
+      "Award": "Przyznaj Karmę",
+      "NoCharacters": "Brak postaci graczy (typ „Gracz” z właścicielem-graczem).",
+      "NoGM": "Głos dociera do MG — poczekaj, aż MG będzie zalogowany."
     }
   }
 }

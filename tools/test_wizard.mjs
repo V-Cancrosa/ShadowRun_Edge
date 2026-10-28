@@ -28,7 +28,7 @@ globalThis.game = {
   settings: { get: () => [] },
 };
 globalThis.CONFIG = { SR6: { GEAR_SUBTYPES: { WEAPON_FIREARMS: { PISTOLS_HEAVY: "Ciężki pistolet" }, ARMOR: { ARMOR_BODY: "Pancerz" } } } };
-globalThis.Hooks = { on() {} };
+globalThis.Hooks = { on() {}, once() {} };
 globalThis.fetch = async () => ({ ok: true, json: async () => [] });
 
 for (const h of ["localize", "selectOptions", "checked"]) Handlebars.registerHelper(h, () => "");
@@ -47,4 +47,22 @@ for (const actor of [null, { name: "Runner" }]) {
     assert.ok(html.includes('name="state.name"'), `template for ${category}`);
   }
 }
+// Karma vote: tallies, who may vote, and the shared card.
+globalThis.Handlebars = { escapeExpression: (t) => String(t).replace(/</g, "&lt;") };
+const { tally, canVote, renderCard } = await import("../scripts/karma-vote.mjs");
+const vote = {
+  status: "open", max: 5, noSelfVote: true,
+  actors: [{ id: "a1", name: "Rook", img: "r.png" }, { id: "a2", name: "<Vex>", img: "v.png" }],
+  votes: { a1: { u1: 3, u2: 4 }, a2: {} },
+};
+assert.deepEqual(tally(vote), { a1: { count: 2, average: 3.5, suggested: 4 }, a2: { count: 0, average: 0, suggested: 0 } });
+assert.equal(canVote(vote, ["u1"], "u1", "a1"), false);
+assert.equal(canVote(vote, ["u1"], "u2", "a1"), true);
+assert.equal(canVote(vote, [], "u2", "zz"), false);
+assert.equal(canVote({ ...vote, status: "closed" }, [], "u2", "a1"), false);
+const card = renderCard(vote);
+assert.ok(card.includes('data-value="5"') && !card.includes('data-value="6"'));
+assert.ok(card.includes("&lt;Vex>"));
+assert.ok(renderCard({ ...vote, status: "closed", awarded: { a1: 4, a2: 0 } }).includes("+4"));
+
 console.log("wizard OK");

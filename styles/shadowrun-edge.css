@@ -131,3 +131,75 @@
 .sre-purchase .sre-warn {
   margin: 0.25rem 0;
 }
+
+.sre-karma-vote h3 {
+  margin: 0 0 0.25rem;
+}
+
+.sre-karma-vote .sre-kv-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid var(--color-border-light-2, #ccc);
+}
+
+.sre-karma-vote .sre-kv-row img,
+.sre-kv-pick img {
+  width: 24px;
+  height: 24px;
+  border: none;
+  object-fit: cover;
+}
+
+.sre-karma-vote .sre-kv-name {
+  flex: 1 1 auto;
+  font-weight: bold;
+}
+
+.sre-karma-vote .sre-kv-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  width: 100%;
+}
+
+.sre-karma-vote .sre-kv-value {
+  flex: 1 0 1.8em;
+  min-width: 1.8em;
+  padding: 0;
+  line-height: 1.6em;
+}
+
+.sre-karma-vote .sre-kv-value.sre-kv-mine {
+  background: var(--color-warm-2, #c9593f);
+  color: #fff;
+}
+
+.sre-karma-vote .sre-kv-count,
+.sre-karma-vote .sre-kv-avg {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+.sre-karma-vote .sre-kv-award {
+  font-weight: bold;
+}
+
+.sre-kv-picks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0.5rem 0;
+}
+
+.sre-kv-pick {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.directory .header-actions .sre-karma-vote-button {
+  flex-basis: 100%;
+}
