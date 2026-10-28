@@ -65,4 +65,36 @@ assert.ok(card.includes('data-value="5"') && !card.includes('data-value="6"'));
 assert.ok(card.includes("&lt;Vex>"));
 assert.ok(renderCard({ ...vote, status: "closed", awarded: { a1: 4, a2: 0 } }).includes("+4"));
 
+// Character creator: builds against the same ApplicationV2 stand-in and renders every tab.
+globalThis.CONFIG.SR6.skill_special = { firearms: { pistols_heavy: "x" } };
+game.user.can = () => true;
+const ccTemplate = Handlebars.compile(readFileSync(new URL("../templates/character-creator.hbs", import.meta.url), "utf8"));
+const { CharacterCreator } = await import("../scripts/chargen/creator.mjs");
+const creator = new CharacterCreator();
+creator.draft.priorities = { magic: "A", attributes: "B", skills: "C", metatype: "D", resources: "E" };
+Object.assign(creator.draft, { metatype: "elf", magicType: "full" });
+creator.draft.qualities = [{ id: "exceptional", detail: "" }, { id: "allergy", karma: 11, detail: "pollen" }, { id: "built_tough", level: 2 }];
+creator.draft.contacts = [{ name: "Fixer", connection: 3, loyalty: 2 }];
+for (const tab of ["priorities", "attributes", "skills", "qualities", "extras", "summary"]) {
+  creator.tab = tab;
+  const html = ccTemplate(await creator._prepareContext());
+  assert.ok(html.includes('data-budget="karma"'), `creator tab ${tab}`);
+  assert.ok(html.includes('name="draft.qualities.2.level"'));
+}
+
+// Form values (as FormDataExtended + expandObject give them) merge into the draft.
+const { mergeForm } = await import("../scripts/chargen/creator.mjs");
+const merged = mergeForm(creator.draft, {
+  priorities: { resources: "E" },
+  skills: { firearms: { points: 3 } },
+  qualities: { 0: { id: "exceptional", detail: "log", level: 1 } },
+  attrPoints: { agi: 4 },
+});
+assert.equal(merged.skills.firearms.points, 3);
+assert.equal(merged.skills.firearms.karma, 0);
+assert.equal(merged.priorities.magic, "A");
+assert.deepEqual(merged.qualities, [{ id: "exceptional", detail: "log", level: 1 }]);
+assert.equal(merged.attrPoints.agi, 4);
+assert.equal(merged.attrPoints.bod, 0);
+
 console.log("wizard OK");

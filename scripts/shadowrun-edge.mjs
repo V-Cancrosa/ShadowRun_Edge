@@ -6,6 +6,7 @@ import { openItemWizard } from "./wizard/item-wizard.mjs";
 import "./acquire.mjs";
 import "./mounts.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
+import { openCharacterCreator } from "./chargen/creator.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SYSTEM_ID = "shadowrun6-eden";
@@ -49,7 +50,7 @@ Hooks.once("init", () => {
     default: "block",
   });
 
-  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote };
+  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote, openCharacterCreator };
 });
 
 Hooks.once("ready", () => {

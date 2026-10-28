@@ -1305,11 +1305,11 @@
       "broken": "ZEPSUTY"
     },
     "mortype": {
-      "adept": "Adepta",
+      "adept": "Adept",
       "aspectedmagician": "Mag aspektowany",
       "magician": "Mag",
       "mundane": "Przyziemny",
-      "mysticadept": "Mistyczny adepta",
+      "mysticadept": "Mistyczny adept",
       "technomancer": "Technomanta"
     },
     "newitem": {

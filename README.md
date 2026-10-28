@@ -62,6 +62,32 @@ poboczne z wired reflexes, obrażenia bez broni z bone lacing), opisuje notatka 
 Kompendium jest zablokowane do edycji, a przy aktualizacji modułu zostaje nadpisane. Własne przedmioty
 twórz kreatorem w **Katalogu własnym (świat)**.
 
+## Kreator postaci
+
+Przycisk **Kreator postaci** jest w zakładce *Aktorzy* (dla każdego, kto może tworzyć aktorów; makro:
+`game.modules.get("shadowrun-edge").api.openCharacterCreator()`). Prowadzi przez tworzenie postaci
+według rozdziału *Character Creation* (s. 62–69), a na górze okna cały czas widać budżety: punkty atrybutów,
+dostosowania i umiejętności, Karmę, kontakty, wiedzę i nuyeny. Na dole jest lista tego, co jeszcze się nie
+zgadza.
+
+1. **Priorytety:** imię, koncepcja, poziom gry (standardowy / uliczny — wartości z rzędu niżej / prime —
+   100 Karmy), rzędy A–E dla pięciu kolumn (każdy raz), metatyp dostępny w wybranym rzędzie i typ magii.
+2. **Atrybuty:** punkty atrybutów, punkty dostosowania (tylko Edge, Magia/Rezonans i atrybuty rasowe powyżej
+   6) i dodatkowe poziomy za Karmę według tabeli z s. 69. Tylko jeden atrybut na maksimum.
+3. **Umiejętności:** punkty, Karma, specjalizacje (1 punkt albo 5 Karmy). Maks. 6, z Aptitude 7, tylko
+   jedna na maksimum.
+4. **Cechy:** pełna lista zalet i wad z kosztami. Najwyżej 6 cech, wady najwyżej 20 Karmy netto. Exceptional,
+   Impaired, Aptitude, Incompetent i In Debt zmieniają limity i przeliczenia. Cechy rasowe dochodzą same.
+5. **Karma i kontakty:** Karma na nuyeny (2000¥, z In Debt 5000¥), kontakty (Charyzma × 6 punktów),
+   umiejętności wiedzy i języki (Logika za darmo + język ojczysty, kolejne po 3 Karmy).
+6. **Podsumowanie** i **Utwórz postać**: powstaje zwykła postać gracza systemu z atrybutami, Edge, magią,
+   umiejętnościami, specjalizacjami, cechami (Built Tough, Glass Jaw, Will to Live i Dermal Deposits od
+   razu zmieniają monitory i WO), wiedzą, językami, kontaktami, pozostałą Karmą i nuyenami.
+
+Sprzęt kupuje się potem z katalogu — okno zakupu odejmuje nuyeny postaci. Wybór czarów, mocy adepta i form
+złożonych dojdzie w kolejnej wersji; kreator pokazuje, ile ich przysługuje. MG może utworzyć postać mimo
+błędów (zaznaczenie w podsumowaniu).
+
 ## Głosowanie Karmy
 
 MG ma w zakładce *Aktorzy* przycisk **Głosowanie Karmy** (albo makro:
