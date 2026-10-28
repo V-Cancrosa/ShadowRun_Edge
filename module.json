@@ -30,7 +30,8 @@
   ],
   "styles": [
     "styles/shadowrun-edge.css",
-    "styles/character-creator.css"
+    "styles/character-creator.css",
+    "styles/system-theme.css"
   ],
   "languages": [
     {

@@ -1,0 +1,700 @@
+/*
+ * "Edge" look for the shadowrun6-eden system (sheets, chat, roll dialog).
+ * Active only while body has .sre-theme (see scripts/theme.mjs). Nothing here touches
+ * the system's markup: it re-colors through the system's own CSS variables first and
+ * overrides individual rules (some inline styles need !important) where that isn't enough.
+ */
+
+/* ───── Palette ─────
+ * The system defines its variables on .themed elements, so ours must be set on the
+ * same windows (not just body) to win. */
+body.sre-theme-dark :is(.app.shadowrun6, .application.shadowrun6, .application.sr6, .app.sre-roll-dialog, .chat-message),
+body.sre-theme-dark #chat-log {
+  --sre-accent: #e0409a;
+  --sre-accent-soft: rgba(224, 64, 154, 0.16);
+  --sre-accent-line: rgba(224, 64, 154, 0.45);
+  --sre-cyan: #3fd4e8;
+  --sre-cyan-soft: rgba(63, 212, 232, 0.14);
+  --sre-ok: #4fd68a;
+  --sre-warn: #f0b24a;
+  --sre-bad: #ff5470;
+  --sre-bg: #101117;
+  --sre-bg-deep: #0a0a0e;
+  --sre-panel: rgba(255, 255, 255, 0.04);
+  --sre-panel-strong: rgba(255, 255, 255, 0.08);
+  --sre-line: rgba(255, 255, 255, 0.1);
+  --sre-text: #e8e8ee;
+  --sre-text-dim: #9aa0ad;
+  --sre-input: rgba(0, 0, 0, 0.35);
+  --sre-head: linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
+}
+
+body.sre-theme-light :is(.app.shadowrun6, .application.shadowrun6, .application.sr6, .app.sre-roll-dialog, .chat-message),
+body.sre-theme-light #chat-log {
+  --sre-accent: #c2187a;
+  --sre-accent-soft: rgba(194, 24, 122, 0.1);
+  --sre-accent-line: rgba(194, 24, 122, 0.4);
+  --sre-cyan: #0f8ea0;
+  --sre-cyan-soft: rgba(15, 142, 160, 0.1);
+  --sre-ok: #1f9a57;
+  --sre-warn: #b9770e;
+  --sre-bad: #d42a4a;
+  --sre-bg: #f5f3f7;
+  --sre-bg-deep: #e9e6ee;
+  --sre-panel: rgba(255, 255, 255, 0.75);
+  --sre-panel-strong: rgba(0, 0, 0, 0.05);
+  --sre-line: rgba(0, 0, 0, 0.12);
+  --sre-text: #1d1b24;
+  --sre-text-dim: #5f5a6a;
+  --sre-input: #ffffff;
+  --sre-head: linear-gradient(180deg, rgba(194, 24, 122, 0.06), transparent);
+}
+
+/* Map the system's own variables (and the Foundry ones it relies on) onto the palette. */
+body.sre-theme :is(.app.shadowrun6, .application.shadowrun6, .application.sr6, .app.sre-roll-dialog, .chat-message) {
+  --highlight-color: var(--sre-accent);
+  --accent-color: var(--sre-cyan);
+  --section-background: var(--sre-panel);
+  --tablehead-background: var(--sre-panel-strong);
+  --input-color: var(--sre-text);
+  --contrast-color: var(--sre-text);
+  --color-text-primary: var(--sre-text);
+  --color-text-secondary: var(--sre-text-dim);
+  --color-shadow-primary: var(--sre-accent);
+  --color-border-highlight: var(--sre-accent);
+  --color-border-highlight-alt: var(--sre-accent);
+  --color-underline-header: var(--sre-accent-line);
+  --color-form-label: var(--sre-text-dim);
+  --input-background-color: var(--sre-input);
+  --input-text-color: var(--sre-text);
+  --input-border-color: var(--sre-line);
+  --button-text-color: var(--sre-text);
+  --button-background-color: var(--sre-panel-strong);
+  --button-border-color: var(--sre-line);
+  --button-hover-background-color: var(--sre-accent-soft);
+  --button-hover-border-color: var(--sre-accent);
+  --button-hover-text-color: var(--sre-text);
+  color: var(--sre-text);
+}
+
+/* ───── Windows ───── */
+body.sre-theme.game :is(.app.shadowrun6, .application.shadowrun6, .application.sr6, .app.sre-roll-dialog) {
+  border: 1px solid var(--sre-accent-line);
+  box-shadow: 0 0 30px rgba(224, 64, 154, 0.12), 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .app.sre-roll-dialog) .window-header,
+body.sre-theme.game :is(.application.shadowrun6, .application.sr6) > .window-header {
+  background: var(--sre-bg-deep);
+  color: var(--sre-text);
+  border-bottom: 1px solid var(--sre-accent-line);
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .app.sre-roll-dialog) .window-content,
+body.sre-theme.game .app.shadowrun6.actor .window-content,
+body.sre-theme.game :is(.application.shadowrun6, .application.sr6) > .window-content {
+  background: var(--sre-bg);
+  background-image: none;
+  color: var(--sre-text);
+}
+
+/* ───── Inputs ───── */
+body.sre-theme :is(.app.shadowrun6, .application.sr6, .app.sre-roll-dialog) :is(input[type="text"], input[type="number"], select, textarea) {
+  background: var(--sre-input);
+  color: var(--sre-text);
+  border: 1px solid var(--sre-line);
+  border-radius: 4px;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6, .app.sre-roll-dialog) :is(input, select, textarea):focus {
+  border-color: var(--sre-accent);
+  box-shadow: 0 0 0 2px var(--sre-accent-soft);
+  outline: none;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) input::placeholder { color: var(--sre-text-dim); }
+
+/* Text inputs that the system shows "bare" (names, metatype…) stay bare, just recolored. */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header .description :is(input, select),
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header h1 input {
+  background: transparent !important;
+  border-color: transparent;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header .description :is(input, select):hover,
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header h1 input:hover {
+  border-color: var(--sre-line);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6, .app.sre-roll-dialog) button {
+  background: var(--sre-panel-strong);
+  color: var(--sre-text);
+  border: 1px solid var(--sre-line);
+  box-shadow: none;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6, .app.sre-roll-dialog) button:hover {
+  background: var(--sre-accent-soft);
+  border-color: var(--sre-accent);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(a, .item-control):hover {
+  color: var(--sre-accent);
+  text-shadow: 0 0 6px var(--sre-accent-soft);
+}
+
+/* ───── Sheet header ───── */
+body.sre-theme .app.shadowrun6.actor .sheet-header,
+body.sre-theme .application.sr6 .sheet-header {
+  margin: -8px -8px 0;
+  padding: 12px 12px 10px;
+  background: var(--sre-head);
+  border-bottom: 1px solid var(--sre-accent-line);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header .profile-img {
+  border: 1px solid var(--sre-accent-line);
+  border-radius: 6px;
+  background: var(--sre-panel);
+  box-shadow: 0 0 14px var(--sre-accent-soft);
+  clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 100%, 12% 100%, 0 88%);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header h1 {
+  border: none;
+  margin-bottom: 0.2rem;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header h1 input {
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--sre-text);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header .description {
+  color: var(--sre-text-dim);
+  margin-bottom: 0.4rem;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header .description :is(input, select) {
+  color: var(--sre-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header .description select {
+  color: var(--sre-cyan);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .sheet-header .description select option {
+  background: var(--sre-bg);
+  color: var(--sre-text);
+}
+
+/* ───── Damage monitors: boxes instead of a bar ───── */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors label {
+  color: var(--sre-text-dim);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors img {
+  filter: invert(48%) sepia(60%) saturate(2000%) hue-rotate(295deg);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors td > div > div[style*="border"] {
+  border: none !important;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(.barPhyMax, .barStunMax) > div {
+  width: auto !important;
+  min-width: 300px;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(#barPhyCur, #barStunCur) {
+  background: transparent !important;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors .monitor {
+  flex-direction: row;
+  gap: 3px;
+  color: var(--sre-text-dim);
+  text-shadow: none;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors .monitor .monitorBox {
+  flex: 0 0 20px;
+  height: 18px;
+  border: 1px solid var(--sre-line) !important;
+  border-radius: 3px;
+  background: var(--sre-panel);
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors .monitor .monitorBox:nth-child(3n) {
+  margin-right: 4px;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors .monitor .monitorBox > div {
+  font-size: 0.65rem;
+  line-height: 16px;
+  font-weight: bold;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors .monitor .monitorBox:hover {
+  border-color: var(--sre-accent) !important;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) #barPhyBoxes .monitorBox.sre-dmg {
+  background: var(--sre-bad);
+  border-color: var(--sre-bad) !important;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(255, 84, 112, 0.5);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) #barStunBoxes .monitorBox.sre-dmg {
+  background: var(--sre-cyan);
+  border-color: var(--sre-cyan) !important;
+  color: #04181c;
+  box-shadow: 0 0 6px rgba(63, 212, 232, 0.5);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors :is(.health-phys, .health-stun) {
+  width: 2.4rem;
+  font-weight: bold;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors .health-phys { color: var(--sre-bad); }
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .monitors .health-stun { color: var(--sre-cyan); }
+
+/* Edge coin and nuyen chip */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .edge img {
+  filter: drop-shadow(0 0 6px var(--sre-accent-soft)) !important;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .edge input.edge-value {
+  border: none;
+  background: transparent;
+  text-shadow: 0 0 6px #000, 0 0 2px #000;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .edge label.edge-max-label {
+  background: var(--sre-bg-deep);
+  color: var(--sre-accent);
+  border: 1px solid var(--sre-accent-line);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .edge input.edge-max {
+  background: var(--sre-bg-deep);
+  border: 1px solid var(--sre-accent-line);
+  color: var(--sre-text);
+}
+
+/* ───── Tabs ───── */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) nav.sheet-tabs {
+  margin: 0 -8px 10px;
+  padding: 0 8px;
+  border-top: none;
+  border-bottom: 1px solid var(--sre-line);
+  background: transparent;
+  gap: 0;
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) nav.sheet-tabs [data-tab] {
+  padding: 0.45rem 0.6rem;
+  color: var(--sre-text-dim);
+  border-bottom: 2px solid transparent;
+  text-transform: none;
+  text-shadow: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) nav.sheet-tabs [data-tab]:hover {
+  color: var(--sre-text);
+  background: var(--sre-panel);
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) nav.sheet-tabs [data-tab].active {
+  color: var(--sre-text);
+  border-bottom-color: var(--sre-accent);
+  background: linear-gradient(180deg, transparent, var(--sre-accent-soft));
+  text-shadow: none;
+}
+
+/* ───── Attribute tiles ───── */
+body.sre-theme .app.window-app.shadowrun6.actor .attributes .attribute,
+body.sre-theme .application.sr6 .attributes .attribute {
+  --aug-border-bg: var(--sre-line);
+  --aug-border: 1px;
+  background: var(--sre-panel);
+  border: 1px solid var(--sre-line);
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 86% 100%, 0 100%);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+body.sre-theme .app.window-app.shadowrun6.actor .attributes .attribute:hover,
+body.sre-theme .application.sr6 .attributes .attribute:hover {
+  border-color: var(--sre-accent-line);
+  background: var(--sre-accent-soft);
+}
+
+body.sre-theme .app.window-app.shadowrun6.actor .attributes .attribute p a,
+body.sre-theme .application.sr6 .attributes .attribute p a {
+  color: var(--sre-accent);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+body.sre-theme .app.window-app.shadowrun6.actor .attributes .attribute span,
+body.sre-theme .application.sr6 .attributes .attribute span {
+  color: var(--sre-text);
+  font-size: 1.7rem;
+  font-weight: bold;
+  line-height: 1;
+  margin-top: 0.15rem;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .attribute input {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--sre-text-dim);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .attribute input:hover,
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .attribute input:focus {
+  border-color: var(--sre-line) !important;
+  background: var(--sre-input) !important;
+  color: var(--sre-text);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .attribute input.attribute-mod-high { color: var(--sre-warn); }
+
+/* ───── Sections and lists ───── */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .section {
+  background: var(--sre-panel);
+  border: 1px solid var(--sre-line);
+  border-radius: 5px;
+  padding: 0 0 4px;
+  overflow: hidden;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .section-head {
+  padding: 5px 8px;
+  margin: 0 0 4px;
+  border-bottom: 1px solid var(--sre-accent-line);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(.section-title, .section-head h2) {
+  color: var(--sre-accent);
+  font-size: 0.78rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+  border: none;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .section-head .item-control h2 {
+  color: var(--sre-text-dim);
+  font-size: 0.8rem;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(h1, h2, h3, h4) {
+  color: inherit;
+  border-bottom-color: var(--sre-accent-line);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(h3, h4).highlight { color: var(--sre-accent); }
+
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) table {
+  background: transparent;
+  border: none;
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) :is(th, thead tr, .sheet-body * thead) {
+  background: transparent;
+  color: var(--sre-text-dim);
+  font-size: 0.7rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-shadow: none;
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) table tr.item,
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) table tr.list-item {
+  border-top: 1px solid var(--sre-line);
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) table tr.list-item:nth-child(4n + 1) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+body.sre-theme.game :is(.app.shadowrun6, .application.sr6) table tr:is(.item, .list-item):hover {
+  background: var(--sre-accent-soft);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) table td { color: var(--sre-text); }
+
+/* Rollable labels look like dice-pool chips: the system marks them with these classes. */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(.skill-pool, .defense-roll, .legwork-roll) {
+  color: var(--sre-text);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(.skill-roll, .attributeonly-roll, .defense-roll, .matrix-roll, .spell-roll, .weapon-roll, .rollable) {
+  color: var(--sre-accent);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .skill-pool > span:not(:empty) {
+  display: inline-block;
+  min-width: 2rem;
+  padding: 0 0.3rem;
+  margin-right: 0.4rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.5rem;
+  border: 1px solid var(--sre-accent-line);
+  border-radius: 4px;
+  background: var(--sre-accent-soft);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(.skill-name, .skill-name :is(a, span)) { color: var(--sre-text); cursor: pointer; }
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(.skill-name, .skill-name a):hover { color: var(--sre-accent); }
+body.sre-theme :is(.app.shadowrun6, .application.sr6) ol.item-list > li { border-top: 1px solid var(--sre-line); padding: 1px 4px; }
+body.sre-theme :is(.app.shadowrun6, .application.sr6) ol.item-list > li:first-child { border-top: none; }
+body.sre-theme :is(.app.shadowrun6, .application.sr6) ol.item-list > li:hover { background: var(--sre-accent-soft); }
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .skill-attrib { color: var(--sre-text-dim); font-size: 0.8rem; }
+
+/* Skill list (definition list) */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) dl :is(dt, dd) {
+  border-color: var(--sre-line);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) dt:hover,
+body.sre-theme :is(.app.shadowrun6, .application.sr6) dt:hover + dd {
+  background: var(--sre-accent-soft);
+}
+
+/* Collapsible "+" buttons */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) button:is(.collapsible, .collapsible-skill) {
+  background: transparent;
+  border: none;
+  color: var(--sre-accent);
+}
+
+/* Effects tab and editors */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(.effects-header, .effects-list .effect) {
+  border-color: var(--sre-line);
+  background: transparent;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) :is(.editor, .editor-content, .prosemirror) {
+  color: var(--sre-text);
+  background: var(--sre-input);
+  border-radius: 4px;
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .switch .shadowrun6-slider {
+  background: var(--sre-panel-strong);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .switch input:checked + .shadowrun6-slider {
+  background: var(--sre-accent);
+}
+
+/* Item sheets share the header block */
+body.sre-theme .app.shadowrun6.item .item-sheet-header {
+  margin: -8px -8px 8px;
+  padding: 8px;
+  background: var(--sre-head);
+  border-bottom: 1px solid var(--sre-accent-line);
+}
+
+body.sre-theme .app.shadowrun6.item .item-sheet-header h2 { color: var(--sre-text); }
+
+/* ───── Chat roll cards ───── */
+body.sre-theme #chat-log .chat-message,
+body.sre-theme .chat-popout .chat-message,
+body.sre-theme .chat-message {
+  background: var(--sre-bg);
+  background-image: none;
+  color: var(--sre-text);
+  border: 1px solid var(--sre-line);
+  border-left: 3px solid var(--sre-accent);
+  border-radius: 5px;
+}
+
+body.sre-theme .chat-message .message-header {
+  color: var(--sre-text-dim);
+}
+
+body.sre-theme .chat-message .message-sender { color: var(--sre-text); }
+
+body.sre-theme .chat-message .message-content h3 {
+  margin: 0.2rem 0 0.4rem;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sre-text);
+}
+
+body.sre-theme .chat-message hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sre-accent-line), transparent);
+}
+
+body.sre-theme .chat-message .dice-result .part-header {
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  background: var(--sre-panel-strong);
+  cursor: pointer;
+}
+
+body.sre-theme .chat-message .dice-result .part-header > div:first-child {
+  color: var(--sre-text-dim);
+  font-size: 0.8rem;
+}
+
+body.sre-theme .chat-message .resulttext b {
+  font-size: 1.25rem;
+  color: var(--sre-ok);
+}
+
+/* Glitches: recolor the system's inline-colored spans and flag the whole card. */
+body.sre-theme .chat-message .part-header span[style*="color"] {
+  color: var(--sre-bad) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+body.sre-theme #chat-log .chat-message:has(.part-header span[style*="color"]),
+body.sre-theme .chat-message:has(.part-header span[style*="color"]) {
+  border-left-color: var(--sre-bad);
+}
+
+body.sre-theme .chat-message:has(.part-header span[style*="color"]) .resulttext b { color: var(--sre-bad); }
+
+/* Dice: numbered squares instead of the die-face images. */
+body.sre-theme .dice-tooltip .dice-rolls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0.4rem 0;
+  padding: 0;
+}
+
+body.sre-theme .dice-tooltip .dice-rolls .die {
+  float: none;
+  width: 24px;
+  height: 24px;
+  line-height: 22px;
+  margin: 0;
+  border: 1px solid var(--sre-line);
+  border-radius: 4px;
+  background-image: none !important;
+  color: var(--sre-text-dim);
+  font-size: 0.85rem;
+  opacity: 1;
+  font-size: 0;
+}
+
+body.sre-theme .dice-tooltip .dice-rolls .die::before {
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+body.sre-theme .dice-tooltip .dice-rolls .die:is(.die_1, .die_1_wild)::before { content: "1"; }
+body.sre-theme .dice-tooltip .dice-rolls .die:is(.die_2, .die_2_wild)::before { content: "2"; }
+body.sre-theme .dice-tooltip .dice-rolls .die:is(.die_3, .die_3_wild)::before { content: "3"; }
+body.sre-theme .dice-tooltip .dice-rolls .die:is(.die_4, .die_4_wild)::before { content: "4"; }
+body.sre-theme .dice-tooltip .dice-rolls .die:is(.die_5, .die_5_wild)::before { content: "5"; }
+body.sre-theme .dice-tooltip .dice-rolls .die:is(.die_6, .die_6_wild)::before { content: "6"; }
+
+body.sre-theme .dice-tooltip .dice-rolls .die.hit {
+  border-color: var(--sre-ok);
+  color: var(--sre-ok);
+  background-color: rgba(79, 214, 138, 0.12);
+}
+
+body.sre-theme .dice-tooltip .dice-rolls .die:is(.die_1, .die_1_wild) {
+  border-color: var(--sre-bad);
+  color: var(--sre-bad);
+}
+
+body.sre-theme .dice-tooltip .dice-rolls .die.wild {
+  border-color: var(--sre-warn);
+  color: var(--sre-warn);
+  box-shadow: 0 0 6px rgba(240, 178, 74, 0.4);
+}
+
+body.sre-theme .dice-tooltip .dice-rolls .die.ignored { filter: none; opacity: 0.35; text-decoration: line-through; }
+body.sre-theme .dice-tooltip .dice-rolls .die.edged { filter: none; outline: 2px solid var(--sre-accent); outline-offset: 1px; }
+
+body.sre-theme .chat-message .spend_edge select,
+body.sre-theme .chat-message .spend_edge button,
+body.sre-theme .chat-message button {
+  background: var(--sre-panel-strong);
+  color: var(--sre-text);
+  border: 1px solid var(--sre-accent-line);
+  border-radius: 4px;
+}
+
+body.sre-theme .chat-message button:hover {
+  background: var(--sre-accent-soft);
+  border-color: var(--sre-accent);
+}
+
+/* ───── Roll dialog ───── */
+body.sre-theme .app.sre-roll-dialog .window-content form h3 {
+  color: var(--sre-text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: none;
+}
+
+body.sre-theme .app.sre-roll-dialog :is(h2.highlight, #rolldia-checkText) {
+  color: var(--sre-accent);
+  border: none;
+}
+
+body.sre-theme .app.sre-roll-dialog :is(fieldset, .section) {
+  border: 1px solid var(--sre-line);
+  border-radius: 5px;
+  background: var(--sre-panel);
+}
+
+body.sre-theme .app.sre-roll-dialog .dialog-buttons button {
+  border-color: var(--sre-accent-line);
+}
+
+body.sre-theme .app.sre-roll-dialog .dialog-buttons button.default,
+body.sre-theme .app.sre-roll-dialog .dialog-buttons button:hover {
+  background: var(--sre-accent);
+  border-color: var(--sre-accent);
+  color: #fff;
+}
+
+/* Sections whose title is a bare h2 (no .section-head wrapper) get the same header strip. */
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .section > h2.section-title {
+  padding: 5px 8px;
+  margin: 0 0 4px;
+  border-bottom: 1px solid var(--sre-accent-line);
+}
+
+body.sre-theme :is(.app.shadowrun6, .application.sr6) .section > table { margin: 0 4px; width: calc(100% - 8px); }

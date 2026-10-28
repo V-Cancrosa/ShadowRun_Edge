@@ -12,6 +12,7 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
   broń, akcesoria, amunicja, materiały wybuchowe, pancerze i ich modyfikacje, elektronika, oprogramowanie,
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
+- **Wygląd „Edge”** kart postaci, czatu i okna rzutu (ciemny lub jasny, do wyłączenia).
 
 ## Katalog sprzętu
 
@@ -87,6 +88,20 @@ zgadza.
 Sprzęt kupuje się potem z katalogu — okno zakupu odejmuje nuyeny postaci. Wybór czarów, mocy adepta i form
 złożonych dojdzie w kolejnej wersji; kreator pokazuje, ile ich przysługuje. MG może utworzyć postać mimo
 błędów (zaznaczenie w podsumowaniu).
+
+## Wygląd „Edge”
+
+Moduł może zmienić wygląd systemu na styl kreatora postaci: ciemne panele, różowe i cyjanowe akcenty,
+kafelki atrybutów, monitory obrażeń w kratkach (kliknięcie kratki ustawia obrażenia jak w systemie),
+karty rzutów z ponumerowanymi kośćmi (trafienia na zielono, jedynki na czerwono, dzika kość na złoto)
+i czerwoną kartą przy komplikacji.
+
+- *Ustawienia → Shadowrun Edge → Wygląd systemu „Edge”*: każdy gracz wybiera **ciemny**, **jasny** albo
+  **wyłączony** (oryginalny wygląd systemu).
+- *Wygląd „Edge” dla wszystkich* (ustawienie świata): MG może wymusić jeden wygląd dla wszystkich albo
+  zostawić **wybór gracza**.
+
+To tylko arkusz stylów nałożony na szablony systemu, więc działa z 3.3.9 i 4.x bez zmiany kodu systemu.
 
 ## Głosowanie Karmy
 

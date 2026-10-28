@@ -396,6 +396,20 @@
         "mundane": "Brak magii"
       },
       "AdjustmentShort": "Dostos."
+    },
+    "Theme": {
+      "Setting": {
+        "Name": "Wygląd systemu „Edge”",
+        "Hint": "Ciemny lub jasny wygląd kart postaci, czatu i okien rzutów w stylu modułu. „Wyłączony” zostawia oryginalny wygląd systemu."
+      },
+      "Override": {
+        "Name": "Wygląd „Edge” dla wszystkich",
+        "Hint": "MG może wymusić jeden wygląd dla wszystkich graczy. „Wybór gracza” pozwala każdemu ustawić go samemu."
+      },
+      "dark": "Ciemny",
+      "light": "Jasny",
+      "off": "Wyłączony",
+      "player": "Wybór gracza"
     }
   }
 }

@@ -396,6 +396,20 @@
         "mundane": "Mundane"
       },
       "AdjustmentShort": "Adj."
+    },
+    "Theme": {
+      "Setting": {
+        "Name": "“Edge” system look",
+        "Hint": "Dark or light module-styled look for character sheets, chat and roll dialogs. “Off” keeps the system's original look."
+      },
+      "Override": {
+        "Name": "“Edge” look for everyone",
+        "Hint": "The GM can force one look for all players. “Player's choice” lets everyone pick their own."
+      },
+      "dark": "Dark",
+      "light": "Light",
+      "off": "Off",
+      "player": "Player's choice"
     }
   }
 }
