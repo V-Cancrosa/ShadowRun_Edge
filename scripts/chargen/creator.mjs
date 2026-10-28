@@ -49,7 +49,7 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
     position: { width: 760, height: 720 },
     form: { handler: CharacterCreator.#onSubmit, submitOnChange: false, closeOnSubmit: false },
     actions: {
-      tab: CharacterCreator.#onTab,
+      showTab: CharacterCreator.#onTab,
       addRow: CharacterCreator.#onAddRow,
       removeRow: CharacterCreator.#onRemoveRow,
       reset: CharacterCreator.#onReset,

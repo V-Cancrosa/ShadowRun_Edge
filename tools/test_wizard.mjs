@@ -97,4 +97,16 @@ assert.deepEqual(merged.qualities, [{ id: "exceptional", detail: "log", level: 1
 assert.equal(merged.attrPoints.agi, 4);
 assert.equal(merged.attrPoints.bod, 0);
 
+// ApplicationV2 handles some data-action names itself (before the app's own actions), so a template must not
+// use them for its own buttons, and every data-action must have a handler.
+const RESERVED = ["close", "tab", "toggleControls"];
+for (const [file, App] of [["item-wizard.hbs", ItemWizard], ["character-creator.hbs", CharacterCreator]]) {
+  const source = readFileSync(new URL(`../templates/${file}`, import.meta.url), "utf8");
+  const actions = [...source.matchAll(/data-action="([^"]+)"/g)].map((m) => m[1]);
+  for (const action of actions) {
+    assert.ok(!RESERVED.includes(action), `${file}: data-action="${action}" is handled by ApplicationV2 itself`);
+    assert.ok(action in App.DEFAULT_OPTIONS.actions, `${file}: no handler for data-action="${action}"`);
+  }
+}
+
 console.log("wizard OK");
