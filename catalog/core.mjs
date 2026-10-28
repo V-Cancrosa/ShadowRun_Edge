@@ -420,7 +420,7 @@ export const SECTIONS = [
     ],
   },
   {
-    category: "electronics", subtype: "FILE_STORAGE", page: 269, columns: ["rating", "avail", "price"],
+    category: "electronics", subtype: "RFID", page: 269, columns: ["rating", "avail", "price"],
     rows: [["Datachips (10) 1 1 5¥", { notes: "Paczka 10 sztuk." }]],
   },
   {
@@ -853,7 +853,8 @@ export const SECTIONS = [
     ],
   },
   {
-    category: "gear", type: "MAGICAL", subtype: "MAGICAL_FORMULA", page: 294,
+    // MAGIC_SUPPLIES: the only Magical subtype in shadowrun6-eden 3.3.x.
+    category: "gear", type: "MAGICAL", subtype: "MAGIC_SUPPLIES", page: 294, folder: ["Towary magiczne", "Formuły"],
     rows: [
       "Spell formula, combat 3(L) 2,000¥",
       "Spell formula, detection 2(L) 500¥",
@@ -863,7 +864,7 @@ export const SECTIONS = [
     ],
   },
   {
-    category: "gear", type: "MAGICAL", subtype: "MAGIC_LODGE", page: 294,
+    category: "gear", type: "MAGICAL", subtype: "MAGIC_SUPPLIES", page: 294, folder: ["Towary magiczne", "Loża"],
     rows: [["Magical lodge materials R(L) R*500¥", { rating: [1, 6] }]],
   },
   {

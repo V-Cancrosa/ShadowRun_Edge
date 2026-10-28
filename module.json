@@ -19,7 +19,8 @@
         "type": "system",
         "manifest": "https://github.com/yjeroen/foundry-shadowrun6-eden/releases/latest/download/system.json",
         "compatibility": {
-          "minimum": "4.0.0"
+          "minimum": "3.3.9",
+          "verified": "4.0.11"
         }
       }
     ]
