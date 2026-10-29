@@ -713,12 +713,52 @@
     "Errata": {
       "aug2019": {
         "Name": "Errata SR6: sierpień 2019",
-        "Hint": "Oficjalna errata Catalyst do podręcznika podstawowego (sierpień 2019). Wyłączona = tekst z pierwszego druku. W module: Wyjątkowy atrybut kupowany tylko raz (s. 71)."
+        "Hint": "Oficjalna errata Catalyst do podręcznika podstawowego (sierpień 2019). Wyłączona = tekst z pierwszego druku. W module: Wyjątkowy atrybut kupowany tylko raz (s. 71); kara za rany nie obejmuje testów regeneracji naturalnej (s. 121)."
       },
       "feb2020": {
         "Name": "Errata SR6: luty 2020",
-        "Hint": "Oficjalna errata Catalyst (luty 2020), nadpisuje wcześniejszą tam, gdzie obie zmieniają to samo. W module: remis w teście przeciwstawnym wygrywa atakujący (s. 105); Wyjątkowy atrybut raz na każdy atrybut (s. 71); maksimum Magii/Rezonansu 6 + stopień − 1 za każdy pełny utracony punkt Esencji (s. 167, 195)."
+        "Hint": "Oficjalna errata Catalyst (luty 2020), nadpisuje wcześniejszą tam, gdzie obie zmieniają to samo. W module: remis w teście przeciwstawnym wygrywa atakujący (s. 105); Wyjątkowy atrybut raz na każdy atrybut (s. 71); apteczka: ocena apteczki + Logika jako alternatywa (s. 120); maksimum Magii/Rezonansu 6 + stopień − 1 za każdy pełny utracony punkt Esencji (s. 167, 195)."
       }
+    },
+    "Heal": {
+      "Button": "Leczenie",
+      "Title": "Leczenie: {name}",
+      "State": "{name}: ogłuszenie {stun}, fizyczne {physical}, nadmiar {overflow}.",
+      "MethodLabel": "Sposób",
+      "Method": {
+        "firstAid": "Pierwsza pomoc (Biotech + Logika)",
+        "medkit": "Apteczka (Biotech + Logika)",
+        "magic": "Magia (Czarnoksięstwo + Magia)",
+        "restStun": "Odpoczynek: ogłuszenie (BUD + WOL, 1 godz.)",
+        "restPhysical": "Odpoczynek: fizyczne / nadmiar (BUD + BUD, 1 dzień)"
+      },
+      "AlreadyUsed": "już użyte przy tych ranach",
+      "Healer": "Leczący",
+      "Kit": "Mam zestaw pierwszej pomocy (bez niego −2 kości i bez Edge)",
+      "UseMedkitRating": "Rzut oceną apteczki + Logika zamiast Biotech (errata 02/2020, s. 120)",
+      "MedkitRating": "Ocena apteczki",
+      "Assistance": "Opieka medyczna (ktoś z Biotech przez połowę odpoczynku): +2 kości",
+      "DrainBoxes": "Z tego ogłuszenia z drenażu (nie leczy się)",
+      "Prefer": "Sukcesy najpierw na",
+      "PreferPhysical": "obrażenia fizyczne",
+      "PreferStun": "ogłuszenie",
+      "ManualHits": "Sukcesy z własnego rzutu (puste = rzuć tutaj)",
+      "ManualHitsPlaceholder": "np. z rzutu czaru z Edge",
+      "Hint": "Nadmiar leczy się zawsze najpierw. Pierwsza pomoc w ciągu minuty po walce, apteczka w ciągu godziny; każda z nich i magia działa raz na dany zestaw ran (s. 119–121). Próg: 5 − Esencja celu; cel bez wszczepów daje +1 sukces.",
+      "Roll": "Rzuć",
+      "CardTreatment": "{healer}: pula {pool}, sukcesy {hits} {auto}, próg {threshold}.",
+      "AutoHit": "(+1 za cel bez wszczepów)",
+      "CardRest": "Pula {pool}, sukcesy {hits}.",
+      "Box": {
+        "overflow": "nadmiar −{n}",
+        "physical": "fizyczne −{n}",
+        "stun": "ogłuszenie −{n}"
+      },
+      "Nothing": "Nic nie wyleczono.",
+      "UsedWarning": "Ten sposób był już użyty przy tym zestawie ran — według zasad nie działa ponownie (MG decyduje).",
+      "Apply": "Zastosuj leczenie",
+      "Applied": "Zastosowano",
+      "Dead": "{name} ma nadmiar równy BUD × 2 — postać nie żyje i nie da się jej wyleczyć (s. 121)."
     }
   }
 }

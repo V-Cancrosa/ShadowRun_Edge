@@ -10,6 +10,7 @@ import * as rolls from "./system-rolls.mjs";
 import { METATYPES, SKILLS } from "../chargen/rules.mjs";
 import { giveItem, deleteItem } from "../give.mjs";
 import { errataFlags } from "../errata.mjs";
+import { openHealing } from "../healing.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key) => game.i18n.localize(key);
@@ -54,6 +55,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       count: EdgeActorSheet.#onCount,
       rollLegwork: EdgeActorSheet.#onLegwork,
       addContact: EdgeActorSheet.#onAddContact,
+      heal: EdgeActorSheet.#onHeal,
     },
   };
 
@@ -267,6 +269,10 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onLegwork(event, target) {
     const item = this.#item(target);
     if (item) return rolls.rollLegwork(this.document, item);
+  }
+
+  static #onHeal() {
+    return openHealing(this.document);
   }
 
   static async #onAddContact() {

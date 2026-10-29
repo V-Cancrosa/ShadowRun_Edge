@@ -10,6 +10,7 @@ export const ERRATA = {
     setting: "errataAug2019",
     rules: [
       { id: "exceptionalOnce", page: 71 }, // Exceptional (Attribute): purchased once
+      { id: "noWoundsOnRecovery", page: 121 }, // wound modifiers don't apply to natural recovery tests
     ],
   },
   feb2020: {
@@ -17,6 +18,7 @@ export const ERRATA = {
     rules: [
       { id: "tiesToAttacker", page: 105 }, // Step 3: ties go to the attacker
       { id: "exceptionalPerAttribute", page: 71 }, // Exceptional: once per attribute (replaces "once")
+      { id: "medkitRating", page: 120 }, // medkit: Biotech + Logic or medkit rating + Logic
       { id: "essenceLowersMagicMax", page: 167 }, // max Magic/Resonance 6 + grade, −1 per full Essence point lost (also p. 195)
     ],
   },

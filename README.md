@@ -177,16 +177,33 @@ z lutego 2020, s. 105); po wyłączeniu tej erraty remis wygrywa obrońca.
 - Dla czarów atrybuty obrony ustawiasz na Karcie Edge czaru (z opisu czaru w podręczniku); domyślnie Budowa +
   Siła Woli, jak w FAQ Sixth World dla czarów bez podanego testu.
 
+## Leczenie
+
+Przycisk **Leczenie** jest przy monitorach na Karcie Edge i w nagłówku karty postaci/NPC systemu. Zasady z podręcznika
+(s. 119–121):
+- **Pierwsza pomoc** — Biotech + Logika, próg 5 − Esencja celu (cel bez wszczepów: +1 sukces); bez zestawu −2 kości.
+  Sukcesy ponad próg: 1 kratka ogłuszenia za sukces albo 1 kratka fizycznych/nadmiaru za 2 sukcesy.
+- **Apteczka** — Biotech + Logika (albo ocena apteczki + Logika, errata 02/2020), ten sam próg; 1 kratka za sukces.
+- **Magia** — Czarnoksięstwo + Magia, ten sam próg; 1 kratka za sukces netto. Sukcesy z czaru rzuconego w systemie
+  (np. z Edge) można wpisać ręcznie.
+- **Odpoczynek** — ogłuszenie: BUD + WOL co godzinę; fizyczne: BUD + BUD co dzień; nadmiar jak fizyczne, minus kara
+  za rany. Opieka medyczna +2 kości. Kara za rany nie obejmuje regeneracji (errata 08/2019).
+- Nadmiar leczy się zawsze najpierw; drenażu nie leczy pierwsza pomoc, apteczka ani magia (podajesz, ile kratek
+  ogłuszenia pochodzi z drenażu). Pierwsza pomoc, apteczka i magia działają raz na zestaw ran — moduł to zapamiętuje
+  i zapomina przy nowych obrażeniach. Nadmiar równy BUD × 2 oznacza śmierć.
+- Wynik trafia na czat z przyciskiem *Zastosuj leczenie* (właściciel postaci albo — przez MG — każdy gracz).
+
 ## Erraty SR6
 
 Moduł trzyma się wyłącznie 6. edycji. Oficjalne erraty Catalyst do podręcznika podstawowego są przełącznikami
 w ustawieniach świata (domyślnie włączone; wyłączenie = tekst z pierwszego druku):
-- **Errata SR6: sierpień 2019** — Wyjątkowy atrybut kupowany tylko raz (s. 71).
+- **Errata SR6: sierpień 2019** — Wyjątkowy atrybut kupowany tylko raz (s. 71); bez kary za rany przy regeneracji
+  naturalnej (s. 121).
 - **Errata SR6: luty 2020** (nadpisuje wcześniejszą) — remis w teście przeciwstawnym wygrywa atakujący (s. 105);
-  Wyjątkowy atrybut raz na każdy atrybut (s. 71); maksimum Magii/Rezonansu 6 + stopień inicjacji/zanurzenia,
+  Wyjątkowy atrybut raz na każdy atrybut (s. 71); apteczka: ocena apteczki + Logika (s. 120); maksimum Magii/Rezonansu 6 + stopień inicjacji/zanurzenia,
   −1 za każdy pełny utracony punkt Esencji (s. 167, 195) — Karta Edge ostrzega, gdy Magia je przekracza.
 
-Kolejne funkcje (leczenie, przywoływanie, granaty) dostaną swoje erraty do tych samych przełączników.
+Kolejne funkcje (przywoływanie, granaty) dostaną swoje erraty do tych samych przełączników.
 
 ## Wygląd „Edge”
 

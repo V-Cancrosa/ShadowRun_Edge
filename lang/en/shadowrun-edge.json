@@ -713,12 +713,52 @@
     "Errata": {
       "aug2019": {
         "Name": "SR6 errata: August 2019",
-        "Hint": "Catalyst's official core rulebook errata (August 2019). Off = first-print text. In the module: Exceptional (Attribute) bought only once (p. 71)."
+        "Hint": "Catalyst's official core rulebook errata (August 2019). Off = first-print text. In the module: Exceptional (Attribute) bought only once (p. 71); wound modifiers don't apply to natural recovery tests (p. 121)."
       },
       "feb2020": {
         "Name": "SR6 errata: February 2020",
-        "Hint": "Catalyst's official errata (February 2020); wins over the earlier one where both change the same rule. In the module: ties in opposed tests go to the attacker (p. 105); Exceptional once per attribute (p. 71); maximum Magic/Resonance 6 + grade − 1 per full point of Essence lost (p. 167, 195)."
+        "Hint": "Catalyst's official errata (February 2020); wins over the earlier one where both change the same rule. In the module: ties in opposed tests go to the attacker (p. 105); Exceptional once per attribute (p. 71); medkit rating + Logic as an alternative (p. 120); maximum Magic/Resonance 6 + grade − 1 per full point of Essence lost (p. 167, 195)."
       }
+    },
+    "Heal": {
+      "Button": "Healing",
+      "Title": "Healing: {name}",
+      "State": "{name}: Stun {stun}, Physical {physical}, Overflow {overflow}.",
+      "MethodLabel": "Method",
+      "Method": {
+        "firstAid": "First aid (Biotech + Logic)",
+        "medkit": "Medkit (Biotech + Logic)",
+        "magic": "Magic (Sorcery + Magic)",
+        "restStun": "Rest: Stun (BOD + WIL, 1 hour)",
+        "restPhysical": "Rest: Physical / Overflow (BOD + BOD, 1 day)"
+      },
+      "AlreadyUsed": "already used on these injuries",
+      "Healer": "Healer",
+      "Kit": "I have a first aid kit (without one −2 dice and no Edge)",
+      "UseMedkitRating": "Roll medkit rating + Logic instead of Biotech (errata 02/2020, p. 120)",
+      "MedkitRating": "Medkit rating",
+      "Assistance": "Medical attention (someone with Biotech for half the rest): +2 dice",
+      "DrainBoxes": "Of the Stun, boxes from drain (not healable)",
+      "Prefer": "Spend hits first on",
+      "PreferPhysical": "Physical damage",
+      "PreferStun": "Stun damage",
+      "ManualHits": "Hits from your own roll (empty = roll here)",
+      "ManualHitsPlaceholder": "e.g. from a spell roll with Edge",
+      "Hint": "Overflow always heals first. First aid within a minute after combat, medkit within an hour; each of them and magic works once per set of injuries (pp. 119–121). Threshold: 5 − patient's Essence; a fully natural patient gives +1 hit.",
+      "Roll": "Roll",
+      "CardTreatment": "{healer}: pool {pool}, hits {hits} {auto}, threshold {threshold}.",
+      "AutoHit": "(+1 natural patient)",
+      "CardRest": "Pool {pool}, hits {hits}.",
+      "Box": {
+        "overflow": "Overflow −{n}",
+        "physical": "Physical −{n}",
+        "stun": "Stun −{n}"
+      },
+      "Nothing": "Nothing healed.",
+      "UsedWarning": "This method was already used on this set of injuries — by the rules it doesn't work again (the GM decides).",
+      "Apply": "Apply healing",
+      "Applied": "Applied",
+      "Dead": "{name} has Overflow equal to BOD × 2 — the character is dead, beyond healing (p. 121)."
     }
   }
 }

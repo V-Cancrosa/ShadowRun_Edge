@@ -48,3 +48,37 @@ d.qualities[1].detail = "agi";
 assert.ok(keys(evaluateDraft(d)).includes("ExceptionalSameAttribute"));
 assert.ok(!keys(evaluateDraft(d, { errata: { exceptionalPerAttribute: false, exceptionalOnce: false } })).some((k) => k.startsWith("Exceptional")), "no errata: first print");
 console.log("errata OK");
+
+// Healing (core rulebook pp. 119–121).
+const H = await import("../scripts/healing-rules.mjs");
+assert.deepEqual(H.treatmentThreshold(3), { threshold: 2, autoHit: 0 }, "example on p. 120: Essence 3 → threshold 2");
+assert.deepEqual(H.treatmentThreshold(6), { threshold: 0, autoHit: 1 }, "fully natural: +1 hit");
+assert.equal(H.treatmentThreshold(5.8).threshold, 0);
+const healer = { skills: { biotech: { pool: 9 }, sorcery: { pool: 12 } }, attributes: { log: { pool: 4 } } };
+assert.equal(H.healingPool("firstAid", healer, {}, { kit: true }), 9);
+assert.equal(H.healingPool("firstAid", healer, {}, { kit: false }), 7, "no kit: −2");
+assert.equal(H.healingPool("medkit", healer, {}, { useMedkitRating: true, medkitRating: 3 }), 7, "Feb 2020: rating + Logic");
+assert.equal(H.healingPool("medkit", healer, {}, { useMedkitRating: true, medkitRating: 3, errata: { medkitRating: false } }), 9);
+const patient = { attributes: { bod: { pool: 6 }, wil: { pool: 3 } }, overflow: { dmg: 0 } };
+assert.equal(H.healingPool("restStun", {}, patient, { woundModifier: 3 }), 9, "Aug 2019: no wound modifiers on recovery");
+assert.equal(H.healingPool("restStun", {}, patient, { woundModifier: 3, errata: { noWoundsOnRecovery: false } }), 6);
+assert.equal(H.healingPool("restPhysical", {}, patient, { assistance: true }), 14, "BOD + BOD + 2 assistance");
+assert.equal(H.healingPool("restPhysical", {}, { ...patient, overflow: { dmg: 2 } }, { woundModifier: 4 }), 8, "Overflow: Body + Body − wound modifiers");
+// The book's healing example (p. 120): first aid 4 hits vs threshold 2 → 1 box of Overflow (2 hits per box).
+let r = H.healingResult({ method: "firstAid", hits: 4, threshold: 2, damage: { stun: 10, physical: 11, overflow: 2 } });
+assert.deepEqual(r.heal, { overflow: 1, physical: 0, stun: 0 });
+// Then the medkit: 6 hits, 4 over → the last Overflow first, the rest by the chosen preference
+// (the book's healer split it 2 Physical + 1 Stun; the dialog spends greedily on the preferred track).
+r = H.healingResult({ method: "medkit", hits: 6, threshold: 2, damage: { stun: 10, physical: 11, overflow: 1 } });
+assert.deepEqual(r.heal, { overflow: 1, physical: 3, stun: 0 });
+r = H.healingResult({ method: "medkit", hits: 6, threshold: 2, damage: { stun: 10, physical: 11, overflow: 1 }, prefer: "stun" });
+assert.deepEqual(r.heal, { overflow: 1, physical: 0, stun: 3 });
+// Drain is never healed by treatment.
+r = H.healingResult({ method: "medkit", hits: 5, threshold: 0, damage: { stun: 3, physical: 0, overflow: 0 }, drainBoxes: 2 });
+assert.equal(r.heal.stun, 1);
+// Natural recovery: every hit heals a box.
+assert.equal(H.healingResult({ method: "restStun", hits: 3, damage: { stun: 8 } }).heal.stun, 3);
+assert.deepEqual(H.healingResult({ method: "restPhysical", hits: 4, damage: { physical: 7, overflow: 1 } }).heal, { overflow: 1, physical: 3, stun: 0 });
+assert.equal(H.isDead({ overflow: { dmg: 12 }, attributes: { bod: { pool: 6 } } }), true, "Overflow = BOD × 2");
+assert.equal(H.isDead({ overflow: { dmg: 11 }, attributes: { bod: { pool: 6 } } }), false);
+console.log("healing OK");

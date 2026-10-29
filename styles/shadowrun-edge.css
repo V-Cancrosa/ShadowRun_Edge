@@ -244,3 +244,14 @@
 /* "Defend" button on spell / complex form chat cards (scripts/opposed.mjs) */
 .sre-defend { margin-top: 6px; }
 .sre-defend button { width: 100%; }
+
+/* Healing dialog and chat card (scripts/healing.mjs) */
+.sre-heal { display: flex; flex-direction: column; gap: 6px; }
+.sre-heal label:not(.checkbox) { display: flex; flex-direction: column; gap: 2px; }
+.sre-heal label.checkbox { display: flex; align-items: center; gap: 6px; }
+.sre-heal-state { margin: 0; font-weight: bold; }
+.sre-heal-card h3 { margin: 0 0 4px; }
+.sre-heal-card p { margin: 2px 0; }
+.sre-heal-result strong { color: #4fd68a; }
+.sre-heal-warn { color: #f0b24a; font-size: 0.9em; }
+.sre-heal-apply { width: 100%; margin-top: 4px; }

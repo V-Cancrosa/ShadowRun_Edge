@@ -49,7 +49,8 @@
       <div class="sre-es-col">
         {{!-- Condition monitors --}}
         <div class="sre-es-panel">
-          <h3>{{localize "SRE.Sheet.Monitors"}} <span>{{localize "SRE.Sheet.MonitorsHint"}}</span></h3>
+          <h3>{{localize "SRE.Sheet.Monitors"}} <span>{{localize "SRE.Sheet.MonitorsHint"}}
+            <button type="button" class="sre-es-mini" data-action="heal"><i class="fas fa-kit-medical"></i> {{localize "SRE.Heal.Button"}}</button></span></h3>
           {{#each monitors}}
           <div class="sre-es-monitor" data-monitor="{{id}}">
             <span class="sre-es-label">{{label}}</span>
