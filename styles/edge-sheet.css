@@ -71,10 +71,11 @@ body.sre-edge-light .sre-sheet {
 
 /* ───── Header ───── */
 .sre-es-head {
+  position: relative;
   flex: 0 0 auto;
   display: flex;
   gap: 14px;
-  padding: 14px;
+  padding: 14px 40px 14px 14px;
   background: var(--sre-head);
   border-bottom: 1px solid var(--sre-accent-line);
 }
@@ -845,3 +846,24 @@ body.sre-edge-light .sre-sheet {
 .sre-give-msg { margin: 0; }
 .sre-es .sre-it-f :is(input, select), .sre-es .sre-it-ar input { box-sizing: border-box; min-width: 0; }
 .sre-it-inline .sre-es-pool { font-size: 14px; line-height: 1.5; }
+
+/* Light/dark switch, top right of the sheet header */
+.sre-es-theme {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  min-height: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: var(--sre-panel-strong);
+  color: var(--sre-text-dim);
+  border: 1px solid var(--sre-line);
+  border-radius: 0;
+  line-height: 1;
+  z-index: 1;
+}
+.sre-es-theme:hover { color: var(--sre-accent); border-color: var(--sre-accent); box-shadow: 0 0 8px var(--sre-accent-soft); }
+.sre-es-theme i { margin: 0; font-size: 12px; }

@@ -245,23 +245,21 @@ Magowie z umiejętnością Przywoływanie mają w zakładce Magia panel **Duchy*
 
 ## Wygląd „Edge”
 
-Moduł może zmienić wygląd systemu na styl kreatora postaci: ciemne panele, różowe i cyjanowe akcenty,
+Moduł zmienia wygląd systemu na styl kreatora postaci: ciemne panele, różowe i cyjanowe akcenty,
 kafelki atrybutów, monitory obrażeń w kratkach (kliknięcie kratki ustawia obrażenia jak w systemie),
 karty rzutów z ponumerowanymi kośćmi (trafienia na zielono, jedynki na czerwono, dzika kość na złoto)
 i czerwoną kartą przy komplikacji.
 
-- *Ustawienia → Shadowrun Edge → Wygląd systemu „Edge”*: każdy gracz wybiera **automatycznie** (jasny lub ciemny
-  jak schemat kolorów Foundry — domyślnie), **ciemny**, **jasny** albo **wyłączony** (oryginalny wygląd systemu).
-  Karta Edge, kreator i okna modułu idą za tym wyborem; przy wyłączonym wyglądzie — za schematem Foundry.
-- *Wygląd „Edge” dla wszystkich* (ustawienie świata): MG może wymusić jeden wygląd dla wszystkich albo
-  zostawić **wybór gracza**.
+- Wygląd jest zawsze włączony; nie ma go w ustawieniach. Każdy gracz przełącza **jasny / ciemny** przyciskiem
+  ze słońcem lub księżycem w prawym górnym rogu Karty Edge (albo w nagłówku karty postaci systemu). Wybór jest
+  zapisany przy użytkowniku, więc działa na każdym komputerze i obejmuje karty, kreator, okna i czat.
+- Dopóki gracz nic nie wybierze, wygląd idzie za schematem kolorów Foundry.
 
 To tylko arkusz stylów nałożony na szablony systemu, więc działa z 3.3.9 i 4.x bez zmiany kodu systemu.
 
 Okna modułu (Karta Edge, karta przedmiotu, kreator postaci, Kreator przedmiotów, okna leczenia, granatów, duchów,
-przekazania i usuwania, głosowania Karmy, stopnia wszczepu i zakupu) oraz jego karty na czacie mają styl Edge
-zawsze. Przy włączonym wyglądzie Edge dostają go też okno rzutu systemu, systemowe okna potwierdzeń i okno
-efektów. Okna samego Foundry (ustawienia, katalogi, kompendia) zostają bez zmian.
+przekazania i usuwania, głosowania Karmy, stopnia wszczepu i zakupu) i jego karty na czacie mają styl Edge, tak
+samo okno rzutu systemu, systemowe okna potwierdzeń i okno efektów. Okna samego Foundry (ustawienia, katalogi, kompendia) zostają bez zmian.
 
 ## Głosowanie Karmy
 

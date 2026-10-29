@@ -1,6 +1,9 @@
 <div class="sre-es">
   {{!-- Header --}}
   <header class="sre-es-head">
+    <button type="button" class="sre-es-theme" data-action="toggleTheme" data-tooltip="{{themeSwitch.label}}" aria-label="{{themeSwitch.label}}">
+      <i class="fas {{themeSwitch.icon}}"></i>
+    </button>
     <div class="sre-es-portrait" data-action="showPortraitArtwork">
       {{#if img}}<img src="{{img}}" alt="{{name}}">{{else}}<span>{{initial}}</span>{{/if}}
     </div>

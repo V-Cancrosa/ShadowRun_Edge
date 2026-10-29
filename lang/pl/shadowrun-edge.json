@@ -401,19 +401,8 @@
       "Repaired": "Shadowrun Edge: naprawiono {count} postać/postaci z kreatora (brakujące modyfikatory atrybutów i umiejętności dawały rzuty 0d6)."
     },
     "Theme": {
-      "Setting": {
-        "Name": "Wygląd systemu „Edge”",
-        "Hint": "Ciemny lub jasny wygląd kart postaci, czatu i okien rzutów w stylu modułu. „Wyłączony” zostawia oryginalny wygląd systemu."
-      },
-      "Override": {
-        "Name": "Wygląd „Edge” dla wszystkich",
-        "Hint": "MG może wymusić jeden wygląd dla wszystkich graczy. „Wybór gracza” pozwala każdemu ustawić go samemu."
-      },
-      "dark": "Ciemny",
-      "light": "Jasny",
-      "off": "Wyłączony",
-      "player": "Wybór gracza",
-      "auto": "Automatycznie (jak Foundry)"
+      "ToLight": "Jasny motyw",
+      "ToDark": "Ciemny motyw"
     },
     "Sheet": {
       "Label": "Karta Edge (Shadowrun Edge)",

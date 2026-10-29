@@ -14,6 +14,7 @@ import { openHealing } from "../healing.mjs";
 import { openSummon, openBanish, spiritsOf, setServices } from "../summoning.mjs";
 import { forceBudget } from "../summoning-rules.mjs";
 import { throwExplosive } from "../blast.mjs";
+import { isLightTheme, toggleTheme } from "../theme.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key) => game.i18n.localize(key);
@@ -40,6 +41,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       rollSpell: EdgeActorSheet.#onSpell,
       openItem: EdgeActorSheet.#onOpenItem,
       systemSheet: EdgeActorSheet.#onSystemSheet,
+      toggleTheme: () => toggleTheme(),
       rollAttribute: EdgeActorSheet.#onAttribute,
       rollSkill: EdgeActorSheet.#onSkill,
       toggleUntrained: EdgeActorSheet.#onToggleUntrained,
@@ -95,9 +97,11 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       social.notesHTML = await enrich(social.notes);
       if (social.hasDescription) social.descriptionHTML = await enrich(social.description);
     }
+    const light = isLightTheme();
     return {
       ...context,
       ...data,
+      themeSwitch: { light, icon: light ? "fa-moon" : "fa-sun", label: L(light ? "SRE.Theme.ToDark" : "SRE.Theme.ToLight") },
       magic: tab === "magic" ? this.#magicContext(config) : null,
       matrix: tab === "matrix" ? buildMatrixContext(this.document, { L, config, showAllActions: this.showAllMatrixActions }) : null,
       gear: tab === "gear" ? buildGearContext(this.document, { L, config }) : null,

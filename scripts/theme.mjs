@@ -1,10 +1,10 @@
 /**
  * "Edge" look for the shadowrun6-eden system: a stylesheet scoped to body.sre-theme
  * (styles/system-theme.css) plus a few DOM touches the CSS can't do alone.
- * Each player picks the look; the GM can force one for the whole world.
+ * Always on; each player switches between dark and light on the character sheet.
  */
 const MODULE_ID = "shadowrun-edge";
-const THEMES = ["off", "dark", "light"];
+const THEMES = ["dark", "light"];
 
 /** Foundry's own color scheme for applications (Settings → Core → Interface), light or dark. */
 function foundryScheme() {
@@ -22,51 +22,47 @@ function foundryScheme() {
 }
 
 /**
- * The look in effect for this client: the GM's world override wins over the player's choice;
- * "auto" follows Foundry's color scheme.
+ * The look in effect for this user: dark or light, switched on the character sheet (stored on the user, so it
+ * follows the player to any device). Until the player picks one, an earlier choice from the old settings is kept,
+ * else Foundry's color scheme decides. There are no settings for it any more.
  */
 export function activeTheme() {
-  const forced = game.settings.get(MODULE_ID, "themeOverride");
-  let theme = forced === "player" ? game.settings.get(MODULE_ID, "theme") : forced;
-  if (theme === "auto") theme = foundryScheme();
-  return THEMES.includes(theme) ? theme : "off";
+  const picked = game.user?.getFlag?.(MODULE_ID, "theme");
+  if (picked === "dark" || picked === "light") return picked;
+  let stored = null;
+  try {
+    stored = game.settings.get(MODULE_ID, "theme");
+  } catch {
+    // not registered (outside Foundry)
+  }
+  if (stored === "dark" || stored === "light") return stored;
+  return foundryScheme();
+}
+
+export const isLightTheme = () => activeTheme() === "light";
+
+/** Switches this player's look between dark and light. */
+export async function toggleTheme() {
+  const next = isLightTheme() ? "dark" : "light";
+  await game.user.setFlag(MODULE_ID, "theme", next);
+  applyTheme();
 }
 
 function applyTheme() {
   const theme = activeTheme();
   const body = document.body;
-  body.classList.toggle("sre-theme", theme !== "off");
+  body.classList.add("sre-theme");
   for (const t of THEMES) body.classList.toggle(`sre-theme-${t}`, theme === t);
-  // The module's own windows (Edge sheets, creator, dialogs) are always Edge: light with the light look,
-  // or with Foundry's light scheme when the system look is off.
-  body.classList.toggle("sre-edge-light", theme === "light" || (theme === "off" && foundryScheme() === "light"));
-  // Re-render open sheets so the damage monitors pick up (or drop) the box styling.
+  body.classList.toggle("sre-edge-light", theme === "light");
+  // Re-render open sheets so the damage monitors and the switch pick up the look.
   const apps = [...Object.values(ui.windows ?? {}), ...(globalThis.foundry?.applications?.instances?.values?.() ?? [])];
   for (const app of apps) if (app.actor && app.rendered) app.render(false);
 }
 
 Hooks.once("init", () => {
-  game.settings.register(MODULE_ID, "theme", {
-    name: "SRE.Theme.Setting.Name",
-    hint: "SRE.Theme.Setting.Hint",
-    scope: "client",
-    config: true,
-    type: String,
-    choices: { auto: "SRE.Theme.auto", dark: "SRE.Theme.dark", light: "SRE.Theme.light", off: "SRE.Theme.off" },
-    default: "auto",
-    onChange: applyTheme,
-  });
-
-  game.settings.register(MODULE_ID, "themeOverride", {
-    name: "SRE.Theme.Override.Name",
-    hint: "SRE.Theme.Override.Hint",
-    scope: "world",
-    config: true,
-    type: String,
-    choices: { player: "SRE.Theme.player", auto: "SRE.Theme.auto", dark: "SRE.Theme.dark", light: "SRE.Theme.light", off: "SRE.Theme.off" },
-    default: "player",
-    onChange: applyTheme,
-  });
+  // Kept only to read an earlier choice; no longer shown in the settings.
+  game.settings.register(MODULE_ID, "theme", { scope: "client", config: false, type: String, default: "auto" });
+  game.settings.register(MODULE_ID, "themeOverride", { scope: "world", config: false, type: String, default: "player" });
 });
 
 Hooks.once("setup", () => {
@@ -75,7 +71,7 @@ Hooks.once("setup", () => {
 Hooks.once("ready", () => {
   if (game.system.id === "shadowrun6-eden") applyTheme();
 });
-// Foundry's color scheme changed: "auto" (and the Edge windows with the look off) follow it.
+// Foundry's color scheme changed: players who haven't picked a look follow it.
 Hooks.on("clientSettingChanged", (key) => {
   if (key === "core.uiConfig" && game.system.id === "shadowrun6-eden") applyTheme();
 });
@@ -103,7 +99,6 @@ function markMonitors(root) {
 }
 
 Hooks.on("renderActorSheet", (app, html) => {
-  if (activeTheme() === "off") return;
   const root = html instanceof HTMLElement ? html : html?.[0];
   if (root) markMonitors(root.closest(".app") ?? root);
 });
@@ -115,13 +110,24 @@ Hooks.on("renderRollDialog", (app, html) => {
 });
 
 /**
- * With the Edge look on, the system's own confirmations (DialogV2) and its Active Effect window get the Edge
+ * The system's own confirmations (DialogV2) and its Active Effect window get the Edge
  * dialog style too. The module's dialogs always carry the class.
  */
 for (const hook of ["renderDialogV2", "renderActiveEffectConfig"]) {
   Hooks.on(hook, (app, html) => {
-    if (activeTheme() === "off") return;
     const root = app.element instanceof HTMLElement ? app.element : html instanceof HTMLElement ? html : html?.[0];
     root?.classList.add("sre-dialog");
   });
 }
+
+/** The light/dark switch on the system's character sheet too (AppV1 in 3.x, AppV2 in 4.x). */
+const switchLabel = () => game.i18n.localize(isLightTheme() ? "SRE.Theme.ToDark" : "SRE.Theme.ToLight");
+const switchIcon = () => (isLightTheme() ? "fas fa-moon" : "fas fa-sun");
+Hooks.on("getActorSheetHeaderButtons", (sheet, buttons) => {
+  if (game.system.id !== "shadowrun6-eden" || sheet.actor?.type !== "Player") return;
+  buttons.unshift({ label: switchLabel(), class: "sre-theme-switch", icon: switchIcon(), onclick: () => toggleTheme() });
+});
+Hooks.on("getHeaderControlsActorSheetV2", (sheet, controls) => {
+  if (game.system.id !== "shadowrun6-eden" || sheet.actor?.type !== "Player" || sheet.constructor.name === "EdgeActorSheet") return;
+  controls.unshift({ label: switchLabel(), icon: switchIcon(), action: "sreToggleTheme", onClick: () => toggleTheme() });
+});
