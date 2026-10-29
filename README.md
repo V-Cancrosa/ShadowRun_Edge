@@ -261,6 +261,15 @@ Okna modułu (Karta Edge, karta przedmiotu, kreator postaci, Kreator przedmiotó
 przekazania i usuwania, głosowania Karmy, stopnia wszczepu i zakupu) i jego karty na czacie mają styl Edge, tak
 samo okno rzutu systemu, systemowe okna potwierdzeń i okno efektów. Okna samego Foundry (ustawienia, katalogi, kompendia) zostają bez zmian.
 
+### Okno rzutu
+
+Okno rzutu systemu ma układ Karty Edge: nagłówek z nazwą testu i wyborem atrybutu, kafelki **Pula kości**
+(z rozpisaniem: baza, modyfikator, rany, podtrzymywanie) i **Edge**, panele **Broń** (DV, tryby, WA, amunicja,
+tryb ognia, dystans), **Czar** (zasięg, drenaż, wzmocnienie, obszar), **Przewaga** (WA kontra WO, Edge sytuacyjny,
+kto dostaje Edge), **Wydawanie Edge** i **Modyfikatory** (−/+ i przełączniki-chipy: kara za rany, podtrzymywanie,
+dzika kość, test rozszerzony), a przycisk mówi, iloma kośćmi rzucasz. Moduł przestawia pola systemu, nie
+podmienia ich, więc rzut, Edge i przeliczenia działają dokładnie jak w systemie (3.3.9 i 4.x).
+
 ## Głosowanie Karmy
 
 MG ma w zakładce *Aktorzy* przycisk **Głosowanie Karmy** (albo makro:

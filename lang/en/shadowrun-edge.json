@@ -834,6 +834,27 @@
       "Folder": "Qualities and powers",
       "FocusEffect": "Focused Concentration (Add level: sustain 1 more spell/complex form without penalty)",
       "PainEffect": "Pain Resistance (Add level; negative = penalties earlier)"
+    },
+    "Roll": {
+      "Test": "Test",
+      "Pool": "Dice pool",
+      "Weapon": "Weapon",
+      "Spell": "Spell",
+      "Opposed": "Edge gain",
+      "OpposedHint": "AR vs DR",
+      "AR": "AR",
+      "DR": "DR",
+      "Modifiers": "Modifiers",
+      "Wound": "Wound penalty",
+      "Sustained": "Sustaining",
+      "Wild": "Wild die",
+      "Other": "Other",
+      "Base": "Base",
+      "Mod": "mod",
+      "WoundShort": "wounds",
+      "SustainedShort": "sustaining",
+      "RollN": "Roll {n} dice",
+      "RollOne": "Roll 1 die"
     }
   }
 }

@@ -834,6 +834,27 @@
       "Folder": "Cechy i moce",
       "FocusEffect": "Focused Concentration (Dodaj poziom: kolejny podtrzymywany czar/forma bez kary)",
       "PainEffect": "Pain Resistance (Dodaj poziom; ujemny = kary wcześniej)"
+    },
+    "Roll": {
+      "Test": "Test",
+      "Pool": "Pula kości",
+      "Weapon": "Broń",
+      "Spell": "Czar",
+      "Opposed": "Przewaga",
+      "OpposedHint": "WA kontra WO",
+      "AR": "WA",
+      "DR": "WO",
+      "Modifiers": "Modyfikatory",
+      "Wound": "Kara za rany",
+      "Sustained": "Podtrzymywanie",
+      "Wild": "Dzika kość",
+      "Other": "Inne",
+      "Base": "Baza",
+      "Mod": "mod",
+      "WoundShort": "rany",
+      "SustainedShort": "podtrzymanie",
+      "RollN": "Rzuć {n} kośćmi",
+      "RollOne": "Rzuć 1 kością"
     }
   }
 }

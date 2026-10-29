@@ -16,6 +16,7 @@ import "./healing.mjs";
 import "./blast.mjs";
 import "./summoning.mjs";
 import "./traits.mjs";
+import "./roll-dialog.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";
 
