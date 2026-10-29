@@ -6,6 +6,7 @@ import { openItemWizard } from "./wizard/item-wizard.mjs";
 import "./acquire.mjs";
 import "./mounts.mjs";
 import "./theme.mjs";
+import "./sheet/edge-sheet.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";
 

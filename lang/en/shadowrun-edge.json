@@ -411,6 +411,77 @@
       "light": "Light",
       "off": "Off",
       "player": "Player's choice"
+    },
+    "Sheet": {
+      "Label": "Edge sheet (Shadowrun Edge)",
+      "Tab": {
+        "main": "Main",
+        "skills": "Attributes & skills",
+        "combat": "Combat",
+        "magic": "Magic",
+        "matrix": "Matrix",
+        "gear": "Augmentations & gear",
+        "social": "Contacts & notes"
+      },
+      "Monitor": {
+        "physical": "Physical",
+        "stun": "Stun",
+        "overflow": "Overflow"
+      },
+      "Initiative": {
+        "physical": "Physical",
+        "astral": "Astral",
+        "matrix": "Matrix"
+      },
+      "Quick": {
+        "defense": "Defense",
+        "soak": "Damage resistance",
+        "perception": "Perception",
+        "composure": "Composure",
+        "judge_intentions": "Judge intentions",
+        "memory": "Memory"
+      },
+      "Warn": {
+        "wound": "Wound penalty −{wound} is included in the pools shown (except damage resistance); the roll dialog applies it itself.",
+        "essence": "Essence below 1 — another implant may kill the character.",
+        "edgeCap": "Edge above 7 — more than the rules allow."
+      },
+      "Karma": "Karma",
+      "Nuyen": "Nuyen",
+      "Reputation": "Reputation",
+      "Heat": "Heat",
+      "Essence": "Essence",
+      "Monitors": "Condition monitors",
+      "MonitorsHint": "click a box",
+      "WoundPenalty": "Wound penalty (−1 per 3 boxes)",
+      "InitiativeTitle": "Initiative",
+      "D6": "d6",
+      "Roll": "Roll",
+      "Actions": "Actions per round:",
+      "Major": "major",
+      "Minor": "minor",
+      "ActionsHint": "1 + 1 minor per initiative die",
+      "QuickTitle": "Quick rolls",
+      "DefenseTitle": "Defense",
+      "DefenseRating": "Defense Rating",
+      "DefenseRatingHint": "BOD + armor",
+      "DefenseTestHint": "REA + INT",
+      "SoakHint": "BOD, no wound penalty",
+      "Movement": "Movement",
+      "Sprint": "sprint",
+      "PerHit": "per hit",
+      "LiftCarry": "Lift/carry (BOD + WIL)",
+      "InHand": "In hand",
+      "Attack": "Attack",
+      "Modes": "Modes",
+      "Ammo": "Ammo",
+      "Reload": "Reload",
+      "Cast": "Cast",
+      "Drain": "Drain",
+      "DrainResist": "resist",
+      "NothingInHand": "No weapons or spells — add them from the catalog or on the system sheet.",
+      "Soon": "This tab arrives in later module versions. Until then edit this data on the system sheet — both sheets share the same data.",
+      "OpenSystemSheet": "Open the system sheet"
     }
   }
 }

@@ -12,6 +12,7 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
   broń, akcesoria, amunicja, materiały wybuchowe, pancerze i ich modyfikacje, elektronika, oprogramowanie,
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
+- **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (na razie zakładka *Główna*).
 - **Wygląd „Edge”** kart postaci, czatu i okna rzutu (ciemny lub jasny, do wyłączenia).
 
 ## Katalog sprzętu
@@ -88,6 +89,24 @@ zgadza.
 Sprzęt kupuje się potem z katalogu — okno zakupu odejmuje nuyeny postaci. Wybór czarów, mocy adepta i form
 złożonych dojdzie w kolejnej wersji; kreator pokazuje, ile ich przysługuje. MG może utworzyć postać mimo
 błędów (zaznaczenie w podsumowaniu).
+
+## Karta Edge
+
+Dodatkowa karta postaci gracza, ułożona jak karta z podręcznika SR6. Włączasz ją w nagłówku karty:
+*Konfiguruj kartę → Karta Edge (Shadowrun Edge)*. Karta systemu zostaje domyślna, a obie korzystają z tych samych
+danych, więc można się przełączać w każdej chwili.
+
+Zakładka **Główna** (wersja 0.6.0):
+- nagłówek z Karmą, nuyenami, Reputacją, Heat i Esencją; Edge jako romby do klikania (limit 7);
+- monitory fizyczny, ogłuszenia i nadmiaru w kratkach (kliknięcie kratki ustawia obrażenia) i łączna kara za rany;
+- inicjatywa fizyczna, astralna i matrycowa z rzutem oraz liczbą akcji w rundzie (1 większa + 1 mniejsza
+  i 1 mniejsza za każdą kość inicjatywy);
+- obrona: Defense Rating, test obrony (REA + INT) i wytrzymanie (BUD), ruch i Dźwiganie;
+- szybkie rzuty (obrona, wytrzymanie, percepcja, opanowanie, ocena intencji, pamięć);
+- „W ręku”: broń z DV, trybami ognia, WA, amunicją (przycisk *Przeładuj*) i czary z pulą i drenażem.
+
+Pule pokazują już karę za rany; rzut i tak przechodzi przez okno rzutu systemu, które odejmuje ją samo.
+Pozostałe zakładki pojawią się w kolejnych wersjach — do tego czasu mają przycisk *Otwórz kartę systemu*.
 
 ## Wygląd „Edge”
 

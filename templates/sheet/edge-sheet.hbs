@@ -1,0 +1,168 @@
+<div class="sre-es">
+  {{!-- Header --}}
+  <header class="sre-es-head">
+    <div class="sre-es-portrait" data-action="showPortraitArtwork">
+      {{#if img}}<img src="{{img}}" alt="{{name}}">{{else}}<span>{{initial}}</span>{{/if}}
+    </div>
+    <div class="sre-es-identity">
+      <input class="sre-es-name" type="text" name="name" value="{{name}}" {{#unless editable}}disabled{{/unless}}>
+      <div class="sre-es-tags">
+        {{#each tags}}<span class="sre-es-tag sre-es-tag-{{kind}}">{{text}}</span>{{/each}}
+      </div>
+      <div class="sre-es-edge">
+        <span class="sre-es-edge-label">Edge</span>
+        <span class="sre-es-pips">
+          {{#each edge.pips}}
+          <button type="button" class="sre-es-pip {{#if on}}on{{/if}} {{#unless available}}cap{{/unless}}"
+                  data-action="edge" data-value="{{index}}" {{#unless available}}disabled{{/unless}}></button>
+          {{/each}}
+        </span>
+        <strong>{{edge.value}}/{{edge.max}}</strong>
+        <button type="button" class="sre-es-mini" data-action="edge" data-delta="1" {{#unless edge.canGain}}disabled{{/unless}}>+1</button>
+        <button type="button" class="sre-es-mini" data-action="edge" data-delta="-1" {{#unless edge.canSpend}}disabled{{/unless}}>−1</button>
+      </div>
+    </div>
+    <div class="sre-es-chips">
+      {{#each chips}}
+      <div class="sre-es-chip {{#if kind}}sre-es-chip-{{kind}}{{/if}}" data-chip="{{id}}">
+        <span>{{label}}</span><strong>{{value}}</strong>{{#if extra}} <small>{{extra}}</small>{{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </header>
+
+  <nav class="sre-es-tabs">
+    {{#each tabs}}
+    <button type="button" class="sre-es-tabbtn {{#if active}}active{{/if}}" data-action="showSheetTab" data-tab="{{id}}">{{label}}</button>
+    {{/each}}
+  </nav>
+
+  <section class="sre-sheet-body">
+    {{#if active.main}}
+    {{#if warnings.length}}
+    <div class="sre-es-warnings">
+      {{#each warnings}}<span class="sre-es-warning sre-es-warning-{{level}}">{{text}}</span>{{/each}}
+    </div>
+    {{/if}}
+
+    <div class="sre-es-grid">
+      <div class="sre-es-col">
+        {{!-- Condition monitors --}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Sheet.Monitors"}} <span>{{localize "SRE.Sheet.MonitorsHint"}}</span></h3>
+          {{#each monitors}}
+          <div class="sre-es-monitor" data-monitor="{{id}}">
+            <span class="sre-es-label">{{label}}</span>
+            <span class="sre-es-boxes sre-es-boxes-{{id}}">
+              {{#each boxes}}
+              <button type="button" class="sre-es-box {{#if filled}}filled{{/if}}" data-action="monitor" data-monitor="{{../id}}" data-index="{{index}}"
+                      {{#unless ../../editable}}disabled{{/unless}}>{{label}}</button>
+              {{/each}}
+            </span>
+            <span class="sre-es-count">{{dmg}} / {{max}}</span>
+          </div>
+          {{/each}}
+          <div class="sre-es-wound {{#if wound}}active{{/if}}">
+            <span>{{localize "SRE.Sheet.WoundPenalty"}}</span><strong>{{#if wound}}−{{wound}}{{else}}0{{/if}}</strong>
+          </div>
+        </div>
+
+        {{!-- Initiative --}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Sheet.InitiativeTitle"}}</h3>
+          {{#each initiative}}
+          <div class="sre-es-row">
+            <span class="sre-es-grow">{{label}}</span>
+            <span class="sre-es-dim">{{base}} + {{dice}}{{localize "SRE.Sheet.D6"}}</span>
+            <button type="button" class="sre-es-btn {{#if @first}}solid{{/if}}" data-action="rollInitiative"
+                    data-id="{{id}}" data-base="{{base}}" data-dice="{{dice}}" data-label="{{label}}">{{localize "SRE.Sheet.Roll"}}</button>
+          </div>
+          {{/each}}
+          <div class="sre-es-row sre-es-actions">
+            <span>{{localize "SRE.Sheet.Actions"}}</span>
+            <span class="sre-es-act major">{{actions.major}} {{localize "SRE.Sheet.Major"}}</span>
+            <span class="sre-es-act">{{actions.minor}} {{localize "SRE.Sheet.Minor"}}</span>
+            <span class="sre-es-dim sre-es-right">{{localize "SRE.Sheet.ActionsHint"}}</span>
+          </div>
+        </div>
+
+        {{!-- Quick rolls --}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Sheet.QuickTitle"}}</h3>
+          <div class="sre-es-quick">
+            {{#each quick}}
+            <button type="button" class="sre-es-qb" data-action="rollQuick" data-kind="{{roll.kind}}" data-id="{{roll.id}}"
+                    data-pool="{{raw}}" data-label="{{label}}">
+              {{label}} <span class="sre-es-pool">{{value}}{{#if minus}}<small>−{{minus}}</small>{{/if}}</span>
+            </button>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      <div class="sre-es-col">
+        {{!-- Defense --}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Sheet.DefenseTitle"}}</h3>
+          <div class="sre-es-tiles">
+            <div class="sre-es-tile"><span>{{localize "SRE.Sheet.DefenseRating"}}</span><strong>{{defense.rating}}</strong><small>{{localize "SRE.Sheet.DefenseRatingHint"}}</small></div>
+            <button type="button" class="sre-es-tile" data-action="rollQuick" data-kind="defense" data-id="physical" data-pool="{{defense.test.raw}}" data-label="{{defense.test.label}}">
+              <span>{{defense.test.label}}</span><strong>{{defense.test.value}}</strong><small>{{localize "SRE.Sheet.DefenseTestHint"}}</small>
+            </button>
+            <button type="button" class="sre-es-tile" data-action="rollQuick" data-kind="soak" data-id="damage_physical" data-pool="{{defense.soak.raw}}" data-label="{{defense.soak.label}}">
+              <span>{{defense.soak.label}}</span><strong>{{defense.soak.value}}</strong><small>{{localize "SRE.Sheet.SoakHint"}}</small>
+            </button>
+          </div>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.Movement"}}</span>
+            <span class="sre-es-dim">{{defense.walk}} m / {{localize "SRE.Sheet.Sprint"}} {{defense.sprint}} m (+{{defense.perHit}} m {{localize "SRE.Sheet.PerHit"}})</span></div>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.LiftCarry"}}</span><span class="sre-es-dim">{{defense.liftCarry}}</span></div>
+        </div>
+
+        {{!-- In hand: weapons and spells --}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Sheet.InHand"}}</h3>
+          {{#each weapons}}
+          <div class="sre-es-weapon" data-item-id="{{id}}">
+            <div class="sre-es-row">
+              <a class="sre-es-grow sre-es-itemname" data-action="openItem">{{name}}</a>
+              <span class="sre-es-pool">{{pool.value}}{{#if pool.minus}}<small>−{{pool.minus}}</small>{{/if}}</span>
+              <button type="button" class="sre-es-btn solid" data-action="rollWeapon">{{localize "SRE.Sheet.Attack"}}</button>
+            </div>
+            <div class="sre-es-stats">
+              <span>DV <b>{{dv}}</b></span>
+              {{#if modes}}<span>{{localize "SRE.Sheet.Modes"}} <b>{{modes}}</b></span>{{/if}}
+              <span>WA <b>{{ar}}</b></span>
+              {{#if ammo}}
+              <span class="sre-es-ammo">{{localize "SRE.Sheet.Ammo"}} <b>{{ammo.count}}/{{ammo.cap}}</b>
+                <span class="sre-es-rounds">{{#each ammo.rounds}}<i class="{{#unless this}}empty{{/unless}}"></i>{{/each}}</span>
+              </span>
+              <button type="button" class="sre-es-btn" data-action="reload">{{localize "SRE.Sheet.Reload"}}</button>
+              {{/if}}
+            </div>
+          </div>
+          {{/each}}
+          {{#each spells}}
+          <div class="sre-es-weapon" data-item-id="{{id}}">
+            <div class="sre-es-row">
+              <a class="sre-es-grow sre-es-itemname" data-action="openItem">{{name}}</a>
+              <span class="sre-es-pool">{{pool.value}}{{#if pool.minus}}<small>−{{pool.minus}}</small>{{/if}}</span>
+              <button type="button" class="sre-es-btn solid" data-action="rollSpell">{{localize "SRE.Sheet.Cast"}}</button>
+            </div>
+            <div class="sre-es-stats">
+              {{#if category}}<span>{{category}}</span>{{/if}}
+              <span>{{localize "SRE.Sheet.Drain"}} <b>{{drain}}</b> ({{localize "SRE.Sheet.DrainResist"}} {{drainPool}})</span>
+            </div>
+          </div>
+          {{/each}}
+          {{#unless weapons.length}}{{#unless spells.length}}<p class="sre-es-empty">{{localize "SRE.Sheet.NothingInHand"}}</p>{{/unless}}{{/unless}}
+        </div>
+      </div>
+    </div>
+    {{else}}
+    <div class="sre-es-soon">
+      <p>{{localize "SRE.Sheet.Soon"}}</p>
+      <button type="button" class="sre-es-btn solid" data-action="systemSheet">{{localize "SRE.Sheet.OpenSystemSheet"}}</button>
+    </div>
+    {{/if}}
+  </section>
+</div>

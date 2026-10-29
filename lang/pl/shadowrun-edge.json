@@ -411,6 +411,77 @@
       "light": "Jasny",
       "off": "Wyłączony",
       "player": "Wybór gracza"
+    },
+    "Sheet": {
+      "Label": "Karta Edge (Shadowrun Edge)",
+      "Tab": {
+        "main": "Główna",
+        "skills": "Atrybuty i umiejętności",
+        "combat": "Walka",
+        "magic": "Magia",
+        "matrix": "Matryca",
+        "gear": "Wszczepy i ekwipunek",
+        "social": "Kontakty i notatki"
+      },
+      "Monitor": {
+        "physical": "Fizyczny",
+        "stun": "Ogłuszenie",
+        "overflow": "Nadmiar"
+      },
+      "Initiative": {
+        "physical": "Fizyczna",
+        "astral": "Astralna",
+        "matrix": "Matryca"
+      },
+      "Quick": {
+        "defense": "Obrona",
+        "soak": "Wytrzymanie",
+        "perception": "Percepcja",
+        "composure": "Opanowanie",
+        "judge_intentions": "Ocena intencji",
+        "memory": "Pamięć"
+      },
+      "Warn": {
+        "wound": "Kara za rany −{wound} jest wliczona w pokazane pule (poza wytrzymaniem); okno rzutu odejmie ją samo.",
+        "essence": "Esencja poniżej 1 — kolejny wszczep może zabić postać.",
+        "edgeCap": "Edge powyżej 7 — więcej niż pozwalają zasady."
+      },
+      "Karma": "Karma",
+      "Nuyen": "Nuyeny",
+      "Reputation": "Reputacja",
+      "Heat": "Heat",
+      "Essence": "Esencja",
+      "Monitors": "Monitory stanu",
+      "MonitorsHint": "kliknij kratkę",
+      "WoundPenalty": "Kara za rany (−1 za każde 3 kratki)",
+      "InitiativeTitle": "Inicjatywa",
+      "D6": "k6",
+      "Roll": "Rzuć",
+      "Actions": "Akcje w rundzie:",
+      "Major": "większa",
+      "Minor": "mniejsze",
+      "ActionsHint": "1 + 1 mniejsza za każdą kość inicjatywy",
+      "QuickTitle": "Szybkie rzuty",
+      "DefenseTitle": "Obrona",
+      "DefenseRating": "Defense Rating",
+      "DefenseRatingHint": "BUD + pancerz",
+      "DefenseTestHint": "REA + INT",
+      "SoakHint": "BUD, bez kary za rany",
+      "Movement": "Ruch",
+      "Sprint": "sprint",
+      "PerHit": "za sukces",
+      "LiftCarry": "Dźwiganie (BUD + WOL)",
+      "InHand": "W ręku",
+      "Attack": "Atak",
+      "Modes": "Tryby",
+      "Ammo": "Amunicja",
+      "Reload": "Przeładuj",
+      "Cast": "Rzuć czar",
+      "Drain": "Drenaż",
+      "DrainResist": "odp.",
+      "NothingInHand": "Brak broni i czarów — dodaj je z katalogu albo na karcie systemu.",
+      "Soon": "Ta zakładka powstaje w kolejnych wersjach modułu. Do tego czasu edytuj te dane na karcie systemu — obie karty korzystają z tych samych danych.",
+      "OpenSystemSheet": "Otwórz kartę systemu"
     }
   }
 }
