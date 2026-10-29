@@ -8,6 +8,7 @@ import {
 } from "./context.mjs";
 import * as rolls from "./system-rolls.mjs";
 import { METATYPES, SKILLS } from "../chargen/rules.mjs";
+import { giveItem, deleteItem } from "../give.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key) => game.i18n.localize(key);
@@ -96,6 +97,17 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       tabs: TABS.filter((id) => id !== "magic" || awakened).map((id) => ({ id, label: L(`SRE.Sheet.Tab.${id}`), active: id === tab })),
       active: Object.fromEntries(TABS.map((id) => [id, id === this.sheetTab])),
     };
+  }
+
+  /** Right-click on any item row: open, give to another character, delete. */
+  _onFirstRender(context, options) {
+    super._onFirstRender?.(context, options);
+    const item = (li) => this.document.items.get(li.closest("[data-item-id]")?.dataset.itemId);
+    new foundry.applications.ux.ContextMenu.implementation(this.element, "[data-item-id]", [
+      { name: "SRE.Give.Open", icon: '<i class="fas fa-up-right-from-square"></i>', callback: (li) => item(li)?.sheet.render(true) },
+      { name: "SRE.Give.Button", icon: '<i class="fas fa-hand-holding"></i>', condition: (li) => this.isEditable && !!item(li) && item(li).type !== "skill", callback: (li) => giveItem(item(li)) },
+      { name: "SRE.Give.Delete", icon: '<i class="fas fa-trash"></i>', condition: () => this.isEditable, callback: (li) => deleteItem(item(li)) },
+    ], { jQuery: false, fixed: true });
   }
 
   /** Item fields (ammo type…) live on embedded items, outside the actor form: save them directly. */
@@ -191,7 +203,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onDeleteItem(event, target) {
     const item = this.document.items.get(target.closest("[data-item-id]")?.dataset.itemId);
-    if (item) return item.deleteDialog?.() ?? item.delete();
+    if (item) return deleteItem(item);
   }
 
   static async #onToggleArmor(event, target) {

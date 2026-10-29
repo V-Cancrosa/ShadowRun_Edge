@@ -756,3 +756,92 @@ body.sre-theme-light .sre-sheet {
 
 .sre-es-editor prose-mirror { display: block; min-height: 140px; margin: 10px; padding: 6px 10px; border: 1px solid var(--sre-line); border-radius: 4px; background: var(--sre-input); color: var(--sre-text); }
 .sre-es-editor prose-mirror .editor-content { min-height: 120px; }
+
+/* ───── Edge item sheet (scripts/sheet/edge-item-sheet.mjs) ───── */
+.sre-it-head { flex: 0 0 auto; display: flex; gap: 12px; padding: 12px 14px; background: var(--sre-head); border-bottom: 1px solid var(--sre-accent-line); }
+
+.sre-it-icon {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border: 1px solid var(--sre-accent-line);
+  background: linear-gradient(135deg, rgba(224, 64, 154, 0.25), rgba(63, 212, 232, 0.12));
+  clip-path: polygon(0 0, 86% 0, 100% 14%, 100% 100%, 14% 100%, 0 86%);
+  cursor: pointer;
+}
+
+.sre-it .sre-es-name { font-size: 20px; }
+.sre-it-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.sre-it-chip { padding: 3px 8px; font-size: 12px; border: 1px solid var(--sre-line); border-radius: 5px; background: var(--sre-panel); }
+.sre-it-chip span { margin-right: 4px; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sre-text-dim); }
+
+.sre-it-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; padding: 10px; }
+
+.sre-it-f {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sre-text-dim);
+}
+
+.sre-it-f.sre-it-wide { grid-column: span 2; }
+.sre-es .sre-it-f :is(input[type="number"], input[type="text"], select) { width: 100%; height: 26px; font-size: 13px; letter-spacing: 0; text-transform: none; text-align: left; font-weight: normal; padding: 0 6px; background: var(--sre-input); color: var(--sre-text); border: 1px solid var(--sre-line); border-radius: 4px; }
+.sre-it-f .sre-es-toggle, .sre-it-f .sre-es-btn { align-self: flex-start; }
+.sre-it-inline { display: inline-flex; gap: 6px; align-items: center; }
+
+.sre-it-modes { display: inline-flex; gap: 4px; }
+
+.sre-es .sre-it-modes button {
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 3px 10px;
+  font-size: 12px;
+  border: 1px solid var(--sre-line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--sre-text-dim);
+  box-shadow: none;
+}
+
+.sre-es .sre-it-modes button.on { border-color: var(--sre-accent); color: var(--sre-accent); background: var(--sre-accent-soft); }
+
+.sre-es-panel h3.sre-it-sub { border-top: 1px solid var(--sre-line); }
+.sre-it-ar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 10px; }
+.sre-it-ar label { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; text-transform: uppercase; color: var(--sre-text-dim); }
+.sre-es .sre-it-ar input[type="number"] { width: 100%; height: 28px; font-size: 14px; }
+
+.sre-it-grades { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; }
+
+.sre-es .sre-it-grade {
+  flex: 1 1 100px;
+  height: auto;
+  padding: 6px 8px;
+  text-align: center;
+  border: 1px solid var(--sre-line);
+  border-radius: 5px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.sre-es .sre-it-grade b { display: block; }
+.sre-es .sre-it-grade small { font-size: 11px; color: var(--sre-text-dim); }
+.sre-es .sre-it-grade.active { border-color: var(--sre-accent); background: var(--sre-accent-soft); }
+.sre-es .sre-it-grade:not(:disabled):hover { border-color: var(--sre-accent-line); }
+
+.sre-it-slot { width: 90px; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sre-text-dim); }
+.sre-it-drop { margin: 10px; padding: 14px; text-align: center; font-size: 12px; color: var(--sre-text-dim); border: 1px dashed var(--sre-accent-line); border-radius: 6px; }
+.sre-it-effect.off { opacity: 0.55; }
+.sre-it-changes { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; color: var(--sre-text-dim); }
+.sre-it-changes b { color: var(--sre-cyan); }
+
+/* Give dialog */
+.sre-give { display: flex; flex-direction: column; gap: 8px; }
+.sre-give label { display: flex; flex-direction: column; gap: 4px; }
+.sre-give-msg { margin: 0; }
+.sre-es .sre-it-f :is(input, select), .sre-es .sre-it-ar input { box-sizing: border-box; min-width: 0; }
+.sre-it-inline .sre-es-pool { font-size: 14px; line-height: 1.5; }

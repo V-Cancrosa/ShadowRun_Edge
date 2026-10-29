@@ -1,0 +1,237 @@
+<div class="sre-es sre-it" data-kind="{{kind}}">
+  <header class="sre-it-head">
+    <img class="sre-it-icon" src="{{img}}" alt="" data-edit="img" data-action="editImage">
+    <div class="sre-es-identity">
+      <input class="sre-es-name" type="text" name="name" value="{{name}}" {{#unless editable}}disabled{{/unless}}>
+      <div class="sre-it-chips">
+        {{#each chips}}<span class="sre-it-chip"><span>{{label}}</span>{{value}}</span>{{/each}}
+      </div>
+    </div>
+  </header>
+
+  <nav class="sre-es-tabs">
+    {{#each tabs}}<button type="button" class="sre-es-tabbtn {{#if active}}active{{/if}}" data-action="showItemTab" data-tab="{{id}}">{{label}}</button>{{/each}}
+  </nav>
+
+  <section class="sre-sheet-body">
+    {{#if active.stats}}
+    {{#if isGear}}
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.ItemSheet.Basics"}}</h3>
+      <div class="sre-it-grid">
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.Type"}}
+          <select name="system.type" {{#unless editable}}disabled{{/unless}}>{{#each gearTypes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.Subtype"}}
+          <select name="system.subtype" {{#unless editable}}disabled{{/unless}}>{{#each gearSubtypes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Cost"}} (¥)<input type="number" name="system.price" value="{{src.price}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.Avail"}}<input type="text" name="system.availDef" value="{{src.availDef}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Rating"}}<input type="number" name="system.rating" value="{{src.rating}}" {{#unless editable}}disabled{{/unless}}></label>
+        <div class="sre-it-f">{{localize "SRE.ItemSheet.NeedsRating"}}<button type="button" class="sre-es-toggle {{#if src.needsRating}}on{{/if}}" data-action="toggleField" data-field="system.needsRating" {{#unless editable}}disabled{{/unless}}></button></div>
+        <div class="sre-it-f">{{localize "SRE.ItemSheet.Countable"}}<button type="button" class="sre-es-toggle {{#if src.countable}}on{{/if}}" data-action="toggleField" data-field="system.countable" {{#unless editable}}disabled{{/unless}}></button></div>
+        {{#if src.countable}}<label class="sre-it-f">{{localize "SRE.Sheet.Count"}}<input type="number" name="system.count" value="{{src.count}}" min="0" {{#unless editable}}disabled{{/unless}}></label>{{/if}}
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if (or (eq kind "ranged") (eq kind "melee"))}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.ItemSheet.Attack"}} {{#if dv}}<span>DV {{dv}}</span>{{/if}}</h3>
+      <div class="sre-it-grid">
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.Damage"}}<input type="number" name="system.dmg" value="{{src.dmg}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.DamageType"}}
+          <select name="system.stun" {{#unless editable}}disabled{{/unless}}>{{#each stunOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Skill"}}
+          <select name="system.skill" {{#unless editable}}disabled{{/unless}}>{{#each skillOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.Specialization"}}
+          <select name="system.skillSpec" {{#unless editable}}disabled{{/unless}}>{{#each specOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        {{#if ranged}}
+        <div class="sre-it-f sre-it-wide">{{localize "SRE.Sheet.Modes"}}
+          <span class="sre-it-modes">{{#each modes}}<button type="button" class="{{#if on}}on{{/if}}" data-action="toggleMode" data-mode="{{id}}" {{#unless ../editable}}disabled{{/unless}}>{{label}}</button>{{/each}}</span></div>
+        {{/if}}
+        <div class="sre-it-f">{{localize "SRE.ItemSheet.WildDie"}}<button type="button" class="sre-es-toggle {{#if src.wild}}on{{/if}}" data-action="toggleField" data-field="system.wild" {{#unless editable}}disabled{{/unless}}></button></div>
+        {{#if onActor}}<div class="sre-it-f">{{localize "SRE.ItemSheet.PoolOnActor"}}<span class="sre-it-inline"><span class="sre-es-pool">{{pool}}</span>
+          <button type="button" class="sre-es-btn solid" data-action="rollItem">{{localize "SRE.Sheet.Attack"}}</button></span></div>{{/if}}
+      </div>
+      <h3 class="sre-it-sub">{{localize "SRE.ItemSheet.AttackRating"}}</h3>
+      <div class="sre-it-ar">
+        {{#each ar}}<label>{{label}}<input type="number" name="sre.ar.{{index}}" value="{{value}}" min="0" {{#unless ../editable}}disabled{{/unless}}></label>{{/each}}
+      </div>
+    </div>
+    {{#if ranged}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.Ammo"}}</h3>
+      <div class="sre-it-grid">
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.Magazine"}}<input type="number" name="system.ammocap" value="{{src.ammocap}}" min="0" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.Rounds"}}<input type="number" name="system.ammocount" value="{{src.ammocount}}" min="0" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Type"}}
+          <select name="system.ammoLoaded" {{#unless editable}}disabled{{/unless}}>{{#each ammoTypes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <div class="sre-it-f">&nbsp;<button type="button" class="sre-es-btn solid" data-action="reloadItem" {{#unless editable}}disabled{{/unless}}>{{localize "SRE.Sheet.Reload"}}</button></div>
+      </div>
+    </div>
+    {{/if}}
+    {{/if}}
+
+    {{#if (eq kind "armor")}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.Armor"}}</h3>
+      <div class="sre-it-grid">
+        <label class="sre-it-f">{{localize "SRE.Sheet.Rating"}} (DR)<input type="number" name="system.defense" value="{{src.defense}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Social"}}<input type="number" name="system.social" value="{{src.social}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Capacity"}}<input type="number" name="system.capacity" value="{{src.capacity}}" {{#unless editable}}disabled{{/unless}}></label>
+        <div class="sre-it-f">{{localize "SRE.Sheet.Worn"}}<button type="button" class="sre-es-toggle {{#if src.usedForPool}}on{{/if}}" data-action="toggleField" data-field="system.usedForPool" {{#unless editable}}disabled{{/unless}}></button></div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if (eq kind "augment")}}
+    {{#if grades}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.Grade"}} <span>{{localize "SRE.ItemSheet.GradeHint"}}</span></h3>
+      <div class="sre-it-grades">
+        {{#each grades}}
+        <button type="button" class="sre-it-grade {{#if active}}active{{/if}}" data-action="setGrade" data-grade="{{id}}" {{#unless ../editable}}disabled{{/unless}}>
+          <b>{{label}}</b><small>{{essence}} · {{price}}¥ · {{avail}}</small></button>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.Augmentations"}}</h3>
+      <div class="sre-it-grid">
+        <label class="sre-it-f">{{localize "SRE.Sheet.Essence"}}<input type="number" step="0.01" name="system.essence" value="{{src.essence}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Capacity"}}<input type="number" name="system.capacity" value="{{src.capacity}}" {{#unless editable}}disabled{{/unless}}></label>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if (eq kind "device")}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.ItemSheet.Device"}}</h3>
+      <div class="sre-it-grid">
+        <label class="sre-it-f">{{localize "SRE.ItemSheet.DeviceRating"}}<input type="number" name="system.devRating" value="{{src.devRating}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Asdf.a"}}<input type="number" name="system.a" value="{{src.a}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Asdf.s"}}<input type="number" name="system.s" value="{{src.s}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Asdf.d"}}<input type="number" name="system.d" value="{{src.d}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Asdf.f"}}<input type="number" name="system.f" value="{{src.f}}" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Slots"}}<input type="number" name="system.progSlots" value="{{src.progSlots}}" {{#unless editable}}disabled{{/unless}}></label>
+        <div class="sre-it-f">{{localize "SRE.Sheet.Active"}}<button type="button" class="sre-es-toggle {{#if src.usedForPool}}on{{/if}}" data-action="toggleField" data-field="system.usedForPool" {{#unless editable}}disabled{{/unless}}></button></div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if (eq kind "spell")}}
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.ItemSheet.Spell"}}</h3>
+      <div class="sre-it-grid">
+        <label class="sre-it-f">{{localize "SRE.Sheet.Category"}}<select name="system.category" {{#unless editable}}disabled{{/unless}}>{{#each categoryOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Type"}}<select name="system.type" {{#unless editable}}disabled{{/unless}}>{{#each typeOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Range"}}<select name="system.range" {{#unless editable}}disabled{{/unless}}>{{#each rangeOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Duration"}}<select name="system.duration" {{#unless editable}}disabled{{/unless}}>{{#each durationOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        <label class="sre-it-f">{{localize "SRE.Sheet.Drain"}}<input type="number" name="system.drain" value="{{src.drain}}" {{#unless editable}}disabled{{/unless}}></label>
+        {{#if damageOptions.length}}<label class="sre-it-f">{{localize "SRE.ItemSheet.Damage"}}<select name="system.damage" {{#unless editable}}disabled{{/unless}}>{{#each damageOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>{{/if}}
+        <div class="sre-it-f">{{localize "SRE.ItemSheet.Opposed"}}<button type="button" class="sre-es-toggle {{#if src.isOpposed}}on{{/if}}" data-action="toggleField" data-field="system.isOpposed" {{#unless editable}}disabled{{/unless}}></button></div>
+        <div class="sre-it-f">{{localize "SRE.ItemSheet.Alchemic"}}<button type="button" class="sre-es-toggle {{#if src.alchemic}}on{{/if}}" data-action="toggleField" data-field="system.alchemic" {{#unless editable}}disabled{{/unless}}></button></div>
+      </div>
+    </div>
+    {{#if onActor}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.ItemSheet.OnActor"}}</h3>
+      <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.ItemSheet.CastPool"}}</span><span class="sre-es-pool">{{castPool}}</span>
+        <button type="button" class="sre-es-btn solid" data-action="rollItem">{{localize "SRE.Sheet.Cast"}}</button></div>
+      <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.DrainResistance"}}</span><span class="sre-es-pool">{{drainPool}}</span></div>
+    </div>
+    {{/if}}
+    {{/if}}
+
+    {{#if (eq kind "adeptpower")}}
+    <div class="sre-es-panel"><h3>{{localize "SRE.ItemSheet.AdeptPower"}}</h3><div class="sre-it-grid">
+      <label class="sre-it-f">{{localize "SRE.Sheet.PPCost"}}<input type="number" step="0.25" name="system.cost" value="{{src.cost}}" {{#unless editable}}disabled{{/unless}}></label>
+      <div class="sre-it-f">{{localize "SRE.ItemSheet.HasLevel"}}<button type="button" class="sre-es-toggle {{#if src.hasLevel}}on{{/if}}" data-action="toggleField" data-field="system.hasLevel" {{#unless editable}}disabled{{/unless}}></button></div>
+      {{#if src.hasLevel}}<label class="sre-it-f">{{localize "SRE.Sheet.Level"}}<input type="number" name="system.level" value="{{src.level}}" min="0" {{#unless editable}}disabled{{/unless}}></label>{{/if}}
+      <label class="sre-it-f">{{localize "SRE.ItemSheet.Activation"}}<select name="system.activation" {{#unless editable}}disabled{{/unless}}>{{#each activationOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+      <label class="sre-it-f sre-it-wide">{{localize "SRE.ItemSheet.Choice"}}<input type="text" name="system.choice" value="{{src.choice}}" {{#unless editable}}disabled{{/unless}}></label>
+    </div></div>
+    {{/if}}
+
+    {{#if (eq kind "quality")}}
+    <div class="sre-es-panel"><h3>{{localize "SRE.ItemSheet.Quality"}}</h3><div class="sre-it-grid">
+      <label class="sre-it-f">{{localize "SRE.Sheet.Category"}}<select name="system.category" {{#unless editable}}disabled{{/unless}}>{{#each categoryOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+      <div class="sre-it-f">{{localize "SRE.ItemSheet.HasLevel"}}<button type="button" class="sre-es-toggle {{#if src.level}}on{{/if}}" data-action="toggleField" data-field="system.level" {{#unless editable}}disabled{{/unless}}></button></div>
+      {{#if src.level}}<label class="sre-it-f">{{localize "SRE.Sheet.Level"}}<input type="number" name="system.value" value="{{src.value}}" min="0" {{#unless editable}}disabled{{/unless}}></label>{{/if}}
+      <label class="sre-it-f sre-it-wide">{{localize "SRE.ItemSheet.Explain"}}<input type="text" name="system.explain" value="{{src.explain}}" {{#unless editable}}disabled{{/unless}}></label>
+    </div></div>
+    {{/if}}
+
+    {{#if (eq kind "focus")}}<div class="sre-es-panel"><h3>{{localize "SRE.Sheet.Focus"}}</h3><div class="sre-it-grid">
+      <label class="sre-it-f">{{localize "SRE.Sheet.Force"}}<input type="number" name="system.rating" value="{{src.rating}}" min="1" {{#unless editable}}disabled{{/unless}}></label></div></div>{{/if}}
+
+    {{#if (eq kind "ritual")}}<div class="sre-es-panel"><h3>{{localize "SRE.Sheet.Ritual"}}</h3><div class="sre-it-grid">
+      <label class="sre-it-f">{{localize "SRE.Sheet.Threshold"}}<input type="number" name="system.threshold" value="{{src.threshold}}" min="0" {{#unless editable}}disabled{{/unless}}></label>
+      {{#if onActor}}<div class="sre-it-f">&nbsp;<button type="button" class="sre-es-btn solid" data-action="rollItem">{{localize "SRE.Sheet.Ritual"}}</button></div>{{/if}}</div></div>{{/if}}
+
+    {{#if (eq kind "complexform")}}<div class="sre-es-panel"><h3>{{localize "SRE.ItemSheet.ComplexForm"}}</h3><div class="sre-it-grid">
+      <label class="sre-it-f">{{localize "SRE.Sheet.Fading"}}<input type="number" name="system.fading" value="{{src.fading}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label class="sre-it-f">{{localize "SRE.Sheet.Duration"}}<select name="system.duration" {{#unless editable}}disabled{{/unless}}>{{#each durationOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+      {{#if onActor}}<div class="sre-it-f">&nbsp;<button type="button" class="sre-es-btn solid" data-action="rollItem">{{localize "SRE.Sheet.Thread"}}</button></div>{{/if}}</div></div>{{/if}}
+
+    {{#if (eq kind "contact")}}<div class="sre-es-panel"><h3>{{localize "SRE.ItemSheet.Contact"}}</h3><div class="sre-it-grid">
+      <label class="sre-it-f">{{localize "SRE.Sheet.Connection"}}<input type="number" name="system.rating" value="{{src.rating}}" min="1" max="12" {{#unless editable}}disabled{{/unless}}></label>
+      <label class="sre-it-f">{{localize "SRE.Sheet.Loyalty"}}<input type="number" name="system.loyalty" value="{{src.loyalty}}" min="1" max="6" {{#unless editable}}disabled{{/unless}}></label>
+      <label class="sre-it-f">{{localize "SRE.Sheet.Favors"}}<input type="number" name="system.favors" value="{{src.favors}}" min="0" {{#unless editable}}disabled{{/unless}}></label>
+      <label class="sre-it-f">{{localize "SRE.Sheet.Type"}}<input type="text" name="system.type" value="{{src.type}}" {{#unless editable}}disabled{{/unless}}></label></div></div>{{/if}}
+
+    {{#if (eq kind "lifestyle")}}<div class="sre-es-panel"><h3>{{localize "SRE.ItemSheet.Lifestyle"}}</h3><div class="sre-it-grid">
+      <label class="sre-it-f">{{localize "SRE.Sheet.Type"}}<select name="system.type" {{#unless editable}}disabled{{/unless}}>{{#each lifestyleOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+      <label class="sre-it-f">{{localize "SRE.Sheet.Cost"}} (¥)<input type="number" name="system.cost" value="{{src.cost}}" min="0" {{#unless editable}}disabled{{/unless}}></label>
+      <label class="sre-it-f">{{localize "SRE.Sheet.Paid"}}<input type="number" name="system.paid" value="{{src.paid}}" min="0" {{#unless editable}}disabled{{/unless}}></label></div></div>{{/if}}
+
+    {{#if (eq kind "sin")}}<div class="sre-es-panel"><h3>{{localize "SRE.ItemSheet.Sin"}}</h3><div class="sre-it-grid">
+      <label class="sre-it-f sre-it-wide">{{localize "SRE.Sheet.Quality"}}<select name="system.quality" {{#unless editable}}disabled{{/unless}}>{{#each sinOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label></div></div>{{/if}}
+
+    {{#if (eq kind "skill")}}<div class="sre-es-panel"><h3>{{localize "SRE.ItemSheet.KnowledgeSkill"}}</h3><div class="sre-es-row sre-es-dim">{{localize "SRE.Sheet.KnowledgeHint"}}</div></div>{{/if}}
+
+    {{#if (eq kind "mod")}}<div class="sre-es-panel"><h3>{{localize "SRE.ItemSheet.Mod"}}</h3><div class="sre-es-row sre-es-dim">{{localize "SRE.ItemSheet.ModHint"}}</div></div>{{/if}}
+
+    {{#unless known}}
+    <div class="sre-es-soon"><p>{{localize "SRE.ItemSheet.Unknown"}}</p>
+      <button type="button" class="sre-es-btn solid" data-action="systemItemSheet">{{localize "SRE.ItemSheet.SystemSheet"}}</button></div>
+    {{/unless}}
+
+    {{else if active.mods}}
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.ItemSheet.InstalledMods"}}</h3>
+      {{#each mods}}
+      <div class="sre-es-row" data-mod-id="{{id}}">
+        <span class="sre-it-slot">{{#if slot}}{{slot}}{{else}}—{{/if}}</span>
+        <a class="sre-es-grow sre-es-itemname" data-action="openMod">{{name}}</a>
+        {{#if ../editable}}<button type="button" class="sre-es-mini" data-action="uninstallMod" data-tooltip="SRE.ItemSheet.Uninstall">✕</button>{{/if}}
+      </div>
+      {{/each}}
+      {{#each builtIn}}<div class="sre-es-row"><span class="sre-it-slot">{{localize "SRE.ItemSheet.BuiltIn"}}</span><span class="sre-es-grow">{{this}}</span></div>{{/each}}
+      {{#unless modCount}}<p class="sre-es-empty">{{localize "SRE.ItemSheet.NoMods"}}</p>{{/unless}}
+      {{#if editable}}<div class="sre-it-drop">{{#if onActor}}{{localize "SRE.ItemSheet.DropMod"}}{{else}}{{localize "SRE.ItemSheet.ModNeedsActor"}}{{/if}}</div>{{/if}}
+    </div>
+
+    {{else if active.description}}
+    <div class="sre-es-panel sre-es-editor">
+      <h3>{{localize "SRE.ItemSheet.Tab.description"}}</h3>
+      <prose-mirror name="system.description" value="{{description}}" toggled {{#unless editable}}disabled{{/unless}}>{{{descriptionHTML}}}</prose-mirror>
+    </div>
+
+    {{else if active.effects}}
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.ItemSheet.Tab.effects"}} {{#if editable}}<button type="button" class="sre-es-mini" data-action="createEffect">+ {{localize "SRE.Sheet.AddShort"}}</button>{{/if}}</h3>
+      {{#each effects}}
+      <div class="sre-es-row sre-it-effect {{#if disabled}}off{{/if}}" data-effect-id="{{id}}">
+        <a class="sre-es-grow sre-es-itemname" data-action="editEffect">{{name}}</a>
+        <span class="sre-it-changes">{{#each changes}}<span>{{label}} <b>{{value}}</b></span>{{/each}}</span>
+        {{#if ../editable}}
+        <button type="button" class="sre-es-toggle {{#unless disabled}}on{{/unless}}" data-action="toggleEffect"></button>
+        <button type="button" class="sre-es-mini" data-action="deleteEffect">✕</button>
+        {{/if}}
+      </div>
+      {{else}}<p class="sre-es-empty">{{localize "SRE.ItemSheet.NoEffects"}}</p>{{/each}}
+    </div>
+    {{/if}}
+  </section>
+</div>

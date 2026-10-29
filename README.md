@@ -13,6 +13,7 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
 - **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (siedem zakładek, od walki po kontakty).
+- **Karta Edge przedmiotu** i **przekazywanie przedmiotów** innym postaciom (z dodatkami), usuwanie przedmiotów.
 - **Wygląd „Edge”** kart postaci, czatu i okna rzutu (ciemny lub jasny, do wyłączenia).
 
 ## Katalog sprzętu
@@ -65,6 +66,8 @@ Kompendium jest zablokowane do edycji, a przy aktualizacji modułu zostaje nadpi
 twórz kreatorem w **Katalogu własnym (świat)**.
 
 ## Kreator postaci
+
+Od wersji 0.9.0 kreator ma wygląd Karty Edge (ten sam nagłówek, kafelki budżetów i zakładki).
 
 Przycisk **Kreator postaci** jest w zakładce *Aktorzy* (dla każdego, kto może tworzyć aktorów; makro:
 `game.modules.get("shadowrun-edge").api.openCharacterCreator()`). Prowadzi przez tworzenie postaci
@@ -135,6 +138,28 @@ SIN-y, style życia, Karma/Reputacja/Heat/nuyeny do edycji, opis (system 4.x) i 
 
 Pule pokazują już karę za rany (i za podtrzymywane czary); rzut i tak przechodzi przez okno rzutu systemu,
 które odejmuje je samo.
+
+## Karta Edge przedmiotu
+
+Dodatkowa karta dla wszystkich przedmiotów (*Konfiguruj kartę → Karta Edge (Shadowrun Edge)* w nagłówku przedmiotu;
+karta systemu zostaje domyślna, a przycisk *Karta systemu* otwiera ją w razie potrzeby).
+- nagłówek z typem i podtypem, oceną, ceną, dostępnością i źródłem (podręcznik i strona);
+- **Statystyki** zależne od rodzaju: broń (DV, rodzaj obrażeń, umiejętność i specjalizacja, tryby ognia, dzika kość,
+  WA dla 5 zasięgów, amunicja z przeładowaniem, pula na postaci i atak), pancerz, wszczepy (klasa z podglądem Esencji,
+  ceny i dostępności; Esencja, pojemność), urządzenia (ocena, A/S/D/F, programy), czary (z pulą rzucania i drenażu
+  na postaci), moce adepta, cechy, foki, rytuały, formy złożone, kontakty, style życia, SIN-y;
+- **Dodatki**: zamontowane mody z miejscem montażu, odmontowanie i montaż przez przeciągnięcie (zasady montażu
+  modułu sprawdzają miejsce i pojemność);
+- **Opis** w edytorze Foundry i **Efekty** (włączanie, edycja, usuwanie, dodawanie).
+
+## Przekazywanie i usuwanie przedmiotów
+
+- Na Karcie Edge postaci: **prawy przycisk** na dowolnym przedmiocie → *Otwórz*, *Przekaż*, *Usuń*.
+- W nagłówku karty przedmiotu (Karty Edge i karty systemu) są przyciski *Przekaż* i *Usuń*.
+- *Przekaż* pyta, której postaci gracza oddać przedmiot (przy rzeczach liczonych w sztukach — ile sztuk).
+  Zamontowane dodatki idą razem z bronią czy pancerzem. Jeśli gracz nie ma praw do postaci odbiorcy, przekazanie
+  wykonuje zalogowany MG (moduł sprawdza, że gracz jest właścicielem przedmiotu). Na czacie pojawia się informacja.
+- *Usuń* pyta o potwierdzenie i usuwa przedmiot razem z zamontowanymi w nim dodatkami.
 
 ## Wygląd „Edge”
 

@@ -7,6 +7,8 @@ import "./acquire.mjs";
 import "./mounts.mjs";
 import "./theme.mjs";
 import "./sheet/edge-sheet.mjs";
+import "./sheet/edge-item-sheet.mjs";
+import "./give.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";
 
