@@ -3,7 +3,10 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import Handlebars from "handlebars";
-import { buildSheetContext, buildSkillsContext, buildCombatContext, metatypeMax, monitorPenalty, attackRatingText } from "../scripts/sheet/context.mjs";
+import {
+  buildSheetContext, buildSkillsContext, buildCombatContext, buildMagicContext, buildMatrixContext, buildGearContext, buildSocialContext,
+  metatypeMax, monitorPenalty, attackRatingText, matrixActionPool, sustainedPenalty,
+} from "../scripts/sheet/context.mjs";
 import { METATYPES, SKILLS } from "../scripts/chargen/rules.mjs";
 
 const lang = JSON.parse(readFileSync(new URL("../lang/pl/shadowrun-edge.json", import.meta.url), "utf8"));
@@ -134,10 +137,63 @@ assert.ok(skHtml.includes('name="system.attributes.bod.base"') && skHtml.include
 assert.ok(skHtml.includes('<option value="spellcasting" selected>'));
 const cbHtml = page("combat", { combat: cb });
 assert.ok(cbHtml.includes("Pałka") && cbHtml.includes('data-item-field="system.ammoLoaded"') && cbHtml.includes("sre-es-toggle on"));
+// Magic tab.
+const mgActor = { ...cbActor, items: [...cbActor.items,
+  { id: "s2", name: "Zwiększenie refleksów", type: "spell", system: { duration: "sustained", isSustained: true, drain: 4 } },
+  { id: "r1", name: "Obserwator", type: "ritual", system: { threshold: 3 } },
+  { id: "p1", name: "Zwiększone refleksy", type: "adeptpower", system: { hasLevel: true, level: 2, cost: 1.5 } }] };
+assert.equal(sustainedPenalty(mgActor), 2, "−2 per sustained spell");
+const mg = buildMagicContext(mgActor, { L, config: { spell_duration: { sustained: "Podtrz." } } });
+assert.equal(mg.penalty, 3, "wound 1 + sustained 2");
+assert.equal(mg.spells.find((x) => x.id === "s2").canSustain, true);
+assert.equal(mg.spells[0].pool.value, 9, "sorcery 12 − 3");
+assert.equal(mg.ppUsed, 3, "1.5 PP × level 2");
+assert.equal(mg.rituals[0].threshold, 3);
+
+// Matrix tab.
+const action = { skill: "cracking", specialization: "hacking", attrib: "log" };
+assert.equal(matrixActionPool(action, { skills: { cracking: { pool: 7, points: 3, modifier: 0, specialization: "hacking" } }, attributes: { log: { pool: 5 } } }), 10);
+assert.equal(matrixActionPool(action, { skills: { cracking: { pool: 0, points: 0 } }, attributes: { log: { pool: 5 } } }), 0, "untrained cracking: no pool");
+const mxActor = { ...mgActor, system: { ...mgActor.system, overwatch: 12, persona: { used: { a: 4, s: 3, d: 2, f: 1 } } },
+  items: [...mgActor.items, { id: "d1", name: "Microdeck", type: "gear", system: { type: "ELECTRONICS", subtype: "CYBERDECK", a: 4, s: 3, devRating: 1, usedForPool: true, program: { armor: true } } }] };
+const mx = buildMatrixContext(mxActor, { L, config: { MATRIX_ACTIONS: { brute_force: action, change_icon: {} }, PROGRAMS: [{ id: "armor", type: 1 }, { id: "browse", type: 0 }] } });
+assert.equal(mx.overwatch.pct, 30);
+assert.equal(mx.devices[0].asdf[2].v, null, "missing D shows as —");
+assert.equal(mx.activeDeck.programs.find((x) => x.id === "armor").on, true);
+assert.deepEqual(mx.actions.map((a) => a.id), ["brute_force"], "actions without a skill are not listed");
+assert.equal(mx.persona[2].k, L("SRE.Sheet.Asdf.d"));
+
+// Gear tab.
+const grActor = { ...mxActor, items: [...mxActor.items,
+  { id: "c1", name: "Cyberoczy", type: "gear", flags: { "shadowrun-edge": { grade: { id: "alpha" } } }, system: { type: "CYBERWARE", rating: 2, essence: 0.16, capacity: 8 } },
+  { id: "g1", name: "Medkit", type: "gear", system: { type: "SURVIVAL", rating: 3, countable: true, count: 2 } }] };
+const gr = buildGearContext(grActor, { L, config: { GEAR_TYPES: { SURVIVAL: "Przetrwanie" } } });
+assert.equal(gr.augments[0].grade, "Alfa");
+assert.ok(!gr.groups.some((g) => g.type === "ARMOR" || g.type === "WEAPON_FIREARMS" || g.type === "CYBERWARE"), "weapons, armor and augments are not gear groups");
+assert.ok(gr.groups.some((g) => g.type === "ELECTRONICS"), "devices also listed under electronics");
+assert.equal(gr.groups.find((g) => g.type === "SURVIVAL").items[0].count, 2);
+
+// Contacts & notes tab.
+const soActor = { ...grActor, items: [...grActor.items, { id: "co1", name: "Mr Johnson", type: "contact", system: { rating: 3, loyalty: 2, favors: 1 } }],
+  _source: { system: { ...grActor._source.system, karma: 7, karma_total: 57, nuyen: 12450, notes: "<p>x</p>" } } };
+const so = buildSocialContext(soActor, { L });
+assert.equal(so.contacts[0].legwork, 6, "legwork pool = connection × 2");
+assert.equal(so.contacts[0].ratingDots.filter(Boolean).length, 3);
+assert.equal(so.hasDescription, false, "3.x actors have no description field");
+
+const mgHtml = page("magic", { magic: mg });
+assert.ok(mgHtml.includes('data-action="toggleSustain"') && mgHtml.includes("PP: 3"));
+const mxHtml = page("matrix", { matrix: mx });
+assert.ok(mxHtml.includes('data-matrix-id="brute_force"') && mxHtml.includes('data-program="armor"'));
+const grHtml = page("gear", { gear: gr });
+assert.ok(grHtml.includes("Cyberoczy") && grHtml.includes('data-action="count"'));
+const soHtml = page("social", { social: { ...so, notesHTML: "<p>x</p>" } });
+assert.ok(soHtml.includes('name="system.karma_total"') && soHtml.includes('<prose-mirror name="system.notes"'));
+
 // Only source fields may be named form fields: prepared values (pool, mod) must never be submitted back.
-for (const html of [skHtml, cbHtml]) {
+for (const html of [skHtml, cbHtml, mgHtml, mxHtml, grHtml, soHtml]) {
   for (const [, name] of html.matchAll(/name="(system\.[^"]+)"/g)) {
-    assert.match(name, /\.(base|max|points|specialization|expertise)$/, `form field ${name}`);
+    assert.match(name, /\.(base|max|points|specialization|expertise)$|^system\.(karma|karma_total|reputation|heat|nuyen|notes|description)$/, `form field ${name}`);
   }
 }
 

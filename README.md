@@ -12,8 +12,7 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
   broń, akcesoria, amunicja, materiały wybuchowe, pancerze i ich modyfikacje, elektronika, oprogramowanie,
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
-- **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (zakładki *Główna*, *Atrybuty
-  i umiejętności*, *Walka*).
+- **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (siedem zakładek, od walki po kontakty).
 - **Wygląd „Edge”** kart postaci, czatu i okna rzutu (ciemny lub jasny, do wyłączenia).
 
 ## Katalog sprzętu
@@ -120,8 +119,22 @@ Zakładka **Walka** (0.7.0):
 - pancerz z przełącznikiem *Założony* i Defense Rating;
 - obrona i odporności: obrona fizyczna/astralna, czary bezpośrednie/pośrednie/inne, toksyny, wytrzymanie.
 
-Pule pokazują już karę za rany; rzut i tak przechodzi przez okno rzutu systemu, które odejmuje ją samo.
-Pozostałe zakładki pojawią się w kolejnych wersjach — do tego czasu mają przycisk *Otwórz kartę systemu*.
+Zakładka **Magia** (0.8.0, tylko postacie przebudzone): Magia, tradycja, odporność na drenaż (rzut), WA i DR astralne;
+czary z kategorią, typem, zasięgiem, czasem, drenażem i przełącznikiem *Podtrzymany* (−2 kości za każdy
+podtrzymywany czar lub formę); rytuały, foki, metamagia i moce adepta z sumą PP.
+
+Zakładka **Matryca** (0.8.0): inicjatywa, WA/DR i percepcja matrycowa, Overwatch Score z paskiem do 40;
+urządzenia (komlink, cyberdeck, konsola) z A/S/D/F i przełącznikiem *Aktywne*; persona; programy aktywnego
+decku; akcje matrycowe z pulami (najczęstsze albo wszystkie); u technomanty formy złożone z zanikiem i echa.
+
+Zakładka **Wszczepy i ekwipunek** (0.8.0): pasek Esencji, wszczepy z klasą (alfa, beta…), oceną, Esencją
+i pojemnością; ekwipunek w kategoriach z licznikiem ilości; niezamontowane dodatki.
+
+Zakładka **Kontakty i notatki** (0.8.0): kontakty z Wpływami i Lojalnością oraz rzutem Legwork (Wpływy × 2),
+SIN-y, style życia, Karma/Reputacja/Heat/nuyeny do edycji, opis (system 4.x) i notatki w edytorze Foundry.
+
+Pule pokazują już karę za rany (i za podtrzymywane czary); rzut i tak przechodzi przez okno rzutu systemu,
+które odejmuje je samo.
 
 ## Wygląd „Edge”
 

@@ -67,6 +67,43 @@ export async function rollSpell(actor, item) {
   return actor.rollSpell(roll, false);
 }
 
+export async function rollRitual(actor, item) {
+  const { RitualRoll } = await types();
+  return actor.rollSpell(new RitualRoll(actor.system, item, item.id, item.system), true);
+}
+
+/** Threading a complex form: 3.x rollComplexForm, 4.x rollResonanceAbility. */
+export async function rollComplexForm(actor, item) {
+  const { ComplexFormRoll } = await types();
+  const roll = new ComplexFormRoll(actor.system, item, item.id, item.system);
+  return (actor.rollResonanceAbility ?? actor.rollComplexForm).call(actor, roll);
+}
+
+/** A matrix action from CONFIG.SR6.MATRIX_ACTIONS, as the system sheet's reference table does it. */
+export async function rollMatrixAction(actor, actionId) {
+  const { MatrixActionRoll } = await types();
+  const action = CONFIG.SR6.MATRIX_ACTIONS[actionId];
+  if (!action) return;
+  if (!isV4()) return actor.performMatrixAction(new MatrixActionRoll(actor.system, action));
+  const roll = new MatrixActionRoll(actor, action, { fromReferenceSection: true });
+  if (action.onMatrixActionRoll) await action.onMatrixActionRoll(roll);
+  if (!action.skill) return roll.toChat();
+  return actor.performMatrixAction(roll);
+}
+
+/** Legwork with a contact: Connection × 2 dice, threshold 1, no wound or sustain penalty (system rules). */
+export async function rollLegwork(actor, contact) {
+  const { PreparedRoll, RollType } = await types();
+  const roll = new PreparedRoll();
+  roll.rollType = RollType.Legwork;
+  roll.pool = (Number(contact.system.rating) || 0) * 2;
+  roll.allowBuyHits = true;
+  roll.threshold = 1;
+  roll.legwork = { loyalty: Number(contact.system.loyalty) || 0, contact: contact.name };
+  roll.actionText = roll.checkText = game.i18n.format("shadowrun6.legwork.legwork_description", { name: contact.name });
+  return actor.rollCommonCheck(roll, { useWoundModifier: false, useSustainedSpellModifier: false });
+}
+
 /**
  * Physical initiative goes through the combat tracker (the system's combatant formula);
  * astral and matrix scores are rolled to chat, since the tracker uses one type per combatant.

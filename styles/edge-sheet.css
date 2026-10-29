@@ -671,3 +671,88 @@ body.sre-theme-light .sre-sheet {
   .sre-es-skill { grid-template-columns: 1fr 48px 54px 54px; }
   .sre-es-skill .sre-es-spec { grid-column: span 2; }
 }
+
+/* ───── Magic, Matrix, Gear, Social tabs ───── */
+.sre-es-tiles6 { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-bottom: 12px; }
+
+.sre-es .sre-es-ktile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  padding: 8px;
+  text-align: center;
+  background: var(--sre-panel);
+  border: 1px solid var(--sre-line);
+  border-radius: 0;
+  box-shadow: none;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 88% 100%, 0 100%);
+}
+
+.sre-es button.sre-es-ktile:hover { border-color: var(--sre-accent-line); background: var(--sre-accent-soft); }
+.sre-es-ktile span { font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sre-cyan); }
+.sre-es-ktile strong { font-size: 24px; line-height: 1.15; }
+.sre-es-ktile strong.text { font-size: 15px; padding: 4px 0; }
+.sre-es-ktile strong.warn { color: var(--sre-warn); }
+.sre-es-ktile small { font-size: 10px; color: var(--sre-text-dim); }
+
+.sre-es-meter { height: 8px; margin: 8px 10px 10px; border-radius: 4px; background: var(--sre-line); overflow: hidden; }
+.sre-es-meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--sre-cyan), var(--sre-accent)); }
+.sre-es-meter.os i { background: linear-gradient(90deg, var(--sre-warn), var(--sre-bad)); }
+
+.sre-es-asdf { display: inline-flex; gap: 3px; }
+.sre-es-asdf i { min-width: 28px; padding: 1px 3px; font-style: normal; font-size: 12px; text-align: center; border: 1px solid var(--sre-line); border-radius: 3px; }
+.sre-es-asdf i b { margin-right: 2px; font-size: 9px; font-weight: normal; color: var(--sre-text-dim); }
+
+.sre-es-chiplist { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 10px; max-height: 190px; overflow-y: auto; }
+
+.sre-es .sre-es-chipbtn {
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 1px 8px;
+  font-size: 11px;
+  border-radius: 99px;
+  border: 1px solid var(--sre-line);
+  background: transparent;
+  color: var(--sre-text-dim);
+  box-shadow: none;
+}
+
+.sre-es .sre-es-chipbtn.hacking { border-style: dashed; }
+.sre-es .sre-es-chipbtn.on { border-color: var(--sre-cyan); color: var(--sre-cyan); background: rgba(63, 212, 232, 0.1); }
+.sre-es .sre-es-qb.illegal { border-color: rgba(255, 84, 112, 0.35); }
+
+.sre-es-gearcols { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; margin-top: 12px; align-items: start; }
+
+.sre-es-grade {
+  font-size: 10px;
+  padding: 0 6px;
+  border-radius: 99px;
+  border: 1px solid var(--sre-accent-line);
+  color: var(--sre-accent);
+  text-transform: uppercase;
+}
+
+.sre-es-grade.dim { border-color: var(--sre-line); color: var(--sre-text-dim); }
+.sre-es-count { display: inline-flex; align-items: center; gap: 4px; }
+.sre-es-count b { min-width: 20px; text-align: center; }
+
+.sre-es-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; padding: 10px; }
+.sre-es-card { padding: 8px 10px; border: 1px solid var(--sre-line); border-radius: 6px; background: rgba(0, 0, 0, 0.15); }
+.sre-es-card .sre-es-itemname { font-size: 14px; }
+.sre-es-cardstats { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 8px; font-size: 12px; color: var(--sre-text-dim); }
+.sre-es-cardstats strong { color: var(--sre-text); }
+.sre-es-cardfoot { display: flex; align-items: center; gap: 6px; }
+.sre-es-cardfoot .sre-es-small { margin-left: auto; }
+.sre-es-dots { display: inline-flex; gap: 2px; vertical-align: middle; }
+.sre-es-dots i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--sre-accent); }
+.sre-es-dots i.on { background: var(--sre-accent); }
+.sre-es-dots.c i { border-color: var(--sre-cyan); }
+.sre-es-dots.c i.on { background: var(--sre-cyan); }
+.sre-es input[type="number"].wide { width: 6.5em; }
+
+.sre-es-editor prose-mirror { display: block; min-height: 140px; margin: 10px; padding: 6px 10px; border: 1px solid var(--sre-line); border-radius: 4px; background: var(--sre-input); color: var(--sre-text); }
+.sre-es-editor prose-mirror .editor-content { min-height: 120px; }

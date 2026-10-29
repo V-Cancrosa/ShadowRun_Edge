@@ -122,7 +122,7 @@ export function buildSheetContext(actor, { L = (k) => k, config = {} } = {}) {
   const sorcery = skillPool("sorcery");
   const spells = MAGIC_TYPES.has(mortype) ? items.filter((i) => i.type === "spell").map((i) => ({
     id: i.id, name: i.name, img: i.img,
-    pool: pool(sorcery, wound),
+    pool: pool(sorcery, wound + sustainedPenalty(actor)),
     drain: i.system?.drain ?? "",
     drainPool: num(s.defensepool?.drain?.pool),
     category: i.system?.category ? L(config.spell_category?.[i.system.category] ?? i.system.category) : "",
@@ -283,4 +283,196 @@ export function buildCombatContext(actor, { L = (k) => k, config = {} } = {}) {
   });
 
   return { ranged, melee, unarmed, armor, defenseRating: num(s.defenserating?.physical?.pool), resist };
+}
+
+// ───── Magic tab ─────
+
+const woundOf = (actor) => (typeof actor.getWoundModifier === "function"
+  ? num(actor.getWoundModifier())
+  : monitorPenalty(actor.system?.physical) + monitorPenalty(actor.system?.stun));
+/** Sustained spells and complex forms: −2 dice each (SR6), as the system's getSustainedModifier. */
+export function sustainedPenalty(actor) {
+  if (typeof actor.getSustainedModifier === "function") return num(actor.getSustainedModifier());
+  return 2 * [...(actor.items ?? [])].filter((i) => (i.type === "spell" || i.type === "complexform") && i.system?.isSustained).length;
+}
+const label = (L, map, key) => (key ? L(map?.[key] ?? key) : "");
+
+export function buildMagicContext(actor, { L = (k) => k, config = {} } = {}) {
+  const s = actor.system ?? {};
+  const items = [...(actor.items ?? [])];
+  const mortype = s.mortype ?? "mundane";
+  const penalty = woundOf(actor) + sustainedPenalty(actor);
+  const sorcery = num(s.skills?.sorcery?.pool);
+  const mag = s.attributes?.mag ?? {};
+  const adeptLike = mortype === "adept" || mortype === "mysticadept";
+  const powers = items.filter((i) => i.type === "adeptpower").map((i) => {
+    const lvl = i.system?.hasLevel ? Math.max(1, num(i.system?.level)) : null;
+    return { id: i.id, name: i.name, level: lvl, cost: num(i.system?.cost) * (lvl ?? 1) };
+  });
+  const sustained = items.filter((i) => i.type === "spell" && i.system?.isSustained).length;
+  return {
+    penalty, sustained, sustainedPenalty: sustainedPenalty(actor),
+    tiles: [
+      { id: "mag", label: L("attrib.mag"), value: num(mag.pool) },
+      { id: "tradition", label: L("SRE.Sheet.Tradition"), value: s.tradition?.name || "—", small: s.tradition?.attribute ? `${L("SRE.Sheet.DrainAttr")}: ${L(`attrib.${s.tradition.attribute}_short`)}` : "", text: true },
+      { id: "drain", label: L("SRE.Sheet.DrainResistance"), value: num(s.defensepool?.drain?.pool), roll: true },
+      { id: "astralAr", label: L("SRE.Sheet.AstralAR"), value: num(s.attackrating?.astral?.pool) },
+      { id: "astralDr", label: L("SRE.Sheet.AstralDR"), value: num(s.defenserating?.astral?.pool) },
+      ...(mag.initiation !== undefined ? [{ id: "initiation", label: L("SRE.Sheet.Initiation"), value: num(mag.initiation) }] : []),
+    ],
+    drainPool: num(s.defensepool?.drain?.pool),
+    spells: items.filter((i) => i.type === "spell").map((i) => ({
+      id: i.id, name: i.name,
+      category: label(L, config.spell_category, i.system?.category),
+      type: label(L, config.spell_type, i.system?.type),
+      range: label(L, config.spell_range, i.system?.range),
+      duration: label(L, config.spell_duration, i.system?.duration),
+      drain: i.system?.drain ?? "",
+      canSustain: i.system?.duration === "sustained",
+      sustained: !!i.system?.isSustained,
+      pool: { raw: sorcery, value: Math.max(0, sorcery - penalty), minus: penalty },
+    })),
+    rituals: items.filter((i) => i.type === "ritual").map((i) => ({ id: i.id, name: i.name, threshold: num(i.system?.threshold) })),
+    foci: items.filter((i) => i.type === "focus").map((i) => ({ id: i.id, name: i.name, rating: num(i.system?.rating) })),
+    metamagic: items.filter((i) => i.type === "metamagic").map((i) => ({ id: i.id, name: i.name })),
+    adept: adeptLike || powers.length > 0,
+    powers,
+    ppUsed: Math.round(powers.reduce((a, p) => a + p.cost, 0) * 100) / 100,
+    ppMax: num(mag.pool),
+  };
+}
+
+// ───── Matrix tab ─────
+
+const DEVICE_SUBTYPES = new Set(["COMMLINK", "CYBERDECK", "RIGGER_CONSOLE", "CYBERJACK"]);
+const QUICK_MATRIX = ["brute_force", "probe", "matrix_perception", "data_spike", "full_matrix_defense"];
+
+/** Matrix action pool as the system's helper computes it: skill points + modifier (+2/+3), + attribute. */
+export function matrixActionPool(action, s) {
+  const sk = s.skills?.[action.skill];
+  if (!action.skill || !sk || !num(sk.pool)) return 0;
+  let pool = num(sk.points) + num(sk.modifier);
+  if (sk.expertise && sk.expertise === action.specialization) pool += 3;
+  else if (sk.specialization && sk.specialization === action.specialization) pool += 2;
+  if (action.attrib) pool += num(s.attributes?.[action.attrib]?.pool);
+  return pool;
+}
+
+export function buildMatrixContext(actor, { L = (k) => k, config = {}, showAllActions = false } = {}) {
+  const s = actor.system ?? {};
+  const items = [...(actor.items ?? [])];
+  const wound = woundOf(actor);
+  const technomancer = s.mortype === "technomancer";
+  const used = s.persona?.used ?? {};
+  const devices = items.filter((i) => i.type === "gear" && DEVICE_SUBTYPES.has(i.system?.subtype)).map((i) => ({
+    id: i.id, name: i.name, type: L(config.GEAR_SUBTYPES?.[i.system?.type]?.[i.system?.subtype] ?? i.system?.subtype),
+    rating: num(i.system?.devRating),
+    asdf: ["a", "s", "d", "f"].map((k) => ({ k: k.toUpperCase(), v: i.system?.[k] ? num(i.system[k]) : null })),
+    slots: num(i.system?.progSlots), active: !!i.system?.usedForPool,
+    deck: i.system?.subtype === "CYBERDECK",
+    programs: i.system?.subtype === "CYBERDECK"
+      ? (config.PROGRAMS ?? []).map((p) => ({ id: p.id, label: L(`shadowrun6.program.${p.id}.name`), on: !!i.system?.program?.[p.id], hacking: p.type === 1 }))
+      : [],
+  }));
+  const actions = Object.entries(config.MATRIX_ACTIONS ?? {})
+    .filter(([id, a]) => a.skill && (showAllActions || QUICK_MATRIX.includes(id)))
+    .map(([id, a]) => {
+      const raw = matrixActionPool(a, s);
+      return { id, label: L(`shadowrun6.matrixaction.${id}.name`), raw, value: Math.max(0, raw - wound), minus: wound, illegal: !!a.illegal };
+    })
+    .sort((a, b) => a.label.localeCompare(b.label));
+  const overwatch = num(s.overwatch);
+  const sustainPenalty = sustainedPenalty(actor);
+  const resonance = num(s.attributes?.res?.pool);
+  return {
+    technomancer,
+    tiles: [
+      { id: "ini", label: L("SRE.Sheet.Initiative.matrix"), value: `${num(s.initiative?.matrix?.pool)}+${num(s.initiative?.matrix?.dicePool, num(s.initiative?.matrix?.dice))}${L("SRE.Sheet.D6")}` },
+      { id: "ar", label: L("SRE.Sheet.MatrixAR"), value: num(s.attackrating?.matrix?.pool) },
+      { id: "dr", label: L("SRE.Sheet.MatrixDR"), value: num(s.defenserating?.matrix?.pool) },
+      { id: "perception", label: L("SRE.Sheet.MatrixPerception"), value: num(s.derived?.matrix_perception?.pool) },
+      ...(technomancer ? [{ id: "res", label: L("attrib.res"), value: resonance }] : []),
+      { id: "os", label: L("SRE.Sheet.Overwatch"), value: overwatch, warn: overwatch >= 30 },
+    ],
+    overwatch: { value: overwatch, pct: Math.min(100, Math.round((overwatch / 40) * 100)) },
+    persona: ["a", "s", "d", "f"].map((k) => ({ k: L(`SRE.Sheet.Asdf.${k}`), v: num(used[k]) })),
+    devices,
+    activeDeck: devices.find((d) => d.deck && d.active) ?? null,
+    actions, showAllActions,
+    forms: items.filter((i) => i.type === "complexform").map((i) => {
+      // Threading a complex form: Tasking (+ Resonance), as computed by the system.
+      const raw = num(s.skills?.tasking?.pool);
+      const minus = wound + sustainPenalty;
+      return { id: i.id, name: i.name, fading: i.system?.fading ?? "", duration: label(L, config.spell_duration, i.system?.duration),
+        canSustain: i.system?.duration === "sustained", sustained: !!i.system?.isSustained, pool: { raw, value: Math.max(0, raw - minus), minus } };
+    }),
+    fadingPool: num(s.defensepool?.fading?.pool),
+    echoes: items.filter((i) => i.type === "echo").map((i) => ({ id: i.id, name: i.name })),
+  };
+}
+
+// ───── Augmentations & gear tab ─────
+
+const AUGMENT_TYPES = new Set(["CYBERWARE", "BIOWARE", "NANOWARE", "GENETICS"]);
+const NOT_GEAR = new Set(["WEAPON_CLOSE_COMBAT", "WEAPON_FIREARMS", "WEAPON_RANGED", "WEAPON_SPECIAL", "ARMOR", ...AUGMENT_TYPES]);
+
+export function buildGearContext(actor, { L = (k) => k, config = {}, moduleId = "shadowrun-edge" } = {}) {
+  const s = actor.system ?? {};
+  const items = [...(actor.items ?? [])];
+  const essence = num(s.essence, 6);
+  const modsOf = (w) => items.filter((m) => {
+    if (m.type !== "mod") return false;
+    const host = m.system?.embeddedInUuid;
+    const into = m.system?.installedIn;
+    return (host && host === w.uuid) || (into && (into.id ?? into) === w.id);
+  }).map((m) => m.name).join(", ");
+  const gear = items.filter((i) => i.type === "gear");
+  const augments = gear.filter((i) => AUGMENT_TYPES.has(i.system?.type)).map((i) => {
+    const grade = i.flags?.[moduleId]?.grade?.id ?? i.getFlag?.(moduleId, "grade")?.id ?? "standard";
+    return {
+      id: i.id, name: i.name, type: L(config.GEAR_TYPES?.[i.system.type] ?? i.system.type),
+      grade: L(`SRE.Grade.Name.${grade}`), standard: grade === "standard",
+      rating: num(i.system?.rating) || null, essence: num(i.system?.essence).toFixed(2),
+      capacity: num(i.system?.capacity) || null, extras: modsOf(i),
+    };
+  });
+  const groups = new Map();
+  for (const i of gear) {
+    const type = i.system?.type;
+    if (!type || NOT_GEAR.has(type)) continue;
+    if (!groups.has(type)) groups.set(type, { type, label: L(config.GEAR_TYPES?.[type] ?? type), items: [] });
+    groups.get(type).items.push({
+      id: i.id, name: i.name, rating: i.system?.needsRating || num(i.system?.rating) ? num(i.system?.rating) : null,
+      countable: !!i.system?.countable, count: num(i.system?.count, 1), extras: modsOf(i),
+    });
+  }
+  const loose = items.filter((i) => i.type === "mod" && !i.system?.embeddedInUuid && !i.system?.installedIn).map((i) => ({ id: i.id, name: i.name }));
+  return {
+    essence: essence.toFixed(2), essencePct: Math.max(0, Math.min(100, Math.round((essence / 6) * 1000) / 10)),
+    augments, groups: [...groups.values()], loose,
+  };
+}
+
+// ───── Contacts & notes tab ─────
+
+export function buildSocialContext(actor, { L = (k) => k, config = {} } = {}) {
+  const s = actor.system ?? {};
+  const src = actor._source?.system ?? s;
+  const items = [...(actor.items ?? [])];
+  const dots = (n, max = 6) => Array.from({ length: max }, (_, i) => i < n);
+  return {
+    contacts: items.filter((i) => i.type === "contact").map((i) => {
+      const rating = num(i.system?.rating);
+      const loyalty = num(i.system?.loyalty);
+      return { id: i.id, name: i.name, type: i.system?.type ?? "", rating, loyalty, favors: num(i.system?.favors),
+        ratingDots: dots(rating, Math.max(6, rating)), loyaltyDots: dots(loyalty, Math.max(6, loyalty)), legwork: rating * 2 };
+    }),
+    sins: items.filter((i) => i.type === "sin").map((i) => ({ id: i.id, name: i.name, quality: label(L, config.SIN_QUALITY, i.system?.quality) })),
+    lifestyles: items.filter((i) => i.type === "lifestyle").map((i) => ({
+      id: i.id, name: i.name, type: label(L, config.LIFESTYLE_TYPE, i.system?.type), cost: num(i.system?.cost).toLocaleString(), paid: num(i.system?.paid),
+    })),
+    karma: num(src.karma), karmaTotal: num(src.karma_total), reputation: num(src.reputation), heat: num(src.heat), nuyen: num(src.nuyen),
+    hasDescription: src.description !== undefined,
+    notes: src.notes ?? "", description: src.description ?? "",
+  };
 }

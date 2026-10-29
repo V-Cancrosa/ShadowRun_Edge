@@ -322,6 +322,233 @@
       </div>
     </div>
 
+    {{else if active.magic}}
+    {{#if magic.sustained}}<div class="sre-es-warnings"><span class="sre-es-warning">{{localize "SRE.Sheet.Sustaining"}} {{magic.sustained}} — −{{magic.sustainedPenalty}}</span></div>{{/if}}
+    <div class="sre-es-tiles6">
+      {{#each magic.tiles}}
+      {{#if roll}}
+      <button type="button" class="sre-es-ktile" data-action="rollResist" data-kind="defense" data-pool="{{value}}" data-label="{{label}}">
+        <span>{{label}}</span><strong>{{value}}</strong><small>{{localize "SRE.Sheet.ClickToRoll"}}</small></button>
+      {{else}}
+      <div class="sre-es-ktile"><span>{{label}}</span><strong class="{{#if text}}text{{/if}}">{{value}}</strong>{{#if small}}<small>{{small}}</small>{{/if}}</div>
+      {{/if}}
+      {{/each}}
+    </div>
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.Sheet.Spells"}}</h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Sheet.Name"}}</th><th>{{localize "SRE.Sheet.Category"}}</th><th>{{localize "SRE.Sheet.Type"}}</th><th>{{localize "SRE.Sheet.Range"}}</th>
+          <th>{{localize "SRE.Sheet.Duration"}}</th><th class="c">{{localize "SRE.Sheet.Drain"}}</th><th class="c">{{localize "SRE.Sheet.Sustained"}}</th><th class="c">{{localize "SRE.Sheet.Pool"}}</th><th></th></tr>
+        {{#each magic.spells}}
+        <tr data-item-id="{{id}}">
+          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td>{{category}}</td><td>{{type}}</td><td>{{range}}</td><td>{{duration}}</td>
+          <td class="c">{{drain}}</td>
+          <td class="c">{{#if canSustain}}<button type="button" class="sre-es-toggle {{#if sustained}}on{{/if}}" data-action="toggleSustain" {{#unless ../editable}}disabled{{/unless}}></button>{{else}}—{{/if}}</td>
+          <td class="c"><span class="sre-es-pool">{{pool.value}}{{#if pool.minus}}<small>−{{pool.minus}}</small>{{/if}}</span></td>
+          <td><button type="button" class="sre-es-btn solid" data-action="rollSpell">{{localize "SRE.Sheet.Cast"}}</button></td>
+        </tr>
+        {{else}}<tr><td colspan="9" class="sre-es-empty">{{localize "SRE.Sheet.NoSpells"}}</td></tr>{{/each}}
+      </table>
+    </div>
+    <div class="sre-es-two">
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Rituals"}}</h3>
+        <table class="sre-es-table">
+          <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">{{localize "SRE.Sheet.Threshold"}}</th><th></th></tr>
+          {{#each magic.rituals}}
+          <tr data-item-id="{{id}}"><td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td class="c">{{threshold}}</td>
+            <td><button type="button" class="sre-es-btn" data-action="rollRitual">{{localize "SRE.Sheet.Ritual"}}</button></td></tr>
+          {{else}}<tr><td colspan="3" class="sre-es-empty">—</td></tr>{{/each}}
+        </table>
+      </div>
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.FociMetamagic"}}</h3>
+        <table class="sre-es-table">
+          <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">{{localize "SRE.Sheet.Force"}}</th></tr>
+          {{#each magic.foci}}<tr data-item-id="{{id}}"><td><a class="sre-es-itemname" data-action="openItem">{{name}}</a><div class="sre-es-small">{{localize "SRE.Sheet.Focus"}}</div></td><td class="c">{{rating}}</td></tr>{{/each}}
+          {{#each magic.metamagic}}<tr data-item-id="{{id}}"><td><a class="sre-es-itemname" data-action="openItem">{{name}}</a><div class="sre-es-small">{{localize "SRE.Sheet.Metamagic"}}</div></td><td class="c">—</td></tr>{{/each}}
+        </table>
+      </div>
+    </div>
+    {{#if magic.adept}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.AdeptPowers"}} <span>PP: {{magic.ppUsed}} / {{magic.ppMax}}</span></h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">{{localize "SRE.Sheet.Level"}}</th><th class="c">{{localize "SRE.Sheet.PPCost"}}</th></tr>
+        {{#each magic.powers}}<tr data-item-id="{{id}}"><td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td class="c">{{#if level}}{{level}}{{else}}—{{/if}}</td><td class="c">{{cost}}</td></tr>
+        {{else}}<tr><td colspan="3" class="sre-es-empty">—</td></tr>{{/each}}
+      </table>
+    </div>
+    {{/if}}
+
+    {{else if active.matrix}}
+    <div class="sre-es-tiles6">
+      {{#each matrix.tiles}}<div class="sre-es-ktile"><span>{{label}}</span><strong class="{{#if warn}}warn{{/if}}">{{value}}</strong></div>{{/each}}
+    </div>
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.Sheet.Overwatch"}} <span>{{matrix.overwatch.value}} / 40</span></h3>
+      <div class="sre-es-meter os"><i style="width: {{matrix.overwatch.pct}}%"></i></div>
+    </div>
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.Devices"}} <span>{{localize "SRE.Sheet.DevicesHint"}}</span></h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Sheet.Name"}}</th><th>{{localize "SRE.Sheet.Type"}}</th><th class="c">{{localize "SRE.Sheet.Rating"}}</th><th>A / S / D / F</th><th class="c">{{localize "SRE.Sheet.Slots"}}</th><th class="c">{{localize "SRE.Sheet.Active"}}</th></tr>
+        {{#each matrix.devices}}
+        <tr data-item-id="{{id}}">
+          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td>{{type}}</td><td class="c">{{rating}}</td>
+          <td><span class="sre-es-asdf">{{#each asdf}}<i><b>{{k}}</b>{{#if v includeZero=true}}{{v}}{{else}}—{{/if}}</i>{{/each}}</span></td>
+          <td class="c">{{#if slots}}{{slots}}{{else}}—{{/if}}</td>
+          <td class="c"><button type="button" class="sre-es-toggle {{#if active}}on{{/if}}" data-action="toggleDevice" {{#unless ../editable}}disabled{{/unless}}></button></td>
+        </tr>
+        {{else}}<tr><td colspan="6" class="sre-es-empty">{{localize "SRE.Sheet.NoDevices"}}</td></tr>{{/each}}
+      </table>
+    </div>
+    <div class="sre-es-two">
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Persona"}}</h3>
+        {{#each matrix.persona}}<div class="sre-es-row"><span class="sre-es-grow">{{k}}</span><strong>{{v}}</strong></div>{{/each}}
+        <div class="sre-es-row sre-es-dim">{{localize "SRE.Sheet.PersonaHint"}}</div>
+      </div>
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Programs"}} {{#if matrix.activeDeck}}<span>{{matrix.activeDeck.name}}</span>{{/if}}</h3>
+        {{#if matrix.activeDeck}}
+        <div class="sre-es-chiplist" data-item-id="{{matrix.activeDeck.id}}">
+          {{#each matrix.activeDeck.programs}}
+          <button type="button" class="sre-es-chipbtn {{#if on}}on{{/if}} {{#if hacking}}hacking{{/if}}" data-action="toggleProgram" data-program="{{id}}" {{#unless ../../editable}}disabled{{/unless}}>{{label}}</button>
+          {{/each}}
+        </div>
+        {{else}}<p class="sre-es-empty">{{localize "SRE.Sheet.NoDeck"}}</p>{{/if}}
+      </div>
+    </div>
+    {{#if matrix.technomancer}}
+    <div class="sre-es-two">
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.ComplexForms"}} <span>{{localize "SRE.Sheet.FadingResist"}} {{matrix.fadingPool}}</span></h3>
+        <table class="sre-es-table">
+          <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">{{localize "SRE.Sheet.Fading"}}</th><th class="c">{{localize "SRE.Sheet.Sustained"}}</th><th class="c">{{localize "SRE.Sheet.Pool"}}</th><th></th></tr>
+          {{#each matrix.forms}}
+          <tr data-item-id="{{id}}"><td><a class="sre-es-itemname" data-action="openItem">{{name}}</a><div class="sre-es-small">{{duration}}</div></td><td class="c">{{fading}}</td>
+            <td class="c">{{#if canSustain}}<button type="button" class="sre-es-toggle {{#if sustained}}on{{/if}}" data-action="toggleSustain" {{#unless ../editable}}disabled{{/unless}}></button>{{else}}—{{/if}}</td>
+            <td class="c"><span class="sre-es-pool">{{pool.value}}{{#if pool.minus}}<small>−{{pool.minus}}</small>{{/if}}</span></td><td><button type="button" class="sre-es-btn solid" data-action="rollForm">{{localize "SRE.Sheet.Thread"}}</button></td></tr>
+          {{else}}<tr><td colspan="5" class="sre-es-empty">—</td></tr>{{/each}}
+        </table>
+      </div>
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Echoes"}}</h3>
+        {{#each matrix.echoes}}<div class="sre-es-row" data-item-id="{{id}}"><a class="sre-es-itemname" data-action="openItem">{{name}}</a></div>{{else}}<p class="sre-es-empty">—</p>{{/each}}
+      </div>
+    </div>
+    {{/if}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.MatrixActions"}}
+        <button type="button" class="sre-es-mini" data-action="toggleAllActions">{{#if matrix.showAllActions}}{{localize "SRE.Sheet.CommonActions"}}{{else}}{{localize "SRE.Sheet.AllActions"}}{{/if}}</button></h3>
+      <div class="sre-es-quick">
+        {{#each matrix.actions}}
+        <button type="button" class="sre-es-qb {{#if illegal}}illegal{{/if}}" data-action="rollMatrix" data-matrix-id="{{id}}">{{label}} <span class="sre-es-pool">{{value}}{{#if minus}}<small>−{{minus}}</small>{{/if}}</span></button>
+        {{/each}}
+      </div>
+    </div>
+
+    {{else if active.gear}}
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.Sheet.Essence"}} <span>{{gear.essence}} / 6.00</span></h3>
+      <div class="sre-es-meter"><i style="width: {{gear.essencePct}}%"></i></div>
+    </div>
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.Augmentations"}}</h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Sheet.Name"}}</th><th>{{localize "SRE.Sheet.Type"}}</th><th class="c">{{localize "SRE.Sheet.Grade"}}</th><th class="c">{{localize "SRE.Sheet.Rating"}}</th><th class="c">{{localize "SRE.Sheet.Essence"}}</th><th class="c">{{localize "SRE.Sheet.Capacity"}}</th></tr>
+        {{#each gear.augments}}
+        <tr data-item-id="{{id}}">
+          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a>{{#if extras}}<div class="sre-es-small">{{extras}}</div>{{/if}}</td><td>{{type}}</td>
+          <td class="c"><span class="sre-es-grade {{#if standard}}dim{{/if}}">{{grade}}</span></td>
+          <td class="c">{{#if rating}}{{rating}}{{else}}—{{/if}}</td><td class="c sre-es-cyan">{{essence}}</td><td class="c">{{#if capacity}}{{capacity}}{{else}}—{{/if}}</td>
+        </tr>
+        {{else}}<tr><td colspan="6" class="sre-es-empty">{{localize "SRE.Sheet.NoAugments"}}</td></tr>{{/each}}
+      </table>
+    </div>
+    <div class="sre-es-gearcols">
+      {{#each gear.groups}}
+      <div class="sre-es-panel">
+        <h3>{{label}}</h3>
+        <table class="sre-es-table">
+          <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">{{localize "SRE.Sheet.Rating"}}</th><th class="c">{{localize "SRE.Sheet.Count"}}</th></tr>
+          {{#each items}}
+          <tr data-item-id="{{id}}">
+            <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a>{{#if extras}}<div class="sre-es-small">{{extras}}</div>{{/if}}</td>
+            <td class="c">{{#if rating includeZero=true}}{{rating}}{{else}}—{{/if}}</td>
+            <td class="c">{{#if countable}}<span class="sre-es-count">
+              <button type="button" class="sre-es-mini" data-action="count" data-delta="-1" {{#unless ../../editable}}disabled{{/unless}}>−</button><b>{{count}}</b>
+              <button type="button" class="sre-es-mini" data-action="count" data-delta="1" {{#unless ../../editable}}disabled{{/unless}}>+</button></span>{{else}}—{{/if}}</td>
+          </tr>
+          {{/each}}
+        </table>
+      </div>
+      {{/each}}
+      {{#if gear.loose.length}}
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.LooseMods"}}</h3>
+        {{#each gear.loose}}<div class="sre-es-row" data-item-id="{{id}}"><a class="sre-es-itemname" data-action="openItem">{{name}}</a></div>{{/each}}
+      </div>
+      {{/if}}
+    </div>
+    {{#unless gear.groups.length}}<p class="sre-es-empty">{{localize "SRE.Sheet.NoGear"}}</p>{{/unless}}
+
+    {{else if active.social}}
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.Sheet.Contacts"}} {{#if editable}}<button type="button" class="sre-es-mini" data-action="addContact">+ {{localize "SRE.Sheet.AddShort"}}</button>{{/if}}</h3>
+      <div class="sre-es-cards">
+        {{#each social.contacts}}
+        <div class="sre-es-card" data-item-id="{{id}}">
+          <a class="sre-es-itemname" data-action="openItem">{{name}}</a>{{#if type}}<div class="sre-es-small">{{type}}</div>{{/if}}
+          <div class="sre-es-cardstats">
+            <span>{{localize "SRE.Sheet.Connection"}} <span class="sre-es-dots">{{#each ratingDots}}<i class="{{#if this}}on{{/if}}"></i>{{/each}}</span> <strong>{{rating}}</strong></span>
+            <span>{{localize "SRE.Sheet.Loyalty"}} <span class="sre-es-dots c">{{#each loyaltyDots}}<i class="{{#if this}}on{{/if}}"></i>{{/each}}</span> <strong>{{loyalty}}</strong></span>
+          </div>
+          <div class="sre-es-cardfoot">
+            <button type="button" class="sre-es-btn solid" data-action="rollLegwork">{{localize "SRE.Sheet.Legwork"}} ({{legwork}})</button>
+            {{#if favors}}<span class="sre-es-small">{{localize "SRE.Sheet.Favors"}}: {{favors}}</span>{{/if}}
+          </div>
+        </div>
+        {{else}}<p class="sre-es-empty">{{localize "SRE.Sheet.NoContacts"}}</p>{{/each}}
+      </div>
+    </div>
+    <div class="sre-es-two">
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Sins"}}</h3>
+        <table class="sre-es-table"><tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">{{localize "SRE.Sheet.Quality"}}</th></tr>
+          {{#each social.sins}}<tr data-item-id="{{id}}"><td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td class="c">{{quality}}</td></tr>
+          {{else}}<tr><td colspan="2" class="sre-es-empty">—</td></tr>{{/each}}</table>
+      </div>
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Lifestyles"}}</h3>
+        <table class="sre-es-table"><tr><th>{{localize "SRE.Sheet.Name"}}</th><th>{{localize "SRE.Sheet.Type"}}</th><th class="c">{{localize "SRE.Sheet.Cost"}}</th><th class="c">{{localize "SRE.Sheet.Paid"}}</th></tr>
+          {{#each social.lifestyles}}<tr data-item-id="{{id}}"><td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td>{{type}}</td><td class="c">{{cost}}¥</td><td class="c">{{paid}}</td></tr>
+          {{else}}<tr><td colspan="4" class="sre-es-empty">—</td></tr>{{/each}}</table>
+      </div>
+    </div>
+    <div class="sre-es-two">
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.KarmaRep"}}</h3>
+        <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.KarmaSpendTotal"}}</span>
+          <input type="number" name="system.karma" value="{{social.karma}}" {{#unless editable}}disabled{{/unless}}> <span class="sre-es-dim">/</span>
+          <input type="number" name="system.karma_total" value="{{social.karmaTotal}}" {{#unless editable}}disabled{{/unless}}></div>
+        <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.Reputation"}}</span><input type="number" name="system.reputation" value="{{social.reputation}}" {{#unless editable}}disabled{{/unless}}></div>
+        <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.Heat"}}</span><input type="number" name="system.heat" value="{{social.heat}}" {{#unless editable}}disabled{{/unless}}></div>
+        <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.Nuyen"}}</span><input type="number" class="wide" name="system.nuyen" value="{{social.nuyen}}" {{#unless editable}}disabled{{/unless}}></div>
+      </div>
+      {{#if social.hasDescription}}
+      <div class="sre-es-panel sre-es-editor">
+        <h3>{{localize "SRE.Sheet.Description"}}</h3>
+        <prose-mirror name="system.description" value="{{social.description}}" toggled {{#unless editable}}disabled{{/unless}}>{{{social.descriptionHTML}}}</prose-mirror>
+      </div>
+      {{/if}}
+    </div>
+    <div class="sre-es-panel sre-es-gap sre-es-editor">
+      <h3>{{localize "SRE.Sheet.Notes"}}</h3>
+      <prose-mirror name="system.notes" value="{{social.notes}}" toggled {{#unless editable}}disabled{{/unless}}>{{{social.notesHTML}}}</prose-mirror>
+    </div>
+
     {{else}}
     <div class="sre-es-soon">
       <p>{{localize "SRE.Sheet.Soon"}}</p>
