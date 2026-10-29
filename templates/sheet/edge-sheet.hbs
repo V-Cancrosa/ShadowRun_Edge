@@ -158,6 +158,170 @@
         </div>
       </div>
     </div>
+    {{else if active.skills}}
+    {{!-- Attributes --}}
+    <div class="sre-es-attrs">
+      {{#each sk.attributes}}
+      <div class="sre-es-attr {{#if special}}special{{/if}}">
+        <button type="button" class="sre-es-attr-roll" data-action="rollAttribute" data-id="{{id}}" data-pool="{{value}}" data-label="{{label}}">
+          <span class="sre-es-attr-name">{{short}} · {{label}}</span>
+          <strong class="{{#if atMax}}max{{/if}}">{{value}}</strong>
+        </button>
+        <div class="sre-es-attr-foot">
+          <label>{{localize "SRE.Sheet.Base"}} <input type="number" name="system.attributes.{{id}}.base" value="{{base}}" min="0" max="15" {{#unless ../editable}}disabled{{/unless}}></label>
+          <span class="{{#if mod}}sre-es-aug{{/if}}" data-tooltip="SRE.Sheet.ModHint">{{#if mod}}{{#if (gt mod 0)}}+{{/if}}{{mod}}{{else}}+0{{/if}}</span>
+          <span>{{localize "SRE.Sheet.Max"}} {{max}}</span>
+        </div>
+      </div>
+      {{/each}}
+      <div class="sre-es-attr special">
+        <div class="sre-es-attr-roll"><span class="sre-es-attr-name">Edge</span><strong>{{sk.edgeAttr.value}}</strong></div>
+        <div class="sre-es-attr-foot">
+          <label>{{localize "SRE.Sheet.Max"}} <input type="number" name="system.edge.max" value="{{sk.edgeAttr.base}}" min="1" max="7" {{#unless editable}}disabled{{/unless}}></label>
+          <span>{{localize "SRE.Sheet.Limit"}} {{sk.edgeAttr.cap}}</span>
+        </div>
+      </div>
+      <div class="sre-es-attr special">
+        <div class="sre-es-attr-roll"><span class="sre-es-attr-name">{{localize "SRE.Sheet.Essence"}}</span><strong class="sre-es-cyan">{{sk.essence}}</strong></div>
+        <div class="sre-es-attr-foot"><span>{{localize "SRE.Sheet.EssenceHint"}}</span></div>
+      </div>
+    </div>
+
+    {{!-- Active skills --}}
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.Sheet.ActiveSkills"}}
+        <span class="sre-es-filter">{{localize "SRE.Sheet.Show"}}
+          <button type="button" class="{{#if sk.showAll}}on{{/if}}" data-action="toggleUntrained" {{#if sk.showAll}}disabled{{/if}}>{{localize "SRE.Sheet.ShowAll"}}</button>
+          <button type="button" class="{{#unless sk.showAll}}on{{/unless}}" data-action="toggleUntrained" {{#unless sk.showAll}}disabled{{/unless}}>{{localize "SRE.Sheet.ShowTrained"}} ({{sk.trainedCount}})</button>
+        </span>
+      </h3>
+      <div class="sre-es-skillhead">
+        <span>{{localize "SRE.Sheet.Skill"}}</span><span>{{localize "SRE.Sheet.Attr"}}</span><span>{{localize "SRE.Sheet.Points"}}</span>
+        <span>{{localize "SRE.Sheet.Pool"}}</span><span>{{localize "SRE.Sheet.Specialization"}}</span><span>{{localize "SRE.Sheet.Expertise"}}</span><span></span>
+      </div>
+      {{#each sk.skills}}
+      <div class="sre-es-skill {{#unless trained}}untrained{{/unless}}" data-skill="{{id}}">
+        <span class="sre-es-skillname">{{label}}{{#unless trained}}{{#unless untrainedAllowed}} <small>{{localize "SRE.Sheet.NoUntrained"}}</small>{{/unless}}{{/unless}}</span>
+        <span class="sre-es-dim">{{attr}}</span>
+        <input type="number" name="system.skills.{{id}}.points" value="{{points}}" min="0" max="12" {{#unless ../editable}}disabled{{/unless}}>
+        <span class="sre-es-pool">{{pool.value}}{{#if pool.minus}}<small>−{{pool.minus}}</small>{{/if}}</span>
+        <span class="sre-es-spec">
+          <select name="system.skills.{{id}}.specialization" {{#unless ../editable}}disabled{{/unless}}>
+            <option value="">—</option>
+            {{#each specOptions}}<option value="{{value}}" {{#if (eq value ../specialization)}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+          {{#if specPool includeZero=true}}<button type="button" class="sre-es-pool sre-es-poolbtn" data-action="rollSkill" data-skill="{{id}}" data-spec="{{specialization}}">{{specPool}}</button>{{/if}}
+        </span>
+        <span class="sre-es-spec">
+          <select name="system.skills.{{id}}.expertise" {{#unless ../editable}}disabled{{/unless}}>
+            <option value="">—</option>
+            {{#each specOptions}}<option value="{{value}}" {{#if (eq value ../expertise)}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+          {{#if expPool includeZero=true}}<button type="button" class="sre-es-pool sre-es-poolbtn" data-action="rollSkill" data-skill="{{id}}" data-spec="{{expertise}}">{{expPool}}</button>{{/if}}
+        </span>
+        <button type="button" class="sre-es-btn solid" data-action="rollSkill" data-skill="{{id}}">{{localize "SRE.Sheet.Roll"}}</button>
+      </div>
+      {{/each}}
+    </div>
+
+    <div class="sre-es-two">
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Knowledge"}}
+          {{#if editable}}<button type="button" class="sre-es-mini" data-action="addKnowledge" data-kind="knowledge">+ {{localize "SRE.Sheet.AddShort"}}</button>{{/if}}</h3>
+        {{#each sk.knowledge}}
+        <div class="sre-es-row" data-item-id="{{id}}">
+          <a class="sre-es-grow sre-es-itemname" data-action="openItem">{{name}}</a>
+          {{#if ../editable}}<button type="button" class="sre-es-mini" data-action="deleteItem" data-tooltip="SRE.Sheet.Delete">✕</button>{{/if}}
+        </div>
+        {{else}}<p class="sre-es-empty">{{localize "SRE.Sheet.KnowledgeHint"}}</p>{{/each}}
+      </div>
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Languages"}}
+          {{#if editable}}<button type="button" class="sre-es-mini" data-action="addKnowledge" data-kind="language">+ {{localize "SRE.Sheet.AddShort"}}</button>{{/if}}</h3>
+        {{#each sk.languages}}
+        <div class="sre-es-row" data-item-id="{{id}}">
+          <a class="sre-es-grow sre-es-itemname" data-action="openItem">{{name}}</a>
+          {{#if native}}<span class="sre-es-badge">{{localize "SRE.Sheet.Native"}}</span>{{/if}}
+          {{#if ../editable}}<button type="button" class="sre-es-mini" data-action="deleteItem" data-tooltip="SRE.Sheet.Delete">✕</button>{{/if}}
+        </div>
+        {{else}}<p class="sre-es-empty">—</p>{{/each}}
+      </div>
+    </div>
+
+    {{else if active.combat}}
+    <div class="sre-es-panel">
+      <h3>{{localize "SRE.Sheet.Ranged"}}</h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">DV</th><th class="c">{{localize "SRE.Sheet.Modes"}}</th>
+          <th>{{localize "SRE.Sheet.ArRanges"}}</th><th>{{localize "SRE.Sheet.Ammo"}}</th><th class="c">{{localize "SRE.Sheet.Pool"}}</th><th></th></tr>
+        {{#each combat.ranged}}
+        <tr data-item-id="{{id}}">
+          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a>{{#if extras}}<div class="sre-es-small">{{extras}}</div>{{/if}}</td>
+          <td class="c"><b>{{dv}}</b></td>
+          <td class="c">{{modes}}</td>
+          <td><span class="sre-es-ar">{{#each ar}}<i class="{{#unless this}}na{{/unless}}">{{#if this}}{{this}}{{else}}—{{/if}}</i>{{/each}}</span></td>
+          <td>{{#if ammo}}
+            <b>{{ammo.count}}/{{ammo.cap}}</b>
+            <select class="sre-es-ammotype" data-item-field="system.ammoLoaded" {{#unless ../editable}}disabled{{/unless}}>
+              {{#each ammo.types}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+            </select>
+            <button type="button" class="sre-es-btn" data-action="reload">{{localize "SRE.Sheet.Reload"}}</button>
+          {{else}}—{{/if}}</td>
+          <td class="c"><span class="sre-es-pool">{{pool.value}}{{#if pool.minus}}<small>−{{pool.minus}}</small>{{/if}}</span></td>
+          <td><button type="button" class="sre-es-btn solid" data-action="rollWeapon">{{localize "SRE.Sheet.Attack"}}</button></td>
+        </tr>
+        {{else}}<tr><td colspan="7" class="sre-es-empty">{{localize "SRE.Sheet.NoWeapons"}}</td></tr>{{/each}}
+      </table>
+    </div>
+
+    <div class="sre-es-two">
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Melee"}}</h3>
+        <table class="sre-es-table">
+          <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">DV</th><th class="c">WA</th><th class="c">{{localize "SRE.Sheet.Pool"}}</th><th></th></tr>
+          {{#each combat.melee}}
+          <tr data-item-id="{{id}}">
+            <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a>{{#if extras}}<div class="sre-es-small">{{extras}}</div>{{/if}}</td>
+            <td class="c"><b>{{dv}}</b></td><td class="c">{{arFirst}}</td>
+            <td class="c"><span class="sre-es-pool">{{pool.value}}{{#if pool.minus}}<small>−{{pool.minus}}</small>{{/if}}</span></td>
+            <td><button type="button" class="sre-es-btn solid" data-action="rollWeapon">{{localize "SRE.Sheet.Attack"}}</button></td>
+          </tr>
+          {{/each}}
+          <tr>
+            <td><b>{{localize "SRE.Sheet.Unarmed"}}</b><div class="sre-es-small">{{localize "SRE.Sheet.UnarmedHint"}}</div></td>
+            <td class="c"><b>{{combat.unarmed.dv}}</b></td><td class="c">{{combat.unarmed.ar}}</td>
+            <td class="c"><span class="sre-es-pool">{{combat.unarmed.pool.value}}{{#if combat.unarmed.pool.minus}}<small>−{{combat.unarmed.pool.minus}}</small>{{/if}}</span></td>
+            <td><button type="button" class="sre-es-btn" data-action="rollUnarmed">{{localize "SRE.Sheet.Attack"}}</button></td>
+          </tr>
+        </table>
+      </div>
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Sheet.Armor"}} <span>{{localize "SRE.Sheet.DefenseRating"}} {{combat.defenseRating}}</span></h3>
+        <table class="sre-es-table">
+          <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">{{localize "SRE.Sheet.Rating"}}</th><th class="c">{{localize "SRE.Sheet.Social"}}</th><th class="c">{{localize "SRE.Sheet.Worn"}}</th></tr>
+          {{#each combat.armor}}
+          <tr data-item-id="{{id}}">
+            <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td>
+            <td class="c">+{{defense}}</td><td class="c">{{#if social}}+{{social}}{{else}}—{{/if}}</td>
+            <td class="c"><button type="button" class="sre-es-toggle {{#if worn}}on{{/if}}" data-action="toggleArmor" {{#unless ../editable}}disabled{{/unless}}></button></td>
+          </tr>
+          {{else}}<tr><td colspan="4" class="sre-es-empty">{{localize "SRE.Sheet.NoArmor"}}</td></tr>{{/each}}
+        </table>
+        <div class="sre-es-row sre-es-dim">{{localize "SRE.Sheet.ArmorHint"}}</div>
+      </div>
+    </div>
+
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Sheet.ResistTitle"}} <span>{{localize "SRE.Sheet.ClickToRoll"}}</span></h3>
+      <div class="sre-es-quick">
+        {{#each combat.resist}}
+        <button type="button" class="sre-es-qb" data-action="rollResist" data-kind="{{kind}}" data-pool="{{raw}}" data-label="{{label}}">
+          {{label}} <span class="sre-es-pool">{{value}}{{#if minus}}<small>−{{minus}}</small>{{/if}}</span>
+        </button>
+        {{/each}}
+      </div>
+    </div>
+
     {{else}}
     <div class="sre-es-soon">
       <p>{{localize "SRE.Sheet.Soon"}}</p>

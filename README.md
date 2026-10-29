@@ -12,7 +12,8 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
   broń, akcesoria, amunicja, materiały wybuchowe, pancerze i ich modyfikacje, elektronika, oprogramowanie,
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
-- **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (na razie zakładka *Główna*).
+- **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (zakładki *Główna*, *Atrybuty
+  i umiejętności*, *Walka*).
 - **Wygląd „Edge”** kart postaci, czatu i okna rzutu (ciemny lub jasny, do wyłączenia).
 
 ## Katalog sprzętu
@@ -104,6 +105,20 @@ Zakładka **Główna** (wersja 0.6.0):
 - obrona: Defense Rating, test obrony (REA + INT) i wytrzymanie (BUD), ruch i Dźwiganie;
 - szybkie rzuty (obrona, wytrzymanie, percepcja, opanowanie, ocena intencji, pamięć);
 - „W ręku”: broń z DV, trybami ognia, WA, amunicją (przycisk *Przeładuj*) i czary z pulą i drenażem.
+
+Zakładka **Atrybuty i umiejętności** (0.7.0):
+- kafelki atrybutów z edycją bazy, modyfikatorem (wszczepy, cechy, efekty) i maksimum metatypu (z tekstu metatypu:
+  Człowiek/Elf/Krasnolud/Ork/Troll; atrybut na maksimum świeci na złoto), Magia/Rezonans, Edge (limit 7), Esencja;
+  kliknięcie kafelka to test atrybutu;
+- umiejętności czynne: punkty, pula, specjalizacja (+2) i ekspertyza (+3) z osobnym rzutem, filtr
+  *wszystkie / wyszkolone*; przy umiejętnościach bez testu bez szkolenia jest ostrzeżenie;
+- umiejętności wiedzy i języki (SR6: bez poziomów; język może być ojczysty) z dodawaniem i usuwaniem.
+
+Zakładka **Walka** (0.7.0):
+- broń dystansowa: DV, tryby, WA dla 5 zasięgów, dodatki, amunicja z wyborem rodzaju i przeładowaniem, pula, atak;
+- walka wręcz z wierszem *Bez broni* (DV = SIŁ/2 ogłuszenia, WA = REA + SIŁ);
+- pancerz z przełącznikiem *Założony* i Defense Rating;
+- obrona i odporności: obrona fizyczna/astralna, czary bezpośrednie/pośrednie/inne, toksyny, wytrzymanie.
 
 Pule pokazują już karę za rany; rzut i tak przechodzi przez okno rzutu systemu, które odejmuje ją samo.
 Pozostałe zakładki pojawią się w kolejnych wersjach — do tego czasu mają przycisk *Otwórz kartę systemu*.

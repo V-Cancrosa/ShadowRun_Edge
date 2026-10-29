@@ -153,3 +153,134 @@ export function buildSheetContext(actor, { L = (k) => k, config = {} } = {}) {
     edge, monitors, wound, initiative, actions, defense, quick, weapons, spells, warnings,
   };
 }
+
+// ───── Attributes & skills tab ─────
+
+export const PRIMARY = ["bod", "agi", "rea", "str", "wil", "log", "int", "cha"];
+const SHORT_KEY = { bod: "bod", agi: "agi", rea: "rea", str: "str", wil: "wil", log: "log", int: "int", cha: "cha", mag: "magic", res: "magic", edg: "edge" };
+
+/** Finds the metatype maxima from the free-text metatype ("Elf", "troll", "Krasnolud"…); unknown → human (6). */
+export function metatypeMax(text, metatypes, L) {
+  const t = String(text ?? "").trim().toLowerCase();
+  const id = Object.keys(metatypes).find((m) => m === t || L(`SRE.Chargen.Metatype.${m}`).toLowerCase() === t);
+  return (metatypes[id] ?? metatypes.human ?? { max: {} }).max;
+}
+
+/**
+ * @param {object} actor   prepared actor; actor._source holds the editable values
+ * @param {object} opts    { L, config: CONFIG.SR6, metatypes: METATYPES, skills: ordered skill ids, showAll }
+ */
+export function buildSkillsContext(actor, { L = (k) => k, config = {}, metatypes = {}, skills = [], showAll = true } = {}) {
+  const s = actor.system ?? {};
+  const src = actor._source?.system ?? s;
+  const wound = typeof actor.getWoundModifier === "function" ? num(actor.getWoundModifier()) : monitorPenalty(s.physical) + monitorPenalty(s.stun);
+  const max = metatypeMax(s.metatype, metatypes, L);
+  const mortype = s.mortype ?? "mundane";
+  const special = mortype === "technomancer" ? "res" : MAGIC_TYPES.has(mortype) ? "mag" : null;
+
+  const attr = (id) => {
+    const a = s.attributes?.[id] ?? {};
+    const value = num(a.pool);
+    const limit = id === "mag" || id === "res" ? 6 + num(a.initiation) : num(max[id], 6);
+    return {
+      id, short: L(`SRE.Chargen.Short.${SHORT_KEY[id] ?? id}`), label: L(`attrib.${id}`),
+      value, base: num(src.attributes?.[id]?.base), mod: num(a.mod), max: limit, atMax: value >= limit,
+      special: id === "mag" || id === "res",
+    };
+  };
+  const attributes = PRIMARY.map(attr);
+  if (special) attributes.push(attr(special));
+
+  const defs = config.ATTRIB_BY_SKILL;
+  const defFor = (id) => (defs instanceof Map ? defs.get(id) : defs?.[id]) ?? {};
+  const list = skills
+    .filter((id) => s.skills?.[id] && (id !== "tasking" || mortype === "technomancer"))
+    .map((id) => {
+      const sk = s.skills[id];
+      const def = defFor(id);
+      const points = num(src.skills?.[id]?.points);
+      const specOptions = Object.entries(config.skill_special?.[id] ?? {}).map(([value, key]) => ({ value, label: L(key) }));
+      const raw = num(sk.pool);
+      return {
+        id, label: L(`skill.${id}`), attr: def.attrib ? L(`attrib.${def.attrib}_short`) : "",
+        points, trained: points > 0, untrainedAllowed: def.useUntrained !== false,
+        pool: { raw, value: Math.max(0, raw - wound), minus: wound },
+        specialization: src.skills?.[id]?.specialization ?? "",
+        expertise: src.skills?.[id]?.expertise ?? "",
+        specPool: sk.specialization ? Math.max(0, num(sk.poolS, raw + 2) - wound) : null,
+        expPool: sk.expertise ? Math.max(0, num(sk.poolE, raw + 3) - wound) : null,
+        specOptions,
+      };
+    });
+  const items = [...(actor.items ?? [])].filter((i) => i.type === "skill");
+  return {
+    attributes,
+    edgeAttr: { value: num(s.edge?.max), base: num(src.edge?.max), max: num(max.edge, 6), cap: EDGE_CAP },
+    essence: num(s.essence, 6).toFixed(2),
+    skills: showAll ? list : list.filter((x) => x.trained),
+    trainedCount: list.filter((x) => x.trained).length,
+    showAll,
+    knowledge: items.filter((i) => i.system?.genesisID === "knowledge").map((i) => ({ id: i.id, name: i.name })),
+    languages: items.filter((i) => i.system?.genesisID === "language").map((i) => ({ id: i.id, name: i.name, native: num(i.system?.points) >= 4 })),
+  };
+}
+
+// ───── Combat tab ─────
+
+const RANGED = new Set(["WEAPON_FIREARMS", "WEAPON_RANGED", "WEAPON_SPECIAL"]);
+const stripHtml = (h) => String(h ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+
+export function buildCombatContext(actor, { L = (k) => k, config = {} } = {}) {
+  const s = actor.system ?? {};
+  const wound = typeof actor.getWoundModifier === "function" ? num(actor.getWoundModifier()) : monitorPenalty(s.physical) + monitorPenalty(s.stun);
+  const items = [...(actor.items ?? [])];
+  const modsOf = (w) => items
+    .filter((m) => {
+      if (m.type !== "mod") return false;
+      const host = m.system?.embeddedInUuid;
+      const into = m.system?.installedIn;
+      return (host && host === w.uuid) || (into && (into.id ?? into) === w.id);
+    })
+    .map((m) => m.name);
+  const ammoTypes = Object.entries(config.AMMO_TYPES ?? {}).map(([value, key]) => ({ value, label: L(key) }));
+
+  const weapon = (i) => {
+    const g = i.system ?? {};
+    const cap = num(g.ammocap);
+    const ar = (i.calculatedAttackRating ?? i.calculated?.attackRating ?? g.attackRating ?? []).slice(0, 5).map((v) => (num(v) > 0 ? String(v) : null));
+    while (ar.length < 5) ar.push(null);
+    const raw = num(g.pool) + num(g.modes?.dicePoolMod);
+    const extras = [...modsOf(i), stripHtml(g.accessories)].filter(Boolean).join(", ");
+    return {
+      id: i.id, name: i.name, dv: g.dmgDef ?? "", modes: fireModesText(g.modes, L), ar, arFirst: ar[0] ?? "—", extras,
+      pool: { raw, value: Math.max(0, raw - wound), minus: wound },
+      ammo: cap > 0 ? { count: Math.min(num(g.ammocount), cap), cap, loaded: g.ammoLoaded ?? "regular",
+        types: ammoTypes.map((t) => ({ ...t, selected: t.value === (g.ammoLoaded ?? "regular") })) } : null,
+    };
+  };
+  const gear = items.filter((i) => i.type === "gear");
+  const ranged = gear.filter((i) => RANGED.has(i.system?.type)).map(weapon);
+  const melee = gear.filter((i) => i.system?.type === "WEAPON_CLOSE_COMBAT").map(weapon);
+
+  // Unarmed: DV = STR/2 (rounded up) stun, AR = REA + STR, pool = Close Combat.
+  const str = num(s.attributes?.str?.pool);
+  const ccRaw = num(s.skills?.close_combat?.pool);
+  const unarmed = { dv: `${Math.ceil(str / 2)}${L("SRE.Sheet.StunShort")}`, ar: num(s.attributes?.rea?.pool) + str,
+    pool: { raw: ccRaw, value: Math.max(0, ccRaw - wound), minus: wound } };
+
+  const armor = gear.filter((i) => i.system?.type === "ARMOR").map((i) => ({
+    id: i.id, name: i.name, defense: num(i.system?.defense), social: num(i.system?.social), worn: !!i.system?.usedForPool,
+  }));
+
+  const dp = s.defensepool ?? {};
+  const resist = [
+    ["physical", "defense"], ["astral", "defense"], ["spells_direct", "defense"], ["spells_indirect", "defense"],
+    ["spells_other", "defense"], ["toxin", "defense"], ["damage_physical", "soak"], ["damage_astral", "soak"],
+  ].filter(([id]) => dp[id]).map(([id, kind]) => {
+    const raw = num(dp[id].pool);
+    const minus = kind === "soak" ? 0 : wound;
+    return { id, kind, label: L(`SRE.Sheet.Resist.${id}`), raw, value: Math.max(0, raw - minus), minus };
+  });
+
+  return { ranged, melee, unarmed, armor, defenseRating: num(s.defenserating?.physical?.pool), resist };
+}

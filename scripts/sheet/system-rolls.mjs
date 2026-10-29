@@ -33,6 +33,19 @@ export async function rollPool(actor, { pool, label, kind }) {
   return actor.rollCommonCheck(roll, dialogConfig);
 }
 
+/** Attribute test, like the system sheet's attribute tiles (attribute + optional second attribute in the dialog). */
+export async function rollAttribute(actor, { id, pool, label }) {
+  const { PreparedRoll, RollType } = await types();
+  const roll = new PreparedRoll();
+  roll.pool = Number(pool) || 0;
+  roll.rollType = RollType.Common;
+  roll.actionText = roll.checkText = label;
+  roll.allowBuyHits = true;
+  roll.useAttributeMod = true;
+  roll.attributeTested = id;
+  return actor.rollCommonCheck(roll, { useModifier: true, useThreshold: true });
+}
+
 export async function rollSkill(actor, skillId, skillSpec) {
   const { SkillRoll } = await types();
   const roll = new SkillRoll(actor.system, skillId);

@@ -3,7 +3,8 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import Handlebars from "handlebars";
-import { buildSheetContext, monitorPenalty, attackRatingText } from "../scripts/sheet/context.mjs";
+import { buildSheetContext, buildSkillsContext, buildCombatContext, metatypeMax, monitorPenalty, attackRatingText } from "../scripts/sheet/context.mjs";
+import { METATYPES, SKILLS } from "../scripts/chargen/rules.mjs";
 
 const lang = JSON.parse(readFileSync(new URL("../lang/pl/shadowrun-edge.json", import.meta.url), "utf8"));
 const L = (key) => key.split(".").reduce((o, k) => o?.[k], lang) ?? key;
@@ -71,6 +72,74 @@ const tabs = ["main", "skills"].map((id, i) => ({ id, label: id, active: i === 0
 const html = Handlebars.compile(source)({ ...ctx, editable: true, tabs, active: { main: true } });
 assert.ok(html.includes("Ares Predator VI") && html.includes("Kula Many"));
 assert.equal((html.match(/data-action="monitor"/g) ?? []).length, 23);
+
+// Attributes & skills tab.
+assert.equal(metatypeMax("Troll", METATYPES, L).bod, 9);
+assert.equal(metatypeMax("Krasnolud", METATYPES, L).str, 8, "localized metatype names work");
+assert.equal(metatypeMax("cokolwiek", METATYPES, L).bod, 6, "unknown text falls back to human");
+const skActor = {
+  ...actor,
+  system: {
+    ...actor.system,
+    attributes: { bod: { base: 2, mod: 0, pool: 2 }, agi: { base: 3, pool: 3 }, rea: { base: 3, mod: 1, pool: 4 }, str: { pool: 1 }, wil: { pool: 6 },
+      log: { pool: 5 }, int: { pool: 3 }, cha: { base: 5, pool: 5 }, mag: { base: 6, pool: 6 } },
+    skills: { sorcery: { pool: 12, poolS: 14, specialization: "spellcasting" }, firearms: { pool: 4 }, tasking: { pool: 0 }, perception: { pool: 5 } },
+  },
+  _source: { system: { attributes: { rea: { base: 3 } }, edge: { max: 4 }, skills: { sorcery: { points: 6, specialization: "spellcasting" }, firearms: { points: 1 } } } },
+  items: [...actor.items, { id: "k1", name: "Gangi Seattle", type: "skill", system: { genesisID: "knowledge" } },
+    { id: "l1", name: "Sperethiel", type: "skill", system: { genesisID: "language", points: 4 } }],
+};
+const config = {
+  ATTRIB_BY_SKILL: new Map([["sorcery", { attrib: "mag", useUntrained: false }], ["firearms", { attrib: "agi", useUntrained: true }]]),
+  skill_special: { sorcery: { spellcasting: "Rzucanie czarów" } },
+  AMMO_TYPES: { regular: "Standardowa", gel: "Żelowa" },
+};
+const sk = buildSkillsContext(skActor, { L, config, metatypes: METATYPES, skills: SKILLS });
+assert.equal(sk.attributes.length, 9, "8 primary + Magic for a magician");
+assert.equal(sk.attributes.find((a) => a.id === "rea").base, 3, "base comes from the source data");
+assert.equal(sk.attributes.find((a) => a.id === "cha").max, 8, "elf Charisma max 8");
+assert.ok(!sk.skills.some((x) => x.id === "tasking"), "tasking only for technomancers");
+const sorc = sk.skills.find((x) => x.id === "sorcery");
+assert.equal(sorc.points, 6);
+assert.equal(sorc.specPool, 13, "spec pool from the system's poolS, minus wounds");
+assert.equal(sorc.expPool, null);
+assert.equal(sk.trainedCount, 2);
+assert.equal(buildSkillsContext(skActor, { L, config, metatypes: METATYPES, skills: SKILLS, showAll: false }).skills.length, 2);
+assert.deepEqual(sk.languages, [{ id: "l1", name: "Sperethiel", native: true }]);
+
+// Combat tab.
+const cbActor = { ...skActor, items: [...skActor.items,
+  { id: "m1", name: "Pałka", type: "gear", system: { type: "WEAPON_CLOSE_COMBAT", pool: 3, dmgDef: "5S(e)", attackRating: [6, 0, 0, 0, 0] } },
+  { id: "a1", name: "Kurtka pancerna", type: "gear", system: { type: "ARMOR", defense: 4, usedForPool: true } },
+  { id: "x1", name: "Tłumik", type: "mod", system: { installedIn: { id: "w1" } } }] };
+cbActor.system = { ...cbActor.system, defensepool: { ...actor.system.defensepool, astral: { pool: 9 } } };
+const cb = buildCombatContext(cbActor, { L, config });
+assert.equal(cb.ranged.length, 1);
+assert.deepEqual(cb.ranged[0].ar, ["10", "10", "8", null, null]);
+assert.equal(cb.ranged[0].extras, "Tłumik");
+assert.equal(cb.ranged[0].ammo.types.find((t) => t.selected).value, "regular");
+assert.equal(cb.melee[0].arFirst, "6");
+assert.equal(cb.melee[0].extras, "", "a mod installed in another weapon is not listed");
+assert.equal(cb.unarmed.dv, "1O", "STR 1 → 1 stun");
+assert.equal(cb.unarmed.ar, 5, "REA 4 + STR 1");
+assert.equal(cb.armor[0].worn, true);
+assert.deepEqual(cb.resist.map((r) => r.id), ["physical", "astral", "damage_physical"]);
+assert.equal(cb.resist.find((r) => r.id === "damage_physical").minus, 0, "damage resistance ignores wounds");
+
+Handlebars.registerHelper("eq", (a, b) => a === b);
+Handlebars.registerHelper("gt", (a, b) => a > b);
+const page = (active, extra) => Handlebars.compile(source)({ ...ctx, ...extra, editable: true, tabs, active: { [active]: true } });
+const skHtml = page("skills", { sk });
+assert.ok(skHtml.includes('name="system.attributes.bod.base"') && skHtml.includes('name="system.skills.sorcery.points"'));
+assert.ok(skHtml.includes('<option value="spellcasting" selected>'));
+const cbHtml = page("combat", { combat: cb });
+assert.ok(cbHtml.includes("Pałka") && cbHtml.includes('data-item-field="system.ammoLoaded"') && cbHtml.includes("sre-es-toggle on"));
+// Only source fields may be named form fields: prepared values (pool, mod) must never be submitted back.
+for (const html of [skHtml, cbHtml]) {
+  for (const [, name] of html.matchAll(/name="(system\.[^"]+)"/g)) {
+    assert.match(name, /\.(base|max|points|specialization|expertise)$/, `form field ${name}`);
+  }
+}
 
 // Every data-action has a handler (own or inherited from ActorSheetV2) and none is reserved by ApplicationV2.
 globalThis.foundry = { applications: { api: { HandlebarsApplicationMixin: (c) => c }, sheets: { ActorSheetV2: class {} } } };
