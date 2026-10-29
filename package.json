@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node tools/build_catalog.mjs --pack",
-    "test": "node tools/test_parser.mjs && node tools/test_chargen.mjs && node tools/test_wizard.mjs && node tools/test_theme.mjs && node tools/test_sheet.mjs && node tools/test_item_sheet.mjs && node tools/test_rules.mjs && node tools/build_catalog.mjs"
+    "test": "node tools/test_parser.mjs && node tools/test_chargen.mjs && node tools/test_wizard.mjs && node tools/test_theme.mjs && node tools/test_lang.mjs && node tools/test_sheet.mjs && node tools/test_item_sheet.mjs && node tools/test_rules.mjs && node tools/build_catalog.mjs"
   },
   "devDependencies": {
     "@foundryvtt/foundryvtt-cli": "^1.1.0",

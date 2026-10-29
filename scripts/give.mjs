@@ -3,6 +3,8 @@
  * A player usually cannot create items on someone else's character, so the transfer is then done by the active
  * GM through the module socket, after checking that the sender owns the item.
  */
+import * as ui2 from "./ui/edge-ui.mjs";
+
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
@@ -82,18 +84,24 @@ export async function giveItem(item) {
   const total = Number(item.system.count) || 0;
   const countable = item.system.countable && total > 1;
   const mods = installedMods(item, source.items);
-  const options = list.map((r) => `<option value="${r.id}">${foundry.utils.escapeHTML(r.name)}${r.owners ? ` (${foundry.utils.escapeHTML(r.owners)})` : ""}</option>`).join("");
-  const result = await foundry.applications.api.DialogV2.prompt({
+  const people = list.map((r, i) => ({ value: r.id, label: r.name, small: r.owners, avatar: { img: game.actors.get(r.id)?.img, name: r.name }, checked: i === 0 }));
+  const content = `<div class="sre-ed">
+    ${ui2.head({ kind: L("SRE.Give.Kind"), name: item.name, sub: mods.length ? L("SRE.Give.WithMods", { mods: mods.map((m) => m.name).join(", ") }) : "" })}
+    <div class="sre-ed-body">
+      ${ui2.panel(L("SRE.Give.To"), ui2.options("target", people, { people: true }))}
+      ${countable ? ui2.panel(L("SRE.Give.HowMany"), ui2.rows([ui2.row(L("SRE.Give.Count", { total }), ui2.stepper("count", total, { min: 1, max: total }))])) : ""}
+    </div>
+  </div>`;
+  const nameOf = (id) => list.find((r) => r.id === id)?.name ?? "";
+  const result = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.Give.Title", { name: item.name }) },
-    content: `<div class="sre-give">
-      <label>${L("SRE.Give.To")} <select name="target">${options}</select></label>
-      ${countable ? `<label>${L("SRE.Give.Count", { total })} <input type="number" name="count" value="${total}" min="1" max="${total}"></label>` : ""}
-      ${mods.length ? `<p class="hint">${L("SRE.Give.WithMods", { mods: mods.map((m) => m.name).join(", ") })}</p>` : ""}
-    </div>`,
-    ok: { label: L("SRE.Give.Button"), callback: (event, button) => ({ target: button.form.elements.target.value, count: Number(button.form.elements.count?.value) || 0 }) },
+    position: { width: 460 },
+    content,
+    render: (event, dialog) => ui2.wire(dialog, (form) => ui2.setMainLabel(dialog, L("SRE.Give.ButtonTo", { name: nameOf(form.elements.target.value) }))),
+    buttons: ui2.buttons(L("SRE.Give.Button"), (event, button) => ({ target: button.form.elements.target.value, count: Number(button.form.elements.count?.value) || 0 }), { icon: "fas fa-right-left" }),
     rejectClose: false,
-  });
+  }));
   if (!result?.target) return;
   const target = game.actors.get(result.target);
   const count = countable ? Math.max(1, Math.min(total, result.count)) : 0;
@@ -107,11 +115,20 @@ export async function giveItem(item) {
 export async function deleteItem(item) {
   const actor = item.actor;
   const mods = actor ? installedMods(item, actor.items) : [];
-  const ok = await foundry.applications.api.DialogV2.confirm({
+  const ok = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.Give.DeleteTitle", { name: item.name }) },
-    content: `<p>${L("SRE.Give.DeleteText", { name: item.name })}</p>${mods.length ? `<p class="hint">${L("SRE.Give.DeleteMods", { mods: mods.map((m) => m.name).join(", ") })}</p>` : ""}`,
-  });
+    position: { width: 440 },
+    content: `<div class="sre-ed">
+      ${ui2.head({ kind: L("SRE.Give.DeleteKind"), name: item.name, sub: actor?.name ?? "" })}
+      <div class="sre-ed-body">
+        ${ui2.note(L("SRE.Give.DeleteText", { name: foundry.utils.escapeHTML(item.name) }), "warn", { html: true })}
+        ${mods.length ? ui2.note(L("SRE.Give.DeleteMods", { mods: mods.map((m) => m.name).join(", ") }), "info") : ""}
+      </div>
+    </div>`,
+    buttons: ui2.buttons(L("SRE.Give.DeleteButton"), () => true, { icon: "fas fa-trash" }),
+    rejectClose: false,
+  }));
   if (!ok) return;
   if (actor) return actor.deleteEmbeddedDocuments("Item", [...mods.map((m) => m.id), item.id]);
   return item.delete();

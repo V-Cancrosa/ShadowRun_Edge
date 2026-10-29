@@ -3,6 +3,8 @@
  * of cyberware and bioware. The system has no grades, so the module keeps the standard values in a flag and
  * recalculates the item from them.
  */
+import * as ui2 from "./ui/edge-ui.mjs";
+
 const MODULE_ID = "shadowrun-edge";
 
 export const GRADES = {
@@ -70,27 +72,26 @@ export async function promptGrade(item) {
   const flag = item.getFlag(MODULE_ID, "grade");
   const base = baseValues(item.system, flag);
   const current = flag?.id ?? "standard";
-  const rows = Object.keys(GRADES).map((id) => {
+  const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
+  const tilesList = Object.keys(GRADES).map((id) => {
     const u = gradeUpdates(base, id);
-    const details = game.i18n.format("SRE.Grade.Details", {
-      essence: u["system.essence"], price: u["system.price"].toLocaleString(), avail: u["system.availDef"] || u["system.avail"],
-    });
-    return `<label class="sre-grade"><input type="radio" name="grade" value="${id}" ${id === current ? "checked" : ""}>
-      <strong>${game.i18n.localize(`SRE.Grade.Name.${id}`)}</strong> <span>${details}</span></label>`;
-  }).join("");
-  return foundry.applications.api.DialogV2.wait({
+    return {
+      value: id, label: L(`SRE.Grade.Name.${id}`), checked: id === current,
+      small: L("SRE.Grade.Details", { essence: u["system.essence"], price: u["system.price"].toLocaleString(), avail: u["system.availDef"] || u["system.avail"] }),
+    };
+  });
+  const name = item.name.replace(SUFFIX, "");
+  return ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
-    window: { title: game.i18n.format("SRE.Grade.Title", { name: item.name.replace(SUFFIX, "") }) },
-    content: `<p class="hint">${game.i18n.localize("SRE.Grade.Hint")}</p><div class="sre-grades">${rows}</div>`,
-    buttons: [
-      {
-        action: "ok", label: game.i18n.localize("SRE.Grade.Apply"), icon: "fas fa-check", default: true,
-        callback: (event, button) => button.form.elements.grade.value,
-      },
-      { action: "cancel", label: game.i18n.localize("Cancel") },
-    ],
+    window: { title: L("SRE.Grade.Title", { name }) },
+    position: { width: 520 },
+    content: `<div class="sre-ed">
+      ${ui2.head({ kind: L("SRE.Grade.Kind"), name, sub: L("SRE.Grade.Hint") })}
+      <div class="sre-ed-body">${ui2.panel(L("SRE.Grade.Kind"), ui2.options("grade", tilesList))}</div>
+    </div>`,
+    buttons: ui2.buttons(L("SRE.Grade.Apply"), (event, button) => button.form.elements.grade.value, { icon: "fas fa-check" }),
     rejectClose: false,
-  }).then((result) => (result && result !== "cancel" ? result : null));
+  }));
 }
 
 /** Asks for a grade and applies it; resolves once the item is updated (or the player cancelled). */

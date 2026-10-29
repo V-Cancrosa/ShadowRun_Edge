@@ -270,6 +270,13 @@ kto dostaje Edge), **Wydawanie Edge** i **Modyfikatory** (−/+ i przełączniki
 dzika kość, test rozszerzony), a przycisk mówi, iloma kośćmi rzucasz. Moduł przestawia pola systemu, nie
 podmienia ich, więc rzut, Edge i przeliczenia działają dokładnie jak w systemie (3.3.9 i 4.x).
 
+### Okna modułu
+
+Okna leczenia, granatów, przywoływania i wypędzania, przekazania i usuwania, głosowania Karmy, stopnia wszczepu,
+zakupu i dodawania wiedzy mają ten sam układ: nagłówek, kafelki (pula, próg, kości ducha, kwota), panele, metody
+i typy jako kafelki do kliknięcia, przełączniki-chipy, −/+ i przycisk mówiący, co się stanie („Lecz · rzuć 9
+kośćmi”, „Przekaż: Doc”). Leczenie pokazuje na monitorach (zielona ramka), co zejdzie przy średnim wyniku.
+
 ## Głosowanie Karmy
 
 MG ma w zakładce *Aktorzy* przycisk **Głosowanie Karmy** (albo makro:

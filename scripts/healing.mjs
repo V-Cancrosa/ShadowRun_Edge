@@ -6,6 +6,7 @@
  */
 import { METHODS, ONCE_PER_INJURIES, healingPool, healingResult, treatmentThreshold, isDead } from "./healing-rules.mjs";
 import { errataFlags } from "./errata.mjs";
+import * as ui2 from "./ui/edge-ui.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
@@ -25,53 +26,87 @@ function healers(target) {
   return [...new Set([...order.filter((a) => a.isOwner), ...list])];
 }
 
+const split = (label) => {
+  const m = String(label).match(/^(.*?)\s*\((.*)\)$/);
+  return m ? [m[1], m[2]] : [label, ""];
+};
+
 export async function openHealing(target) {
   if (!target) return;
   if (isDead(target.system)) return ui.notifications.error(L("SRE.Heal.Dead", { name: target.name }));
   const used = target.getFlag(MODULE_ID, "healed") ?? {};
-  const options = METHODS.map((m) => `<option value="${m}">${L(`SRE.Heal.Method.${m}`)}${used[m] ? ` — ${L("SRE.Heal.AlreadyUsed")}` : ""}</option>`).join("");
-  const healerOptions = healers(target).map((a) => `<option value="${a.id}">${esc(a.name)}</option>`).join("");
+  const list = healers(target);
   const d = damageOf(target);
-  const content = `<div class="sre-heal">
-    <p class="sre-heal-state">${L("SRE.Heal.State", { name: esc(target.name), stun: d.stun, physical: d.physical, overflow: d.overflow })}</p>
-    <label>${L("SRE.Heal.MethodLabel")} <select name="method">${options}</select></label>
-    <label data-for="firstAid medkit magic">${L("SRE.Heal.Healer")} <select name="healer">${healerOptions}</select></label>
-    <label class="checkbox" data-for="firstAid"><input type="checkbox" name="kit" checked> ${L("SRE.Heal.Kit")}</label>
-    <label class="checkbox" data-for="medkit"><input type="checkbox" name="useMedkitRating"> ${L("SRE.Heal.UseMedkitRating")}</label>
-    <label data-for="medkit">${L("SRE.Heal.MedkitRating")} <input type="number" name="medkitRating" value="3" min="1" max="6"></label>
-    <label class="checkbox" data-for="restStun restPhysical"><input type="checkbox" name="assistance"> ${L("SRE.Heal.Assistance")}</label>
-    <label data-for="firstAid medkit magic">${L("SRE.Heal.DrainBoxes")} <input type="number" name="drainBoxes" value="0" min="0" max="${d.stun}"></label>
-    <label data-for="firstAid medkit magic">${L("SRE.Heal.Prefer")} <select name="prefer"><option value="physical">${L("SRE.Heal.PreferPhysical")}</option><option value="stun">${L("SRE.Heal.PreferStun")}</option></select></label>
-    <label>${L("SRE.Heal.ManualHits")} <input type="number" name="manualHits" placeholder="${L("SRE.Heal.ManualHitsPlaceholder")}" min="0"></label>
-    <p class="hint">${L("SRE.Heal.Hint")}</p>
+  const s = target.system;
+  const essence = Number(s.essence ?? 6);
+  const { threshold, autoHit } = treatmentThreshold(essence);
+  const first = METHODS.find((m) => !used[m]) ?? METHODS[0];
+  const methodTiles = METHODS.map((m) => {
+    const [label, small] = split(L(`SRE.Heal.Method.${m}`));
+    return { value: m, label, small: used[m] ? L("SRE.Heal.AlreadyUsed") : small, checked: m === first };
+  });
+  const monitors = [
+    ui2.monitorRow("physical", L("SRE.Sheet.Monitor.physical"), Number(s.physical?.max) || 0, d.physical),
+    ui2.monitorRow("stun", L("SRE.Sheet.Monitor.stun"), Number(s.stun?.max) || 0, d.stun),
+    Number(s.overflow?.max) > 0 ? ui2.monitorRow("overflow", L("SRE.Sheet.Monitor.overflow"), Number(s.overflow.max), d.overflow) : "",
+  ].join("");
+  const treatment = "firstAid medkit magic";
+  const content = `<div class="sre-ed">
+    ${ui2.head({ kind: L("SRE.Heal.Kind"), name: target.name, sub: L("SRE.Heal.Sub", { essence: essence.toFixed(2), threshold }) })}
+    <div class="sre-ed-body">
+      ${ui2.tiles([
+        { id: "pool", big: "–", label: L("SRE.Roll.Pool"), accent: true },
+        { id: "threshold", big: threshold, label: L("SRE.Roll.Threshold"), calc: autoHit ? L("SRE.Heal.AutoHit") : `5 − ${essence.toFixed(1)}` },
+      ])}
+      ${ui2.panel(L("SRE.Heal.MethodLabel"), ui2.options("method", methodTiles), { hint: "s. 119–121" })}
+      ${ui2.panel(L("SRE.Heal.Monitors"), `${monitors}${ui2.note("", "ok", { id: "forecast" })}${ui2.note("", "warn", { id: "used" })}`, { hint: L("SRE.Heal.ForecastHint") })}
+      ${ui2.panel(L("SRE.Heal.Options"), ui2.rows([
+        ui2.row(L("SRE.Heal.Healer"), `<select name="healer">${list.map((a) => `<option value="${a.id}">${esc(a.name)}</option>`).join("")}</select>`, { attrs: ` data-for="${treatment}"` }),
+        ui2.chips([
+          ui2.chip("kit", L("SRE.Heal.KitShort"), { checked: true, attrs: ' data-for="firstAid"' }),
+          ui2.chip("useMedkitRating", L("SRE.Heal.UseMedkitRatingShort"), { attrs: ' data-for="medkit"' }),
+          ui2.chip("assistance", L("SRE.Heal.AssistanceShort"), { value: "+2", attrs: ' data-for="restStun restPhysical"' }),
+        ]),
+        ui2.row(L("SRE.Heal.MedkitRating"), ui2.stepper("medkitRating", 3, { min: 1, max: 6 }), { attrs: ' data-for="medkit"' }),
+        ui2.row(L("SRE.Heal.DrainBoxes"), ui2.stepper("drainBoxes", 0, { min: 0, max: d.stun }), { attrs: ` data-for="${treatment}"` }),
+        ui2.row(L("SRE.Heal.Prefer"), `<select name="prefer"><option value="physical">${L("SRE.Heal.PreferPhysical")}</option><option value="stun">${L("SRE.Heal.PreferStun")}</option></select>`, { attrs: ` data-for="${treatment}"` }),
+        ui2.row(L("SRE.Heal.ManualHits"), `<input type="number" name="manualHits" min="0" placeholder="—">`),
+      ]))}
+      ${ui2.note(L("SRE.Heal.HintShort"), "info")}
+    </div>
   </div>`;
-  const result = await foundry.applications.api.DialogV2.prompt({
+  const read = (f) => ({
+    method: f.method.value, healer: f.healer?.value, kit: f.kit?.checked, useMedkitRating: f.useMedkitRating?.checked,
+    medkitRating: Number(f.medkitRating?.value) || 0, assistance: f.assistance?.checked, drainBoxes: Number(f.drainBoxes?.value) || 0,
+    prefer: f.prefer?.value ?? "physical", manualHits: f.manualHits.value === "" ? null : Number(f.manualHits.value),
+  });
+  const result = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.Heal.Title", { name: target.name }) },
+    position: { width: 500 },
     content,
     render: (event, dialog) => {
-      const root = dialog.element ?? event?.target?.element;
-      const form = root?.querySelector("form") ?? root;
-      const sync = () => {
-        const m = form.querySelector("[name=method]").value;
-        for (const el of form.querySelectorAll("[data-for]")) el.hidden = !el.dataset.for.split(" ").includes(m);
-      };
-      form?.querySelector("[name=method]")?.addEventListener("change", sync);
-      if (form) sync();
+      ui2.wire(dialog, (form) => {
+        const o = read(form.elements);
+        ui2.showFor(form, o.method);
+        const isTreatment = ONCE_PER_INJURIES.includes(o.method);
+        const healer = isTreatment ? game.actors.get(o.healer) ?? target : target;
+        const pool = healingPool(o.method, healer.system, target.system, { ...o, woundModifier: target.getWoundModifier?.() ?? 0, errata: errataFlags() });
+        const thr = isTreatment ? threshold : 0;
+        ui2.setTile(form, "pool", { big: pool, calc: split(L(`SRE.Heal.Method.${o.method}`))[1] });
+        ui2.setTile(form, "threshold", { big: isTreatment ? thr : "—", calc: isTreatment ? (autoHit ? L("SRE.Heal.AutoHit") : `5 − ${essence.toFixed(1)}`) : "" });
+        const hits = o.manualHits ?? Math.round(pool / 3);
+        const res = healingResult({ method: o.method, hits, threshold: thr, autoHit: isTreatment ? autoHit : 0, damage: d, drainBoxes: o.drainBoxes, prefer: o.prefer });
+        ui2.setMonitorForecast(form, res.heal);
+        const parts = ["overflow", "physical", "stun"].filter((k) => res.heal[k]).map((k) => L(`SRE.Heal.Box.${k}`, { n: res.heal[k] }));
+        ui2.setNote(form, "forecast", L(o.manualHits === null ? "SRE.Heal.Forecast" : "SRE.Heal.ForecastManual", { hits, text: parts.length ? parts.join(", ") : L("SRE.Heal.Nothing") }));
+        ui2.setNote(form, "used", isTreatment && used[o.method] ? L("SRE.Heal.UsedWarning") : "");
+        ui2.setMainLabel(dialog, o.manualHits === null ? L("SRE.Heal.RollButton", { n: pool }) : L("SRE.Heal.ApplyButton"));
+      });
     },
-    ok: {
-      label: L("SRE.Heal.Roll"),
-      callback: (event, button) => {
-        const f = button.form.elements;
-        return {
-          method: f.method.value, healer: f.healer?.value, kit: f.kit?.checked, useMedkitRating: f.useMedkitRating?.checked,
-          medkitRating: Number(f.medkitRating?.value) || 0, assistance: f.assistance?.checked, drainBoxes: Number(f.drainBoxes?.value) || 0,
-          prefer: f.prefer?.value ?? "physical", manualHits: f.manualHits.value === "" ? null : Number(f.manualHits.value),
-        };
-      },
-    },
+    buttons: ui2.buttons(L("SRE.Heal.Roll"), (event, button) => read(button.form.elements), { icon: "fas fa-kit-medical" }),
     rejectClose: false,
-  });
+  }));
   if (!result) return;
   return healingTest(target, result);
 }

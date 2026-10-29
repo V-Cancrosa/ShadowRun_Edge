@@ -15,6 +15,7 @@ import { openSummon, openBanish, spiritsOf, setServices } from "../summoning.mjs
 import { forceBudget } from "../summoning-rules.mjs";
 import { throwExplosive } from "../blast.mjs";
 import { isLightTheme, toggleTheme } from "../theme.mjs";
+import * as ui2 from "../ui/edge-ui.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key) => game.i18n.localize(key);
@@ -206,14 +207,18 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** New knowledge skill or language (system skill items; SR6 knowledge skills have no rating). */
   static async #onAddKnowledge(event, target) {
     const kind = target.dataset.kind;
-    const name = await foundry.applications.api.DialogV2.prompt({
+    const name = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
       classes: ["sre-dialog"],
       window: { title: L(`SRE.Sheet.Add.${kind}`) },
-      content: `<label>${L("SRE.Sheet.Add.Name")} <input type="text" name="name" autofocus></label>
-        ${kind === "language" ? `<label class="checkbox"><input type="checkbox" name="native"> ${L("SRE.Sheet.Native")}</label>` : ""}`,
-      ok: { callback: (ev, button) => ({ name: button.form.elements.name.value.trim(), native: button.form.elements.native?.checked }) },
+      position: { width: 420 },
+      content: `<div class="sre-ed">${ui2.head({ kind: L(`SRE.Sheet.Add.${kind}`), name: this.document.name })}
+        <div class="sre-ed-body">${ui2.panel(L("SRE.Sheet.Add.Name"), ui2.rows([
+          `<input type="text" name="name" autofocus>`,
+          kind === "language" ? ui2.chips([ui2.chip("native", L("SRE.Sheet.Native"))]) : "",
+        ]))}</div></div>`,
+      buttons: ui2.buttons(L(`SRE.Sheet.Add.${kind}`), (ev, button) => ({ name: button.form.elements.name.value.trim(), native: button.form.elements.native?.checked }), { icon: "fas fa-plus" }),
       rejectClose: false,
-    });
+    }));
     if (!name?.name) return;
     const points = kind === "language" ? (name.native ? 4 : 1) : 1;
     return this.document.createEmbeddedDocuments("Item", [{ name: name.name, type: "skill", system: { genesisID: kind, points } }]);
@@ -320,7 +325,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onDismissSpirit(event, target) {
     const spirit = game.actors.get(target.closest("[data-spirit-id]")?.dataset.spiritId);
     if (!spirit?.isOwner) return;
-    const ok = await foundry.applications.api.DialogV2.confirm({ classes: ["sre-dialog"], window: { title: spirit.name }, content: `<p>${game.i18n.format("SRE.Summon.DismissConfirm", { name: spirit.name })}</p>` });
+    const ok = await ui2.confirm({ kind: L("SRE.Summon.DismissKind"), name: spirit.name, text: game.i18n.format("SRE.Summon.DismissConfirm", { name: spirit.name }), button: L("SRE.Summon.DismissButton"), icon: "fas fa-door-open", warn: true });
     if (ok) await spirit.delete();
     this.render();
   }

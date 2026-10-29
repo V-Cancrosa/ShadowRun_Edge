@@ -9,6 +9,7 @@ import {
 import { QUALITIES } from "./qualities.mjs";
 import { buildCharacter, repairUpdate } from "./build.mjs";
 import { errataFlags } from "../errata.mjs";
+import * as ui2 from "../ui/edge-ui.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -354,9 +355,9 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
   }
 
   static async #onReset() {
-    const ok = await foundry.applications.api.DialogV2.confirm({
-      classes: ["sre-dialog"],
-      window: { title: L("SRE.Chargen.Title") }, content: `<p>${L("SRE.Chargen.ResetConfirm")}</p>`, rejectClose: false,
+    const ok = await ui2.confirm({
+      title: L("SRE.Chargen.Title"), kind: L("SRE.Chargen.Title"), name: L("SRE.Chargen.ResetKind"),
+      text: L("SRE.Chargen.ResetConfirm"), button: L("SRE.Chargen.ResetButton"), icon: "fas fa-rotate-left", warn: true,
     });
     if (!ok) return;
     this.draft = emptyDraft();

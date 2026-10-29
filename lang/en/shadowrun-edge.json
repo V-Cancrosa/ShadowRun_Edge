@@ -155,7 +155,8 @@
       "Setting": {
         "Name": "Ask for implant grade",
         "Hint": "When cyberware or bioware is dropped on a character, ask for its grade (used, alpha, beta, delta)."
-      }
+      },
+      "Kind": "Implant grade"
     },
     "Mount": {
       "Label": "Mount (weapon)",
@@ -207,7 +208,12 @@
       "Setting": {
         "Name": "Ask to purchase",
         "Hint": "When an item with a price is dropped on a player character, offer to buy it with the character's nuyen."
-      }
+      },
+      "Kind": "Purchase",
+      "Total": "To pay",
+      "Left": "Left after",
+      "Options": "Options",
+      "MarkupShort": "Size surcharge"
     },
     "KarmaVote": {
       "Button": "Karma vote",
@@ -227,7 +233,12 @@
       "AwardHint": "The suggested value is the rounded average vote. You can change it before awarding.",
       "Award": "Award Karma",
       "NoCharacters": "No player characters (type \"Player\" owned by a player).",
-      "NoGM": "Votes go to the GM; wait until a GM is logged in."
+      "NoGM": "Votes go to the GM; wait until a GM is logged in.",
+      "Kind": "End of session",
+      "Sub": "Every player votes how much Karma each character earned",
+      "Characters": "Characters",
+      "Options": "Options",
+      "Awards": "Awards"
     },
     "Chargen": {
       "Title": "Character creator",
@@ -398,7 +409,9 @@
         "mundane": "Mundane"
       },
       "AdjustmentShort": "Adj.",
-      "Repaired": "Shadowrun Edge: repaired {count} character(s) from the creator (missing attribute and skill modifiers caused 0d6 rolls)."
+      "Repaired": "Shadowrun Edge: repaired {count} character(s) from the creator (missing attribute and skill modifiers caused 0d6 rolls).",
+      "ResetKind": "Start over",
+      "ResetButton": "Clear"
     },
     "Theme": {
       "ToLight": "Light theme",
@@ -617,7 +630,12 @@
       "Chat": "{from} gives <b>{item}</b> to {to}.",
       "DeleteTitle": "Delete: {name}",
       "DeleteText": "Delete <b>{name}</b> from the character? This cannot be undone.",
-      "DeleteMods": "Its installed mods are deleted too: {mods}."
+      "DeleteMods": "Its installed mods are deleted too: {mods}.",
+      "Kind": "Give",
+      "HowMany": "How many",
+      "ButtonTo": "Give to {name}",
+      "DeleteKind": "Delete",
+      "DeleteButton": "Delete"
     },
     "ItemSheet": {
       "Label": "Edge sheet (Shadowrun Edge)",
@@ -748,12 +766,25 @@
       "UsedWarning": "This method was already used on this set of injuries — by the rules it doesn't work again (the GM decides).",
       "Apply": "Apply healing",
       "Applied": "Applied",
-      "Dead": "{name} has Overflow equal to BOD × 2 — the character is dead, beyond healing (p. 121)."
+      "Dead": "{name} has Overflow equal to BOD × 2 — the character is dead, beyond healing (p. 121).",
+      "Kind": "Healing",
+      "Sub": "Essence {essence} · threshold {threshold}",
+      "Monitors": "Monitors",
+      "ForecastHint": "green outline = expected healing",
+      "Forecast": "With {hits} hits on average: {text}",
+      "ForecastManual": "With {hits} hits: {text}",
+      "Options": "Options",
+      "KitShort": "First aid kit",
+      "UseMedkitRatingShort": "Medkit rating + Logic (errata 02/2020)",
+      "AssistanceShort": "Medical care",
+      "HintShort": "Overflow heals first. First aid, medkit and magic work once per set of injuries; they don't heal drain.",
+      "RollButton": "Heal · roll {n} dice",
+      "ApplyButton": "Heal with the typed hits"
     },
     "Blast": {
       "Explosives": "Explosives",
       "ExplosivesHint": "thrown or launched, scatter and zones (pp. 114–117)",
-      "Zones": "ground zero / close / near",
+      "Zones": "Blast zones",
       "Radius": "Radius",
       "Throw": "Throw",
       "Panel": "Blast",
@@ -790,7 +821,16 @@
       "SoakDirt": "Hit the Dirt (−2 DV)",
       "CardHint": "Everyone in the radius resists with BOD (vehicles BOD × 2). The GM handles the Avoid Incoming action; Hit the Dirt lowers the DV by 2.",
       "NotOwner": "The character's owner or the GM rolls the resistance.",
-      "Result": "{name} — {item}: BOD pool {pool}, hits {hits} vs DV {dv} → {type}."
+      "Result": "{name} — {item}: BOD pool {pool}, hits {hits} vs DV {dv} → {type}.",
+      "Kind": "Grenade",
+      "Sub": "DV {gz}{type} / {close}{type} / {near}{type} · blast {radius} m",
+      "ThrownShort": "Throw",
+      "Athletics": "Athletics",
+      "Launcher": "Exotic weapons",
+      "Dice": "{skill} · {n} dice",
+      "AirburstShort": "Airburst",
+      "HintShort": "Then click a point on the scene (Esc cancels) — the module rolls 2D6 scatter and direction.",
+      "Title": "Grenade: {name}"
     },
     "Summon": {
       "Button": "Summon",
@@ -828,7 +868,22 @@
       "BanishDrainInitial": "Drain = 2 × the spirit's hits; Physical if it exceeds Magic {magic}.",
       "Dismiss": "Dismiss",
       "DismissConfirm": "Dismiss {name}? The spirit actor is deleted.",
-      "NoSpirits": "No summoned spirits."
+      "NoSpirits": "No summoned spirits.",
+      "Kind": "Summoning",
+      "Sub": "Magic {magic} · Force limit {max} ({used} in use)",
+      "PoolCalc": "Conjuring + Magic",
+      "SpiritRolls": "Spirit rolls",
+      "SpiritCalc": "Force {force} × 2",
+      "ForceLabel": "Spirit Force ({left} of the limit free)",
+      "ReagentsShort": "Reagents",
+      "Forecast": "About {services} services on average · drain ~{drain} (spirit hits), Physical above {magic}",
+      "ButtonN": "Summon · {n} dice",
+      "BanishKind": "Banishing",
+      "BanishSub": "Force {force}",
+      "Options": "Options",
+      "BanishHintShort": "Each net hit removes one service; drain = 2 × the spirit hits.",
+      "DismissKind": "Dismiss spirit",
+      "DismissButton": "Dismiss"
     },
     "Traits": {
       "Folder": "Qualities and powers",
@@ -854,7 +909,8 @@
       "WoundShort": "wounds",
       "SustainedShort": "sustaining",
       "RollN": "Roll {n} dice",
-      "RollOne": "Roll 1 die"
+      "RollOne": "Roll 1 die",
+      "Threshold": "Threshold"
     }
   }
 }

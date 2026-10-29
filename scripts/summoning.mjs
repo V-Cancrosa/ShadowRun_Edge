@@ -7,6 +7,7 @@
 import { CORE_SPIRITS, summoningResult, banishingResult, optionalPowers, forceBudget } from "./summoning-rules.mjs";
 import { errata } from "./errata.mjs";
 import * as rolls from "./sheet/system-rolls.mjs";
+import * as ui2 from "./ui/edge-ui.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
@@ -33,22 +34,44 @@ export async function openSummon(actor) {
   const budget = forceBudget(magic, spiritsOf(actor).map((s) => s.system.rating));
   const all = Object.keys(CONFIG.SR6?.SPIRIT_TYPES ?? {});
   const types = [...CORE_SPIRITS.filter((t) => !all.length || all.includes(t)), ...all.filter((t) => !CORE_SPIRITS.includes(t))];
-  const list = types.map((t) => `<option value="${t}">${esc(spiritLabel(t))}${CORE_SPIRITS.includes(t) ? "" : ` (${L("SRE.Summon.OtherBook")})`}</option>`).join("");
   const pool = Number(actor.system.skills?.conjuring?.pool) || 0;
-  const result = await foundry.applications.api.DialogV2.prompt({
+  const icons = { air: "fas fa-wind", beasts: "fas fa-paw", earth: "fas fa-mountain", fire: "fas fa-fire", kin: "fas fa-user", water: "fas fa-water" };
+  const typeTiles = types.map((t, i) => ({
+    value: t, label: spiritLabel(t), icon: icons[t] ?? "fas fa-ghost", checked: i === 0,
+    small: CORE_SPIRITS.includes(t) ? "" : L("SRE.Summon.OtherBook"),
+  }));
+  const startForce = Math.max(1, Math.min(magic, budget.left || 1));
+  const content = `<div class="sre-ed">
+    ${ui2.head({ kind: L("SRE.Summon.Kind"), name: actor.name, sub: L("SRE.Summon.Sub", { magic, used: budget.used, max: budget.max }) })}
+    <div class="sre-ed-body">
+      ${ui2.tiles([
+        { id: "pool", big: pool, label: L("SRE.Roll.Pool"), calc: L("SRE.Summon.PoolCalc"), accent: true },
+        { id: "spirit", big: startForce * 2, label: L("SRE.Summon.SpiritRolls"), calc: L("SRE.Summon.SpiritCalc", { force: startForce }) },
+      ])}
+      ${ui2.panel(L("SRE.Summon.Type"), ui2.options("type", typeTiles, { cards: true }))}
+      ${ui2.panel(L("SRE.Summon.Force"), ui2.rows([
+        ui2.row(L("SRE.Summon.ForceLabel", { left: budget.left }), ui2.stepper("force", startForce, { min: 1 })),
+        ui2.chips([ui2.chip("reagents", L("SRE.Summon.ReagentsShort"))]),
+        ui2.row(L("SRE.Heal.ManualHits"), `<input type="number" name="manualHits" min="0" placeholder="—">`),
+      ]) + ui2.note("", "ok", { id: "forecast" }) + ui2.note("", "warn", { id: "budget" }))}
+    </div>
+  </div>`;
+  const result = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.Summon.Title", { name: actor.name }) },
-    content: `<div class="sre-heal">
-      <p class="sre-heal-state">${L("SRE.Summon.Info", { pool, magic, used: budget.used, max: budget.max })}</p>
-      <label>${L("SRE.Summon.Type")} <select name="type">${list}</select></label>
-      <label>${L("SRE.Summon.Force")} <input type="number" name="force" value="${Math.max(1, Math.min(magic, budget.left || 1))}" min="1" max="${Math.max(1, budget.left)}"></label>
-      <label class="checkbox"><input type="checkbox" name="reagents"> ${L("SRE.Summon.Reagents")}</label>
-      <label>${L("SRE.Heal.ManualHits")} <input type="number" name="manualHits" min="0" placeholder="${L("SRE.Heal.ManualHitsPlaceholder")}"></label>
-      <p class="hint">${L("SRE.Summon.Hint")}</p>
-    </div>`,
-    ok: { label: L("SRE.Summon.Button"), callback: (e, b) => ({ type: b.form.elements.type.value, force: Number(b.form.elements.force.value) || 1, reagents: b.form.elements.reagents.checked, manualHits: b.form.elements.manualHits.value === "" ? null : Number(b.form.elements.manualHits.value) }) },
+    position: { width: 500 },
+    content,
+    render: (event, dialog) => ui2.wire(dialog, (form) => {
+      const force = Math.max(1, Number(form.elements.force.value) || 1);
+      ui2.setTile(form, "spirit", { big: force * 2, calc: L("SRE.Summon.SpiritCalc", { force }) });
+      const net = pool / 3 - (force * 2) / 3;
+      ui2.setNote(form, "forecast", L("SRE.Summon.Forecast", { services: Math.max(0, Math.round(net)), drain: Math.round((force * 2) / 3), magic }));
+      ui2.setNote(form, "budget", force > budget.left ? L("SRE.Summon.OverBudget", { max: budget.max }) : "");
+      ui2.setMainLabel(dialog, L("SRE.Summon.ButtonN", { n: pool }));
+    }),
+    buttons: ui2.buttons(L("SRE.Summon.Button"), (e, b) => ({ type: b.form.elements.type.value, force: Number(b.form.elements.force.value) || 1, reagents: b.form.elements.reagents.checked, manualHits: b.form.elements.manualHits.value === "" ? null : Number(b.form.elements.manualHits.value) }), { icon: "fas fa-hat-wizard" }),
     rejectClose: false,
-  });
+  }));
   if (!result) return;
   if (result.force > budget.left) ui.notifications.warn(L("SRE.Summon.OverBudget", { max: budget.max }));
   const summoner = result.manualHits === null ? await hits(pool) : { roll: null, hits: result.manualHits };
@@ -94,18 +117,31 @@ export async function openBanish(actor) {
   if (!target || target.type !== "Spirit") return ui.notifications.warn(L("SRE.Summon.TargetSpirit"));
   const force = Number(target.system.rating) || 1;
   const flag = target.getFlag(MODULE_ID, "spirit");
-  const result = await foundry.applications.api.DialogV2.prompt({
+  const banishPool = Number(actor.system.skills?.conjuring?.pool) || 0;
+  const content = `<div class="sre-ed">
+    ${ui2.head({ kind: L("SRE.Summon.BanishKind"), name: target.name, sub: L("SRE.Summon.BanishSub", { force }) })}
+    <div class="sre-ed-body">
+      ${ui2.tiles([
+        { big: banishPool, label: L("SRE.Roll.Pool"), calc: L("SRE.Summon.PoolCalc"), accent: true },
+        { big: force * 2, label: L("SRE.Summon.SpiritRolls"), calc: L("SRE.Summon.SpiritCalc", { force }) },
+      ])}
+      ${ui2.panel(L("SRE.Summon.Options"), ui2.rows([
+        ui2.row(L("SRE.Summon.ServicesLeft"), ui2.stepper("services", flag?.services ?? 1, { min: 0 })),
+        ui2.chips([ui2.chip("reagents", L("SRE.Summon.ReagentsShort"))]),
+        ui2.row(L("SRE.Heal.ManualHits"), `<input type="number" name="manualHits" min="0" placeholder="—">`),
+      ]))}
+      ${ui2.note(L("SRE.Summon.BanishHintShort"), "info")}
+    </div>
+  </div>`;
+  const result = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.Summon.BanishTitle", { name: target.name }) },
-    content: `<div class="sre-heal">
-      <p class="sre-heal-state">${L("SRE.Summon.BanishInfo", { name: esc(target.name), force, pool: Number(actor.system.skills?.conjuring?.pool) || 0 })}</p>
-      <label>${L("SRE.Summon.ServicesLeft")} <input type="number" name="services" value="${flag?.services ?? 1}" min="0"></label>
-      <label class="checkbox"><input type="checkbox" name="reagents"> ${L("SRE.Summon.Reagents")}</label>
-      <label>${L("SRE.Heal.ManualHits")} <input type="number" name="manualHits" min="0" placeholder="${L("SRE.Heal.ManualHitsPlaceholder")}"></label>
-    </div>`,
-    ok: { label: L("SRE.Summon.BanishButton"), callback: (e, b) => ({ services: Number(b.form.elements.services.value) || 0, reagents: b.form.elements.reagents.checked, manualHits: b.form.elements.manualHits.value === "" ? null : Number(b.form.elements.manualHits.value) }) },
+    position: { width: 480 },
+    content,
+    render: (event, dialog) => ui2.wire(dialog),
+    buttons: ui2.buttons(L("SRE.Summon.BanishButton"), (e, b) => ({ services: Number(b.form.elements.services.value) || 0, reagents: b.form.elements.reagents.checked, manualHits: b.form.elements.manualHits.value === "" ? null : Number(b.form.elements.manualHits.value) }), { icon: "fas fa-ban" }),
     rejectClose: false,
-  });
+  }));
   if (!result) return;
   const pool = Number(actor.system.skills?.conjuring?.pool) || 0;
   const banisher = result.manualHits === null ? await hits(pool) : { roll: null, hits: result.manualHits };

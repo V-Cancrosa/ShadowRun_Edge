@@ -3,6 +3,8 @@
  * earned, and the GM closes the vote and awards it (system.karma and system.karma_total).
  * Players cannot edit the GM's chat message, so their votes go to the active GM through the module socket.
  */
+import * as ui2 from "./ui/edge-ui.mjs";
+
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
 const FLAG = "karmaVote";
@@ -81,30 +83,30 @@ export async function startKarmaVote() {
     ui.notifications.warn(L("SRE.KarmaVote.NoCharacters"));
     return;
   }
-  const list = characters.map((a) => `<label class="sre-kv-pick"><input type="checkbox" name="actor" value="${a.id}" checked>
-    <img src="${esc(a.img)}" alt=""> ${esc(a.name)}</label>`).join("");
-  const content = `
-    <div class="form-group"><label>${L("SRE.KarmaVote.TitleField")}</label>
-      <input type="text" name="title" placeholder="${esc(L("SRE.KarmaVote.Title"))}"></div>
-    <div class="sre-kv-picks">${list}</div>
-    <div class="form-group"><label>${L("SRE.KarmaVote.Max")}</label>
-      <input type="number" name="max" value="5" min="1" max="20" step="1"></div>
-    <div class="form-group"><label>${L("SRE.KarmaVote.NoSelf")}</label>
-      <input type="checkbox" name="noSelf" checked></div>`;
-  const settings = await foundry.applications.api.DialogV2.wait({
+  const content = `<div class="sre-ed">
+    ${ui2.head({ kind: L("SRE.KarmaVote.Kind"), name: L("SRE.KarmaVote.Title"), sub: L("SRE.KarmaVote.Sub") })}
+    <div class="sre-ed-body">
+      ${ui2.panel(L("SRE.KarmaVote.Characters"), ui2.toggles("actor", characters.map((a) => ({ value: a.id, label: a.name, avatar: { img: a.img, name: a.name }, checked: true })), { people: true }))}
+      ${ui2.panel(L("SRE.KarmaVote.Options"), ui2.rows([
+        ui2.row(L("SRE.KarmaVote.TitleField"), `<input type="text" name="title" placeholder="${esc(L("SRE.KarmaVote.Title"))}">`),
+        ui2.row(L("SRE.KarmaVote.Max"), ui2.stepper("max", 5, { min: 1, max: 20 })),
+        ui2.chips([ui2.chip("noSelf", L("SRE.KarmaVote.NoSelf"), { checked: true })]),
+      ]))}
+    </div>
+  </div>`;
+  const settings = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.KarmaVote.Title"), icon: "fas fa-star" },
+    position: { width: 480 },
     content,
-    buttons: [{
-      action: "start", label: L("SRE.KarmaVote.Start"), icon: "fas fa-check", default: true,
-      callback: (event, button) => {
-        const f = button.form.elements;
-        const ids = [...button.form.querySelectorAll("input[name=actor]:checked")].map((i) => i.value);
-        return { ids, max: Math.min(20, Math.max(1, Math.trunc(Number(f.max.value) || 5))), noSelf: f.noSelf.checked, title: f.title.value.trim() };
-      },
-    }],
+    render: (event, dialog) => ui2.wire(dialog),
+    buttons: ui2.buttons(L("SRE.KarmaVote.Start"), (event, button) => {
+      const f = button.form.elements;
+      const ids = [...button.form.querySelectorAll("input[name=actor]:checked")].map((i) => i.value);
+      return { ids, max: Math.min(20, Math.max(1, Math.trunc(Number(f.max.value) || 5))), noSelf: f.noSelf.checked, title: f.title.value.trim() };
+    }, { icon: "fas fa-star" }),
     rejectClose: false,
-  });
+  }));
   if (!settings?.ids?.length) return;
   const vote = {
     status: "open",
@@ -127,20 +129,23 @@ async function closeVote(message) {
   if (!vote || vote.status !== "open" || !game.user.isGM) return;
   const results = tally(vote);
   const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
-  const rows = vote.actors.map((a) => `<div class="form-group">
-      <label>${esc(a.name)} <span class="hint">${L("SRE.KarmaVote.Average", { average: results[a.id].average, count: results[a.id].count })}</span></label>
-      <input type="number" name="${a.id}" value="${results[a.id].suggested}" min="0" step="1"></div>`).join("");
-  const awards = await foundry.applications.api.DialogV2.wait({
+  const rows = vote.actors.map((a) => ui2.row(a.name, ui2.stepper(a.id, results[a.id].suggested, { min: 0 }), {
+    avatar: { img: a.img, name: a.name },
+    small: L("SRE.KarmaVote.Average", { average: results[a.id].average, count: results[a.id].count }),
+  }));
+  const awards = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.KarmaVote.Close"), icon: "fas fa-flag-checkered" },
-    content: `<p class="hint">${L("SRE.KarmaVote.AwardHint")}</p>${rows}`,
-    buttons: [{
-      action: "award", label: L("SRE.KarmaVote.Award"), icon: "fas fa-star", default: true,
-      callback: (event, button) => Object.fromEntries(vote.actors.map((a) =>
-        [a.id, Math.max(0, Math.trunc(Number(button.form.elements[a.id].value) || 0))])),
-    }],
+    position: { width: 480 },
+    content: `<div class="sre-ed">
+      ${ui2.head({ kind: L("SRE.KarmaVote.Kind"), name: vote.title || L("SRE.KarmaVote.Title"), sub: L("SRE.KarmaVote.AwardHint") })}
+      <div class="sre-ed-body">${ui2.panel(L("SRE.KarmaVote.Awards"), ui2.rows(rows))}</div>
+    </div>`,
+    render: (event, dialog) => ui2.wire(dialog),
+    buttons: ui2.buttons(L("SRE.KarmaVote.Award"), (event, button) => Object.fromEntries(vote.actors.map((a) =>
+      [a.id, Math.max(0, Math.trunc(Number(button.form.elements[a.id].value) || 0))])), { icon: "fas fa-star" }),
     rejectClose: false,
-  });
+  }));
   if (!awards) return;
   for (const [actorId, karma] of Object.entries(awards)) {
     const actor = game.actors.get(actorId);

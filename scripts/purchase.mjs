@@ -2,6 +2,8 @@
  * Buying gear: when an item lands on a player character, the module offers to pay for it from the character's
  * nuyen (SR6 core p. 245–246: Availability, legality, size cost adjustments). The system has no shop.
  */
+import * as ui2 from "./ui/edge-ui.mjs";
+
 const MODULE_ID = "shadowrun-edge";
 
 // Dwarf and troll metavariants (SR6 core p. 66–67), matched in the free-text metatype field, in several languages.
@@ -54,38 +56,42 @@ async function promptPurchase(item) {
   const warnings = [];
   if (legality === "L") warnings.push(L("SRE.Purchase.Licensed"));
   if (legality === "I") warnings.push(L("SRE.Purchase.Illegal"));
-  const content = `
-    <div class="sre-purchase">
-      <p><strong>${escape(item.name)}</strong> — ${price.toLocaleString()}¥
-        ${item.system.availDef ? `· ${L("SRE.Wizard.Avail")} ${escape(item.system.availDef)}` : ""}</p>
-      ${warnings.map((w) => `<p class="sre-warn"><i class="fas fa-triangle-exclamation"></i> ${w}</p>`).join("")}
-      ${countable ? `<div class="form-group"><label>${L("SRE.Purchase.Quantity")}</label>
-        <input type="number" name="quantity" value="1" min="1" step="1"></div>` : ""}
-      <div class="form-group"><label>${L("SRE.Purchase.Markup")}</label>
-        <input type="checkbox" name="markup" ${markup ? "checked" : ""}></div>
-      ${size ? `<p class="hint">${L(`SRE.Purchase.Size.${size}`)}</p>` : ""}
-      <p>${L("SRE.Purchase.Balance", { nuyen: nuyen.toLocaleString() })}</p>
-      <p class="hint">${L("SRE.Purchase.Hint")}</p>
-    </div>`;
+  const content = `<div class="sre-ed">
+    ${ui2.head({ kind: L("SRE.Purchase.Kind"), name: item.name, sub: [`${price.toLocaleString()}¥`, item.system.availDef ? `${L("SRE.Wizard.Avail")} ${item.system.availDef}` : ""].filter(Boolean).join(" · ") })}
+    <div class="sre-ed-body">
+      ${ui2.tiles([
+        { id: "total", big: `${purchaseTotal(price, 1, markup ? 0.1 : 0).toLocaleString()}¥`, label: L("SRE.Purchase.Total"), accent: true, money: true },
+        { id: "left", big: `${nuyen.toLocaleString()}¥`, label: L("SRE.Purchase.Left"), money: true },
+      ])}
+      ${warnings.map((w) => ui2.note(w, "warn")).join("")}
+      ${ui2.panel(L("SRE.Purchase.Options"), ui2.rows([
+        countable ? ui2.row(L("SRE.Purchase.Quantity"), ui2.stepper("quantity", 1, { min: 1 })) : "",
+        ui2.chips([ui2.chip("markup", L("SRE.Purchase.MarkupShort"), { checked: !!markup, value: "+10%" })]),
+      ]) + (size ? ui2.note(L(`SRE.Purchase.Size.${size}`), "info") : ""))}
+      ${ui2.note(L("SRE.Purchase.Hint"), "info")}
+    </div>
+  </div>`;
 
-  const read = (button) => {
-    const form = button.form;
-    return {
-      quantity: Math.max(1, Math.trunc(Number(form.elements.quantity?.value) || 1)),
-      markup: form.elements.markup?.checked ? 0.1 : 0,
-    };
-  };
+  const read = (form) => ({
+    quantity: Math.max(1, Math.trunc(Number(form.elements.quantity?.value) || 1)),
+    markup: form.elements.markup?.checked ? 0.1 : 0,
+  });
   return foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.Purchase.Title", { name: actor.name }), icon: "fas fa-cart-shopping" },
+    position: { width: 480 },
     content,
+    render: (event, dialog) => ui2.wire(dialog, (form) => {
+      const o = read(form);
+      const total = purchaseTotal(price, o.quantity, o.markup);
+      ui2.setTile(form, "total", { big: `${total.toLocaleString()}¥`, calc: o.quantity > 1 ? `${o.quantity} × ${price.toLocaleString()}¥` : "" });
+      ui2.setTile(form, "left", { big: `${(nuyen - total).toLocaleString()}¥`, calc: L("SRE.Purchase.Balance", { nuyen: nuyen.toLocaleString() }) });
+      form.querySelector('[data-tile="left"]')?.classList.toggle("bad", total > nuyen);
+    }),
     buttons: [
-      { action: "buy", label: L("SRE.Purchase.Buy"), icon: "fas fa-cart-shopping", default: true,
-        callback: (event, button) => ({ action: "buy", ...read(button) }) },
-      { action: "free", label: L("SRE.Purchase.Free"), icon: "fas fa-gift",
-        callback: (event, button) => ({ action: "free", ...read(button) }) },
-      { action: "remove", label: L("SRE.Purchase.Remove"), icon: "fas fa-xmark",
-        callback: () => ({ action: "remove" }) },
+      { action: "remove", label: L("SRE.Purchase.Remove"), icon: "fas fa-xmark", class: "sre-ed-ghost", callback: () => ({ action: "remove" }) },
+      { action: "free", label: L("SRE.Purchase.Free"), icon: "fas fa-gift", class: "sre-ed-ghost", callback: (event, button) => ({ action: "free", ...read(button.form) }) },
+      { action: "buy", label: L("SRE.Purchase.Buy"), icon: "fas fa-cart-shopping", default: true, class: "sre-ed-main", callback: (event, button) => ({ action: "buy", ...read(button.form) }) },
     ],
     rejectClose: false,
   });

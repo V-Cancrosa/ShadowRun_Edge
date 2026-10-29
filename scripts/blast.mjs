@@ -6,6 +6,7 @@
 import { RANGES, rangeCategory, scatterMeters, scatterAngle, scatterPoint, blastZone, parseBlast, thrownAttackRating, blastDamage } from "./blast-rules.mjs";
 import { errata } from "./errata.mjs";
 import { applyDamage } from "./sheet/system-rolls.mjs";
+import * as ui2 from "./ui/edge-ui.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
@@ -60,23 +61,33 @@ export async function throwExplosive(actor, item) {
   const launchers = actor.items.filter((i) => i.type === "gear" && /launcher|granatnik/i.test(`${i.name} ${i.system.subtype ?? ""}`));
   const agiOrLog = errata("launcherAgility") ? "agi" : "log";
   const launchPool = (Number(s.skills?.exotic_weapons?.points) || 0) + (Number(s.skills?.exotic_weapons?.modifier) || 0) + (Number(s.attributes?.[agiOrLog]?.pool) || 0);
-  const content = `<div class="sre-heal">
-    <p class="sre-heal-state">${L("SRE.Blast.Info", { name: esc(item.name), gz: blast.gz, close: blast.close, near: blast.near, type: blast.stun ? "S" : "P", radius: blast.radius })}</p>
-    <label>${L("SRE.Blast.Mode")} <select name="mode">
-      <option value="thrown">${L("SRE.Blast.Thrown", { pool: Number(s.skills?.athletics?.pool) || 0 })}</option>
-      ${launchers.map((l) => `<option value="${l.id}">${L("SRE.Blast.Launched", { name: esc(l.name), pool: launchPool })}</option>`).join("")}
-    </select></label>
-    <label class="checkbox"><input type="checkbox" name="airburst"> ${L("SRE.Blast.Airburst")}</label>
-    <label>${L("SRE.Heal.ManualHits")} <input type="number" name="manualHits" min="0" placeholder="${L("SRE.Heal.ManualHitsPlaceholder")}"></label>
-    <p class="hint">${L("SRE.Blast.Hint")}</p>
+  const athletics = Number(s.skills?.athletics?.pool) || 0;
+  const content = `<div class="sre-ed">
+    ${ui2.head({ kind: L("SRE.Blast.Kind"), name: item.name, sub: L("SRE.Blast.Sub", { gz: blast.gz, close: blast.close, near: blast.near, type: blast.stun ? "S" : "P", radius: blast.radius }) })}
+    <div class="sre-ed-body">
+      ${ui2.panel(L("SRE.Blast.Zones"), `<div class="sre-ed-zones">
+        <div class="sre-ed-zone"><i>${L("SRE.Blast.Zone.gz")}</i><b>${blast.gz}${blast.stun ? "S" : "P"}</b></div>
+        <div class="sre-ed-zone"><i>${L("SRE.Blast.Zone.close")} ≤3 m</i><b>${blast.close}${blast.stun ? "S" : "P"}</b></div>
+        <div class="sre-ed-zone"><i>${L("SRE.Blast.Zone.near")} ≤${blast.radius} m</i><b>${blast.near}${blast.stun ? "S" : "P"}</b></div></div>`)}
+      ${ui2.panel(L("SRE.Blast.Mode"), `${ui2.options("mode", [
+        { value: "thrown", label: L("SRE.Blast.ThrownShort"), small: L("SRE.Blast.Dice", { skill: L("SRE.Blast.Athletics"), n: athletics }), checked: true },
+        ...launchers.map((l) => ({ value: l.id, label: l.name, small: L("SRE.Blast.Dice", { skill: L("SRE.Blast.Launcher"), n: launchPool }) })),
+      ])}${ui2.rows([
+        ui2.chips([ui2.chip("airburst", L("SRE.Blast.AirburstShort"))]),
+        ui2.row(L("SRE.Heal.ManualHits"), `<input type="number" name="manualHits" min="0" placeholder="—">`),
+      ])}`)}
+      ${ui2.note(L("SRE.Blast.HintShort"), "info")}
+    </div>
   </div>`;
-  const choice = await foundry.applications.api.DialogV2.prompt({
+  const choice = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"],
     window: { title: L("SRE.Blast.Title", { name: item.name }) },
+    position: { width: 480 },
     content,
-    ok: { label: L("SRE.Blast.PickButton"), callback: (e, b) => ({ mode: b.form.elements.mode.value, airburst: b.form.elements.airburst.checked, manualHits: b.form.elements.manualHits.value === "" ? null : Number(b.form.elements.manualHits.value) }) },
+    render: (event, dialog) => ui2.wire(dialog),
+    buttons: ui2.buttons(L("SRE.Blast.PickButton"), (e, b) => ({ mode: b.form.elements.mode.value, airburst: b.form.elements.airburst.checked, manualHits: b.form.elements.manualHits.value === "" ? null : Number(b.form.elements.manualHits.value) }), { icon: "fas fa-crosshairs" }),
     rejectClose: false,
-  });
+  }));
   if (!choice) return;
   const aimed = await pickPoint();
   if (!aimed) return;

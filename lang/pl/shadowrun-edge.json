@@ -155,7 +155,8 @@
       "Setting": {
         "Name": "Pytaj o klasę wszczepu",
         "Hint": "Po przeciągnięciu cyberware lub bioware na postać kreator pyta o klasę (używane, alfa, beta, delta)."
-      }
+      },
+      "Kind": "Stopień wszczepu"
     },
     "Mount": {
       "Label": "Mocowanie (broń)",
@@ -207,7 +208,12 @@
       "Setting": {
         "Name": "Pytaj o zakup",
         "Hint": "Po przeciągnięciu przedmiotu z ceną na postać gracza proponuj zakup za jej nuyeny."
-      }
+      },
+      "Kind": "Zakup",
+      "Total": "Do zapłaty",
+      "Left": "Zostanie",
+      "Options": "Opcje",
+      "MarkupShort": "Dopłata za rozmiar"
     },
     "KarmaVote": {
       "Button": "Głosowanie Karmy",
@@ -227,7 +233,12 @@
       "AwardHint": "Proponowana wartość to zaokrąglona średnia głosów. Możesz ją zmienić przed przyznaniem.",
       "Award": "Przyznaj Karmę",
       "NoCharacters": "Brak postaci graczy (typ „Gracz” z właścicielem-graczem).",
-      "NoGM": "Głos dociera do MG — poczekaj, aż MG będzie zalogowany."
+      "NoGM": "Głos dociera do MG — poczekaj, aż MG będzie zalogowany.",
+      "Kind": "Koniec sesji",
+      "Sub": "Każdy gracz głosuje, ile Karmy zdobyła każda postać",
+      "Characters": "Postacie",
+      "Options": "Opcje",
+      "Awards": "Nagrody"
     },
     "Chargen": {
       "Title": "Kreator postaci",
@@ -398,7 +409,9 @@
         "mundane": "Brak magii"
       },
       "AdjustmentShort": "Dostos.",
-      "Repaired": "Shadowrun Edge: naprawiono {count} postać/postaci z kreatora (brakujące modyfikatory atrybutów i umiejętności dawały rzuty 0d6)."
+      "Repaired": "Shadowrun Edge: naprawiono {count} postać/postaci z kreatora (brakujące modyfikatory atrybutów i umiejętności dawały rzuty 0d6).",
+      "ResetKind": "Zacznij od nowa",
+      "ResetButton": "Wyczyść"
     },
     "Theme": {
       "ToLight": "Jasny motyw",
@@ -617,7 +630,12 @@
       "Chat": "{from} przekazuje <b>{item}</b> postaci {to}.",
       "DeleteTitle": "Usuń: {name}",
       "DeleteText": "Usunąć <b>{name}</b> z karty postaci? Tego nie da się cofnąć.",
-      "DeleteMods": "Usunięte zostaną też zamontowane dodatki: {mods}."
+      "DeleteMods": "Usunięte zostaną też zamontowane dodatki: {mods}.",
+      "Kind": "Przekazanie",
+      "HowMany": "Ile",
+      "ButtonTo": "Przekaż: {name}",
+      "DeleteKind": "Usunięcie",
+      "DeleteButton": "Usuń"
     },
     "ItemSheet": {
       "Label": "Karta Edge (Shadowrun Edge)",
@@ -748,12 +766,25 @@
       "UsedWarning": "Ten sposób był już użyty przy tym zestawie ran — według zasad nie działa ponownie (MG decyduje).",
       "Apply": "Zastosuj leczenie",
       "Applied": "Zastosowano",
-      "Dead": "{name} ma nadmiar równy BUD × 2 — postać nie żyje i nie da się jej wyleczyć (s. 121)."
+      "Dead": "{name} ma nadmiar równy BUD × 2 — postać nie żyje i nie da się jej wyleczyć (s. 121).",
+      "Kind": "Leczenie",
+      "Sub": "Esencja {essence} · próg {threshold}",
+      "Monitors": "Monitory",
+      "ForecastHint": "zielona ramka = przewidywane leczenie",
+      "Forecast": "Przy średnio {hits} sukcesach: {text}",
+      "ForecastManual": "Przy {hits} sukcesach: {text}",
+      "Options": "Opcje",
+      "KitShort": "Zestaw pierwszej pomocy",
+      "UseMedkitRatingShort": "Ocena apteczki + Logika (errata 02/2020)",
+      "AssistanceShort": "Opieka medyczna",
+      "HintShort": "Nadmiar leczy się najpierw. Pierwsza pomoc, apteczka i magia działają raz na zestaw ran; drenażu nie leczą.",
+      "RollButton": "Lecz · rzuć {n} kośćmi",
+      "ApplyButton": "Lecz z wpisanych sukcesów"
     },
     "Blast": {
       "Explosives": "Materiały wybuchowe",
       "ExplosivesHint": "rzut lub granatnik, rozrzut i strefy (s. 114–117)",
-      "Zones": "strefa zero / bliska / pobliska",
+      "Zones": "Strefy wybuchu",
       "Radius": "Promień",
       "Throw": "Rzuć",
       "Panel": "Wybuch",
@@ -790,7 +821,16 @@
       "SoakDirt": "Padnij (−2 DV)",
       "CardHint": "Każdy w promieniu wytrzymuje BUD (pojazdy BUD × 2). Unik z akcją Avoid Incoming rozgrywa MG; „Padnij” (Hit the Dirt) obniża DV o 2.",
       "NotOwner": "Wytrzymanie rzuca właściciel postaci albo MG.",
-      "Result": "{name} — {item}: BUD pula {pool}, sukcesy {hits} przeciw DV {dv} → {type}."
+      "Result": "{name} — {item}: BUD pula {pool}, sukcesy {hits} przeciw DV {dv} → {type}.",
+      "Kind": "Granat",
+      "Sub": "DV {gz}{type} / {close}{type} / {near}{type} · wybuch {radius} m",
+      "ThrownShort": "Rzut",
+      "Athletics": "Atletyka",
+      "Launcher": "Broń egzotyczna",
+      "Dice": "{skill} · {n} kości",
+      "AirburstShort": "Wybuch w powietrzu",
+      "HintShort": "Następnie kliknij punkt na scenie (Esc anuluje) — rozrzut 2K6 i kierunek policzy moduł.",
+      "Title": "Granat: {name}"
     },
     "Summon": {
       "Button": "Przywołaj",
@@ -828,7 +868,22 @@
       "BanishDrainInitial": "Drenaż = 2 × sukcesy ducha; fizyczny, jeśli przekracza Magię {magic}.",
       "Dismiss": "Odpraw",
       "DismissConfirm": "Odprawić {name}? Aktor ducha zostanie usunięty.",
-      "NoSpirits": "Brak przywołanych duchów."
+      "NoSpirits": "Brak przywołanych duchów.",
+      "Kind": "Przywoływanie",
+      "Sub": "Magia {magic} · limit Mocy {max} (zajęte {used})",
+      "PoolCalc": "Przywoływanie + Magia",
+      "SpiritRolls": "Duch rzuca",
+      "SpiritCalc": "Moc {force} × 2",
+      "ForceLabel": "Moc ducha (wolny limit {left})",
+      "ReagentsShort": "Reagenty",
+      "Forecast": "Średnio ~{services} usług · drenaż ~{drain} (sukcesy ducha), fizyczny gdy > {magic}",
+      "ButtonN": "Przywołaj · {n} kości",
+      "BanishKind": "Wypędzanie",
+      "BanishSub": "Moc {force}",
+      "Options": "Opcje",
+      "BanishHintShort": "Każdy sukces netto zabiera jedną usługę; drenaż = 2 × sukcesy ducha.",
+      "DismissKind": "Odprawienie ducha",
+      "DismissButton": "Odpraw"
     },
     "Traits": {
       "Folder": "Cechy i moce",
@@ -854,7 +909,8 @@
       "WoundShort": "rany",
       "SustainedShort": "podtrzymanie",
       "RollN": "Rzuć {n} kośćmi",
-      "RollOne": "Rzuć 1 kością"
+      "RollOne": "Rzuć 1 kością",
+      "Threshold": "Próg"
     }
   }
 }
