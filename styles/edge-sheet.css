@@ -38,14 +38,23 @@ body.sre-edge-light .sre-sheet {
   --sre-text: #1d1b24;
   --sre-text-dim: #5f5a6a;
   --sre-input: #ffffff;
+  --sre-tile: rgba(255, 255, 255, 0.85);
   --sre-head: linear-gradient(180deg, rgba(194, 24, 122, 0.06), transparent);
 }
 
 .sre-sheet .window-header {
+  --color-text-primary: var(--sre-text);
   background: var(--sre-bg-deep);
   color: var(--sre-text);
   border-bottom: 1px solid var(--sre-accent-line);
 }
+
+/* Foundry colors the title and the header buttons itself (light text); keep them on the Edge palette. */
+.sre-sheet .window-header :is(.window-title, .window-icon, button.header-control, a.header-control) {
+  color: var(--sre-text);
+  text-shadow: none;
+}
+.sre-sheet .window-header :is(button.header-control, a.header-control):hover { color: var(--sre-accent); }
 
 .sre-sheet .window-content {
   padding: 0;
@@ -441,7 +450,8 @@ body.sre-edge-light .sre-sheet {
   padding: 8px 4px;
   border: 1px solid var(--sre-line);
   border-radius: 5px;
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--sre-tile, rgba(0, 0, 0, 0.15));
+  color: var(--sre-text);
   box-shadow: none;
   text-align: center;
 }
