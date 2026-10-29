@@ -110,7 +110,7 @@ export function qualityKarma(q) {
 /**
  * Evaluates a draft: budgets ({ total, used }), final values and errors ([{ key, data }], keys under SRE.Chargen.Error).
  */
-export function evaluateDraft(draft) {
+export function evaluateDraft(draft, { errata = {} } = {}) {
   const errors = [];
   const err = (key, data = {}) => errors.push({ key, data });
   const p = draft.priorities ?? {};
@@ -139,6 +139,11 @@ export function evaluateDraft(draft) {
   // Attribute maximums: metatype, Exceptional (+1, max 10), Impaired (−level, min 2).
   const max = { ...meta.max, magic: 6 };
   for (const q of has("exceptional")) if (q.detail in max) max[q.detail] = Math.min(10, max[q.detail] + 1);
+  // Exceptional (p. 71): once per attribute (February 2020 errata), or only once at all (August 2019 errata).
+  const exceptional = has("exceptional");
+  if (errata.exceptionalPerAttribute !== false) {
+    if (new Set(exceptional.map((q) => q.detail)).size < exceptional.length) err("ExceptionalSameAttribute");
+  } else if (errata.exceptionalOnce !== false && exceptional.length > 1) err("ExceptionalOnce");
   for (const q of has("impaired")) if (q.detail in max) max[q.detail] = Math.max(2, max[q.detail] - q.level);
 
   // Adjustment points: Edge, Magic/Resonance and special racial attributes (those above the 1–6 range).

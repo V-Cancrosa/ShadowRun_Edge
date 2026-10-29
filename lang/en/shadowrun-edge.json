@@ -362,7 +362,9 @@
         "NativeTwice": "Only one native language.",
         "KarmaOver": "Karma: {used} of {total}.",
         "ContactOver": "Contact points: {used} of {total}.",
-        "ContactOverCha": "{name}: contact ratings cannot exceed Charisma ({cha})."
+        "ContactOverCha": "{name}: contact ratings cannot exceed Charisma ({cha}).",
+        "ExceptionalSameAttribute": "Exceptional can be taken only once per attribute (errata 02/2020, p. 71).",
+        "ExceptionalOnce": "Exceptional can be bought only once (errata 08/2019, p. 71)."
       },
       "QualityLevel": "Quality level",
       "PriorityTable": "Priority table",
@@ -444,7 +446,8 @@
       "Warn": {
         "wound": "Wound penalty −{wound} is included in the pools shown (except damage resistance); the roll dialog applies it itself.",
         "essence": "Essence below 1 — another implant may kill the character.",
-        "edgeCap": "Edge above 7 — more than the rules allow."
+        "edgeCap": "Edge above 7 — more than the rules allow.",
+        "magicMax": "Magic/Resonance {value} is above its maximum {max} (6 + grade − full points of Essence lost)."
       },
       "Karma": "Karma",
       "Nuyen": "Nuyen",
@@ -704,7 +707,18 @@
       "Label": "Defense against: {item} ({attrs}, caster hits: {hits})",
       "Title": "Target's defense",
       "TitleHint": "attributes the target defends with (see the spell's text)",
-      "Attribute": "Attribute"
+      "Attribute": "Attribute",
+      "HintAttacker": "The caster has {hits} hits — ties go to the attacker (errata 02/2020, p. 105), so the defender needs more hits."
+    },
+    "Errata": {
+      "aug2019": {
+        "Name": "SR6 errata: August 2019",
+        "Hint": "Catalyst's official core rulebook errata (August 2019). Off = first-print text. In the module: Exceptional (Attribute) bought only once (p. 71)."
+      },
+      "feb2020": {
+        "Name": "SR6 errata: February 2020",
+        "Hint": "Catalyst's official errata (February 2020); wins over the earlier one where both change the same rule. In the module: ties in opposed tests go to the attacker (p. 105); Exceptional once per attribute (p. 71); maximum Magic/Resonance 6 + grade − 1 per full point of Essence lost (p. 167, 195)."
+      }
     }
   }
 }

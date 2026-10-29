@@ -26,3 +26,25 @@ assert.equal(defensePool(def, ["wil", "f"]), 9, "Willpower + persona Firewall");
 assert.equal(defensePool(def, ["bod", "wil"]), 7);
 
 console.log("rules OK");
+
+// Errata switches.
+const { defenseThreshold } = await import("../scripts/opposed.mjs");
+assert.equal(defenseThreshold(3, true), 4, "Feb 2020 errata: ties go to the attacker");
+assert.equal(defenseThreshold(3, false), 3, "first print: ties go to the defender");
+assert.equal(defenseThreshold(0, true), 1);
+const { specialMax } = await import("../scripts/sheet/context.mjs");
+assert.equal(specialMax(0, 6), 6);
+assert.equal(specialMax(0, 5.8), 6, "less than a full point lost");
+assert.equal(specialMax(1, 4.9), 6, "grade 1, one full point lost");
+assert.equal(specialMax(0, 3), 3);
+assert.equal(specialMax(0, 3, false), 6, "without the erratum only the grade counts");
+const { evaluateDraft, emptyDraft } = await import("../scripts/chargen/rules.mjs");
+const d = emptyDraft();
+d.qualities = [{ id: "exceptional", detail: "agi" }, { id: "exceptional", detail: "log" }];
+const keys = (r) => r.errors.map((e) => e.key);
+assert.ok(!keys(evaluateDraft(d)).includes("ExceptionalSameAttribute"), "Feb 2020: two different attributes are fine");
+assert.ok(keys(evaluateDraft(d, { errata: { exceptionalPerAttribute: false } })).includes("ExceptionalOnce"), "Aug 2019 only: once in total");
+d.qualities[1].detail = "agi";
+assert.ok(keys(evaluateDraft(d)).includes("ExceptionalSameAttribute"));
+assert.ok(!keys(evaluateDraft(d, { errata: { exceptionalPerAttribute: false, exceptionalOnce: false } })).some((k) => k.startsWith("Exceptional")), "no errata: first print");
+console.log("errata OK");

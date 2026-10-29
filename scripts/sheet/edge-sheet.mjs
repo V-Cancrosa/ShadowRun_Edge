@@ -9,6 +9,7 @@ import {
 import * as rolls from "./system-rolls.mjs";
 import { METATYPES, SKILLS } from "../chargen/rules.mjs";
 import { giveItem, deleteItem } from "../give.mjs";
+import { errataFlags } from "../errata.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key) => game.i18n.localize(key);
@@ -72,7 +73,8 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const config = CONFIG.SR6 ?? {};
-    const data = buildSheetContext(this.document, { L, config });
+    const errata = errataFlags();
+    const data = buildSheetContext(this.document, { L, config, errata });
     const tab = this.sheetTab;
     const awakened = ["magician", "mysticadept", "aspectedmagician", "adept"].includes(this.document.system.mortype);
     let social = null;
@@ -90,7 +92,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       gear: tab === "gear" ? buildGearContext(this.document, { L, config }) : null,
       social,
       sk: this.sheetTab === "skills"
-        ? buildSkillsContext(this.document, { L, config, metatypes: METATYPES, skills: SKILLS, showAll: this.showAllSkills })
+        ? buildSkillsContext(this.document, { L, config, metatypes: METATYPES, skills: SKILLS, showAll: this.showAllSkills, errata })
         : null,
       combat: this.sheetTab === "combat" ? buildCombatContext(this.document, { L, config }) : null,
       editable: this.isEditable,

@@ -51,7 +51,7 @@ function pool(base, wound, { label, roll, woundless = false } = {}) {
  * @param {object} actor   the actor document (prepared): { name, img, system, items, getWoundModifier? }
  * @param {object} opts    { L: localize, config: CONFIG.SR6 }
  */
-export function buildSheetContext(actor, { L = (k) => k, config = {} } = {}) {
+export function buildSheetContext(actor, { L = (k) => k, config = {}, errata = {} } = {}) {
   const s = actor.system ?? {};
   const wound = typeof actor.getWoundModifier === "function"
     ? num(actor.getWoundModifier())
@@ -133,6 +133,12 @@ export function buildSheetContext(actor, { L = (k) => k, config = {} } = {}) {
   const essence = num(s.essence, 6);
   if (essence < 1) warnings.push({ level: "bad", text: L("SRE.Sheet.Warn.essence") });
   if (edgeMax > EDGE_CAP) warnings.push({ level: "warn", text: L("SRE.Sheet.Warn.edgeCap") });
+  const special = mortype === "technomancer" ? "res" : MAGIC_TYPES.has(mortype) ? "mag" : null;
+  if (special) {
+    const a = s.attributes?.[special] ?? {};
+    const limit = specialMax(a.initiation, essence, errata.essenceLowersMagicMax !== false);
+    if (num(a.pool) > limit) warnings.push({ level: "bad", text: L("SRE.Sheet.Warn.magicMax").replace("{value}", num(a.pool)).replace("{max}", limit) });
+  }
 
   return {
     name: actor.name,
@@ -170,7 +176,16 @@ export function metatypeMax(text, metatypes, L) {
  * @param {object} actor   prepared actor; actor._source holds the editable values
  * @param {object} opts    { L, config: CONFIG.SR6, metatypes: METATYPES, skills: ordered skill ids, showAll }
  */
-export function buildSkillsContext(actor, { L = (k) => k, config = {}, metatypes = {}, skills = [], showAll = true } = {}) {
+/**
+ * Maximum Magic or Resonance: 6 + initiate/submersion grade, reduced by one for every full point of Essence lost
+ * (February 2020 errata, p. 167 and p. 195; without it only the grade counts).
+ */
+export function specialMax(grade, essence, essenceLowersMax = true) {
+  const lost = essenceLowersMax ? Math.floor(6 - num(essence, 6) + 1e-9) : 0;
+  return Math.max(0, 6 + num(grade) - Math.max(0, lost));
+}
+
+export function buildSkillsContext(actor, { L = (k) => k, config = {}, metatypes = {}, skills = [], showAll = true, errata = {} } = {}) {
   const s = actor.system ?? {};
   const src = actor._source?.system ?? s;
   const wound = typeof actor.getWoundModifier === "function" ? num(actor.getWoundModifier()) : monitorPenalty(s.physical) + monitorPenalty(s.stun);
@@ -181,7 +196,7 @@ export function buildSkillsContext(actor, { L = (k) => k, config = {}, metatypes
   const attr = (id) => {
     const a = s.attributes?.[id] ?? {};
     const value = num(a.pool);
-    const limit = id === "mag" || id === "res" ? 6 + num(a.initiation) : num(max[id], 6);
+    const limit = id === "mag" || id === "res" ? specialMax(a.initiation, s.essence, errata.essenceLowersMagicMax !== false) : num(max[id], 6);
     return {
       id, short: L(`SRE.Chargen.Short.${SHORT_KEY[id] ?? id}`), label: L(`attrib.${id}`),
       value, base: num(src.attributes?.[id]?.base), mod: num(a.mod), max: limit, atMax: value >= limit,

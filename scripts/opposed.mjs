@@ -1,12 +1,14 @@
 /**
  * Defense against non-combat spells and complex forms (system issues #4 and #5): the chat card of the
  * caster's roll gets a "Defend" button for the target. The defender rolls two attributes against the
- * caster's hits as the threshold (a tie goes to the defender).
+ * caster's hits. Who wins a tie follows the errata setting: February 2020 errata (p. 105) gives ties to the
+ * attacker, so the defender needs more hits; with that erratum off a tie goes to the defender.
  * - Complex forms: the system's own oppAttr1/oppAttr2 (a mental attribute and a Matrix attribute).
  * - Spells: chosen per spell on the Edge item sheet; Body + Willpower when the spell names none
  *   (Sixth World FAQ: the default resistance for spells without a stated test).
  */
 import * as rolls from "./sheet/system-rolls.mjs";
+import { errata } from "./errata.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const MATRIX = new Set(["a", "s", "d", "f", "devRating"]);
@@ -40,6 +42,11 @@ function attrLabel(a) {
   return L(key);
 }
 
+/** Hits the defender needs to resist: more than the caster's when ties go to the attacker. */
+export function defenseThreshold(hits, tiesToAttacker) {
+  return Math.max(1, (Number(hits) || 0) + (tiesToAttacker ? 1 : 0));
+}
+
 /** The character defending: the selected token, else the user's own character. */
 function defender() {
   return canvas?.tokens?.controlled?.[0]?.actor ?? game.user.character ?? null;
@@ -62,13 +69,14 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   const button = document.createElement("button");
   button.type = "button";
   button.innerHTML = `<i class="fas fa-shield-halved"></i> ${L("SRE.Defend.Button", { attrs: names })}`;
-  button.dataset.tooltip = L("SRE.Defend.Hint", { hits });
+  const tiesToAttacker = errata("tiesToAttacker");
+  button.dataset.tooltip = L(tiesToAttacker ? "SRE.Defend.HintAttacker" : "SRE.Defend.Hint", { hits });
   button.addEventListener("click", async () => {
     const actor = defender();
     if (!actor) return ui.notifications.warn(L("SRE.Defend.NoDefender"));
     const pool = defensePool(actor, attrs);
     const label = L("SRE.Defend.Label", { item: item.name, attrs: names, hits });
-    return rolls.rollPool(actor, { pool, label, kind: "defense", threshold: Math.max(1, hits) });
+    return rolls.rollPool(actor, { pool, label, kind: "defense", threshold: defenseThreshold(hits, tiesToAttacker) });
   });
   box.append(button);
   (root.querySelector(".message-content") ?? root).append(box);

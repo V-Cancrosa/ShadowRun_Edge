@@ -171,10 +171,22 @@ klikać może właściciel postaci i MG. Na początku każdej rundy akcje wracaj
 ## Obrona przed czarami niebojowymi i formami złożonymi
 
 Karta rzutu czaru niebojowego z testem przeciwstawnym i formy złożonej ma przycisk *Obrona: …*. Obrońca zaznacza
-swój token i klika — rzuca dwoma atrybutami, a progiem są sukcesy rzucającego (remis wygrywa obrońca).
+swój token i klika — rzuca dwoma atrybutami przeciw sukcesom rzucającego. Remis wygrywa atakujący (errata
+z lutego 2020, s. 105); po wyłączeniu tej erraty remis wygrywa obrońca.
 - Formy złożone używają atrybutów obrony z danych systemu (np. Siła Woli + Firewall persony).
 - Dla czarów atrybuty obrony ustawiasz na Karcie Edge czaru (z opisu czaru w podręczniku); domyślnie Budowa +
   Siła Woli, jak w FAQ Sixth World dla czarów bez podanego testu.
+
+## Erraty SR6
+
+Moduł trzyma się wyłącznie 6. edycji. Oficjalne erraty Catalyst do podręcznika podstawowego są przełącznikami
+w ustawieniach świata (domyślnie włączone; wyłączenie = tekst z pierwszego druku):
+- **Errata SR6: sierpień 2019** — Wyjątkowy atrybut kupowany tylko raz (s. 71).
+- **Errata SR6: luty 2020** (nadpisuje wcześniejszą) — remis w teście przeciwstawnym wygrywa atakujący (s. 105);
+  Wyjątkowy atrybut raz na każdy atrybut (s. 71); maksimum Magii/Rezonansu 6 + stopień inicjacji/zanurzenia,
+  −1 za każdy pełny utracony punkt Esencji (s. 167, 195) — Karta Edge ostrzega, gdy Magia je przekracza.
+
+Kolejne funkcje (leczenie, przywoływanie, granaty) dostaną swoje erraty do tych samych przełączników.
 
 ## Wygląd „Edge”
 

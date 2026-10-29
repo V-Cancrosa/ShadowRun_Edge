@@ -8,6 +8,7 @@ import {
 } from "./rules.mjs";
 import { QUALITIES } from "./qualities.mjs";
 import { buildCharacter, repairUpdate } from "./build.mjs";
+import { errataFlags } from "../errata.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -22,7 +23,7 @@ const ERROR_TABS = [
   [/^(Priority|Metatype|Magic)/, "priorities"],
   [/^(Adjust|Attr)/, "attributes"],
   [/^(Skill|Spec)/, "skills"],
-  [/^Qualit/, "qualities"],
+  [/^(Qualit|Exceptional)/, "qualities"],
   [/^(Karma|Contact|Native)/, "extras"],
 ];
 
@@ -81,7 +82,7 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
   };
 
   get result() {
-    return evaluateDraft(this.draft);
+    return evaluateDraft(this.draft, { errata: errataFlags() });
   }
 
   #rowLabel(column, letter) {

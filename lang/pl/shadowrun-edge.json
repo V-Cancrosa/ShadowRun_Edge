@@ -362,7 +362,9 @@
         "NativeTwice": "Tylko jeden język ojczysty.",
         "KarmaOver": "Karma: {used} z {total}.",
         "ContactOver": "Punkty kontaktów: {used} z {total}.",
-        "ContactOverCha": "{name}: oceny kontaktu nie mogą przekraczać Charyzmy ({cha})."
+        "ContactOverCha": "{name}: oceny kontaktu nie mogą przekraczać Charyzmy ({cha}).",
+        "ExceptionalSameAttribute": "Wyjątkowy atrybut można wziąć tylko raz dla danego atrybutu (errata 02/2020, s. 71).",
+        "ExceptionalOnce": "Wyjątkowy atrybut można kupić tylko raz (errata 08/2019, s. 71)."
       },
       "QualityLevel": "Poziom cechy",
       "PriorityTable": "Tabela priorytetów",
@@ -444,7 +446,8 @@
       "Warn": {
         "wound": "Kara za rany −{wound} jest wliczona w pokazane pule (poza wytrzymaniem); okno rzutu odejmie ją samo.",
         "essence": "Esencja poniżej 1 — kolejny wszczep może zabić postać.",
-        "edgeCap": "Edge powyżej 7 — więcej niż pozwalają zasady."
+        "edgeCap": "Edge powyżej 7 — więcej niż pozwalają zasady.",
+        "magicMax": "Magia/Rezonans {value} przekracza maksimum {max} (6 + stopień − pełne punkty utraconej Esencji)."
       },
       "Karma": "Karma",
       "Nuyen": "Nuyeny",
@@ -704,7 +707,18 @@
       "Label": "Obrona przed: {item} ({attrs}, sukcesy rzucającego: {hits})",
       "Title": "Obrona celu",
       "TitleHint": "atrybuty, którymi cel się broni (z opisu czaru)",
-      "Attribute": "Atrybut"
+      "Attribute": "Atrybut",
+      "HintAttacker": "Rzucający ma {hits} sukcesów — remis wygrywa atakujący (errata 02/2020, s. 105), więc obrońca potrzebuje więcej sukcesów."
+    },
+    "Errata": {
+      "aug2019": {
+        "Name": "Errata SR6: sierpień 2019",
+        "Hint": "Oficjalna errata Catalyst do podręcznika podstawowego (sierpień 2019). Wyłączona = tekst z pierwszego druku. W module: Wyjątkowy atrybut kupowany tylko raz (s. 71)."
+      },
+      "feb2020": {
+        "Name": "Errata SR6: luty 2020",
+        "Hint": "Oficjalna errata Catalyst (luty 2020), nadpisuje wcześniejszą tam, gdzie obie zmieniają to samo. W module: remis w teście przeciwstawnym wygrywa atakujący (s. 105); Wyjątkowy atrybut raz na każdy atrybut (s. 71); maksimum Magii/Rezonansu 6 + stopień − 1 za każdy pełny utracony punkt Esencji (s. 167, 195)."
+      }
     }
   }
 }
