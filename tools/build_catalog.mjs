@@ -53,7 +53,7 @@ const { CATEGORIES, emptyState, typeLabel } = await import("../scripts/wizard/ca
 const { parseStatLine, evaluate } = await import("../scripts/wizard/parser.mjs");
 const { collectFormulas } = await import("../scripts/wizard/formulas.mjs");
 const { buildItemData } = await import("../scripts/wizard/item-wizard.mjs");
-const { SECTIONS, AUGMENT_EFFECTS } = await import("../catalog/core.mjs");
+const { SECTIONS, AUGMENT_EFFECTS, TRAITS } = await import("../catalog/core.mjs");
 
 const L = (key) => game.i18n.localize(key);
 
@@ -212,6 +212,29 @@ for (const section of SECTIONS) {
     if (opts.mods?.length) pendingMods.push([doc, opts.mods]);
     if (opts.mounts) (doc.flags[MODULE_ID] ??= {}).mounts = opts.mounts;
   }
+}
+
+// Qualities and adept powers the system lacks (scripts/traits.mjs applies their effects).
+for (const trait of TRAITS) {
+  const path = [L("SRE.Traits.Folder"), L(`TYPES.Item.${trait.type}`)];
+  const folder = folderId(path);
+  const _id = stableId(`item:${path.join("/")}:${trait.name}`);
+  const img = trait.type === "adeptpower"
+    ? `${ICON_ROOT}/default/mage-shield.svg`
+    : `${ICON_ROOT}/default/Default_Skill.svg`;
+  items.push({
+    _id, folder, sort: items.length * 10, _key: `!items!${_id}`, name: trait.name, type: trait.type, img,
+    system: { ...trait.system, description: `<p><em>${escapeHTML(trait.notes)}</em></p>`, product: "core", page: trait.page },
+    effects: trait.effects.map((e, index) => {
+      const effectId = stableId(`effect:${_id}:${index}`);
+      return {
+        _id: effectId, _key: `!items.effects!${_id}.${effectId}`, name: e.name, img: "icons/svg/aura.svg", type: "base",
+        disabled: false, transfer: true, origin: null, system: { level: 1, advanced: false },
+        changes: [{ key: e.key, mode: 2, value: e.value, priority: null }],
+      };
+    }),
+    flags: { [MODULE_ID]: { trait: true } },
+  });
 }
 
 // Every augmentation effect must match a catalog item, so a renamed row cannot silently lose its effects.

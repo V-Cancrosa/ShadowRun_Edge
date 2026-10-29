@@ -6,10 +6,29 @@
 const MODULE_ID = "shadowrun-edge";
 const THEMES = ["off", "dark", "light"];
 
-/** The look in effect for this client: the GM's world override wins over the player's choice. */
+/** Foundry's own color scheme for applications (Settings → Core → Interface), light or dark. */
+function foundryScheme() {
+  let scheme = "";
+  try {
+    const cs = game.settings.get("core", "uiConfig")?.colorScheme;
+    scheme = cs?.applications || cs?.interface || "";
+  } catch {
+    // older cores: no uiConfig
+  }
+  if (!scheme) scheme = document.body.classList.contains("theme-light") ? "light"
+    : document.body.classList.contains("theme-dark") ? "dark"
+    : globalThis.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  return scheme === "light" ? "light" : "dark";
+}
+
+/**
+ * The look in effect for this client: the GM's world override wins over the player's choice;
+ * "auto" follows Foundry's color scheme.
+ */
 export function activeTheme() {
   const forced = game.settings.get(MODULE_ID, "themeOverride");
-  const theme = forced === "player" ? game.settings.get(MODULE_ID, "theme") : forced;
+  let theme = forced === "player" ? game.settings.get(MODULE_ID, "theme") : forced;
+  if (theme === "auto") theme = foundryScheme();
   return THEMES.includes(theme) ? theme : "off";
 }
 
@@ -18,8 +37,12 @@ function applyTheme() {
   const body = document.body;
   body.classList.toggle("sre-theme", theme !== "off");
   for (const t of THEMES) body.classList.toggle(`sre-theme-${t}`, theme === t);
+  // The module's own windows (Edge sheets, creator, dialogs) are always Edge: light with the light look,
+  // or with Foundry's light scheme when the system look is off.
+  body.classList.toggle("sre-edge-light", theme === "light" || (theme === "off" && foundryScheme() === "light"));
   // Re-render open sheets so the damage monitors pick up (or drop) the box styling.
-  for (const app of Object.values(ui.windows ?? {})) if (app.actor) app.render(false);
+  const apps = [...Object.values(ui.windows ?? {}), ...(globalThis.foundry?.applications?.instances?.values?.() ?? [])];
+  for (const app of apps) if (app.actor && app.rendered) app.render(false);
 }
 
 Hooks.once("init", () => {
@@ -29,8 +52,8 @@ Hooks.once("init", () => {
     scope: "client",
     config: true,
     type: String,
-    choices: { dark: "SRE.Theme.dark", light: "SRE.Theme.light", off: "SRE.Theme.off" },
-    default: "dark",
+    choices: { auto: "SRE.Theme.auto", dark: "SRE.Theme.dark", light: "SRE.Theme.light", off: "SRE.Theme.off" },
+    default: "auto",
     onChange: applyTheme,
   });
 
@@ -40,7 +63,7 @@ Hooks.once("init", () => {
     scope: "world",
     config: true,
     type: String,
-    choices: { player: "SRE.Theme.player", dark: "SRE.Theme.dark", light: "SRE.Theme.light", off: "SRE.Theme.off" },
+    choices: { player: "SRE.Theme.player", auto: "SRE.Theme.auto", dark: "SRE.Theme.dark", light: "SRE.Theme.light", off: "SRE.Theme.off" },
     default: "player",
     onChange: applyTheme,
   });
@@ -48,6 +71,13 @@ Hooks.once("init", () => {
 
 Hooks.once("setup", () => {
   if (game.system.id === "shadowrun6-eden") applyTheme();
+});
+Hooks.once("ready", () => {
+  if (game.system.id === "shadowrun6-eden") applyTheme();
+});
+// Foundry's color scheme changed: "auto" (and the Edge windows with the look off) follow it.
+Hooks.on("clientSettingChanged", (key) => {
+  if (key === "core.uiConfig" && game.system.id === "shadowrun6-eden") applyTheme();
 });
 
 /**

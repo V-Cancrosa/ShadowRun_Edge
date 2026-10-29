@@ -118,3 +118,29 @@ assert.equal(S.drainIsPhysical({ drain: 6, resisted: 5, magic: 5, finalDrain: fa
 assert.deepEqual([1, 2, 3, 5, 6, 9].map(S.optionalPowers), [0, 0, 1, 1, 2, 3]);
 assert.deepEqual(S.forceBudget(6, [4, 5]), { max: 18, used: 9, left: 9 });
 console.log("blast & summoning OK");
+
+// ── Focused Concentration & Pain Resistance (scripts/traits-rules.mjs) ──
+{
+  const { eligibleSustained, focusedSustainedModifier, shiftedWoundModifier, boxLabel } = await import("../scripts/traits-rules.mjs");
+  const { monitorPenalty, monitorBoxes } = await import("../scripts/sheet/context.mjs");
+  const assert = (await import("node:assert/strict")).default;
+  const spell = (drain, on = true) => ({ type: "spell", system: { duration: "sustained", isSustained: on, drain } });
+  const items = [spell(4), spell(7), { type: "complexform", system: { duration: "sustained", isSustained: true } }, spell(3, false)];
+  assert.equal(eligibleSustained(items), 2, "drain 7+ and not sustained don't count");
+  assert.equal(focusedSustainedModifier(6, 1, items), 4, "level 1: one spell free");
+  assert.equal(focusedSustainedModifier(6, 3, items), 2, "only eligible spells are free");
+  assert.equal(focusedSustainedModifier(6, 0, items), 6);
+  // System formula (3.3.9) on a 10-box monitor.
+  const sys = (m) => monitorPenalty(m);
+  assert.equal(shiftedWoundModifier(sys, { max: 10, dmg: 3 }, 0), 1);
+  assert.equal(shiftedWoundModifier(sys, { max: 10, dmg: 3 }, 1), 0, "level 1: −1 starts at 4 boxes");
+  assert.equal(shiftedWoundModifier(sys, { max: 10, dmg: 4 }, 1), 1);
+  assert.equal(shiftedWoundModifier(sys, { max: 10, dmg: 2 }, -1), 1, "negative: −1 at 2 boxes");
+  assert.equal(boxLabel(3, 10, 0), "-1");
+  assert.equal(boxLabel(4, 10, 1), "-1");
+  assert.equal(boxLabel(3, 10, 1), null);
+  assert.equal(monitorPenalty({ max: 10, dmg: 3 }, 1), 0, "Edge sheet follows Pain Resistance");
+  assert.equal(monitorBoxes({ max: 10, dmg: 0 }, 1)[3].label, "−1");
+  assert.equal(monitorBoxes({ max: 10, dmg: 0 })[2].label, "−1");
+  console.log("traits OK");
+}

@@ -21,7 +21,7 @@ const LIST = [
   positive("elemental_resistance", "(Elemental) Resistance", 12, 71, { detail: "text" }),
   positive("exceptional", "Exceptional", 12, 71, { detail: "attribute" }),
   positive("first_impression", "First Impression", 12, 71),
-  positive("focused_concentration", "Focused Concentration", 12, 71, { levels: [1, 3] }),
+  positive("focused_concentration", "Focused Concentration", 12, 71, { levels: [1, 3], effects: [{ target: "focusedConcentration", perLevel: 1 }] }),
   positive("gearhead", "Gearhead", 10, 71),
   positive("guts", "Guts", 12, 71),
   positive("hardening", "Hardening", 10, 72),

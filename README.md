@@ -193,6 +193,22 @@ Przycisk **Leczenie** jest przy monitorach na Karcie Edge i w nagłówku karty p
   i zapomina przy nowych obrażeniach. Nadmiar równy BUD × 2 oznacza śmierć.
 - Wynik trafia na czat z przyciskiem *Zastosuj leczenie* (właściciel postaci albo — przez MG — każdy gracz).
 
+## Focused Concentration i Pain Resistance
+
+System nie ma ani danych, ani zasad dla tych dwóch rzeczy, więc moduł je dodaje:
+- **Focused Concentration** (cecha, s. 71, stopnie 1–3) — za każdy stopień jeden podtrzymywany czar lub forma
+  złożona nie daje kary −2 kości (nie liczą się czary z Drenażem 7+). Pole `system.focusedConcentration`.
+- **Pain Resistance** (moc adepta, s. 158, 0,25 PP za poziom) — za każdy poziom modyfikatory z ran przesuwają się
+  o kratkę dalej na monitorze fizycznym i ogłuszenia (wartość ujemna: wcześniej). Pole `system.painResistance`.
+- Oba są w katalogu (folder *Cechy i moce*) z gotowymi efektami zależnymi od poziomu przedmiotu, a kreator postaci
+  dodaje efekt do cechy Focused Concentration. Działa w rzutach systemu, w okienku rzutu, na Karcie Edge (kary
+  i etykiety kratek) i na karcie systemu.
+- Zgodność z modułami zychu
+  ([Focused Concentration](https://github.com/zychuk/foundry-shadowrun6-eden-focused-concentration),
+  [Pain Resistance](https://github.com/zychuk/foundry-shadowrun6-eden-pain-resistance), MIT): te same pola i zasady.
+  Gdy któryś z nich jest włączony, moduł Edge oddaje mu tę część i niczego nie liczy podwójnie; Karta Edge, katalog
+  i kreator działają z nim tak samo.
+
 ## Erraty SR6
 
 Moduł trzyma się wyłącznie 6. edycji. Oficjalne erraty Catalyst do podręcznika podstawowego są przełącznikami
@@ -234,8 +250,9 @@ kafelki atrybutów, monitory obrażeń w kratkach (kliknięcie kratki ustawia ob
 karty rzutów z ponumerowanymi kośćmi (trafienia na zielono, jedynki na czerwono, dzika kość na złoto)
 i czerwoną kartą przy komplikacji.
 
-- *Ustawienia → Shadowrun Edge → Wygląd systemu „Edge”*: każdy gracz wybiera **ciemny**, **jasny** albo
-  **wyłączony** (oryginalny wygląd systemu).
+- *Ustawienia → Shadowrun Edge → Wygląd systemu „Edge”*: każdy gracz wybiera **automatycznie** (jasny lub ciemny
+  jak schemat kolorów Foundry — domyślnie), **ciemny**, **jasny** albo **wyłączony** (oryginalny wygląd systemu).
+  Karta Edge, kreator i okna modułu idą za tym wyborem; przy wyłączonym wyglądzie — za schematem Foundry.
 - *Wygląd „Edge” dla wszystkich* (ustawienie świata): MG może wymusić jeden wygląd dla wszystkich albo
   zostawić **wybór gracza**.
 

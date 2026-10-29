@@ -412,7 +412,8 @@
       "dark": "Ciemny",
       "light": "Jasny",
       "off": "Wyłączony",
-      "player": "Wybór gracza"
+      "player": "Wybór gracza",
+      "auto": "Automatycznie (jak Foundry)"
     },
     "Sheet": {
       "Label": "Karta Edge (Shadowrun Edge)",
@@ -839,6 +840,11 @@
       "Dismiss": "Odpraw",
       "DismissConfirm": "Odprawić {name}? Aktor ducha zostanie usunięty.",
       "NoSpirits": "Brak przywołanych duchów."
+    },
+    "Traits": {
+      "Folder": "Cechy i moce",
+      "FocusEffect": "Focused Concentration (Dodaj poziom: kolejny podtrzymywany czar/forma bez kary)",
+      "PainEffect": "Pain Resistance (Dodaj poziom; ujemny = kary wcześniej)"
     }
   }
 }

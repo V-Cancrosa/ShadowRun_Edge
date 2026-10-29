@@ -30,8 +30,7 @@
     radial-gradient(90% 50% at 100% 100%, rgba(63, 212, 232, 0.06), transparent 60%);
 }
 
-.theme-light .sre-cc,
-body.theme-light .sre-cc {
+body.sre-edge-light .sre-cc {
   --sre-panel: rgba(0, 0, 0, 0.035);
   --sre-panel-strong: rgba(0, 0, 0, 0.07);
   --sre-line: rgba(0, 0, 0, 0.12);
@@ -806,7 +805,7 @@ body.theme-light .sre-cc {
   color: var(--sre-text);
 }
 
-body.sre-theme-light .sre-character-creator .sre-cc {
+body.sre-edge-light .sre-character-creator .sre-cc {
   --sre-accent: #c2187a;
   --sre-accent-soft: rgba(194, 24, 122, 0.1);
   --sre-accent-line: rgba(194, 24, 122, 0.4);

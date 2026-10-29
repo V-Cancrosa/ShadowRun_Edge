@@ -1,4 +1,5 @@
 import { parseBlast } from "../blast-rules.mjs";
+import { boxLabel, focusedSustainedModifier, shiftedWoundModifier } from "../traits-rules.mjs";
 
 /**
  * Data for the Edge sheet, computed from a shadowrun6-eden actor (prepared data).
@@ -12,7 +13,8 @@ const ASTRAL_TYPES = new Set(["magician", "mysticadept", "aspectedmagician"]);
 const num = (v, d = 0) => (Number.isFinite(Number(v)) && v !== "" && v !== null ? Number(v) : d);
 
 /** Wound penalty of one monitor, following the system: -1 per 3 boxes, plus one when the last partial row is full. */
-export function monitorPenalty(monitor) {
+export function monitorPenalty(monitor, painResistance = 0) {
+  if (num(painResistance)) return shiftedWoundModifier((m) => monitorPenalty(m), monitor, painResistance);
   const max = num(monitor?.max);
   const dmg = Math.min(num(monitor?.dmg), max);
   const remain = max - dmg;
@@ -21,14 +23,17 @@ export function monitorPenalty(monitor) {
   return mod;
 }
 
-/** Box list for a monitor; every third box carries the penalty label. */
-export function monitorBoxes(monitor) {
+/** Box list for a monitor; every third box carries the penalty label (moved by Pain Resistance). */
+export function monitorBoxes(monitor, painResistance = 0) {
   const max = num(monitor?.max);
   const dmg = num(monitor?.dmg);
+  const shift = Math.trunc(num(painResistance));
   return Array.from({ length: max }, (_, i) => ({
     index: i + 1,
     filled: i < dmg,
-    label: (i + 1) % 3 === 0 ? `−${(i + 1) / 3}` : "",
+    label: shift
+      ? (boxLabel(i + 1, max, shift) ?? "").replace("-", "−")
+      : (i + 1) % 3 === 0 ? `−${(i + 1) / 3}` : "",
   }));
 }
 
@@ -57,7 +62,7 @@ export function buildSheetContext(actor, { L = (k) => k, config = {}, errata = {
   const s = actor.system ?? {};
   const wound = typeof actor.getWoundModifier === "function"
     ? num(actor.getWoundModifier())
-    : monitorPenalty(s.physical) + monitorPenalty(s.stun);
+    : monitorPenalty(s.physical, s.painResistance) + monitorPenalty(s.stun, s.painResistance);
   const mortype = s.mortype ?? "mundane";
 
   const edgeValue = num(s.edge?.value);
@@ -70,8 +75,9 @@ export function buildSheetContext(actor, { L = (k) => k, config = {}, errata = {
     canSpend: edgeValue > 0,
   };
 
+  const pain = (id) => (id === "overflow" ? 0 : num(s.painResistance));
   const monitor = (id, m, label) => ({
-    id, label, max: num(m?.max), dmg: num(m?.dmg), boxes: monitorBoxes(m), penalty: id === "overflow" ? 0 : monitorPenalty(m),
+    id, label, max: num(m?.max), dmg: num(m?.dmg), boxes: monitorBoxes(m, pain(id)), penalty: id === "overflow" ? 0 : monitorPenalty(m, pain(id)),
   });
   const monitors = [monitor("physical", s.physical, L("SRE.Sheet.Monitor.physical")), monitor("stun", s.stun, L("SRE.Sheet.Monitor.stun"))];
   if (num(s.overflow?.max) > 0) monitors.push(monitor("overflow", s.overflow, L("SRE.Sheet.Monitor.overflow")));
@@ -190,7 +196,7 @@ export function specialMax(grade, essence, essenceLowersMax = true) {
 export function buildSkillsContext(actor, { L = (k) => k, config = {}, metatypes = {}, skills = [], showAll = true, errata = {} } = {}) {
   const s = actor.system ?? {};
   const src = actor._source?.system ?? s;
-  const wound = typeof actor.getWoundModifier === "function" ? num(actor.getWoundModifier()) : monitorPenalty(s.physical) + monitorPenalty(s.stun);
+  const wound = typeof actor.getWoundModifier === "function" ? num(actor.getWoundModifier()) : monitorPenalty(s.physical, s.painResistance) + monitorPenalty(s.stun, s.painResistance);
   const max = metatypeMax(s.metatype, metatypes, L);
   const mortype = s.mortype ?? "mundane";
   const special = mortype === "technomancer" ? "res" : MAGIC_TYPES.has(mortype) ? "mag" : null;
@@ -249,7 +255,7 @@ const stripHtml = (h) => String(h ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g
 
 export function buildCombatContext(actor, { L = (k) => k, config = {} } = {}) {
   const s = actor.system ?? {};
-  const wound = typeof actor.getWoundModifier === "function" ? num(actor.getWoundModifier()) : monitorPenalty(s.physical) + monitorPenalty(s.stun);
+  const wound = typeof actor.getWoundModifier === "function" ? num(actor.getWoundModifier()) : monitorPenalty(s.physical, s.painResistance) + monitorPenalty(s.stun, s.painResistance);
   const items = [...(actor.items ?? [])];
   const modsOf = (w) => items
     .filter((m) => {
@@ -312,11 +318,13 @@ export function buildCombatContext(actor, { L = (k) => k, config = {} } = {}) {
 
 const woundOf = (actor) => (typeof actor.getWoundModifier === "function"
   ? num(actor.getWoundModifier())
-  : monitorPenalty(actor.system?.physical) + monitorPenalty(actor.system?.stun));
+  : monitorPenalty(actor.system?.physical, actor.system?.painResistance) + monitorPenalty(actor.system?.stun, actor.system?.painResistance));
 /** Sustained spells and complex forms: −2 dice each (SR6), as the system's getSustainedModifier. */
 export function sustainedPenalty(actor) {
   if (typeof actor.getSustainedModifier === "function") return num(actor.getSustainedModifier());
-  return 2 * [...(actor.items ?? [])].filter((i) => (i.type === "spell" || i.type === "complexform") && i.system?.isSustained).length;
+  const items = [...(actor.items ?? [])];
+  const base = 2 * items.filter((i) => (i.type === "spell" || i.type === "complexform") && i.system?.isSustained).length;
+  return focusedSustainedModifier(base, actor.system?.focusedConcentration, items);
 }
 const label = (L, map, key) => (key ? L(map?.[key] ?? key) : "");
 

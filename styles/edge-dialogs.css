@@ -49,7 +49,7 @@
   box-shadow: 0 0 30px rgba(224, 64, 154, 0.12), 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-body.sre-theme-light .application.sre-dialog {
+body.sre-edge-light .application.sre-dialog {
   --sre-accent: #c2187a;
   --sre-accent-soft: rgba(194, 24, 122, 0.1);
   --sre-accent-line: rgba(194, 24, 122, 0.4);
@@ -184,7 +184,7 @@ body.sre-theme-light .application.sre-dialog {
   background: linear-gradient(90deg, var(--sre-accent-soft), transparent 70%);
 }
 
-body.sre-theme-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) {
+body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) {
   --sre-accent: #c2187a;
   --sre-accent-soft: rgba(194, 24, 122, 0.08);
   --sre-accent-line: rgba(194, 24, 122, 0.4);

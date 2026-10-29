@@ -9,7 +9,7 @@ const hooks = {};
 const classes = new Set();
 globalThis.Hooks = { once: (n, f) => (hooks[n] = f), on: (n, f) => (hooks[n] = f) };
 globalThis.ui = { windows: {} };
-globalThis.document = { body: { classList: { toggle: (c, on) => (on ? classes.add(c) : classes.delete(c)) } } };
+globalThis.document = { body: { classList: { toggle: (c, on) => (on ? classes.add(c) : classes.delete(c)), contains: (c) => classes.has(c) } } };
 globalThis.game = {
   system: { id: "shadowrun6-eden" },
   settings: { register: (m, k, d) => (registered[k] = d), get: (m, k) => values[k] },
@@ -32,9 +32,27 @@ assert.equal(activeTheme(), "off", "unknown value falls back to off");
 values.theme = "light";
 hooks.setup();
 assert.ok(classes.has("sre-theme") && classes.has("sre-theme-light") && !classes.has("sre-theme-dark"));
+assert.ok(classes.has("sre-edge-light"), "player's light choice makes the Edge windows light");
+values.theme = "dark";
+registered.theme.onChange();
+assert.ok(!classes.has("sre-edge-light"));
 values.theme = "off";
 registered.theme.onChange();
 assert.ok(!classes.has("sre-theme") && classes.has("sre-theme-off"));
+
+// "auto" follows Foundry's color scheme; with the look off the Edge windows follow it too.
+assert.equal(registered.theme.default, "auto");
+values.uiConfig = { colorScheme: { applications: "light", interface: "dark" } };
+values.theme = "auto";
+assert.equal(activeTheme(), "light");
+registered.theme.onChange();
+assert.ok(classes.has("sre-theme-light") && classes.has("sre-edge-light"));
+values.uiConfig = { colorScheme: { applications: "dark" } };
+assert.equal(activeTheme(), "dark");
+values.theme = "off";
+values.uiConfig = { colorScheme: { applications: "light" } };
+registered.theme.onChange();
+assert.ok(!classes.has("sre-theme") && classes.has("sre-edge-light"));
 
 for (const lang of ["pl", "en"]) {
   const t = JSON.parse(readFileSync(new URL(`../lang/${lang}/shadowrun-edge.json`, import.meta.url), "utf8")).SRE.Theme;

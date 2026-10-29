@@ -12,6 +12,7 @@ const QUALITY_EFFECT_KEYS = {
   stun: "system.stun.mod",
   overflow: "system.overflow.mod",
   defenseRating: "system.defenserating.physical.mod",
+  focusedConcentration: "system.focusedConcentration",
 };
 
 const ATTRIBUTE_DEFAULTS = { mod: 0, modString: "", augment: 0 };

@@ -412,7 +412,8 @@
       "dark": "Dark",
       "light": "Light",
       "off": "Off",
-      "player": "Player's choice"
+      "player": "Player's choice",
+      "auto": "Automatic (follow Foundry)"
     },
     "Sheet": {
       "Label": "Edge sheet (Shadowrun Edge)",
@@ -839,6 +840,11 @@
       "Dismiss": "Dismiss",
       "DismissConfirm": "Dismiss {name}? The spirit actor is deleted.",
       "NoSpirits": "No summoned spirits."
+    },
+    "Traits": {
+      "Folder": "Qualities and powers",
+      "FocusEffect": "Focused Concentration (Add level: sustain 1 more spell/complex form without penalty)",
+      "PainEffect": "Pain Resistance (Add level; negative = penalties earlier)"
     }
   }
 }

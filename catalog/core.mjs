@@ -1062,3 +1062,23 @@ export const AUGMENT_EFFECTS = {
   "Pain editor": [on("Edytor bólu aktywny: Siła Woli +1", "wil", 1, true), on("Edytor bólu aktywny: Intuicja −1", "int", -1, true)],
   "Synaptic booster": [on("Wzmacniacz synaptyczny: Reakcja i kości inicjatywy", ["rea", "iniDice"], "R")],
 };
+
+/**
+ * Qualities and adept powers the system has no data or rules for. Their Active Effects use the fields
+ * scripts/traits.mjs (or zychu's standalone modules) apply; the level comes from the item ("@item.…").
+ */
+const effect = (label, key, value) => ({ name: label, key, value });
+export const TRAITS = [
+  {
+    name: "Focused Concentration", type: "quality", page: 71,
+    system: { category: "ADVANTAGE", level: true, value: 1 },
+    notes: "Stopień 1–3, 12 Karmy za stopień. Za każdy stopień jeden podtrzymywany czar lub forma złożona bez −2 kości (nie czary z Drenażem 7+).",
+    effects: [effect("Focused Concentration", "system.focusedConcentration", "@item.system.value")],
+  },
+  {
+    name: "Pain Resistance", type: "adeptpower", page: 158,
+    system: { hasLevel: true, level: 1, cost: 0.25, activation: "passive" },
+    notes: "0,25 PP za poziom. Za każdy poziom modyfikatory z ran przesuwają się o kratkę dalej na obu monitorach.",
+    effects: [effect("Pain Resistance", "system.painResistance", "@item.system.level")],
+  },
+];
