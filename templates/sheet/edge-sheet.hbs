@@ -312,6 +312,22 @@
       </div>
     </div>
 
+    {{#if combat.explosives.length}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Blast.Explosives"}} <span>{{localize "SRE.Blast.ExplosivesHint"}}</span></h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">DV ({{localize "SRE.Blast.Zones"}})</th><th class="c">{{localize "SRE.Blast.Radius"}}</th><th class="c">{{localize "SRE.Sheet.Count"}}</th><th></th></tr>
+        {{#each combat.explosives}}
+        <tr data-item-id="{{id}}">
+          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td class="c"><b>{{dv}}</b></td><td class="c">{{radius}} m</td>
+          <td class="c">{{#if count includeZero=true}}{{count}}{{else}}—{{/if}}</td>
+          <td><button type="button" class="sre-es-btn solid" data-action="throwExplosive" {{#unless ../editable}}disabled{{/unless}}>{{localize "SRE.Blast.Throw"}}</button></td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+    {{/if}}
+
     <div class="sre-es-panel sre-es-gap">
       <h3>{{localize "SRE.Sheet.ResistTitle"}} <span>{{localize "SRE.Sheet.ClickToRoll"}}</span></h3>
       <div class="sre-es-quick">
@@ -371,6 +387,23 @@
         </table>
       </div>
     </div>
+    {{#if magic.canConjure}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Summon.Spirits"}} <span>{{localize "SRE.Summon.Budget"}} {{magic.budget.used}} / {{magic.budget.max}}
+        {{#if editable}}<button type="button" class="sre-es-mini" data-action="summon">{{localize "SRE.Summon.Button"}}</button>
+        <button type="button" class="sre-es-mini" data-action="banish">{{localize "SRE.Summon.BanishButton"}}</button>{{/if}}</span></h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Sheet.Name"}}</th><th>{{localize "SRE.Summon.Type"}}</th><th class="c">{{localize "SRE.Summon.Force"}}</th><th class="c">{{localize "SRE.Summon.ServicesLeft"}}</th><th></th></tr>
+        {{#each magic.spirits}}
+        <tr data-spirit-id="{{id}}">
+          <td><a class="sre-es-itemname" data-action="openSpirit">{{name}}</a></td><td>{{type}}</td><td class="c">{{force}}</td>
+          <td class="c"><span class="sre-es-count">{{#if owner}}<button type="button" class="sre-es-mini" data-action="spiritServices" data-delta="-1">−</button>{{/if}}<b>{{services}}</b>{{#if owner}}<button type="button" class="sre-es-mini" data-action="spiritServices" data-delta="1">+</button>{{/if}}</span></td>
+          <td>{{#if owner}}<button type="button" class="sre-es-mini" data-action="dismissSpirit">{{localize "SRE.Summon.Dismiss"}}</button>{{/if}}</td>
+        </tr>
+        {{else}}<tr><td colspan="5" class="sre-es-empty">{{localize "SRE.Summon.NoSpirits"}}</td></tr>{{/each}}
+      </table>
+    </div>
+    {{/if}}
     {{#if magic.adept}}
     <div class="sre-es-panel sre-es-gap">
       <h3>{{localize "SRE.Sheet.AdeptPowers"}} <span>PP: {{magic.ppUsed}} / {{magic.ppMax}}</span></h3>

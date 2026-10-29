@@ -1,3 +1,5 @@
+import { parseBlast } from "../blast-rules.mjs";
+
 /**
  * Data for the Edge sheet, computed from a shadowrun6-eden actor (prepared data).
  * Pure: no Foundry globals, so tools/test_sheet.mjs can run it in node.
@@ -297,7 +299,13 @@ export function buildCombatContext(actor, { L = (k) => k, config = {} } = {}) {
     return { id, kind, label: L(`SRE.Sheet.Resist.${id}`), raw, value: Math.max(0, raw - minus), minus };
   });
 
-  return { ranged, melee, unarmed, armor, defenseRating: num(s.defenserating?.physical?.pool), resist };
+  // Grenades and explosives: blast data set on the Edge item sheet, or read from the catalog note (pp. 114–117).
+  const explosives = gear.map((i) => {
+    const b = i.flags?.["shadowrun-edge"]?.blast?.gz ? i.flags["shadowrun-edge"].blast : parseBlast(`${i.system?.notes ?? ""} ${i.system?.description ?? ""}`);
+    return b ? { id: i.id, name: i.name, dv: `${b.gz}/${b.close}/${b.near}${b.stun ? "S" : "P"}`, radius: b.radius, count: i.system?.countable ? num(i.system?.count) : null } : null;
+  }).filter(Boolean);
+
+  return { ranged, melee, unarmed, armor, explosives, defenseRating: num(s.defenserating?.physical?.pool), resist };
 }
 
 // ───── Magic tab ─────

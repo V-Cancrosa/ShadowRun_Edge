@@ -11,6 +11,9 @@ import { METATYPES, SKILLS } from "../chargen/rules.mjs";
 import { giveItem, deleteItem } from "../give.mjs";
 import { errataFlags } from "../errata.mjs";
 import { openHealing } from "../healing.mjs";
+import { openSummon, openBanish, spiritsOf, setServices } from "../summoning.mjs";
+import { forceBudget } from "../summoning-rules.mjs";
+import { throwExplosive } from "../blast.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key) => game.i18n.localize(key);
@@ -56,6 +59,12 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       rollLegwork: EdgeActorSheet.#onLegwork,
       addContact: EdgeActorSheet.#onAddContact,
       heal: EdgeActorSheet.#onHeal,
+      summon: EdgeActorSheet.#onSummon,
+      banish: EdgeActorSheet.#onBanish,
+      spiritServices: EdgeActorSheet.#onSpiritServices,
+      openSpirit: EdgeActorSheet.#onOpenSpirit,
+      dismissSpirit: EdgeActorSheet.#onDismissSpirit,
+      throwExplosive: EdgeActorSheet.#onThrow,
     },
   };
 
@@ -89,7 +98,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     return {
       ...context,
       ...data,
-      magic: tab === "magic" ? buildMagicContext(this.document, { L, config }) : null,
+      magic: tab === "magic" ? this.#magicContext(config) : null,
       matrix: tab === "matrix" ? buildMatrixContext(this.document, { L, config, showAllActions: this.showAllMatrixActions }) : null,
       gear: tab === "gear" ? buildGearContext(this.document, { L, config }) : null,
       social,
@@ -269,6 +278,51 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onLegwork(event, target) {
     const item = this.#item(target);
     if (item) return rolls.rollLegwork(this.document, item);
+  }
+
+  /** Magic tab data plus the spirits this character summoned (they are separate actors). */
+  #magicContext(config) {
+    const magic = buildMagicContext(this.document, { L, config });
+    const spirits = spiritsOf(this.document);
+    magic.canConjure = ["magician", "mysticadept", "aspectedmagician"].includes(this.document.system.mortype);
+    magic.spirits = spirits.map((a) => {
+      const f = a.getFlag("shadowrun-edge", "spirit");
+      return { id: a.id, name: a.name, type: L(CONFIG.SR6?.SPIRIT_TYPES?.[a.system.spiritType] ?? a.system.spiritType), force: Number(a.system.rating) || 0, services: f.services, owner: a.isOwner };
+    });
+    magic.budget = forceBudget(this.document.system.attributes?.mag?.pool, spirits.map((a) => a.system.rating));
+    return magic;
+  }
+
+  static #onSummon() {
+    return openSummon(this.document);
+  }
+
+  static #onBanish() {
+    return openBanish(this.document);
+  }
+
+  static async #onSpiritServices(event, target) {
+    const spirit = game.actors.get(target.closest("[data-spirit-id]")?.dataset.spiritId);
+    const flag = spirit?.getFlag("shadowrun-edge", "spirit");
+    if (flag) await setServices(spirit, flag.services + Number(target.dataset.delta));
+    this.render();
+  }
+
+  static #onOpenSpirit(event, target) {
+    game.actors.get(target.closest("[data-spirit-id]")?.dataset.spiritId)?.sheet.render(true);
+  }
+
+  static async #onDismissSpirit(event, target) {
+    const spirit = game.actors.get(target.closest("[data-spirit-id]")?.dataset.spiritId);
+    if (!spirit?.isOwner) return;
+    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: spirit.name }, content: `<p>${game.i18n.format("SRE.Summon.DismissConfirm", { name: spirit.name })}</p>` });
+    if (ok) await spirit.delete();
+    this.render();
+  }
+
+  static async #onThrow(event, target) {
+    const item = this.#item(target);
+    if (item) return throwExplosive(this.document, item);
   }
 
   static #onHeal() {

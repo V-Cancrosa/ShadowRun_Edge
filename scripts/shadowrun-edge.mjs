@@ -13,6 +13,8 @@ import "./actions.mjs";
 import "./opposed.mjs";
 import "./errata.mjs";
 import "./healing.mjs";
+import "./blast.mjs";
+import "./summoning.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";
 

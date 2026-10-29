@@ -713,7 +713,7 @@
     "Errata": {
       "aug2019": {
         "Name": "SR6 errata: August 2019",
-        "Hint": "Catalyst's official core rulebook errata (August 2019). Off = first-print text. In the module: Exceptional (Attribute) bought only once (p. 71); wound modifiers don't apply to natural recovery tests (p. 121)."
+        "Hint": "Catalyst's official core rulebook errata (August 2019). Off = first-print text. In the module: Exceptional bought only once (p. 71); no wound modifiers on recovery (p. 121); each hit reduces scatter (p. 114); thrown grenade AR from the unarmed AR (p. 115); launchers: Exotic Weapons + AGI (p. 263); banishing drain Physical by the drain after resistance (p. 147)."
       },
       "feb2020": {
         "Name": "SR6 errata: February 2020",
@@ -759,6 +759,86 @@
       "Apply": "Apply healing",
       "Applied": "Applied",
       "Dead": "{name} has Overflow equal to BOD × 2 — the character is dead, beyond healing (p. 121)."
+    },
+    "Blast": {
+      "Explosives": "Explosives",
+      "ExplosivesHint": "thrown or launched, scatter and zones (pp. 114–117)",
+      "Zones": "ground zero / close / near",
+      "Radius": "Radius",
+      "Throw": "Throw",
+      "Panel": "Blast",
+      "PanelHint": "DV at Ground Zero (within 1 m), Close (1–3 m), Near (4 m – radius)",
+      "FromNote": "read from the catalog note — change to store your own",
+      "StunDamage": "Stun damage",
+      "Zone": {
+        "gz": "Ground Zero",
+        "close": "Close",
+        "near": "Near"
+      },
+      "Range": {
+        "close": "close",
+        "near": "near",
+        "medium": "medium",
+        "far": "far",
+        "extreme": "extreme"
+      },
+      "Info": "{name}: {gz}/{close}/{near}{type}, radius {radius} m.",
+      "Mode": "How",
+      "Thrown": "Thrown (Athletics + AGI, pool {pool})",
+      "Launched": "Launcher: {name} (Exotic Weapons + AGI, pool {pool})",
+      "Airburst": "Airburst: hits count double against scatter",
+      "Hint": "After 'Pick target' click a point on the scene (Esc or right click cancels). The distance from your token sets the range; scatter is 2D6 − (hits + range modifier), direction from the scatter diagram.",
+      "PickButton": "Pick target",
+      "PickPoint": "Click the point on the scene you aim at.",
+      "NoBlastData": "{name}: no blast data — fill it in on the Edge item sheet (Blast panel).",
+      "NoScene": "Throwing a grenade needs an active scene.",
+      "CardThrown": "Thrown: pool {pool}, hits {hits}, range {range}, throw AR {ar} (errata 08/2019: unarmed AR).",
+      "CardLaunched": "Launcher: pool {pool}, hits {hits}, range {range}.",
+      "CardScatter": "Scatter: 2D6 = {roll} → {meters} m, direction {dir}.",
+      "NoOne": "Nobody was in the blast radius.",
+      "Soak": "Resist",
+      "SoakDirt": "Hit the Dirt (−2 DV)",
+      "CardHint": "Everyone in the radius resists with BOD (vehicles BOD × 2). The GM handles the Avoid Incoming action; Hit the Dirt lowers the DV by 2.",
+      "NotOwner": "The character's owner or the GM rolls the resistance.",
+      "Result": "{name} — {item}: BOD pool {pool}, hits {hits} vs DV {dv} → {type}."
+    },
+    "Summon": {
+      "Button": "Summon",
+      "BanishButton": "Banish",
+      "Spirits": "Spirits",
+      "Budget": "Force total",
+      "Title": "Summoning: {name}",
+      "Info": "Conjuring + Magic: pool {pool}. Magic {magic}: active spirits total Force {used} of {max} (Magic × 3).",
+      "Type": "Type",
+      "Force": "Force",
+      "OtherBook": "other books",
+      "Reagents": "Spend reagents equal to the Force: +1 Edge (add it to a roll with Edge and type the hits in)",
+      "Hint": "The spirit rolls Force × 2 dice. At least one net hit is needed; services = net hits. Drain = the spirit's hits, Physical if higher than Magic (p. 146). The spirit leaves after one sunrise and one sunset.",
+      "OverBudget": "The combined Force of active spirits would exceed Magic × 3 ({max}) — not allowed by the rules.",
+      "SpiritName": "Spirit: {type} (Force {force})",
+      "Created": "{name} appears: {services} services, optional powers to choose: {powers}.",
+      "CardTitle": "Summoning: {type}, Force {force}",
+      "CardRolls": "Hits: {hits} vs {spirit} (the spirit rolled {dice} dice).",
+      "ReagentsNote": "(reagents: +1 Edge)",
+      "Success": "Success — {services} services.",
+      "Failure": "Failed — the spirit doesn't come.",
+      "DrainButton": "Resist drain {drain} ({type})",
+      "Physical": "Physical",
+      "Stun": "Stun",
+      "CardHint": "If the drain knocks the summoner out, the spirit returns to its metaplane.",
+      "DrainLabel": "Drain resistance {drain}",
+      "TargetSpirit": "Pick a spirit token (target or selection).",
+      "BanishTitle": "Banishing: {name}",
+      "BanishInfo": "{name}, Force {force}. Conjuring + Magic: pool {pool}.",
+      "ServicesLeft": "Services",
+      "BanishCard": "Banishing: {name}",
+      "Departs": "The spirit has no services left — it returns to its metaplane.",
+      "ServicesNow": "Net hits {net}: services left {n}.",
+      "BanishDrainFinal": "Drain = 2 × the spirit's hits; Physical if it still exceeds Magic {magic} after resistance (errata 08/2019, p. 147).",
+      "BanishDrainInitial": "Drain = 2 × the spirit's hits; Physical if it exceeds Magic {magic}.",
+      "Dismiss": "Dismiss",
+      "DismissConfirm": "Dismiss {name}? The spirit actor is deleted.",
+      "NoSpirits": "No summoned spirits."
     }
   }
 }

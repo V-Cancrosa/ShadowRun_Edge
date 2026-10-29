@@ -71,6 +71,19 @@
     {{/if}}
     {{/if}}
 
+    {{#if blast}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Blast.Panel"}} <span>{{#if blast.fromNote}}{{localize "SRE.Blast.FromNote"}}{{else}}{{localize "SRE.Blast.PanelHint"}}{{/if}}</span></h3>
+      <div class="sre-it-grid">
+        <label class="sre-it-f">{{localize "SRE.Blast.Zone.gz"}}<input type="number" name="flags.shadowrun-edge.blast.gz" value="{{blast.gz}}" min="0" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Blast.Zone.close"}}<input type="number" name="flags.shadowrun-edge.blast.close" value="{{blast.close}}" min="0" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Blast.Zone.near"}}<input type="number" name="flags.shadowrun-edge.blast.near" value="{{blast.near}}" min="0" {{#unless editable}}disabled{{/unless}}></label>
+        <label class="sre-it-f">{{localize "SRE.Blast.Radius"}} (m)<input type="number" name="flags.shadowrun-edge.blast.radius" value="{{blast.radius}}" min="1" max="50" {{#unless editable}}disabled{{/unless}}></label>
+        <div class="sre-it-f">{{localize "SRE.Blast.StunDamage"}}<button type="button" class="sre-es-toggle {{#if blast.stun}}on{{/if}}" data-action="toggleField" data-field="flags.shadowrun-edge.blast.stun" {{#unless editable}}disabled{{/unless}}></button></div>
+      </div>
+    </div>
+    {{/if}}
+
     {{#if (eq kind "armor")}}
     <div class="sre-es-panel sre-es-gap">
       <h3>{{localize "SRE.Sheet.Armor"}}</h3>

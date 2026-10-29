@@ -11,6 +11,10 @@ export const ERRATA = {
     rules: [
       { id: "exceptionalOnce", page: 71 }, // Exceptional (Attribute): purchased once
       { id: "noWoundsOnRecovery", page: 121 }, // wound modifiers don't apply to natural recovery tests
+      { id: "scatterEachHit", page: 114 }, // each hit (not "extra hits") reduces scatter
+      { id: "thrownGrenadeAR", page: 115 }, // thrown grenades: thrower's unarmed AR by range
+      { id: "launcherAgility", page: 263 }, // grenade launchers: Exotic Weapons + Agility (not Logic)
+      { id: "banishFinalDrain", page: 147 }, // banishing drain is Physical if the final drain exceeds Magic
     ],
   },
   feb2020: {

@@ -117,3 +117,9 @@ export async function rollInitiative(actor, { id, base, dice, label }) {
 export async function reloadWeapon(item) {
   return item.update({ "system.ammocount": item.system.ammocap });
 }
+
+/** Damage through the system (overflow into Physical and the Overflow track): 3.x (monitor, damage), 4.x ({ monitor, damage }). */
+export async function applyDamage(actor, monitor, damage) {
+  if (isV4()) return actor.applyDamage({ monitor, damage });
+  return actor.applyDamage(monitor, damage);
+}

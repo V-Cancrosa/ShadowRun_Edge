@@ -198,12 +198,34 @@ Przycisk **Leczenie** jest przy monitorach na Karcie Edge i w nagłówku karty p
 Moduł trzyma się wyłącznie 6. edycji. Oficjalne erraty Catalyst do podręcznika podstawowego są przełącznikami
 w ustawieniach świata (domyślnie włączone; wyłączenie = tekst z pierwszego druku):
 - **Errata SR6: sierpień 2019** — Wyjątkowy atrybut kupowany tylko raz (s. 71); bez kary za rany przy regeneracji
-  naturalnej (s. 121).
+  naturalnej (s. 121); każdy sukces zmniejsza rozrzut (s. 114); rzucany granat ma AR z walki wręcz rzucającego
+  (s. 115); granatniki: Broń egzotyczna + Zręczność (s. 263); fizyczny drenaż przy wypędzaniu liczony po teście
+  oporu (s. 147).
 - **Errata SR6: luty 2020** (nadpisuje wcześniejszą) — remis w teście przeciwstawnym wygrywa atakujący (s. 105);
   Wyjątkowy atrybut raz na każdy atrybut (s. 71); apteczka: ocena apteczki + Logika (s. 120); maksimum Magii/Rezonansu 6 + stopień inicjacji/zanurzenia,
   −1 za każdy pełny utracony punkt Esencji (s. 167, 195) — Karta Edge ostrzega, gdy Magia je przekracza.
 
-Kolejne funkcje (przywoływanie, granaty) dostaną swoje erraty do tych samych przełączników.
+## Granaty i wybuchy
+
+Granaty z ekwipunku (z kodami DV w notatce katalogu, np. „DV 16P / 12P / 8P, wybuch 20 m”, albo ustawione w panelu
+*Wybuch* Karty Edge przedmiotu) pojawiają się w zakładce Walka w panelu **Materiały wybuchowe**. Zasady z s. 114–117:
+- Wybierasz rzut (Atletyka) albo granatnik z ekwipunku (Broń egzotyczna + ZRE/LOG wg erraty), opcjonalnie wybuch
+  w powietrzu, i klikasz punkt na scenie. Sukcesy z rzutu systemu (np. z Edge) można wpisać ręcznie.
+- Rozrzut: 2K6 − (sukcesy + modyfikator z tabeli zasięgu); kierunek 2K6 wg diagramu. Na scenie powstaje szablon
+  wybuchu, a karta czatu wypisuje wszystkie żetony w strefach Epicentrum / Blisko / Pobliże z ich DV.
+- Przyciski *Wytrzymaj* i *Padnij* (−2 DV) przy każdym celu: właściciel rzuca BUD (pojazdy BUD × 2) i obrażenia
+  trafiają na monitor.
+- Ograniczenia: akcję *Uniknięcie nadlatującego* rozstrzyga MG; zasięgi powyżej Pobliża liczone jak dla broni palnej.
+
+## Przywoływanie duchów
+
+Magowie z umiejętnością Przywoływanie mają w zakładce Magia panel **Duchy** (s. 146–148):
+- **Przywołaj** — typ ducha i Moc; Przywoływanie + Magia przeciw Moc × 2; usługi = sukcesy netto; drenaż = sukcesy
+  ducha (fizyczny, gdy większy od Magii). Duch powstaje jako aktor *Spirit* systemu należący do gracza (gdy gracz nie
+  może tworzyć aktorów, tworzy go MG przez moduł). Limit sumy Mocy aktywnych duchów: Magia × 3.
+- **Wypędź** — na wybranym (targetowanym) duchu; każdy sukces netto zabiera usługę, drenaż = 2 × sukcesy ducha.
+- Usługi duchów można zmieniać na karcie (−/+), duchy otwierać i odprawiać. Drenaż rzuca się przyciskiem z czatu
+  przez okno rzutu systemu.
 
 ## Wygląd „Edge”
 

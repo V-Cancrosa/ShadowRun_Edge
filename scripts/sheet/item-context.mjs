@@ -1,3 +1,5 @@
+import { parseBlast } from "../blast-rules.mjs";
+
 /**
  * Data for the Edge item sheet, from a shadowrun6-eden item. Pure (no Foundry globals) for tools/test_sheet.mjs.
  * Editable fields always show the item's source values; prepared values are shown read-only.
@@ -105,6 +107,13 @@ export function buildItemContext(item, { L = (k) => k, config = {}, moduleId = "
     ctx.builtIn = !actor ? (item.flags?.[moduleId]?.mods ?? []).map((m) => m.name) : [];
   }
   ctx.hasMods = gear;
+  // Explosives (pp. 114–117): DV per zone and blast radius, from the module flag or the catalog note.
+  if (gear) {
+    const flag = item.flags?.[moduleId]?.blast;
+    const parsed = flag?.gz ? flag : parseBlast(`${src.notes ?? ""} ${src.description ?? ""}`);
+    const explosive = !!parsed || ["AMMUNITION", "EXPLOSIVES"].includes(src.type) && /GRENADE|EXPLOSIVE|ROCKET|MISSILE/i.test(src.subtype ?? "");
+    ctx.blast = explosive ? { gz: 0, close: 0, near: 0, radius: 10, stun: false, ...(parsed ?? {}), fromNote: !flag?.gz && !!parsed } : null;
+  }
   ctx.modCount = (ctx.mods?.length ?? 0) + (ctx.builtIn?.length ?? 0);
 
   if (item.type === "spell") {

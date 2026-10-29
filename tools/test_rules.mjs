@@ -82,3 +82,39 @@ assert.deepEqual(H.healingResult({ method: "restPhysical", hits: 4, damage: { ph
 assert.equal(H.isDead({ overflow: { dmg: 12 }, attributes: { bod: { pool: 6 } } }), true, "Overflow = BOD × 2");
 assert.equal(H.isDead({ overflow: { dmg: 11 }, attributes: { bod: { pool: 6 } } }), false);
 console.log("healing OK");
+
+// Blasts and scatter (pp. 114–117).
+const B = await import("../scripts/blast-rules.mjs");
+assert.equal(B.rangeCategory(2), "close");
+assert.equal(B.rangeCategory(20), "near");
+assert.equal(B.scatterMeters({ roll: 7, hits: 4, range: "near" }), 1, "example p. 115: 7 − (4 + 2) = 1 m");
+assert.equal(B.scatterMeters({ roll: 10, hits: 2, range: "near", launched: true, airburst: true }), 6, "launcher example (errata 02/2020): 10 − 2 × 2 = 6 m");
+assert.equal(B.scatterMeters({ roll: 3, hits: 5, range: "close" }), 0, "never below 0");
+assert.equal(B.scatterMeters({ roll: 7, hits: 4, range: "near", eachHit: false }), 2, "first print: only extra hits");
+assert.equal(B.scatterAngle(7), 0);
+assert.equal(B.scatterAngle(11), 120, "11: short and to the right");
+assert.equal(B.scatterAngle(2), -150);
+assert.equal(B.blastZone(0.5), "gz");
+assert.equal(B.blastZone(2), "close");
+assert.equal(B.blastZone(9, 10), "near");
+assert.equal(B.blastZone(11, 10), null, "outside the radius");
+assert.deepEqual(B.parseBlast("DV 16P / 12P / 8P, wybuch 20 m."), { gz: 16, close: 12, near: 8, stun: false, radius: 20 });
+assert.equal(B.parseBlast("DV 10S / 8S / 6S, wybuch 15 m.").stun, true);
+assert.equal(B.parseBlast("+ 20 dawek substancji."), null);
+assert.deepEqual(B.explosiveBlast(10), { gz: 10, close: 5, near: 2, stun: false, radius: 10 }, "p. 117: rating, rating/2, rating/4");
+assert.deepEqual(["close", "near", "medium", "far"].map((r) => B.thrownAttackRating(12, r)), [12, 11, 6, 0], "errata 08/2019 p. 115");
+assert.equal(B.blastDamage(14, 1), 13, "example p. 115: 14P, Body 3 gets 1 hit → 13 boxes");
+assert.equal(B.blastDamage(7, 1, { hitTheDirt: true }), 4);
+
+// Conjuring (pp. 146–147), with the book's example: Force 4, Cass 3 hits vs spirit 2.
+const S = await import("../scripts/summoning-rules.mjs");
+assert.deepEqual(S.summoningResult({ summonerHits: 3, spiritHits: 2, magic: 6 }), { success: true, services: 1, drain: 2, physical: false });
+assert.equal(S.summoningResult({ summonerHits: 2, spiritHits: 2, magic: 6 }).success, false, "at least one net hit");
+assert.equal(S.summoningResult({ summonerHits: 9, spiritHits: 7, magic: 6 }).physical, true, "drain above Magic is Physical");
+// Kumiho banishes: 4 hits vs 3 → 1 net hit cancels the only service; drain 2 × 3 = 6.
+assert.deepEqual(S.banishingResult({ banisherHits: 4, spiritHits: 3, services: 1 }), { net: 1, servicesLeft: 0, departs: true, drain: 6 });
+assert.equal(S.drainIsPhysical({ drain: 6, resisted: 5, magic: 5 }), false, "errata: 1 left after resistance");
+assert.equal(S.drainIsPhysical({ drain: 6, resisted: 5, magic: 5, finalDrain: false }), true, "first print: initial drain 6 > 5");
+assert.deepEqual([1, 2, 3, 5, 6, 9].map(S.optionalPowers), [0, 0, 1, 1, 2, 3]);
+assert.deepEqual(S.forceBudget(6, [4, 5]), { max: 18, used: 9, left: 9 });
+console.log("blast & summoning OK");
