@@ -778,3 +778,123 @@ body.theme-light .sre-cc {
   text-transform: uppercase;
   font-family: var(--font-primary, sans-serif);
 }
+
+/* ───── Karta Edge look (0.9.0): same palette, header, chips and tabs as the Edge sheet ───── */
+.sre-character-creator {
+  border: 1px solid rgba(224, 64, 154, 0.45);
+  box-shadow: 0 0 30px rgba(224, 64, 154, 0.12), 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.sre-character-creator .window-header {
+  background: #0a0a0e;
+  color: #e8e8ee;
+  border-bottom: 1px solid rgba(224, 64, 154, 0.45);
+}
+
+.sre-character-creator .sre-cc {
+  --sre-ok: #4fd68a;
+  --sre-warn: #f0b24a;
+  --sre-panel: rgba(255, 255, 255, 0.04);
+  --sre-panel-strong: rgba(255, 255, 255, 0.08);
+  --sre-line: rgba(255, 255, 255, 0.1);
+  --sre-text: #e8e8ee;
+  --sre-text-dim: #9aa0ad;
+  --sre-input: rgba(0, 0, 0, 0.35);
+  --sre-bg: #101117;
+  --sre-head: linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
+  background: var(--sre-bg);
+  color: var(--sre-text);
+}
+
+body.sre-theme-light .sre-character-creator .sre-cc {
+  --sre-accent: #c2187a;
+  --sre-accent-soft: rgba(194, 24, 122, 0.1);
+  --sre-accent-line: rgba(194, 24, 122, 0.4);
+  --sre-cyan: #0f8ea0;
+  --sre-ok: #1f9a57;
+  --sre-warn: #b9770e;
+  --sre-bad: #d42a4a;
+  --sre-panel: rgba(255, 255, 255, 0.8);
+  --sre-panel-strong: rgba(0, 0, 0, 0.05);
+  --sre-line: rgba(0, 0, 0, 0.12);
+  --sre-text: #1d1b24;
+  --sre-text-dim: #5f5a6a;
+  --sre-input: #ffffff;
+  --sre-bg: #f5f3f7;
+  --sre-head: linear-gradient(180deg, rgba(194, 24, 122, 0.06), transparent);
+}
+
+.sre-character-creator .sre-cc :is(input[type="text"], input[type="number"], select) { color: var(--sre-text); }
+.sre-character-creator .sre-cc select option { background: var(--sre-bg); color: var(--sre-text); }
+
+.sre-character-creator .sre-cc-head {
+  padding: 14px 14px 0;
+  background: var(--sre-head);
+}
+
+.sre-character-creator .sre-cc-hero { gap: 14px; margin-bottom: 12px; }
+
+.sre-character-creator .sre-cc-avatar {
+  flex: 0 0 64px;
+  height: 64px;
+  border-radius: 0;
+  background: linear-gradient(135deg, rgba(224, 64, 154, 0.25), rgba(63, 212, 232, 0.12));
+  clip-path: polygon(0 0, 86% 0, 100% 14%, 100% 100%, 14% 100%, 0 86%);
+  box-shadow: none;
+}
+
+.sre-character-creator .sre-cc-avatar-initial { font-size: 28px; }
+.sre-character-creator .sre-cc-identity h2 { font-size: 24px; letter-spacing: 0.05em; }
+.sre-character-creator .sre-cc-tag { font-size: 11px; padding: 1px 8px; }
+
+/* Budgets look like the sheet's header chips, with the progress bar kept underneath */
+.sre-character-creator .sre-cc-budgets { gap: 8px; margin-bottom: 12px; }
+
+.sre-character-creator .sre-cc-meter {
+  padding: 5px 10px 8px;
+  border-radius: 6px;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.sre-character-creator .sre-cc-meter-label { font-size: 10px; letter-spacing: 0.06em; }
+.sre-character-creator .sre-cc-meter .sre-cc-budget-value { font-size: 17px; }
+.sre-character-creator .sre-cc-meter-bar { left: 10px; right: 10px; bottom: 4px; }
+
+/* Steps: the sheet's underlined tabs, keeping the step number and error badge */
+.sre-character-creator .sre-cc-steps { margin: 0 -14px; padding: 0 8px; border-top: none; }
+
+.sre-character-creator .sre-cc-steps .sre-cc-step {
+  flex: 0 1 auto;
+  padding: 9px 10px;
+  font-size: 12.5px;
+}
+
+.sre-character-creator .sre-cc-step-number { flex-basis: 1.25rem; height: 1.25rem; font-size: 0.68rem; }
+
+/* Panels and section titles: the sheet's panel with a pink title strip */
+.sre-character-creator .sre-cc-body { padding: 14px; }
+
+.sre-character-creator .sre-cc-panel { padding: 0 0 8px; border-radius: 5px; overflow: hidden; }
+.sre-character-creator .sre-cc-panel > :not(.sre-cc-title) { margin-left: 10px; margin-right: 10px; }
+
+.sre-character-creator .sre-cc-title {
+  margin: 14px 0 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--sre-line);
+  border-bottom-color: var(--sre-accent-line);
+  border-radius: 5px 5px 0 0;
+  background: var(--sre-panel);
+  color: var(--sre-accent);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.sre-character-creator .sre-cc-panel > .sre-cc-title { margin: 0 0 8px; border: none; border-bottom: 1px solid var(--sre-accent-line); border-radius: 0; background: transparent; }
+.sre-character-creator .sre-cc-title i { color: var(--sre-cyan); }
+
+.sre-character-creator .sre-cc-list { border-radius: 5px; }
+.sre-character-creator .sre-cc-list-head { font-size: 10px; letter-spacing: 0.06em; color: var(--sre-text-dim); }
+.sre-character-creator .sre-cc-steps { overflow-x: auto; scrollbar-width: thin; }
+.sre-character-creator .sre-cc-steps .sre-cc-step { flex-shrink: 0; }
