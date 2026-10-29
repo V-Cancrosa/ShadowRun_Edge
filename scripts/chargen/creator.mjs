@@ -355,6 +355,7 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
 
   static async #onReset() {
     const ok = await foundry.applications.api.DialogV2.confirm({
+      classes: ["sre-dialog"],
       window: { title: L("SRE.Chargen.Title") }, content: `<p>${L("SRE.Chargen.ResetConfirm")}</p>`, rejectClose: false,
     });
     if (!ok) return;

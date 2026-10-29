@@ -1,0 +1,224 @@
+/*
+ * Edge look for dialogs and small windows: the module's own dialogs and the Item Wizard always, the system's
+ * confirmations and Active Effect window when the Edge look is on (scripts/theme.mjs). Same palette as the
+ * Edge sheet; light when the player picks the light Edge look. Foundry's own variables are overridden too, so
+ * inputs, buttons and tabs follow without restyling every element.
+ */
+.application.sre-dialog {
+  --sre-accent: #e0409a;
+  --sre-accent-soft: rgba(224, 64, 154, 0.16);
+  --sre-accent-line: rgba(224, 64, 154, 0.45);
+  --sre-cyan: #3fd4e8;
+  --sre-ok: #4fd68a;
+  --sre-warn: #f0b24a;
+  --sre-bad: #ff5470;
+  --sre-bg: #101117;
+  --sre-bg-deep: #0a0a0e;
+  --sre-panel: rgba(255, 255, 255, 0.04);
+  --sre-panel-strong: rgba(255, 255, 255, 0.08);
+  --sre-line: rgba(255, 255, 255, 0.1);
+  --sre-text: #e8e8ee;
+  --sre-text-dim: #9aa0ad;
+  --sre-input: rgba(0, 0, 0, 0.35);
+
+  --color-text-primary: var(--sre-text);
+  --color-text-secondary: var(--sre-text-dim);
+  --color-text-emphatic: var(--sre-text);
+  --color-form-label: var(--sre-text);
+  --color-form-hint: var(--sre-text-dim);
+  --color-border: var(--sre-line);
+  --color-fieldset-border: var(--sre-line);
+  --input-background-color: var(--sre-input);
+  --input-text-color: var(--sre-text);
+  --input-border-color: var(--sre-line);
+  --input-focus-outline-color: var(--sre-accent);
+  --button-text-color: var(--sre-text);
+  --button-background-color: var(--sre-panel-strong);
+  --button-border-color: var(--sre-accent-line);
+  --button-hover-background-color: var(--sre-accent-soft);
+  --button-hover-border-color: var(--sre-accent);
+  --button-hover-text-color: var(--sre-text);
+  --button-focus-outline-color: var(--sre-accent);
+  --checkbox-checked-color: var(--sre-accent);
+  --color-scrollbar: var(--sre-accent-line);
+
+  background: var(--sre-bg);
+  color: var(--sre-text);
+  border: 1px solid var(--sre-accent-line);
+  border-radius: 0;
+  box-shadow: 0 0 30px rgba(224, 64, 154, 0.12), 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+body.sre-theme-light .application.sre-dialog {
+  --sre-accent: #c2187a;
+  --sre-accent-soft: rgba(194, 24, 122, 0.1);
+  --sre-accent-line: rgba(194, 24, 122, 0.4);
+  --sre-cyan: #0f8ea0;
+  --sre-ok: #1f9a57;
+  --sre-warn: #b9770e;
+  --sre-bad: #d42a4a;
+  --sre-bg: #f5f3f7;
+  --sre-bg-deep: #e9e6ee;
+  --sre-panel: rgba(255, 255, 255, 0.8);
+  --sre-panel-strong: rgba(0, 0, 0, 0.05);
+  --sre-line: rgba(0, 0, 0, 0.12);
+  --sre-text: #1d1b24;
+  --sre-text-dim: #5f5a6a;
+  --sre-input: #ffffff;
+}
+
+.application.sre-dialog .window-header {
+  background: var(--sre-bg-deep);
+  color: var(--sre-text);
+  border-bottom: 1px solid var(--sre-accent-line);
+  letter-spacing: 0.04em;
+}
+
+.application.sre-dialog .window-header .window-title { color: var(--sre-text); text-transform: uppercase; }
+.application.sre-dialog .window-header .window-icon { color: var(--sre-accent); }
+.application.sre-dialog .window-header button.header-control { color: var(--sre-text-dim); }
+.application.sre-dialog .window-header button.header-control:hover { color: var(--sre-accent); }
+
+.application.sre-dialog .window-content {
+  background: linear-gradient(180deg, rgba(224, 64, 154, 0.05), transparent 80px), var(--sre-bg);
+  color: var(--sre-text);
+}
+
+.application.sre-dialog :is(input[type="text"], input[type="number"], input[type="search"], select, textarea) {
+  background: var(--sre-input);
+  color: var(--sre-text);
+  border: 1px solid var(--sre-line);
+  border-radius: 0;
+}
+
+.application.sre-dialog :is(input, select, textarea):focus {
+  border-color: var(--sre-accent);
+  box-shadow: 0 0 0 1px var(--sre-accent-soft);
+  outline: none;
+}
+
+.application.sre-dialog select option { background: var(--sre-bg); color: var(--sre-text); }
+.application.sre-dialog input[type="checkbox"],
+.application.sre-dialog input[type="radio"] { accent-color: var(--sre-accent); }
+
+.application.sre-dialog :is(label, legend, .form-group > label) { color: var(--sre-text); }
+.application.sre-dialog :is(.hint, p.notes) { color: var(--sre-text-dim); }
+
+.application.sre-dialog fieldset {
+  border: 1px solid var(--sre-line);
+  border-left: 2px solid var(--sre-accent-line);
+  background: var(--sre-panel);
+}
+
+.application.sre-dialog legend {
+  color: var(--sre-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.application.sre-dialog button,
+.application.sre-dialog a.button {
+  background: var(--sre-panel-strong);
+  color: var(--sre-text);
+  border: 1px solid var(--sre-accent-line);
+  border-radius: 0;
+}
+
+.application.sre-dialog button:hover:not(:disabled),
+.application.sre-dialog a.button:hover {
+  background: var(--sre-accent-soft);
+  border-color: var(--sre-accent);
+  box-shadow: 0 0 8px rgba(224, 64, 154, 0.25);
+}
+
+/* The default button (Confirm / OK) stands out. */
+.application.sre-dialog .form-footer button:is([autofocus], .default, [data-action="ok"], [data-action="yes"]) {
+  background: var(--sre-accent-soft);
+  border-color: var(--sre-accent);
+  color: var(--sre-text);
+}
+
+.application.sre-dialog .form-footer { border-top: 1px solid var(--sre-line); padding-top: 8px; }
+
+.application.sre-dialog :is(h1, h2, h3, h4) { color: var(--sre-text); border-bottom-color: var(--sre-accent-line); }
+.application.sre-dialog :is(table, th, td) { border-color: var(--sre-line); }
+.application.sre-dialog th { color: var(--sre-accent); background: var(--sre-panel-strong); }
+.application.sre-dialog tr:nth-child(even) td { background: var(--sre-panel); }
+
+/* Tabs (Active Effect window). */
+.application.sre-dialog nav.tabs { border-color: var(--sre-line); }
+.application.sre-dialog nav.tabs :is(a, .item) { color: var(--sre-text-dim); }
+.application.sre-dialog nav.tabs :is(a, .item).active { color: var(--sre-text); border-bottom: 2px solid var(--sre-accent); text-shadow: none; }
+
+/* Module dialog parts. */
+.application.sre-dialog .sre-heal-state {
+  padding: 6px 8px;
+  background: var(--sre-panel-strong);
+  border-left: 2px solid var(--sre-accent);
+}
+.application.sre-dialog .sre-heal-warn,
+.application.sre-dialog .sre-warn { color: var(--sre-warn); }
+.application.sre-dialog .sre-grades .sre-grade {
+  padding: 4px 6px;
+  border: 1px solid var(--sre-line);
+  background: var(--sre-panel);
+}
+.application.sre-dialog .sre-grades .sre-grade:has(input:checked) { border-color: var(--sre-accent); background: var(--sre-accent-soft); }
+.application.sre-dialog .sre-kv-pick { border: 1px solid var(--sre-line); background: var(--sre-panel); padding: 2px 6px; }
+.application.sre-dialog .sre-kv-pick:has(input:checked) { border-color: var(--sre-accent-line); }
+.application.sre-dialog .sre-wizard :is(.sre-preview, .sre-parse-result, .sre-dropzone) {
+  background: var(--sre-panel);
+  border-color: var(--sre-accent-line);
+}
+
+/* ───── Chat cards of the module ───── */
+.chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) {
+  --sre-accent: #e0409a;
+  --sre-accent-soft: rgba(224, 64, 154, 0.14);
+  --sre-accent-line: rgba(224, 64, 154, 0.45);
+  padding: 6px 8px;
+  border: 1px solid var(--sre-accent-line);
+  border-left: 3px solid var(--sre-accent);
+  background: linear-gradient(90deg, var(--sre-accent-soft), transparent 70%);
+}
+
+body.sre-theme-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) {
+  --sre-accent: #c2187a;
+  --sre-accent-soft: rgba(194, 24, 122, 0.08);
+  --sre-accent-line: rgba(194, 24, 122, 0.4);
+}
+
+.chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) h3 {
+  margin: 0 0 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--sre-accent-line);
+  color: inherit;
+  font-size: 1.05em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) button,
+.chat-message .sre-defend button {
+  border: 1px solid var(--sre-accent-line, rgba(224, 64, 154, 0.45));
+  border-radius: 0;
+  background: rgba(224, 64, 154, 0.12);
+}
+
+.chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) button:hover:not(:disabled),
+.chat-message .sre-defend button:hover {
+  background: rgba(224, 64, 154, 0.28);
+  box-shadow: 0 0 6px rgba(224, 64, 154, 0.3);
+}
+
+.chat-message .sre-blast-list li { padding: 3px 0; border-bottom: 1px dashed var(--sre-accent-line); }
+.chat-message .sre-blast-list li:last-child { border-bottom: 0; }
+
+.chat-message :is(.sre-blast-result, .sre-give-msg) {
+  margin: 0;
+  padding: 4px 8px;
+  border-left: 3px solid #e0409a;
+  background: rgba(224, 64, 154, 0.08);
+}

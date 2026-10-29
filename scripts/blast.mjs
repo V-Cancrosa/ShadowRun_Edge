@@ -71,6 +71,7 @@ export async function throwExplosive(actor, item) {
     <p class="hint">${L("SRE.Blast.Hint")}</p>
   </div>`;
   const choice = await foundry.applications.api.DialogV2.prompt({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.Blast.Title", { name: item.name }) },
     content,
     ok: { label: L("SRE.Blast.PickButton"), callback: (e, b) => ({ mode: b.form.elements.mode.value, airburst: b.form.elements.airburst.checked, manualHits: b.form.elements.manualHits.value === "" ? null : Number(b.form.elements.manualHits.value) }) },

@@ -79,6 +79,7 @@ export async function promptGrade(item) {
       <strong>${game.i18n.localize(`SRE.Grade.Name.${id}`)}</strong> <span>${details}</span></label>`;
   }).join("");
   return foundry.applications.api.DialogV2.wait({
+    classes: ["sre-dialog"],
     window: { title: game.i18n.format("SRE.Grade.Title", { name: item.name.replace(SUFFIX, "") }) },
     content: `<p class="hint">${game.i18n.localize("SRE.Grade.Hint")}</p><div class="sre-grades">${rows}</div>`,
     buttons: [

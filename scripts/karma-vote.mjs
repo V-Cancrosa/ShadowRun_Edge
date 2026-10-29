@@ -92,6 +92,7 @@ export async function startKarmaVote() {
     <div class="form-group"><label>${L("SRE.KarmaVote.NoSelf")}</label>
       <input type="checkbox" name="noSelf" checked></div>`;
   const settings = await foundry.applications.api.DialogV2.wait({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.KarmaVote.Title"), icon: "fas fa-star" },
     content,
     buttons: [{
@@ -130,6 +131,7 @@ async function closeVote(message) {
       <label>${esc(a.name)} <span class="hint">${L("SRE.KarmaVote.Average", { average: results[a.id].average, count: results[a.id].count })}</span></label>
       <input type="number" name="${a.id}" value="${results[a.id].suggested}" min="0" step="1"></div>`).join("");
   const awards = await foundry.applications.api.DialogV2.wait({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.KarmaVote.Close"), icon: "fas fa-flag-checkered" },
     content: `<p class="hint">${L("SRE.KarmaVote.AwardHint")}</p>${rows}`,
     buttons: [{

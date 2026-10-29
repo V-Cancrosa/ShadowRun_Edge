@@ -36,6 +36,7 @@ export async function openSummon(actor) {
   const list = types.map((t) => `<option value="${t}">${esc(spiritLabel(t))}${CORE_SPIRITS.includes(t) ? "" : ` (${L("SRE.Summon.OtherBook")})`}</option>`).join("");
   const pool = Number(actor.system.skills?.conjuring?.pool) || 0;
   const result = await foundry.applications.api.DialogV2.prompt({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.Summon.Title", { name: actor.name }) },
     content: `<div class="sre-heal">
       <p class="sre-heal-state">${L("SRE.Summon.Info", { pool, magic, used: budget.used, max: budget.max })}</p>
@@ -94,6 +95,7 @@ export async function openBanish(actor) {
   const force = Number(target.system.rating) || 1;
   const flag = target.getFlag(MODULE_ID, "spirit");
   const result = await foundry.applications.api.DialogV2.prompt({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.Summon.BanishTitle", { name: target.name }) },
     content: `<div class="sre-heal">
       <p class="sre-heal-state">${L("SRE.Summon.BanishInfo", { name: esc(target.name), force, pool: Number(actor.system.skills?.conjuring?.pool) || 0 })}</p>

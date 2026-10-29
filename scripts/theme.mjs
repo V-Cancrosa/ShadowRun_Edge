@@ -83,3 +83,15 @@ Hooks.on("renderRollDialog", (app, html) => {
   const root = html instanceof HTMLElement ? html : html?.[0];
   (root?.closest(".app") ?? app.element?.[0])?.classList.add("sre-roll-dialog");
 });
+
+/**
+ * With the Edge look on, the system's own confirmations (DialogV2) and its Active Effect window get the Edge
+ * dialog style too. The module's dialogs always carry the class.
+ */
+for (const hook of ["renderDialogV2", "renderActiveEffectConfig"]) {
+  Hooks.on(hook, (app, html) => {
+    if (activeTheme() === "off") return;
+    const root = app.element instanceof HTMLElement ? app.element : html instanceof HTMLElement ? html : html?.[0];
+    root?.classList.add("sre-dialog");
+  });
+}

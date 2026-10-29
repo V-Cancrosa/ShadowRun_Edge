@@ -84,6 +84,7 @@ export async function giveItem(item) {
   const mods = installedMods(item, source.items);
   const options = list.map((r) => `<option value="${r.id}">${foundry.utils.escapeHTML(r.name)}${r.owners ? ` (${foundry.utils.escapeHTML(r.owners)})` : ""}</option>`).join("");
   const result = await foundry.applications.api.DialogV2.prompt({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.Give.Title", { name: item.name }) },
     content: `<div class="sre-give">
       <label>${L("SRE.Give.To")} <select name="target">${options}</select></label>
@@ -107,6 +108,7 @@ export async function deleteItem(item) {
   const actor = item.actor;
   const mods = actor ? installedMods(item, actor.items) : [];
   const ok = await foundry.applications.api.DialogV2.confirm({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.Give.DeleteTitle", { name: item.name }) },
     content: `<p>${L("SRE.Give.DeleteText", { name: item.name })}</p>${mods.length ? `<p class="hint">${L("SRE.Give.DeleteMods", { mods: mods.map((m) => m.name).join(", ") })}</p>` : ""}`,
   });

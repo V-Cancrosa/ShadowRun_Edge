@@ -241,6 +241,11 @@ i czerwoną kartą przy komplikacji.
 
 To tylko arkusz stylów nałożony na szablony systemu, więc działa z 3.3.9 i 4.x bez zmiany kodu systemu.
 
+Okna modułu (Karta Edge, karta przedmiotu, kreator postaci, Kreator przedmiotów, okna leczenia, granatów, duchów,
+przekazania i usuwania, głosowania Karmy, stopnia wszczepu i zakupu) oraz jego karty na czacie mają styl Edge
+zawsze. Przy włączonym wyglądzie Edge dostają go też okno rzutu systemu, systemowe okna potwierdzeń i okno
+efektów. Okna samego Foundry (ustawienia, katalogi, kompendia) zostają bez zmian.
+
 ## Głosowanie Karmy
 
 MG ma w zakładce *Aktorzy* przycisk **Głosowanie Karmy** (albo makro:

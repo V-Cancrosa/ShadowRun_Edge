@@ -76,6 +76,7 @@ async function promptPurchase(item) {
     };
   };
   return foundry.applications.api.DialogV2.wait({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.Purchase.Title", { name: actor.name }), icon: "fas fa-cart-shopping" },
     content,
     buttons: [

@@ -213,7 +213,7 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static DEFAULT_OPTIONS = {
     id: "sre-item-wizard-{id}",
-    classes: ["sre-item-wizard"],
+    classes: ["sre-item-wizard", "sre-dialog"],
     tag: "form",
     window: { title: "SRE.Wizard.Title", icon: "fas fa-wand-magic-sparkles", resizable: true },
     position: { width: 600, height: "auto" },

@@ -46,6 +46,7 @@ export async function openHealing(target) {
     <p class="hint">${L("SRE.Heal.Hint")}</p>
   </div>`;
   const result = await foundry.applications.api.DialogV2.prompt({
+    classes: ["sre-dialog"],
     window: { title: L("SRE.Heal.Title", { name: target.name }) },
     content,
     render: (event, dialog) => {

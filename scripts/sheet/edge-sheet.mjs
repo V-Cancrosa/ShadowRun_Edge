@@ -203,6 +203,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onAddKnowledge(event, target) {
     const kind = target.dataset.kind;
     const name = await foundry.applications.api.DialogV2.prompt({
+      classes: ["sre-dialog"],
       window: { title: L(`SRE.Sheet.Add.${kind}`) },
       content: `<label>${L("SRE.Sheet.Add.Name")} <input type="text" name="name" autofocus></label>
         ${kind === "language" ? `<label class="checkbox"><input type="checkbox" name="native"> ${L("SRE.Sheet.Native")}</label>` : ""}`,
@@ -315,7 +316,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onDismissSpirit(event, target) {
     const spirit = game.actors.get(target.closest("[data-spirit-id]")?.dataset.spiritId);
     if (!spirit?.isOwner) return;
-    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: spirit.name }, content: `<p>${game.i18n.format("SRE.Summon.DismissConfirm", { name: spirit.name })}</p>` });
+    const ok = await foundry.applications.api.DialogV2.confirm({ classes: ["sre-dialog"], window: { title: spirit.name }, content: `<p>${game.i18n.format("SRE.Summon.DismissConfirm", { name: spirit.name })}</p>` });
     if (ok) await spirit.delete();
     this.render();
   }
