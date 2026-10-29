@@ -688,6 +688,23 @@
       "ModNeedsActor": "Dodatki montuje się na przedmiotach na karcie postaci.",
       "NoEffects": "Brak efektów.",
       "ByRating": "wg oceny"
+    },
+    "Actions": {
+      "major": "Akcja większa (kliknij, aby wydać lub oddać)",
+      "minor": "Akcja mniejsza (kliknij, aby wydać lub oddać)",
+      "Setting": {
+        "Name": "Licznik akcji w trackerze walki",
+        "Hint": "Kwadraty (akcja większa) i kółka (mniejsze: 1 + 1 za każdą kość inicjatywy) przy uczestnikach walki. Wracają na początku każdej rundy."
+      }
+    },
+    "Defend": {
+      "Button": "Obrona: {attrs}",
+      "Hint": "Rzucający ma {hits} sukcesów — remis wygrywa obrońca.",
+      "NoDefender": "Zaznacz token postaci, która się broni.",
+      "Label": "Obrona przed: {item} ({attrs}, sukcesy rzucającego: {hits})",
+      "Title": "Obrona celu",
+      "TitleHint": "atrybuty, którymi cel się broni (z opisu czaru)",
+      "Attribute": "Atrybut"
     }
   }
 }

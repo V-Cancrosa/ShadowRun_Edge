@@ -133,6 +133,17 @@
         <div class="sre-it-f">{{localize "SRE.ItemSheet.Alchemic"}}<button type="button" class="sre-es-toggle {{#if src.alchemic}}on{{/if}}" data-action="toggleField" data-field="system.alchemic" {{#unless editable}}disabled{{/unless}}></button></div>
       </div>
     </div>
+    {{#if needsDefense}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Defend.Title"}} <span>{{localize "SRE.Defend.TitleHint"}}</span></h3>
+      <div class="sre-it-grid">
+        {{#each defenseOptions}}
+        <label class="sre-it-f">{{localize "SRE.Defend.Attribute"}} {{n}}
+          <select name="flags.shadowrun-edge.defense.{{index}}" {{#unless ../editable}}disabled{{/unless}}>{{#each choices}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
     {{#if onActor}}
     <div class="sre-es-panel sre-es-gap">
       <h3>{{localize "SRE.ItemSheet.OnActor"}}</h3>

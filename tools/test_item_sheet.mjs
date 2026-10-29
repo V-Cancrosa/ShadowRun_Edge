@@ -91,7 +91,7 @@ for (const [item, ctx] of [[weapon, w], [eyes, c], [spell, sp]]) {
   for (const tab of ["stats", "mods", "description", "effects"]) {
     const html = render(ctx, tab);
     for (const [, name] of html.matchAll(/name="([^"]+)"/g)) {
-      if (name === "name" || /^sre\.ar\.\d$/.test(name)) continue;
+      if (name === "name" || /^sre\.ar\.\d$/.test(name) || /^flags\.shadowrun-edge\.defense\.[01]$/.test(name)) continue;
       assert.ok(name.startsWith("system.") && name.slice(7).split(".")[0] in item._source.system || name === "system.description",
         `${item.name}/${tab}: form field ${name} is not a source field`);
     }

@@ -688,6 +688,23 @@
       "ModNeedsActor": "Mods are installed on items on a character sheet.",
       "NoEffects": "No effects.",
       "ByRating": "by rating"
+    },
+    "Actions": {
+      "major": "Major action (click to spend or give back)",
+      "minor": "Minor action (click to spend or give back)",
+      "Setting": {
+        "Name": "Action tracker in the combat tracker",
+        "Hint": "Squares (Major action) and circles (Minor: 1 + 1 per initiative die) next to combatants. They come back at the start of each round."
+      }
+    },
+    "Defend": {
+      "Button": "Defend: {attrs}",
+      "Hint": "The caster has {hits} hits — ties go to the defender.",
+      "NoDefender": "Select the token of the defending character.",
+      "Label": "Defense against: {item} ({attrs}, caster hits: {hits})",
+      "Title": "Target's defense",
+      "TitleHint": "attributes the target defends with (see the spell's text)",
+      "Attribute": "Attribute"
     }
   }
 }

@@ -115,6 +115,13 @@ export function buildItemContext(item, { L = (k) => k, config = {}, moduleId = "
       durationOptions: options(config.spell_duration, src.duration, L),
       damageOptions: options(config.spell_damage, src.damage, L),
       castPool: actor ? num(actor.system?.skills?.sorcery?.pool) : null,
+      // Non-combat opposed spells: the defender's two attributes (module flag; Body + Willpower by default).
+      needsDefense: !!src.isOpposed && src.category !== "combat",
+      defenseOptions: [0, 1].map((i) => {
+        const current = item.flags?.[moduleId]?.defense?.[i] ?? ["bod", "wil"][i];
+        const choices = ["bod", "agi", "rea", "str", "wil", "log", "int", "cha", "mag", "res"].map((a) => ({ value: a, label: L(`attrib.${a}`), selected: a === current }));
+        return { index: i, n: i + 1, choices };
+      }),
       drainPool: actor ? num(actor.system?.defensepool?.drain?.pool) : null,
     });
   }

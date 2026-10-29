@@ -14,7 +14,7 @@ async function types() {
 const isV4 = () => !foundry.utils.isNewerVersion("4.0.0", game.system.version);
 
 /** A plain pool check (defense, soak, derived values), built like the system sheet's _onCommonCheck. */
-export async function rollPool(actor, { pool, label, kind }) {
+export async function rollPool(actor, { pool, label, kind, threshold }) {
   const { PreparedRoll, RollType } = await types();
   const roll = new PreparedRoll();
   roll.pool = Number(pool) || 0;
@@ -23,7 +23,7 @@ export async function rollPool(actor, { pool, label, kind }) {
   let dialogConfig;
   if (kind === "defense" || kind === "soak") {
     roll.allowBuyHits = false;
-    roll.threshold = 1;
+    roll.threshold = Number(threshold) || 1;
     dialogConfig = { useModifier: kind !== "soak", useThreshold: false };
   } else {
     roll.allowBuyHits = true;

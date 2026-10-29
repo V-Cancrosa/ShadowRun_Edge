@@ -161,6 +161,21 @@ karta systemu zostaje domyślna, a przycisk *Karta systemu* otwiera ją w razie 
   wykonuje zalogowany MG (moduł sprawdza, że gracz jest właścicielem przedmiotu). Na czacie pojawia się informacja.
 - *Usuń* pyta o potwierdzenie i usuwa przedmiot razem z zamontowanymi w nim dodatkami.
 
+## Akcje w rundzie
+
+W trackerze walki przy każdym uczestniku są kwadraty (akcja większa) i kółka (akcje mniejsze: 1 + 1 za każdą kość
+inicjatywy, którą uczestnik używa — fizycznej, astralnej albo matrycowej). Kliknięcie wydaje akcję albo ją oddaje;
+klikać może właściciel postaci i MG. Na początku każdej rundy akcje wracają. Wyłączasz to w ustawieniach świata
+(*Licznik akcji w trackerze walki*).
+
+## Obrona przed czarami niebojowymi i formami złożonymi
+
+Karta rzutu czaru niebojowego z testem przeciwstawnym i formy złożonej ma przycisk *Obrona: …*. Obrońca zaznacza
+swój token i klika — rzuca dwoma atrybutami, a progiem są sukcesy rzucającego (remis wygrywa obrońca).
+- Formy złożone używają atrybutów obrony z danych systemu (np. Siła Woli + Firewall persony).
+- Dla czarów atrybuty obrony ustawiasz na Karcie Edge czaru (z opisu czaru w podręczniku); domyślnie Budowa +
+  Siła Woli, jak w FAQ Sixth World dla czarów bez podanego testu.
+
 ## Wygląd „Edge”
 
 Moduł może zmienić wygląd systemu na styl kreatora postaci: ciemne panele, różowe i cyjanowe akcenty,

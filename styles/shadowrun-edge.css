@@ -207,3 +207,40 @@
 .directory .header-actions .sre-chargen-button {
   flex-basis: 100%;
 }
+
+/* Major/Minor action pips in the combat tracker (scripts/actions.mjs) */
+.sre-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.sre-actions .sre-action-pip {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  min-height: 0;
+  padding: 0;
+  border-radius: 2px;
+  border: 1px solid #e0409a;
+  background: #e0409a;
+  box-shadow: 0 0 4px rgba(224, 64, 154, 0.6);
+}
+
+.sre-actions .sre-action-pip.minor {
+  border-radius: 50%;
+  border-color: #3fd4e8;
+  background: #3fd4e8;
+  box-shadow: 0 0 4px rgba(63, 212, 232, 0.6);
+}
+
+.sre-actions .sre-action-pip.spent {
+  background: transparent;
+  box-shadow: none;
+  opacity: 0.55;
+}
+
+/* "Defend" button on spell / complex form chat cards (scripts/opposed.mjs) */
+.sre-defend { margin-top: 6px; }
+.sre-defend button { width: 100%; }

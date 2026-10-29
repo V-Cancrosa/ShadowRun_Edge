@@ -400,8 +400,12 @@ export function buildMatrixContext(actor, { L = (k) => k, config = {}, showAllAc
     activeDeck: devices.find((d) => d.deck && d.active) ?? null,
     actions, showAllActions,
     forms: items.filter((i) => i.type === "complexform").map((i) => {
-      // Threading a complex form: Tasking (+ Resonance), as computed by the system.
-      const raw = num(s.skills?.tasking?.pool);
+      // Threading a complex form: its skill (Electronics or Cracking, from the system's form data) + Resonance,
+      // +2 with the matching specialization / +3 expertise.
+      const sk = s.skills?.[i.system?.skill || "electronics"] ?? {};
+      const spec = i.system?.skillSpec;
+      const bonus = spec && sk.expertise === spec ? 3 : spec && sk.specialization === spec ? 2 : 0;
+      const raw = num(sk.points) + num(sk.modifier) + bonus + num(s.attributes?.res?.pool);
       const minus = wound + sustainPenalty;
       return { id: i.id, name: i.name, fading: i.system?.fading ?? "", duration: label(L, config.spell_duration, i.system?.duration),
         canSustain: i.system?.duration === "sustained", sustained: !!i.system?.isSustained, pool: { raw, value: Math.max(0, raw - minus), minus } };
