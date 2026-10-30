@@ -3,9 +3,10 @@
  * scatters (2D6 and the Scatter at Range table, direction from the diagram), and everyone in the blast radius
  * resists the Damage Value of their zone (Ground Zero / Close / Near) with Body (vehicles Body × 2).
  */
-import { RANGES, rangeCategory, scatterMeters, scatterAngle, scatterPoint, blastZone, parseBlast, thrownAttackRating, blastDamage } from "./blast-rules.mjs";
+import { RANGES, rangeCategory, scatterMeters, scatterAngle, scatterPoint, blastZone, parseBlast, thrownAttackRating } from "./blast-rules.mjs";
 import { errata } from "./errata.mjs";
-import { applyDamage } from "./sheet/system-rolls.mjs";
+import * as rolls from "./sheet/system-rolls.mjs";
+import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
 
 const MODULE_ID = "shadowrun-edge";
@@ -97,16 +98,24 @@ export async function throwExplosive(actor, item) {
   const mpp = metersPerPixel();
   const range = rangeCategory(Math.hypot(aimed.x - from.x, aimed.y - from.y) * mpp);
   const pool = launched ? launchPool : Number(s.skills?.athletics?.pool) || 0;
-  let attackRoll = null;
-  let hits = choice.manualHits;
-  if (hits === null) {
-    attackRoll = await new Roll(`${pool}d6cs>=5`).evaluate();
-    hits = attackRoll.total;
-  }
+  const ar = launched || !errata("thrownGrenadeAR") ? null : thrownAttackRating(s.attackrating?.physical?.pool, range);
+  const task = {
+    kind: "blast", item: item.name, blast, from, aimed, range, launched, airburst: choice.airburst, eachHit: errata("scatterEachHit"),
+    pool, ar, scene: canvas.scene.id, exploded: false,
+  };
+  return runTest(actor, { pool, label: L("SRE.Blast.TestLabel", { name: item.name }), manualHits: choice.manualHits, task });
+}
+
+/** Scatter, template and the victims card, from the attack's hits at the moment of the explosion. */
+async function explode(message, task) {
+  if (canvas.scene?.id !== task.scene) return ui.notifications.warn(L("SRE.Blast.OtherScene"));
+  const hits = hitsOf(message);
+  const { blast } = task;
+  const mpp = metersPerPixel();
   const distanceRoll = await roll2d6();
-  const meters = scatterMeters({ roll: distanceRoll, hits, range, launched, airburst: choice.airburst, eachHit: errata("scatterEachHit") });
+  const meters = scatterMeters({ roll: distanceRoll, hits, range: task.range, launched: task.launched, airburst: task.airburst, eachHit: task.eachHit });
   const directionRoll = await roll2d6();
-  const point = scatterPoint(from, aimed, meters, scatterAngle(directionRoll), 1 / mpp);
+  const point = scatterPoint(task.from, task.aimed, meters, scatterAngle(directionRoll), 1 / mpp);
 
   // Template for everyone to see, then who is in which zone.
   try {
@@ -120,24 +129,40 @@ export async function throwExplosive(actor, item) {
     .filter((v) => v.zone && v.t.actor)
     .map((v) => ({ token: v.t.document.uuid, name: v.t.name, zone: v.zone, meters: Math.round(v.m), dv: blast[v.zone] }));
 
-  const ar = launched || !errata("thrownGrenadeAR") ? null : thrownAttackRating(s.attackrating?.physical?.pool, range);
   const rows = victims.map((v, i) => `<li data-index="${i}"><b>${esc(v.name)}</b> — ${L(`SRE.Blast.Zone.${v.zone}`)} (${v.meters} m): <b>${v.dv}${blast.stun ? "S" : "P"}</b>
     <span class="sre-blast-buttons"><button type="button" data-soak="${i}">${L("SRE.Blast.Soak")}</button><button type="button" data-soak="${i}" data-dirt="1">${L("SRE.Blast.SoakDirt")}</button></span></li>`).join("");
+  await patchTask(message, { exploded: true });
   return ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    rolls: attackRoll ? [attackRoll] : [],
+    speaker: message.speaker,
     content: `<div class="sre-blast-card">
-      <h3>${esc(item.name)}</h3>
-      <p>${L(launched ? "SRE.Blast.CardLaunched" : "SRE.Blast.CardThrown", { pool, hits, range: L(`SRE.Blast.Range.${range}`), ar: ar ?? "—" })}</p>
+      <h3>${esc(task.item)}</h3>
       <p>${L("SRE.Blast.CardScatter", { roll: distanceRoll, meters, dir: directionRoll })}</p>
       ${victims.length ? `<ul class="sre-blast-list">${rows}</ul>` : `<p>${L("SRE.Blast.NoOne")}</p>`}
       <p class="hint">${L("SRE.Blast.CardHint")}</p>
     </div>`,
-    flags: { [MODULE_ID]: { blast: { victims, stun: !!blast.stun, item: item.name } } },
+    flags: { [MODULE_ID]: { blast: { victims, stun: !!blast.stun, item: task.item } } },
   });
 }
 
-/** Damage Resistance from the chat card: the victim's owner or the GM rolls Body (vehicles Body × 2) and applies. */
+registerTask("blast", {
+  render(task, hits) {
+    return `<div class="sre-blast-card">
+      <h3>${esc(task.item)}</h3>
+      <p>${L(task.launched ? "SRE.Blast.CardLaunched" : "SRE.Blast.CardThrown", { pool: task.pool, hits, range: L(`SRE.Blast.Range.${task.range}`), ar: task.ar ?? "—" })}</p>
+      <button type="button" class="sre-task-apply"${task.exploded ? " disabled" : ""}>${L(task.exploded ? "SRE.Blast.Exploded" : "SRE.Blast.Explode")}</button>
+      <p class="hint">${L("SRE.Blast.ExplodeHint")}</p>
+    </div>`;
+  },
+  bind(root, message, task) {
+    root.querySelector(".sre-task-apply")?.addEventListener("click", (event) => {
+      if (!message.isOwner && !game.user.isGM) return ui.notifications.warn(L("SRE.Blast.NotOwner"));
+      event.currentTarget.disabled = true;
+      return explode(message, task);
+    });
+  },
+});
+
+/** Damage Resistance from the chat card: the victim's owner (or the GM) rolls through the system's soak card. */
 Hooks.on("renderChatMessageHTML", (message, html) => {
   const data = message.getFlag(MODULE_ID, "blast");
   if (!data) return;
@@ -149,16 +174,15 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       const actor = token?.actor;
       if (!actor?.isOwner) return ui.notifications.warn(L("SRE.Blast.NotOwner"));
       const body = Number(actor.system.attributes?.bod?.pool ?? actor.system.bod ?? actor.system.vehicle?.bod) || 0;
-      const pool = actor.type === "Vehicle" ? body * 2 : body;
-      const roll = await new Roll(`${pool}d6cs>=5`).evaluate();
+      const vehicle = actor.type === "Vehicle";
+      // Lifeforms: the system's damage resistance pool (Body and its modifiers); vehicles: Body × 2 (p. 114).
+      const pool = vehicle ? body * 2 : Number(actor.system.defensepool?.damage_physical?.pool) || body;
       const dirt = !!button.dataset.dirt;
-      const damage = blastDamage(v.dv, roll.total, { hitTheDirt: dirt });
-      const monitor = data.stun ? "stun" : "physical";
-      if (damage > 0) await applyDamage(actor, monitor, damage);
-      await ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor }),
-        rolls: [roll],
-        content: `<p class="sre-blast-result">${L("SRE.Blast.Result", { name: esc(actor.name), item: esc(data.item), pool, hits: roll.total, dv: v.dv - (dirt ? 2 : 0), damage, type: L(`SRE.Heal.Box.${monitor}`, { n: damage }) })}</p>`,
+      const dv = Math.max(0, v.dv - (dirt ? 2 : 0));
+      const stun = data.stun && !vehicle;
+      return rolls.rollSoakTest(actor, {
+        soakType: stun ? "damage_stun" : "damage_phys", damage: dv, monitor: stun ? "stun" : "physical", pool,
+        label: L("SRE.Blast.SoakLabel", { item: data.item, dv, type: stun ? "S" : "P" }),
       });
     });
   }

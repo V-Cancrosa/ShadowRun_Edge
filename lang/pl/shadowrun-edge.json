@@ -840,7 +840,13 @@
       "Dice": "{skill} · {n} kości",
       "AirburstShort": "Wybuch w powietrzu",
       "HintShort": "Następnie kliknij punkt na scenie (Esc anuluje) — rozrzut 2K6 i kierunek policzy moduł.",
-      "Title": "Granat: {name}"
+      "Title": "Granat: {name}",
+      "TestLabel": "Atak: {name}",
+      "OtherScene": "Wybuch można odpalić tylko na scenie, na której rzucono.",
+      "Explode": "Wybuch! (rozrzut i strefy)",
+      "Exploded": "Wybuchło",
+      "ExplodeHint": "Rozrzut liczy się z sukcesów w chwili kliknięcia, więc Edge wydany po rzucie się liczy.",
+      "SoakLabel": "Odporność: {item} ({dv}{type})"
     },
     "Summon": {
       "Button": "Przywołaj",
@@ -893,7 +899,11 @@
       "Options": "Opcje",
       "BanishHintShort": "Każdy sukces netto zabiera jedną usługę; drenaż = 2 × sukcesy ducha.",
       "DismissKind": "Odprawienie ducha",
-      "DismissButton": "Odpraw"
+      "DismissButton": "Odpraw",
+      "CreatedShort": "Duch przywołany.",
+      "CreateButton": "Przywołaj ducha ({services} usług)",
+      "ApplyBanish": "Zastosuj (odejmij usługi)",
+      "CardHintEdge": "Wynik uwzględnia Edge wydany po rzucie. Ducha tworzy przycisk, drenaż odpierasz przez kartę odporności systemu."
     },
     "Traits": {
       "Folder": "Cechy i moce",

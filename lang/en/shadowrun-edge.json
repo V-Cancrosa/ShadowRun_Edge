@@ -840,7 +840,13 @@
       "Dice": "{skill} · {n} dice",
       "AirburstShort": "Airburst",
       "HintShort": "Then click a point on the scene (Esc cancels) — the module rolls 2D6 scatter and direction.",
-      "Title": "Grenade: {name}"
+      "Title": "Grenade: {name}",
+      "TestLabel": "Attack: {name}",
+      "OtherScene": "The blast can only go off on the scene where it was thrown.",
+      "Explode": "Blast! (scatter and zones)",
+      "Exploded": "Exploded",
+      "ExplodeHint": "Scatter uses the hits at the moment of the click, so Edge spent after the roll counts.",
+      "SoakLabel": "Resist: {item} ({dv}{type})"
     },
     "Summon": {
       "Button": "Summon",
@@ -893,7 +899,11 @@
       "Options": "Options",
       "BanishHintShort": "Each net hit removes one service; drain = 2 × the spirit hits.",
       "DismissKind": "Dismiss spirit",
-      "DismissButton": "Dismiss"
+      "DismissButton": "Dismiss",
+      "CreatedShort": "Spirit summoned.",
+      "CreateButton": "Summon the spirit ({services} services)",
+      "ApplyBanish": "Apply (remove services)",
+      "CardHintEdge": "The result follows Edge spent after the roll. The button creates the spirit; resist drain through the system soak card."
     },
     "Traits": {
       "Folder": "Qualities and powers",

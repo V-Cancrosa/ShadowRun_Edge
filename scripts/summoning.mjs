@@ -8,6 +8,7 @@ import { CORE_SPIRITS, summoningResult, banishingResult, optionalPowers, forceBu
 import { errata } from "./errata.mjs";
 import * as rolls from "./sheet/system-rolls.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
+import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
@@ -23,10 +24,6 @@ export function spiritsOf(actor) {
 async function hits(pool) {
   const roll = await new Roll(`${Math.max(0, pool)}d6cs>=5`).evaluate();
   return { roll, hits: roll.total };
-}
-
-function drainButton(actor, drain, physical) {
-  return `<button type="button" class="sre-drain" data-actor="${actor.uuid}" data-drain="${drain}">${L("SRE.Summon.DrainButton", { drain, type: L(physical ? "SRE.Summon.Physical" : "SRE.Summon.Stun") })}</button>`;
 }
 
 export async function openSummon(actor) {
@@ -74,36 +71,69 @@ export async function openSummon(actor) {
   }));
   if (!result) return;
   if (result.force > budget.left) ui.notifications.warn(L("SRE.Summon.OverBudget", { max: budget.max }));
-  const summoner = result.manualHits === null ? await hits(pool) : { roll: null, hits: result.manualHits };
+  // The spirit doesn't spend Edge: its Force × 2 dice are rolled here, the summoner rolls through the system.
   const spirit = await hits(result.force * 2);
-  const res = summoningResult({ summonerHits: summoner.hits, spiritHits: spirit.hits, magic });
   const label = spiritLabel(result.type);
-  let created = "";
-  if (res.success) {
-    const data = {
-      name: L("SRE.Summon.SpiritName", { type: label, force: result.force }),
-      type: "Spirit",
-      system: { rating: result.force, spiritType: result.type },
-      flags: { [MODULE_ID]: { spirit: { summoner: actor.id, services: res.services, force: result.force, worldTime: game.time.worldTime } } },
-    };
-    if (game.user.can("ACTOR_CREATE")) await createSpirit(data, game.user.id);
-    else if (game.users.activeGM) game.socket.emit(SOCKET, { type: "summonSpirit", summonerId: actor.id, data });
-    else ui.notifications.warn(L("SRE.Give.NoGM"));
-    created = `<p>${L("SRE.Summon.Created", { name: esc(data.name), services: res.services, powers: optionalPowers(result.force) })}</p>`;
-  }
-  return ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    rolls: [summoner.roll, spirit.roll].filter(Boolean),
-    content: `<div class="sre-blast-card">
-      <h3>${L("SRE.Summon.CardTitle", { type: esc(label), force: result.force })}</h3>
-      <p>${L("SRE.Summon.CardRolls", { hits: summoner.hits, spirit: spirit.hits, dice: result.force * 2 })}${result.reagents ? ` ${L("SRE.Summon.ReagentsNote")}` : ""}</p>
-      <p><strong>${res.success ? L("SRE.Summon.Success", { services: res.services }) : L("SRE.Summon.Failure")}</strong></p>
-      ${created}
-      <p>${drainButton(actor, res.drain, res.physical)}</p>
-      <p class="hint">${L("SRE.Summon.CardHint")}</p>
-    </div>`,
+  const task = {
+    kind: "summon", actor: actor.uuid, type: result.type, typeLabel: label, force: result.force, magic,
+    spiritHits: spirit.hits, reagents: result.reagents, created: false,
+  };
+  return runTest(actor, { pool, label: L("SRE.Summon.CardTitle", { type: label, force: result.force }), manualHits: result.manualHits, task });
+}
+
+const drainType = (physical) => L(physical ? "SRE.Summon.Physical" : "SRE.Summon.Stun");
+
+/** Drain resistance through the system's soak card (its "Apply damage" button puts it on the right monitor). */
+async function resistDrain(actorUuid, drain, physical) {
+  const actor = await fromUuid(actorUuid);
+  if (!actor?.isOwner) return;
+  return rolls.rollSoakTest(actor, {
+    soakType: "drain", damage: drain, monitor: physical ? "physical" : "stun",
+    pool: Number(actor.system.defensepool?.drain?.pool) || 0, label: L("SRE.Summon.DrainLabel", { drain }),
   });
 }
+
+registerTask("summon", {
+  render(task, hits) {
+    const res = summoningResult({ summonerHits: hits, spiritHits: task.spiritHits, magic: task.magic });
+    let action = "";
+    if (res.success) {
+      action = task.created
+        ? `<p>${L("SRE.Summon.CreatedShort")}</p>`
+        : `<button type="button" class="sre-task-apply">${L("SRE.Summon.CreateButton", { services: res.services })}</button>`;
+    }
+    return `<div class="sre-blast-card">
+      <h3>${L("SRE.Summon.CardTitle", { type: esc(task.typeLabel), force: task.force })}</h3>
+      <p>${L("SRE.Summon.CardRolls", { hits, spirit: task.spiritHits, dice: task.force * 2 })}${task.reagents ? ` ${L("SRE.Summon.ReagentsNote")}` : ""}</p>
+      <p><strong>${res.success ? L("SRE.Summon.Success", { services: res.services }) : L("SRE.Summon.Failure")}</strong></p>
+      ${action}
+      <p><button type="button" class="sre-drain">${L("SRE.Summon.DrainButton", { drain: res.drain, type: drainType(res.physical) })}</button></p>
+      <p class="hint">${L("SRE.Summon.CardHintEdge")}</p>
+    </div>`;
+  },
+  bind(root, message, task) {
+    const res = () => summoningResult({ summonerHits: hitsOf(message), spiritHits: task.spiritHits, magic: task.magic });
+    root.querySelector(".sre-drain")?.addEventListener("click", () => resistDrain(task.actor, res().drain, res().physical));
+    root.querySelector(".sre-task-apply")?.addEventListener("click", async (event) => {
+      const actor = await fromUuid(task.actor);
+      if (!actor?.isOwner) return ui.notifications.warn(L("SRE.Blast.NotOwner"));
+      const r = res();
+      if (!r.success) return;
+      event.currentTarget.disabled = true;
+      const data = {
+        name: L("SRE.Summon.SpiritName", { type: task.typeLabel, force: task.force }),
+        type: "Spirit",
+        system: { rating: task.force, spiritType: task.type },
+        flags: { [MODULE_ID]: { spirit: { summoner: actor.id, services: r.services, force: task.force, worldTime: game.time.worldTime } } },
+      };
+      if (game.user.can("ACTOR_CREATE")) await createSpirit(data, game.user.id);
+      else if (game.users.activeGM) game.socket.emit(SOCKET, { type: "summonSpirit", summonerId: actor.id, data });
+      else return ui.notifications.warn(L("SRE.Give.NoGM"));
+      ui.notifications.info(L("SRE.Summon.Created", { name: data.name, services: r.services, powers: optionalPowers(task.force) }).replace(/<[^>]+>/g, ""));
+      await patchTask(message, { created: true });
+    });
+  },
+});
 
 /** Creates the spirit actor, owned by the summoning user. */
 async function createSpirit(data, userId) {
@@ -143,25 +173,41 @@ export async function openBanish(actor) {
     rejectClose: false,
   }));
   if (!result) return;
-  const pool = Number(actor.system.skills?.conjuring?.pool) || 0;
-  const banisher = result.manualHits === null ? await hits(pool) : { roll: null, hits: result.manualHits };
   const spirit = await hits(force * 2);
-  const res = banishingResult({ banisherHits: banisher.hits, spiritHits: spirit.hits, services: result.services });
-  if (flag) await setServices(target, res.servicesLeft);
-  const magic = Number(actor.system.attributes?.mag?.pool) || 0;
-  const finalDrain = errata("banishFinalDrain");
-  return ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    rolls: [banisher.roll, spirit.roll].filter(Boolean),
-    content: `<div class="sre-blast-card">
-      <h3>${L("SRE.Summon.BanishCard", { name: esc(target.name) })}</h3>
-      <p>${L("SRE.Summon.CardRolls", { hits: banisher.hits, spirit: spirit.hits, dice: force * 2 })}</p>
-      <p><strong>${res.departs ? L("SRE.Summon.Departs") : L("SRE.Summon.ServicesNow", { n: res.servicesLeft, net: res.net })}</strong></p>
-      <p>${drainButton(actor, res.drain, !finalDrain && res.drain > magic)}</p>
-      <p class="hint">${L(finalDrain ? "SRE.Summon.BanishDrainFinal" : "SRE.Summon.BanishDrainInitial", { magic })}</p>
-    </div>`,
-  });
+  const task = {
+    kind: "banish", actor: actor.uuid, target: target.uuid, targetName: target.name, force, services: result.services,
+    spiritHits: spirit.hits, magic: Number(actor.system.attributes?.mag?.pool) || 0, finalDrain: errata("banishFinalDrain"), applied: false,
+  };
+  return runTest(actor, { pool: banishPool, label: L("SRE.Summon.BanishCard", { name: target.name }), manualHits: result.manualHits, task });
 }
+
+registerTask("banish", {
+  render(task, hits) {
+    const res = banishingResult({ banisherHits: hits, spiritHits: task.spiritHits, services: task.services });
+    const physical = !task.finalDrain && res.drain > task.magic;
+    return `<div class="sre-blast-card">
+      <h3>${L("SRE.Summon.BanishCard", { name: esc(task.targetName) })}</h3>
+      <p>${L("SRE.Summon.CardRolls", { hits, spirit: task.spiritHits, dice: task.force * 2 })}</p>
+      <p><strong>${res.departs ? L("SRE.Summon.Departs") : L("SRE.Summon.ServicesNow", { n: res.servicesLeft, net: res.net })}</strong></p>
+      ${res.net > 0 ? `<button type="button" class="sre-task-apply"${task.applied ? " disabled" : ""}>${L(task.applied ? "SRE.Heal.Applied" : "SRE.Summon.ApplyBanish")}</button>` : ""}
+      <p><button type="button" class="sre-drain">${L("SRE.Summon.DrainButton", { drain: res.drain, type: drainType(physical) })}</button></p>
+      <p class="hint">${L(task.finalDrain ? "SRE.Summon.BanishDrainFinal" : "SRE.Summon.BanishDrainInitial", { magic: task.magic })}</p>
+    </div>`;
+  },
+  bind(root, message, task) {
+    const res = () => banishingResult({ banisherHits: hitsOf(message), spiritHits: task.spiritHits, services: task.services });
+    root.querySelector(".sre-drain")?.addEventListener("click", () => {
+      const r = res();
+      return resistDrain(task.actor, r.drain, !task.finalDrain && r.drain > task.magic);
+    });
+    root.querySelector(".sre-task-apply")?.addEventListener("click", async (event) => {
+      event.currentTarget.disabled = true;
+      const target = await fromUuid(task.target);
+      if (target?.getFlag(MODULE_ID, "spirit")) await setServices(target, res().servicesLeft);
+      await patchTask(message, { applied: true });
+    });
+  },
+});
 
 /** Owed services of a module-summoned spirit (the spirit's owner, or the GM through the socket). */
 export async function setServices(spirit, services) {
@@ -172,16 +218,12 @@ export async function setServices(spirit, services) {
   if (game.users.activeGM) game.socket.emit(SOCKET, { type: "spiritServices", spiritId: spirit.id, services: next });
 }
 
-/** Drain resistance from the chat card, through the system's roll dialog (Edge, modifiers). */
+/** Drain buttons on older chat cards. */
 Hooks.on("renderChatMessageHTML", (message, html) => {
   const root = html instanceof HTMLElement ? html : html?.[0];
-  for (const button of root?.querySelectorAll(".sre-drain") ?? []) {
-    button.addEventListener("click", async () => {
-      const actor = await fromUuid(button.dataset.actor);
-      if (!actor?.isOwner) return;
-      const pool = Number(actor.system.defensepool?.drain?.pool) || 0;
-      return rolls.rollPool(actor, { pool, label: L("SRE.Summon.DrainLabel", { drain: button.dataset.drain }), kind: "defense" });
-    });
+  // Cards from before 0.18 (the drain value is on the button); newer cards bind their own buttons.
+  for (const button of root?.querySelectorAll(".sre-drain[data-actor]") ?? []) {
+    button.addEventListener("click", () => resistDrain(button.dataset.actor, Number(button.dataset.drain) || 0, button.dataset.physical === "1"));
   }
 });
 

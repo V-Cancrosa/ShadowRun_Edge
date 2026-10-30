@@ -209,6 +209,19 @@ System nie ma ani danych, ani zasad dla tych dwóch rzeczy, więc moduł je doda
   Gdy któryś z nich jest włączony, moduł Edge oddaje mu tę część i niczego nie liczy podwójnie; Karta Edge, katalog
   i kreator działają z nim tak samo.
 
+## Rzuty modułu przez okno rzutu systemu
+
+Leczenie, rzut granatem i z granatnika, przywoływanie i wypędzanie rzucają przez okno rzutu systemu: działa
+w nich Edge (przed i po rzucie), modyfikatory, kary za rany (wg zasad: leczącego przy pierwszej pomocy, apteczce
+i magii; pacjenta przy odpoczynku, bez nich przy regeneracji naturalnej wg erraty 08/2019) i podtrzymywanie.
+- Wynik modułu (wyleczone kratki, usługi ducha, wynik wypędzenia) pojawia się pod kartą rzutu systemu i przelicza
+  się, gdy ktoś wyda Edge po rzucie.
+- Skutki dzieją się po kliknięciu: **Zastosuj leczenie**, **Przywołaj ducha**, **Zastosuj** (wypędzenie),
+  **Wybuch!** (rozrzut, szablon i lista celów) — zawsze z sukcesów w tej chwili.
+- Kości ducha (Moc × 2) rzuca moduł. Drenaż i odporność celów wybuchu idą przez kartę odporności systemu z jej
+  przyciskiem zadania obrażeń (dla pojazdów system każe wpisać je ręcznie).
+- Sukcesy można dalej wpisać ręcznie (np. rzut fizycznymi kośćmi): wtedy okno systemu się nie otwiera.
+
 ## Erraty SR6
 
 Moduł trzyma się wyłącznie 6. edycji. Oficjalne erraty Catalyst do podręcznika podstawowego są przełącznikami

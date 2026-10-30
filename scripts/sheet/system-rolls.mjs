@@ -13,8 +13,11 @@ async function types() {
 
 const isV4 = () => !foundry.utils.isNewerVersion("4.0.0", game.system.version);
 
-/** A plain pool check (defense, soak, derived values), built like the system sheet's _onCommonCheck. */
-export async function rollPool(actor, { pool, label, kind, threshold }) {
+/**
+ * A plain pool check (defense, soak, derived values), built like the system sheet's _onCommonCheck.
+ * `useWoundModifier` (true/false) presets the dialog's wound-modifier box when the rule decides it.
+ */
+export async function rollPool(actor, { pool, label, kind, threshold, useWoundModifier }) {
   const { PreparedRoll, RollType } = await types();
   const roll = new PreparedRoll();
   roll.pool = Number(pool) || 0;
@@ -28,9 +31,28 @@ export async function rollPool(actor, { pool, label, kind, threshold }) {
   } else {
     roll.allowBuyHits = true;
     roll.useWildDie = 1;
+    if (Number(threshold) > 0) roll.threshold = Number(threshold);
     dialogConfig = { useModifier: true, useThreshold: true };
   }
+  if (typeof useWoundModifier === "boolean") roll.useWoundModifier = useWoundModifier;
   return actor.rollCommonCheck(roll, dialogConfig);
+}
+
+/**
+ * A resistance test through the system's soak roll (SoakRoll): its chat card shows the damage left after the
+ * hits and has the system's own "Apply damage" button. `soakType`: "damage_phys" | "damage_stun" | "drain".
+ */
+export async function rollSoakTest(actor, { soakType, damage, monitor, pool, label }) {
+  const { SoakRoll } = await types();
+  const dv = Math.max(0, Number(damage) || 0);
+  const roll = new SoakRoll(dv, soakType);
+  roll.monitor = monitor ?? (soakType === "damage_phys" ? "physical" : "stun");
+  roll.threshold = dv;
+  roll.pool = Number(pool) || 0;
+  roll.allowBuyHits = false;
+  roll.actionText = roll.checkText = label;
+  roll.performer = actor.system;
+  return actor.rollCommonCheck(roll, { useModifier: true, useThreshold: false });
 }
 
 /** Attribute test, like the system sheet's attribute tiles (attribute + optional second attribute in the dialog). */

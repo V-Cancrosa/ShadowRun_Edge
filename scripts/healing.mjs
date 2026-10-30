@@ -7,6 +7,7 @@
 import { METHODS, ONCE_PER_INJURIES, healingPool, healingResult, treatmentThreshold, isDead } from "./healing-rules.mjs";
 import { errataFlags } from "./errata.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
+import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
@@ -91,7 +92,7 @@ export async function openHealing(target) {
         ui2.showFor(form, o.method);
         const isTreatment = ONCE_PER_INJURIES.includes(o.method);
         const healer = isTreatment ? game.actors.get(o.healer) ?? target : target;
-        const pool = healingPool(o.method, healer.system, target.system, { ...o, woundModifier: target.getWoundModifier?.() ?? 0, errata: errataFlags() });
+        const pool = healingPool(o.method, healer.system, target.system, { ...o, woundModifier: 0, errata: errataFlags() });
         const thr = isTreatment ? threshold : 0;
         ui2.setTile(form, "pool", { big: pool, calc: split(L(`SRE.Heal.Method.${o.method}`))[1] });
         ui2.setTile(form, "threshold", { big: isTreatment ? thr : "—", calc: isTreatment ? (autoHit ? L("SRE.Heal.AutoHit") : `5 − ${essence.toFixed(1)}`) : "" });
@@ -113,33 +114,59 @@ export async function openHealing(target) {
 
 async function healingTest(target, o) {
   const errata = errataFlags();
-  const treatment = ["firstAid", "medkit", "magic"].includes(o.method);
+  const treatment = ONCE_PER_INJURIES.includes(o.method);
   const healer = treatment ? game.actors.get(o.healer) ?? target : target;
-  const pool = healingPool(o.method, healer.system, target.system, { ...o, woundModifier: target.getWoundModifier?.() ?? 0, errata });
+  // Wound modifiers come from the system dialog's box: the healer's for treatment, the patient's for rest
+  // (not at all for natural recovery with the August 2019 errata, except with Overflow damage).
+  const pool = healingPool(o.method, healer.system, target.system, { ...o, woundModifier: 0, errata });
+  const restWounds = (o.method === "restPhysical" && Number(target.system.overflow?.dmg) > 0) || errata.noWoundsOnRecovery === false;
   const { threshold, autoHit } = treatment ? treatmentThreshold(target.system.essence) : { threshold: 0, autoHit: 0 };
-  let roll = null;
-  let hits = o.manualHits;
-  if (hits === null || hits === undefined) {
-    roll = await new Roll(`${pool}d6cs>=5`).evaluate();
-    hits = roll.total;
-  }
-  const res = healingResult({ method: o.method, hits, threshold, autoHit, damage: damageOf(target), drainBoxes: o.drainBoxes, prefer: o.prefer });
-  const used = treatment && target.getFlag(MODULE_ID, "healed")?.[o.method];
-  const parts = ["overflow", "physical", "stun"].filter((k) => res.heal[k]).map((k) => L(`SRE.Heal.Box.${k}`, { n: res.heal[k] }));
-  const content = `<div class="sre-heal-card">
-    <h3>${L(`SRE.Heal.Method.${o.method}`)}: ${esc(target.name)}</h3>
-    <p>${treatment ? L("SRE.Heal.CardTreatment", { healer: esc(healer.name), pool, hits: res.hits, threshold, auto: autoHit ? L("SRE.Heal.AutoHit") : "" }) : L("SRE.Heal.CardRest", { pool, hits: res.hits })}</p>
-    <p class="sre-heal-result"><strong>${parts.length ? parts.join(", ") : L("SRE.Heal.Nothing")}</strong></p>
-    ${used ? `<p class="sre-heal-warn">${L("SRE.Heal.UsedWarning")}</p>` : ""}
-    ${parts.length ? `<button type="button" class="sre-heal-apply">${L("SRE.Heal.Apply")}</button>` : ""}
-  </div>`;
-  return ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor: healer }),
-    content,
-    rolls: roll ? [roll] : [],
-    flags: { [MODULE_ID]: { healing: { target: target.uuid, method: o.method, heal: res.heal, applied: false } } },
-  });
+  const task = {
+    kind: "heal", target: target.uuid, targetName: target.name, healer: healer.name, method: o.method, pool, threshold, autoHit,
+    damage: damageOf(target), drainBoxes: o.drainBoxes, prefer: o.prefer,
+    used: !!(treatment && target.getFlag(MODULE_ID, "healed")?.[o.method]), applied: false,
+  };
+  const label = `${split(L(`SRE.Heal.Method.${o.method}`))[0]}: ${target.name}`;
+  return runTest(healer, { pool, label, threshold, useWoundModifier: treatment || restWounds, manualHits: o.manualHits, task });
 }
+
+function healOf(task, hits) {
+  return healingResult({ method: task.method, hits, threshold: task.threshold, autoHit: task.autoHit, damage: task.damage, drainBoxes: task.drainBoxes, prefer: task.prefer });
+}
+
+registerTask("heal", {
+  render(task, hits) {
+    const res = healOf(task, hits);
+    const treatment = ONCE_PER_INJURIES.includes(task.method);
+    const parts = ["overflow", "physical", "stun"].filter((k) => res.heal[k]).map((k) => L(`SRE.Heal.Box.${k}`, { n: res.heal[k] }));
+    const button = parts.length
+      ? `<button type="button" class="sre-heal-apply"${task.applied ? " disabled" : ""}>${L(task.applied ? "SRE.Heal.Applied" : "SRE.Heal.Apply")}</button>`
+      : "";
+    return `<div class="sre-heal-card">
+      <h3>${esc(split(L(`SRE.Heal.Method.${task.method}`))[0])}: ${esc(task.targetName)}</h3>
+      <p>${treatment
+        ? L("SRE.Heal.CardTreatment", { healer: esc(task.healer), pool: task.pool, hits: res.hits, threshold: task.threshold, auto: task.autoHit ? L("SRE.Heal.AutoHit") : "" })
+        : L("SRE.Heal.CardRest", { pool: task.pool, hits: res.hits })}</p>
+      <p class="sre-heal-result"><strong>${parts.length ? parts.join(", ") : L("SRE.Heal.Nothing")}</strong></p>
+      ${task.used ? `<p class="sre-heal-warn">${L("SRE.Heal.UsedWarning")}</p>` : ""}
+      ${button}
+    </div>`;
+  },
+  bind(root, message, task) {
+    root.querySelector(".sre-heal-apply")?.addEventListener("click", async (event) => {
+      event.currentTarget.disabled = true;
+      const target = await fromUuid(task.target);
+      if (!target) return;
+      // The hits at this moment: Edge spent after the roll counts.
+      const { heal } = healOf(task, hitsOf(message));
+      if (target.isOwner) {
+        await applyHealing(task.target, task.method, heal);
+        await patchTask(message, { applied: true });
+      } else if (game.users.activeGM) game.socket.emit(SOCKET, { type: "applyHealing", messageId: message.id });
+      else ui.notifications.warn(L("SRE.Give.NoGM"));
+    });
+  },
+});
 
 /** Applies the healing on the patient (by its owner, or by the GM when asked through the socket). */
 async function applyHealing(targetUuid, method, heal) {
@@ -156,27 +183,6 @@ async function applyHealing(targetUuid, method, heal) {
   return true;
 }
 
-Hooks.on("renderChatMessageHTML", (message, html) => {
-  const data = message.getFlag(MODULE_ID, "healing");
-  if (!data) return;
-  const root = html instanceof HTMLElement ? html : html?.[0];
-  const button = root?.querySelector(".sre-heal-apply");
-  if (!button) return;
-  if (data.applied) {
-    button.disabled = true;
-    button.textContent = L("SRE.Heal.Applied");
-    return;
-  }
-  button.addEventListener("click", async () => {
-    const target = await fromUuid(data.target);
-    if (!target) return;
-    if (target.isOwner) await applyHealing(data.target, data.method, data.heal);
-    else if (game.users.activeGM) game.socket.emit(SOCKET, { type: "applyHealing", messageId: message.id, ...data });
-    else return ui.notifications.warn(L("SRE.Give.NoGM"));
-    if (message.isOwner) await message.setFlag(MODULE_ID, "healing", { ...data, applied: true });
-  });
-});
-
 /** New damage starts a new set of injuries: first aid, medkit and magic can be used again. */
 Hooks.on("preUpdateActor", (actor, changes, options) => {
   if (options.sreHealing) return;
@@ -188,14 +194,14 @@ Hooks.on("preUpdateActor", (actor, changes, options) => {
 });
 
 Hooks.once("ready", () => {
-  game.socket.on(SOCKET, async (data, senderId) => {
+  game.socket.on(SOCKET, async (data) => {
     if (data?.type !== "applyHealing" || !game.users.activeGM?.isSelf) return;
     const message = game.messages.get(data.messageId);
-    const flag = message?.getFlag(MODULE_ID, "healing");
-    // Only heal what the chat card says, once.
-    if (!flag || flag.applied || flag.target !== data.target) return;
-    await applyHealing(flag.target, flag.method, flag.heal);
-    await message.setFlag(MODULE_ID, "healing", { ...flag, applied: true });
+    const task = message?.getFlag(MODULE_ID, "task");
+    // Only heal what the chat card says (from its current hits), once.
+    if (task?.kind !== "heal" || task.applied) return;
+    await applyHealing(task.target, task.method, healOf(task, hitsOf(message)).heal);
+    await message.setFlag(MODULE_ID, "task", { ...task, applied: true });
   });
 });
 
