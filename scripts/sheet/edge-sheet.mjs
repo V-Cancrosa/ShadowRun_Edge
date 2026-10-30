@@ -365,5 +365,5 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 Hooks.once("init", () => {
   if (game.system.id !== "shadowrun6-eden") return;
   const collection = foundry.documents?.collections?.Actors ?? globalThis.Actors;
-  collection.registerSheet(MODULE_ID, EdgeActorSheet, { types: ["Player"], makeDefault: false, label: "SRE.Sheet.Label" });
+  collection.registerSheet(MODULE_ID, EdgeActorSheet, { types: ["Player"], makeDefault: true, label: "SRE.Sheet.Label" });
 });

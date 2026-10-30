@@ -403,7 +403,8 @@ body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karm
 /* Karma vote chat card in the Edge layout */
 .chat-message .sre-karma-vote .sre-kv-row {
   display: grid;
-  grid-template-columns: 26px 1fr auto auto;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  grid-template-areas: "img name count" "votes votes votes" "avg avg avg";
   align-items: center;
   gap: 6px;
   padding: 4px 0;
@@ -411,7 +412,10 @@ body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karm
 }
 .chat-message .sre-karma-vote h3 + .sre-kv-row { border-top: 0; }
 .chat-message .sre-karma-vote .sre-kv-row img { width: 26px; height: 26px; object-fit: cover; border: 1px solid var(--sre-accent-line); border-radius: 0; }
-.chat-message .sre-karma-vote .sre-kv-buttons { display: flex; flex-wrap: wrap; gap: 2px; justify-content: flex-end; }
+.chat-message .sre-karma-vote .sre-kv-row img { grid-area: img; }
+.chat-message .sre-karma-vote .sre-kv-name { grid-area: name; min-width: 0; overflow-wrap: break-word; word-break: normal; font-weight: bold; }
+/* Vote buttons on their own line under the name, so long names don't wrap letter by letter. */
+.chat-message .sre-karma-vote .sre-kv-buttons { grid-area: votes; display: flex; flex-wrap: wrap; gap: 3px; justify-content: flex-start; }
 .chat-message .sre-karma-vote .sre-kv-value {
   width: 22px;
   height: 22px;
@@ -422,9 +426,9 @@ body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karm
   border-radius: 0;
 }
 .chat-message .sre-karma-vote .sre-kv-value.sre-kv-mine { background: var(--sre-accent); border-color: var(--sre-accent); color: #fff; }
-.chat-message .sre-karma-vote .sre-kv-count { font-size: 10px; opacity: 0.75; }
-.chat-message .sre-karma-vote .sre-kv-avg { grid-column: 2 / -1; font-size: 10px; opacity: 0.75; }
-.chat-message .sre-karma-vote .sre-kv-award { grid-column: 3 / -1; font-weight: bold; color: var(--sre-accent); }
+.chat-message .sre-karma-vote .sre-kv-count { grid-area: count; font-size: 10px; opacity: 0.75; white-space: nowrap; }
+.chat-message .sre-karma-vote .sre-kv-avg { grid-area: avg; font-size: 10px; opacity: 0.75; }
+.chat-message .sre-karma-vote .sre-kv-award { grid-area: count; font-weight: bold; color: var(--sre-accent); white-space: nowrap; }
 .chat-message .sre-karma-vote .sre-kv-close { width: 100%; margin-top: 4px; }
 .sre-ed-tile.money { flex-direction: column; align-items: flex-start; gap: 2px; }
 .sre-ed-tile.money .sre-ed-big { order: 2; min-width: 0; font-size: 22px; text-align: left; }
