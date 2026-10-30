@@ -7,9 +7,10 @@
       "TargetWorld": "Items directory",
       "TargetActor": "Inventory: {name}",
       "Step": {
-        "Kind": "1. Kind",
-        "Paste": "2. Rulebook row (optional)",
-        "Stats": "3. Stats"
+        "Kind": "Kind",
+        "Paste": "Rulebook row",
+        "Stats": "Stats",
+        "Extras": "Effects and mods"
       },
       "Category": {
         "Label": "Category",
@@ -123,7 +124,16 @@
       },
       "Note": {
         "CapacityCost": "Takes up capacity: [{value}]"
-      }
+      },
+      "NewItem": "New item",
+      "PasteShort": "the module reads the columns",
+      "PreviewMods": "Built-in mods: {mods} · effects: {effects}",
+      "PreviewEmpty": "Stats show up here",
+      "Legality": "Legality",
+      "Attack": "Attack",
+      "Sleaze": "Sleaze",
+      "Data": "Data processing",
+      "Firewall": "Firewall"
     },
     "Catalog": {
       "Label": "Custom catalog (world)",

@@ -1,274 +1,241 @@
-<div class="sre-wizard">
-  <div class="form-group sre-target">
-    <label><i class="fas fa-box-open"></i> {{localize "SRE.Wizard.Target"}}</label>
-    <div class="form-fields">
+<div class="sre-ed sre-wz">
+  {{!-- Header: what is being made, and where it goes --}}
+  <header class="sre-ed-head sre-wz-head">
+    <div class="sre-wz-title">
+      <div class="sre-ed-kind">{{localize "SRE.Wizard.Title"}}</div>
+      <div class="sre-ed-name" data-preview-name>{{#if state.name}}{{state.name}}{{else}}{{localize "SRE.Wizard.NewItem"}}{{/if}}</div>
+      <div class="sre-ed-sub">{{folderPath}}</div>
+    </div>
+    <label class="sre-wz-target">{{localize "SRE.Wizard.Target"}}
       <select name="target">
         {{selectOptions targets selected=target valueAttr="value" labelAttr="label"}}
       </select>
-    </div>
-  </div>
-  {{#if isCatalog}}<p class="hint">{{localize "SRE.Wizard.CatalogFolder"}}: <strong>{{folderPath}}</strong></p>{{/if}}
+    </label>
+  </header>
 
-  <fieldset>
-    <legend>{{localize "SRE.Wizard.Step.Kind"}}</legend>
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Category.Label"}}</label>
-      <select name="state.category">
-        {{selectOptions categories selected=state.category valueAttr="value" labelAttr="label"}}
-      </select>
-    </div>
-    {{#if multiType}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Type"}}</label>
-      <select name="state.type">
-        {{selectOptions types selected=state.type valueAttr="value" labelAttr="label"}}
-      </select>
-    </div>
-    {{/if}}
-    {{#if subtypes.length}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Subtype"}}</label>
-      <select name="state.subtype">
-        {{selectOptions subtypes selected=state.subtype valueAttr="value" labelAttr="label"}}
-      </select>
-    </div>
-    {{/if}}
-    {{#if skillHint}}
-    <p class="hint">{{localize "SRE.Wizard.SkillHint"}}: <strong>{{skillHint}}</strong></p>
-    {{/if}}
-    {{#if presets.length}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Preset"}}</label>
-      <div class="form-fields">
-        <select name="preset">
-          {{selectOptions presets valueAttr="id" labelAttr="label"}}
-        </select>
-        <button type="button" data-action="applyPreset" data-tooltip="SRE.Wizard.PresetApply"><i class="fas fa-file-import"></i></button>
-        <button type="button" data-action="deletePreset" data-tooltip="SRE.Wizard.PresetDelete"><i class="fas fa-trash"></i></button>
+  <nav class="sre-wz-steps">
+    {{#each steps}}
+    <button type="button" class="sre-wz-step{{#if active}} active{{/if}}{{#if done}} done{{/if}}" data-action="wizTab" data-tab="{{id}}">
+      <span class="sre-wz-step-n">{{#if done}}<i class="fas fa-check"></i>{{else}}{{number}}{{/if}}</span>{{label}}
+    </button>
+    {{/each}}
+  </nav>
+
+  <div class="sre-wz-cols">
+    <div class="sre-wz-main">
+      {{!-- 1. Kind --}}
+      <div class="sre-wz-tab{{#if active.kind}} active{{/if}}" data-tab="kind">
+        <section class="sre-ed-panel">
+          <h3>{{localize "SRE.Wizard.Category.Label"}}<small>{{folderPath}}</small></h3>
+          <div class="sre-ed-opts cards sre-wz-cats">
+            {{#each categories}}
+            <label class="sre-ed-opt">
+              <input type="radio" name="state.category" value="{{value}}" {{#if checked}}checked{{/if}}>
+              <i class="{{icon}}"></i><b>{{label}}</b>
+            </label>
+            {{/each}}
+          </div>
+          <div class="sre-ed-rows">
+            {{#if multiType}}
+            <div class="sre-ed-row"><label>{{localize "SRE.Wizard.Type"}}</label>
+              <select name="state.type">{{selectOptions types selected=state.type valueAttr="value" labelAttr="label"}}</select></div>
+            {{/if}}
+            {{#if subtypes.length}}
+            <div class="sre-ed-row"><label>{{localize "SRE.Wizard.Subtype"}}</label>
+              <select name="state.subtype">{{selectOptions subtypes selected=state.subtype valueAttr="value" labelAttr="label"}}</select></div>
+            {{/if}}
+            {{#if presets.length}}
+            <div class="sre-ed-row"><label>{{localize "SRE.Wizard.Preset"}}</label>
+              <div class="sre-wz-inline">
+                <select name="preset">{{selectOptions presets valueAttr="id" labelAttr="label"}}</select>
+                <button type="button" class="sre-wz-icon" data-action="applyPreset" data-tooltip="SRE.Wizard.PresetApply"><i class="fas fa-file-import"></i></button>
+                <button type="button" class="sre-wz-icon" data-action="deletePreset" data-tooltip="SRE.Wizard.PresetDelete"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+            {{/if}}
+          </div>
+          {{#if skillHint}}<div class="sre-ed-note info">{{localize "SRE.Wizard.SkillHint"}}: <strong>{{skillHint}}</strong></div>{{/if}}
+        </section>
       </div>
-    </div>
-    {{/if}}
-  </fieldset>
 
-  <fieldset>
-    <legend>{{localize "SRE.Wizard.Step.Paste"}}</legend>
-    <textarea name="state.statLine" rows="3" placeholder="{{example}}">{{state.statLine}}</textarea>
-    <div class="form-fields">
-      <button type="button" data-action="parse"><i class="fas fa-magnifying-glass"></i> {{localize "SRE.Wizard.Parse"}}</button>
-    </div>
-    <p class="hint">{{localize "SRE.Wizard.PasteHint"}} {{localize "SRE.Wizard.BulkHint"}}</p>
-    {{#if bulk}}
-    <table class="sre-bulk">
-      <thead><tr><th>{{localize "SRE.Wizard.Name"}}</th><th>{{localize "SRE.Wizard.Bulk.Recognized"}}</th></tr></thead>
-      <tbody>
-        {{#each bulk}}
-        <tr>
-          <td>{{state.name}}</td>
-          <td>{{summary}}{{#if unparsed}}<br><span class="sre-warn">{{localize "SRE.Wizard.Unparsed"}}: {{unparsed}}</span>{{/if}}</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
-    <div class="form-fields">
-      <button type="button" data-action="clearBulk"><i class="fas fa-xmark"></i> {{localize "SRE.Wizard.Bulk.Cancel"}}</button>
-      <button type="button" data-action="createBulk"><i class="fas fa-layer-group"></i> {{localize "SRE.Wizard.Bulk.Create"}} ({{bulk.length}})</button>
-    </div>
-    {{/if}}
-    {{#if lastParse}}
-    <p class="sre-parse-result">
-      {{localize "SRE.Wizard.ParseResult" }} {{lastParse.count}}
-      {{#if lastParse.unparsed}}<br><span class="sre-warn">{{localize "SRE.Wizard.Unparsed"}}: {{lastParse.unparsed}}</span>{{/if}}
-    </p>
-    {{/if}}
-  </fieldset>
-
-  <fieldset>
-    <legend>{{localize "SRE.Wizard.Step.Stats"}}</legend>
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Name"}}</label>
-      <input type="text" name="state.name" value="{{state.name}}">
-    </div>
-    {{#if hasRating}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Rating"}}</label>
-      <input type="text" name="state.rating" value="{{state.rating}}" class="sre-short">
-      <p class="hint">{{localize "SRE.Wizard.RatingHint"}}</p>
-    </div>
-    {{/if}}
-
-    {{#if weapon}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.DV"}}</label>
-      <div class="form-fields">
-        <input type="text" name="state.dv" value="{{state.dv}}" class="sre-short">
-        <label class="checkbox"><input type="checkbox" name="state.stun" {{checked state.stun}}> {{localize "SRE.Wizard.Stun"}}</label>
+      {{!-- 2. Paste a rulebook row --}}
+      <div class="sre-wz-tab{{#if active.paste}} active{{/if}}" data-tab="paste">
+        <section class="sre-ed-panel">
+          <h3>{{localize "SRE.Wizard.Step.Paste"}}<small>{{localize "SRE.Wizard.PasteShort"}}</small></h3>
+          <div class="sre-ed-rows">
+            <textarea name="state.statLine" rows="4" placeholder="{{example}}">{{state.statLine}}</textarea>
+            <div class="sre-wz-inline">
+              <button type="button" class="sre-wz-btn" data-action="parse"><i class="fas fa-magnifying-glass"></i> {{localize "SRE.Wizard.Parse"}}</button>
+            </div>
+          </div>
+          {{#if lastParse}}
+          <div class="sre-wz-parsed">
+            {{#each lastParse.fields}}<span class="sre-wz-ok">{{this}}</span>{{/each}}
+            {{#if lastParse.unparsed}}<span class="sre-wz-bad">{{localize "SRE.Wizard.Unparsed"}}: {{lastParse.unparsed}}</span>{{/if}}
+          </div>
+          {{/if}}
+          {{#if bulk}}
+          <div class="sre-wz-bulk">
+            {{#each bulk}}
+            <div class="sre-wz-bulk-row">
+              <b>{{state.name}}</b><span>{{summary}}</span>
+              {{#if unparsed}}<span class="sre-wz-bad">{{localize "SRE.Wizard.Unparsed"}}: {{unparsed}}</span>{{/if}}
+            </div>
+            {{/each}}
+            <div class="sre-wz-inline">
+              <button type="button" class="sre-wz-btn" data-action="clearBulk"><i class="fas fa-xmark"></i> {{localize "SRE.Wizard.Bulk.Cancel"}}</button>
+              <button type="button" class="sre-wz-btn main" data-action="createBulk"><i class="fas fa-layer-group"></i> {{localize "SRE.Wizard.Bulk.Create"}} ({{bulk.length}})</button>
+            </div>
+          </div>
+          {{/if}}
+          <div class="sre-ed-note info">{{localize "SRE.Wizard.PasteHint"}} {{localize "SRE.Wizard.BulkHint"}}</div>
+        </section>
       </div>
-    </div>
-    {{#if show.modes}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Modes"}}</label>
-      <div class="form-fields">
-        <label class="checkbox"><input type="checkbox" name="state.modes.SS" {{checked state.modes.SS}}> {{localize "shadowrun6.item.mode_ss"}}</label>
-        <label class="checkbox"><input type="checkbox" name="state.modes.SA" {{checked state.modes.SA}}> {{localize "shadowrun6.item.mode_sa"}}</label>
-        <label class="checkbox"><input type="checkbox" name="state.modes.BF" {{checked state.modes.BF}}> {{localize "shadowrun6.item.mode_bf"}}</label>
-        <label class="checkbox"><input type="checkbox" name="state.modes.FA" {{checked state.modes.FA}}> {{localize "shadowrun6.item.mode_fa"}}</label>
-      </div>
-    </div>
-    {{/if}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.AR"}}</label>
-      <div class="form-fields sre-ar">
-        {{#each state.ar as |value i|}}
-        <input type="text" name="state.ar.{{i}}" value="{{value}}" placeholder="—" data-tooltip="SRE.Wizard.Range{{i}}">
-        {{/each}}
-      </div>
-    </div>
-    <p class="hint">{{localize "SRE.Wizard.ARHint"}}</p>
-    {{#if show.ammo}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Ammo"}}</label>
-      <input type="text" name="state.ammo" value="{{state.ammo}}" class="sre-short">
-    </div>
-    {{/if}}
-    {{#if show.strWeapon}}
-    <div class="form-group">
-      <label>{{localize "shadowrun6.item.strWeapon"}}</label>
-      <input type="checkbox" name="state.strWeapon" {{checked state.strWeapon}}>
-    </div>
-    {{/if}}
-    {{/if}}
 
-    {{#if show.defense}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Defense"}}</label>
-      <input type="text" name="state.defense" value="{{state.defense}}" class="sre-short">
-    </div>
-    <div class="form-group">
-      <label>{{localize "shadowrun6.item.capacity"}}</label>
-      <input type="text" name="state.capacity" value="{{state.capacity}}" class="sre-short">
-    </div>
-    <div class="form-group">
-      <label>{{localize "shadowrun6.item.social"}}</label>
-      <input type="text" name="state.social" value="{{state.social}}" class="sre-short">
-    </div>
-    {{/if}}
+      {{!-- 3. Stats --}}
+      <div class="sre-wz-tab{{#if active.stats}} active{{/if}}" data-tab="stats">
+        <section class="sre-ed-panel">
+          <h3>{{localize "SRE.Wizard.Step.Stats"}}</h3>
+          <div class="sre-wz-grid">
+            <div class="sre-wz-f span2"><label>{{localize "SRE.Wizard.Name"}}</label><input type="text" name="state.name" value="{{state.name}}"></div>
+            {{#if hasRating}}
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Rating"}}</label><input type="text" name="state.rating" value="{{state.rating}}" data-tooltip="SRE.Wizard.RatingHint"></div>
+            {{/if}}
+            {{#if countable}}
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Count"}}</label><input type="text" name="state.count" value="{{state.count}}"></div>
+            {{/if}}
 
-    {{#if show.essence}}
-    <div class="form-group">
-      <label>{{localize "shadowrun6.item.essence"}}</label>
-      <div class="form-fields">
-        <input type="text" name="state.essence" value="{{state.essence}}" class="sre-short">
-        <span class="sre-preview" data-preview="essence">{{preview.essence}}</span>
+            {{#if weapon}}
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.DV"}}</label><input type="text" name="state.dv" value="{{state.dv}}"></div>
+            <div class="sre-wz-f"><label>&nbsp;</label>
+              <label class="sre-ed-chip"><input type="checkbox" name="state.stun" {{checked state.stun}}><span>{{localize "SRE.Wizard.Stun"}}</span></label></div>
+            <div class="sre-wz-f span2"><label>{{localize "SRE.Wizard.AR"}}</label>
+              <div class="sre-wz-ar">
+                {{#each state.ar as |value i|}}
+                <input type="text" name="state.ar.{{i}}" value="{{value}}" placeholder="—" data-tooltip="SRE.Wizard.Range{{i}}">
+                {{/each}}
+              </div>
+            </div>
+            {{#if show.modes}}
+            <div class="sre-wz-f span2"><label>{{localize "SRE.Wizard.Modes"}}</label>
+              <div class="sre-ed-chips">
+                <label class="sre-ed-chip"><input type="checkbox" name="state.modes.SS" {{checked state.modes.SS}}><span>SS</span></label>
+                <label class="sre-ed-chip"><input type="checkbox" name="state.modes.SA" {{checked state.modes.SA}}><span>SA</span></label>
+                <label class="sre-ed-chip"><input type="checkbox" name="state.modes.BF" {{checked state.modes.BF}}><span>BF</span></label>
+                <label class="sre-ed-chip"><input type="checkbox" name="state.modes.FA" {{checked state.modes.FA}}><span>FA</span></label>
+              </div>
+            </div>
+            {{/if}}
+            {{#if show.ammo}}
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Ammo"}}</label><input type="text" name="state.ammo" value="{{state.ammo}}"></div>
+            {{/if}}
+            {{#if show.strWeapon}}
+            <div class="sre-wz-f"><label>&nbsp;</label>
+              <label class="sre-ed-chip"><input type="checkbox" name="state.strWeapon" {{checked state.strWeapon}}><span>{{localize "shadowrun6.item.strWeapon"}}</span></label></div>
+            {{/if}}
+            {{/if}}
+
+            {{#if show.defense}}
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Defense"}}</label><input type="text" name="state.defense" value="{{state.defense}}"></div>
+            <div class="sre-wz-f"><label>{{localize "shadowrun6.item.capacity"}}</label><input type="text" name="state.capacity" value="{{state.capacity}}"></div>
+            <div class="sre-wz-f"><label>{{localize "shadowrun6.item.social"}}</label><input type="text" name="state.social" value="{{state.social}}"></div>
+            {{/if}}
+            {{#if show.essence}}
+            <div class="sre-wz-f"><label>{{localize "shadowrun6.item.essence"}}</label><input type="text" name="state.essence" value="{{state.essence}}">
+              <small class="sre-wz-calc" data-preview="essence">{{preview.essence}}</small></div>
+            {{/if}}
+            {{#if show.capacity}}
+            <div class="sre-wz-f"><label>{{localize "shadowrun6.item.capacity"}}</label><input type="text" name="state.capacity" value="{{state.capacity}}"></div>
+            {{/if}}
+            {{#if show.matrix}}
+            {{#if isCyberdeck}}
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Attack"}}</label><input type="text" name="state.a" value="{{state.a}}"></div>
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Sleaze"}}</label><input type="text" name="state.s" value="{{state.s}}"></div>
+            {{else}}
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Data"}}</label><input type="text" name="state.d" value="{{state.d}}"></div>
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Firewall"}}</label><input type="text" name="state.f" value="{{state.f}}"></div>
+            {{/if}}
+            <div class="sre-wz-f"><label>{{localize "shadowrun6.label.progSlots"}}</label><input type="text" name="state.progSlots" value="{{state.progSlots}}"></div>
+            {{/if}}
+
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Avail"}}</label><input type="text" name="state.avail" value="{{state.avail}}">
+              <small class="sre-wz-calc" data-preview="avail">{{preview.avail}}</small></div>
+            <div class="sre-wz-f"><label>{{localize "SRE.Wizard.Legality"}}</label>
+              <select name="state.legality">{{selectOptions legalities selected=state.legality valueAttr="value" labelAttr="label"}}</select></div>
+            <div class="sre-wz-f span2"><label>{{localize "SRE.Wizard.Price"}}</label><input type="text" name="state.price" value="{{state.price}}">
+              <small class="sre-wz-calc" data-preview="price">{{preview.price}}</small></div>
+
+            {{#if isMod}}
+            <div class="sre-wz-f span2"><label>{{localize "SRE.Mount.Label"}}</label>
+              <select name="state.mount">{{selectOptions mountOptions selected=state.mount valueAttr="value" labelAttr="label"}}</select></div>
+            <div class="sre-wz-f span2"><label>{{localize "SRE.Mount.CapacityCost"}}</label>
+              <input type="text" name="state.capacityCost" value="{{state.capacityCost}}" placeholder="2 / R" data-tooltip="SRE.Mount.CapacityCostHint"></div>
+            {{/if}}
+          </div>
+          {{#if hasRating}}<div class="sre-ed-note info">{{localize "SRE.Wizard.RatingHint"}}</div>{{/if}}
+          {{#if weapon}}<div class="sre-ed-note info">{{localize "SRE.Wizard.ARHint"}}</div>{{/if}}
+        </section>
       </div>
-    </div>
-    {{/if}}
-    {{#if show.capacity}}
-    <div class="form-group">
-      <label>{{localize "shadowrun6.item.capacity"}}</label>
-      <input type="text" name="state.capacity" value="{{state.capacity}}" class="sre-short">
-    </div>
-    {{/if}}
 
-    {{#if show.matrix}}
-    <div class="form-group">
-      <label>{{#if isCyberdeck}}{{localize "SRE.Wizard.AttackSleaze"}}{{else}}{{localize "SRE.Wizard.DataFirewall"}}{{/if}}</label>
-      <div class="form-fields">
-        {{#if isCyberdeck}}
-        <input type="text" name="state.a" value="{{state.a}}" class="sre-short">
-        <input type="text" name="state.s" value="{{state.s}}" class="sre-short">
-        {{else}}
-        <input type="text" name="state.d" value="{{state.d}}" class="sre-short">
-        <input type="text" name="state.f" value="{{state.f}}" class="sre-short">
+      {{!-- 4. Effects, built-in mods, description --}}
+      <div class="sre-wz-tab{{#if active.extras}} active{{/if}}" data-tab="extras">
+        {{#if showEffects}}
+        <section class="sre-ed-panel">
+          <h3>{{localize "SRE.Wizard.Effect.Title"}}</h3>
+          <div class="sre-ed-rows">
+            {{#each state.effects as |effect i|}}
+            <div class="sre-wz-effect">
+              <input type="text" name="state.effects.{{i}}.label" value="{{effect.label}}" placeholder="{{localize "SRE.Wizard.Effect.Label"}}">
+              <select name="state.effects.{{i}}.target">{{selectOptions ../effectTargets selected=effect.target valueAttr="value" labelAttr="label"}}</select>
+              <input type="text" name="state.effects.{{i}}.value" value="{{effect.value}}" placeholder="+2 / R">
+              <label class="sre-ed-chip" data-tooltip="SRE.Wizard.Effect.ToggleHint"><input type="checkbox" name="state.effects.{{i}}.toggle" {{checked effect.toggle}}><span>{{localize "SRE.Wizard.Effect.Toggle"}}</span></label>
+              <button type="button" class="sre-wz-icon" data-action="removeEffect" data-index="{{i}}"><i class="fas fa-trash"></i></button>
+            </div>
+            {{/each}}
+            <div class="sre-wz-inline"><button type="button" class="sre-wz-btn" data-action="addEffect"><i class="fas fa-plus"></i> {{localize "SRE.Wizard.Effect.Add"}}</button></div>
+          </div>
+          <div class="sre-ed-note info">{{#if isMod}}{{localize "SRE.Wizard.Effect.Hint"}}{{else}}{{localize "SRE.Wizard.Effect.ActorHint"}}{{/if}}</div>
+        </section>
         {{/if}}
+        {{#unless isMod}}
+        <section class="sre-ed-panel">
+          <h3>{{localize "SRE.Wizard.Mods.Title"}}</h3>
+          <div class="sre-wz-dropzone">
+            {{#each state.mods as |mod i|}}
+            <span class="sre-wz-mod"><i class="fas fa-puzzle-piece"></i> {{mod.name}}
+              <button type="button" class="sre-wz-icon" data-action="removeMod" data-index="{{i}}"><i class="fas fa-xmark"></i></button></span>
+            {{else}}
+            <span class="sre-wz-empty">{{localize "SRE.Wizard.Mods.Empty"}}</span>
+            {{/each}}
+          </div>
+          <div class="sre-ed-note info">{{localize "SRE.Wizard.Mods.Hint"}}</div>
+        </section>
+        {{/unless}}
+        <section class="sre-ed-panel">
+          <h3>{{localize "SRE.Wizard.Description"}}</h3>
+          <div class="sre-ed-rows"><textarea name="state.description" rows="4">{{state.description}}</textarea></div>
+        </section>
       </div>
     </div>
-    <div class="form-group">
-      <label>{{localize "shadowrun6.label.progSlots"}}</label>
-      <input type="text" name="state.progSlots" value="{{state.progSlots}}" class="sre-short">
-    </div>
-    {{/if}}
 
-    {{#if countable}}
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Count"}}</label>
-      <input type="text" name="state.count" value="{{state.count}}" class="sre-short">
-    </div>
-    {{/if}}
-
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Avail"}}</label>
-      <div class="form-fields">
-        <input type="text" name="state.avail" value="{{state.avail}}" class="sre-short">
-        <select name="state.legality">
-          {{selectOptions legalities selected=state.legality valueAttr="value" labelAttr="label"}}
-        </select>
-        <span class="sre-preview" data-preview="avail">{{preview.avail}}</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>{{localize "SRE.Wizard.Price"}}</label>
-      <div class="form-fields">
-        <input type="text" name="state.price" value="{{state.price}}">
-        <span class="sre-preview" data-preview="price">{{preview.price}}</span>
-      </div>
-    </div>
-    {{#if isMod}}
-    <div class="form-group">
-      <label>{{localize "SRE.Mount.Label"}}</label>
-      <select name="state.mount">
-        {{selectOptions mountOptions selected=state.mount valueAttr="value" labelAttr="label"}}
-      </select>
-    </div>
-    <div class="form-group">
-      <label>{{localize "SRE.Mount.CapacityCost"}}</label>
-      <input type="text" name="state.capacityCost" value="{{state.capacityCost}}" class="sre-short" placeholder="2 / R">
-      <p class="hint">{{localize "SRE.Mount.CapacityCostHint"}}</p>
-    </div>
-    {{/if}}
-    {{#if showEffects}}
-    <div class="form-group stacked">
-      <label>{{localize "SRE.Wizard.Effect.Title"}}</label>
-      <p class="hint">{{#if isMod}}{{localize "SRE.Wizard.Effect.Hint"}}{{else}}{{localize "SRE.Wizard.Effect.ActorHint"}}{{/if}}</p>
-      {{#each state.effects as |effect i|}}
-      <div class="form-fields sre-effect">
-        <input type="text" name="state.effects.{{i}}.label" value="{{effect.label}}" placeholder="{{localize "SRE.Wizard.Effect.Label"}}">
-        <select name="state.effects.{{i}}.target">
-          {{selectOptions ../effectTargets selected=effect.target valueAttr="value" labelAttr="label"}}
-        </select>
-        <input type="text" name="state.effects.{{i}}.value" value="{{effect.value}}" class="sre-short" placeholder="+2 / R">
-        <label class="checkbox" data-tooltip="SRE.Wizard.Effect.ToggleHint"><input type="checkbox" name="state.effects.{{i}}.toggle" {{checked effect.toggle}}> {{localize "SRE.Wizard.Effect.Toggle"}}</label>
-        <button type="button" data-action="removeEffect" data-index="{{i}}"><i class="fas fa-trash"></i></button>
-      </div>
-      {{/each}}
-      <button type="button" data-action="addEffect"><i class="fas fa-plus"></i> {{localize "SRE.Wizard.Effect.Add"}}</button>
-    </div>
-    {{/if}}
-    {{#unless isMod}}
-    <div class="form-group stacked sre-mods">
-      <label>{{localize "SRE.Wizard.Mods.Title"}}</label>
-      <div class="sre-dropzone">
-        {{#each state.mods as |mod i|}}
-        <div class="sre-mod"><i class="fas fa-puzzle-piece"></i> {{mod.name}}
-          <button type="button" data-action="removeMod" data-index="{{i}}"><i class="fas fa-xmark"></i></button>
+    {{!-- Live preview card --}}
+    <aside class="sre-wz-preview">
+      <div class="sre-wz-preview-top">
+        <div class="sre-wz-preview-img"><i class="{{categoryIcon}}"></i></div>
+        <div>
+          <div class="sre-wz-preview-name" data-preview-name>{{#if state.name}}{{state.name}}{{else}}{{localize "SRE.Wizard.NewItem"}}{{/if}}</div>
+          <div class="sre-wz-preview-kind">{{folderPath}}</div>
         </div>
-        {{else}}
-        <p class="hint">{{localize "SRE.Wizard.Mods.Empty"}}</p>
-        {{/each}}
       </div>
-      <p class="hint">{{localize "SRE.Wizard.Mods.Hint"}}</p>
-    </div>
-    {{/unless}}
+      <div class="sre-wz-preview-chips" data-preview-card>{{{previewHTML}}}</div>
+      <div class="sre-wz-preview-foot">{{localize "SRE.Wizard.PreviewMods" mods=state.mods.length effects=state.effects.length}}</div>
+    </aside>
+  </div>
 
-    <div class="form-group stacked">
-      <label>{{localize "SRE.Wizard.Description"}}</label>
-      <textarea name="state.description" rows="3">{{state.description}}</textarea>
-    </div>
-  </fieldset>
-
-  <footer class="form-footer">
+  <footer class="form-footer sre-wz-footer">
     <button type="button" data-action="reset"><i class="fas fa-eraser"></i> {{localize "SRE.Wizard.Reset"}}</button>
     <button type="button" data-action="savePreset"><i class="fas fa-bookmark"></i> {{localize "SRE.Wizard.PresetSave"}}</button>
     <button type="submit" data-open="false"><i class="fas fa-plus"></i> {{localize "SRE.Wizard.Create"}}</button>
-    <button type="submit" data-open="true"><i class="fas fa-check"></i> {{localize "SRE.Wizard.CreateOpen"}}</button>
+    <button type="submit" class="sre-ed-main" data-open="true"><i class="fas fa-check"></i> {{localize "SRE.Wizard.CreateOpen"}}</button>
   </footer>
 </div>

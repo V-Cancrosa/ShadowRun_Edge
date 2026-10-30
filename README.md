@@ -277,6 +277,13 @@ zakupu i dodawania wiedzy mają ten sam układ: nagłówek, kafelki (pula, próg
 i typy jako kafelki do kliknięcia, przełączniki-chipy, −/+ i przycisk mówiący, co się stanie („Lecz · rzuć 9
 kośćmi”, „Przekaż: Doc”). Leczenie pokazuje na monitorach (zielona ramka), co zejdzie przy średnim wyniku.
 
+### Kreator przedmiotów
+
+Kreator przedmiotów ma kroki jak kreator postaci — **Rodzaj** (kategorie jako kafelki), **Wiersz z podręcznika**
+(rozpoznane pola jako zielone chipy, nierozpoznane na pomarańczowo; po udanym rozpoznaniu przechodzi do
+parametrów), **Parametry** i **Efekty i dodatki** — oraz kartę podglądu po prawej, aktualizowaną przy każdej
+zmianie (DV, tryby, WA, amunicja, dostępność, cena, przy wzorach z R także ich wartość).
+
 ## Głosowanie Karmy
 
 MG ma w zakładce *Aktorzy* przycisk **Głosowanie Karmy** (albo makro:

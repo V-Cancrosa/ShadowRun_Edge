@@ -18,7 +18,7 @@ class ApplicationV2 {
 }
 globalThis.foundry = {
   applications: { api: { ApplicationV2, HandlebarsApplicationMixin: (c) => c } },
-  utils: { deepClone: (x) => structuredClone(x), setProperty() {}, expandObject: (x) => x },
+  utils: { escapeHTML: (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" })[c]), deepClone: (x) => structuredClone(x), setProperty() {}, expandObject: (x) => x },
 };
 const lang = JSON.parse(readFileSync(new URL("../lang/pl/shadowrun-edge.json", import.meta.url), "utf8"));
 const lookup = (key) => key.split(".").reduce((o, k) => o?.[k], lang) ?? key;
@@ -110,3 +110,15 @@ for (const [file, App] of [["item-wizard.hbs", ItemWizard], ["character-creator.
 }
 
 console.log("wizard OK");
+
+// Preview card chips: plain values without "= …", formulas with their value.
+{
+  const { previewChips } = await import("../scripts/wizard/preview.mjs");
+  const base = { category: "firearm", modes: { SA: true }, ar: ["10", "", "", "", ""], dv: "3", stun: false, avail: "2", legality: "L", price: "725" };
+  const plain = previewChips(base, (k) => k, { avail: "= 2(L)", price: "= 725¥" });
+  assert.equal(plain.find((c) => c.label === "SRE.Wizard.Price").value, "725¥");
+  assert.equal(plain.find((c) => c.label === "SRE.Wizard.DV").value, "3P");
+  const formula = previewChips({ ...base, price: "R × 500", rating: "2" }, (k) => k, { price: "= 1000¥" });
+  assert.equal(formula.find((c) => c.label === "SRE.Wizard.Price").value, "R × 500¥ = 1000¥");
+  console.log("wizard preview OK");
+}

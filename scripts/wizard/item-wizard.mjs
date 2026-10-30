@@ -2,8 +2,23 @@ import { ACTOR_EFFECT_TARGETS, CATEGORIES, EFFECT_TARGETS, WEAPON_SKILLS, emptyS
 import { parseStatLine, evaluate } from "./parser.mjs";
 import { collectFormulas } from "./formulas.mjs";
 import { addToCatalog, modsToFlagData } from "../catalog.mjs";
+import { previewChips, stepsDone } from "./preview.mjs";
 
 const MODULE_ID = "shadowrun-edge";
+const STEPS = ["kind", "paste", "stats", "extras"];
+const CATEGORY_ICONS = {
+  firearm: "fas fa-gun", melee: "fas fa-khanda", projectile: "fas fa-bullseye", special: "fas fa-flask-vial",
+  armor: "fas fa-shield-halved", cyberware: "fas fa-microchip", bioware: "fas fa-dna", electronics: "fas fa-laptop-code",
+  software: "fas fa-code", ammo: "fas fa-burst", mod: "fas fa-puzzle-piece", gear: "fas fa-toolbox",
+};
+/** Labels of the fields a pasted row filled, for the "recognized" chips. */
+const FIELD_LABELS = {
+  name: "SRE.Wizard.Name", rating: "SRE.Wizard.Rating", dv: "SRE.Wizard.DV", stun: "SRE.Wizard.Stun", modes: "SRE.Wizard.Modes",
+  ar: "SRE.Wizard.AR", ammo: "SRE.Wizard.Ammo", avail: "SRE.Wizard.Avail", legality: "SRE.Wizard.Legality", price: "SRE.Wizard.Price",
+  defense: "SRE.Wizard.Defense", capacity: "shadowrun6.item.capacity", social: "shadowrun6.item.social", essence: "shadowrun6.item.essence",
+  a: "SRE.Wizard.Attack", s: "SRE.Wizard.Sleaze", d: "SRE.Wizard.Data", f: "SRE.Wizard.Firewall", progSlots: "shadowrun6.label.progSlots",
+  count: "SRE.Wizard.Count",
+};
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 /** Presets shipped with the module, loaded once. */
@@ -209,6 +224,7 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.wizardState.subtype = this.#subtypes()[0]?.value ?? "";
     this.lastParse = null;
     this.bulk = null;
+    this.tab = "kind";
   }
 
   static DEFAULT_OPTIONS = {
@@ -216,7 +232,7 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     classes: ["sre-item-wizard", "sre-dialog"],
     tag: "form",
     window: { title: "SRE.Wizard.Title", icon: "fas fa-wand-magic-sparkles", resizable: true },
-    position: { width: 600, height: "auto" },
+    position: { width: 920, height: "auto" },
     form: { handler: ItemWizard.#onSubmit, submitOnChange: false, closeOnSubmit: false },
     actions: {
       parse: ItemWizard.#onParse,
@@ -229,6 +245,7 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       removeEffect: ItemWizard.#onRemoveEffect,
       removeMod: ItemWizard.#onRemoveMod,
       reset: ItemWizard.#onReset,
+      wizTab: ItemWizard.#onTab,
     },
   };
 
@@ -284,7 +301,13 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       countable: !!category.countable,
       isCyberdeck: this.wizardState.subtype === "CYBERDECK",
       example: category.example,
-      categories: Object.entries(CATEGORIES).map(([value, c]) => ({ value, label: game.i18n.localize(c.label) })),
+      categories: Object.entries(CATEGORIES).map(([value, c]) => ({
+        value, label: game.i18n.localize(c.label), icon: CATEGORY_ICONS[value] ?? "fas fa-box", checked: value === this.wizardState.category,
+      })),
+      categoryIcon: CATEGORY_ICONS[this.wizardState.category] ?? "fas fa-box",
+      steps: this.#steps(),
+      active: { [this.tab]: true },
+      previewHTML: this.#previewHTML(),
       multiType: category.types.length > 1,
       types: category.types.map((value) => ({ value, label: game.i18n.localize(typeLabel(category, value)) })),
       subtypes: this.#subtypes(),
@@ -358,6 +381,28 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     };
   }
 
+  #steps() {
+    const done = stepsDone(this.wizardState, { parsed: !!(this.lastParse || this.bulk) });
+    return STEPS.map((id, i) => ({
+      id, number: i + 1, label: game.i18n.localize(`SRE.Wizard.Step.${id === "kind" ? "Kind" : id === "paste" ? "Paste" : id === "stats" ? "Stats" : "Extras"}`),
+      active: id === this.tab, done: done[id] && id !== this.tab,
+    }));
+  }
+
+  /** The preview card's stat chips (escaped). */
+  #previewHTML() {
+    const esc = (t) => foundry.utils.escapeHTML(String(t));
+    const chips = previewChips(this.wizardState, (k) => game.i18n.localize(k), this.#previews());
+    if (!chips.length) return `<span class="sre-wz-empty">${esc(game.i18n.localize("SRE.Wizard.PreviewEmpty"))}</span>`;
+    return chips.map((c) => `<div class="sre-wz-chip${c.wide ? " wide" : ""}"><i>${esc(c.label)}</i><b>${esc(c.value)}</b></div>`).join("");
+  }
+
+  static #onTab(event, target) {
+    this.#readForm();
+    this.tab = target.dataset.tab;
+    this.render();
+  }
+
   #onChange(event) {
     const name = event.target?.name ?? "";
     const before = { category: this.wizardState.category, type: this.wizardState.type };
@@ -381,6 +426,10 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const el = this.element.querySelector(`[data-preview="${key}"]`);
       if (el) el.textContent = text;
     }
+    const card = this.element.querySelector("[data-preview-card]");
+    if (card) card.innerHTML = this.#previewHTML();
+    const title = this.wizardState.name?.trim() || game.i18n.localize("SRE.Wizard.NewItem");
+    for (const el of this.element.querySelectorAll("[data-preview-name]")) el.textContent = title;
   }
 
   async #onDrop(event) {
@@ -424,8 +473,14 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const { name, fields, unparsed } = parseStatLine(this.wizardState.statLine, this.category, this.wizardState.subtype);
       if (name && !this.wizardState.name) this.wizardState.name = name;
       Object.assign(this.wizardState, fields);
-      this.lastParse = { count: Object.keys(fields).length, unparsed: unparsed.join(" ") };
+      const keys = [...(name ? ["name"] : []), ...Object.keys(fields)];
+      this.lastParse = {
+        count: keys.length,
+        fields: [...new Set(keys.map((k) => game.i18n.localize(FIELD_LABELS[k] ?? k)))],
+        unparsed: unparsed.join(" "),
+      };
       this.bulk = null;
+      if (!unparsed.length) this.tab = "stats";
     }
     this.render();
   }
@@ -498,6 +553,7 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static #onReset() {
+    this.tab = "kind";
     this.wizardState = emptyState(this.wizardState.category);
     this.wizardState.subtype = this.#subtypes()[0]?.value ?? "";
     this.lastParse = null;

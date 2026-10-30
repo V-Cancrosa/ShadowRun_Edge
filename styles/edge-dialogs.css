@@ -428,3 +428,103 @@ body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karm
 .chat-message .sre-karma-vote .sre-kv-close { width: 100%; margin-top: 4px; }
 .sre-ed-tile.money { flex-direction: column; align-items: flex-start; gap: 2px; }
 .sre-ed-tile.money .sre-ed-big { order: 2; min-width: 0; font-size: 22px; text-align: left; }
+
+/* ───── Item Wizard in the Edge layout ───── */
+.application.sre-item-wizard .window-content { padding: 0; overflow-y: auto; }
+.sre-wz-head { display: flex; align-items: center; gap: 12px; }
+.sre-wz-title { flex: 1; min-width: 0; }
+.application.sre-dialog .sre-wz-target {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sre-text-dim);
+}
+.sre-wz-target select { min-width: 16em; text-transform: none; letter-spacing: 0; }
+
+.sre-wz-steps { display: flex; padding: 0 14px; border-bottom: 1px solid var(--sre-line); }
+.application.sre-dialog .sre-wz-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+  padding: 8px 14px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sre-text-dim);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+.application.sre-dialog .sre-wz-step:hover { color: var(--sre-text); background: none; box-shadow: none; }
+.application.sre-dialog .sre-wz-step.active { color: var(--sre-text); border-bottom-color: var(--sre-accent); }
+.sre-wz-step-n { width: 18px; height: 18px; display: grid; place-items: center; font-size: 11px; border: 1px solid var(--sre-line); }
+.sre-wz-step-n i { margin: 0; font-size: 10px; }
+.sre-wz-step.active .sre-wz-step-n { background: var(--sre-accent); border-color: var(--sre-accent); color: #fff; }
+.sre-wz-step.done .sre-wz-step-n { border-color: var(--sre-ok); color: var(--sre-ok); }
+
+.sre-wz-cols { display: grid; grid-template-columns: 1fr 270px; gap: 12px; padding: 10px 14px; align-items: start; }
+.sre-wz-main { min-width: 0; }
+.sre-wz-tab { display: none; flex-direction: column; gap: 10px; }
+.sre-wz-tab.active { display: flex; }
+.sre-ed-opts.cards.sre-wz-cats { grid-template-columns: repeat(4, 1fr); }
+.sre-wz-inline { display: flex; align-items: center; gap: 6px; }
+.sre-wz-inline select { flex: 1; }
+.application.sre-dialog .sre-wz-icon { flex: 0 0 26px; width: 26px; height: 26px; min-height: 0; margin: 0; padding: 0; line-height: 1; }
+.sre-wz-icon i { margin: 0; }
+.application.sre-dialog .sre-wz-btn { flex: 0 0 auto; width: auto; padding: 4px 12px; }
+.application.sre-dialog .sre-wz-btn.main { background: var(--sre-accent); border-color: var(--sre-accent); color: #fff; }
+.sre-wz textarea { width: 100%; box-sizing: border-box; min-height: 70px; font-family: monospace; font-size: 12px; }
+
+.sre-wz-parsed { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 10px 8px; }
+.sre-wz-ok, .sre-wz-bad { padding: 2px 8px; font-size: 11px; border: 1px solid; border-radius: 999px; }
+.sre-wz-ok { border-color: var(--sre-ok); color: var(--sre-ok); }
+.sre-wz-bad { border-color: var(--sre-warn); color: var(--sre-warn); }
+.sre-wz-bulk { display: flex; flex-direction: column; gap: 4px; padding: 0 10px 8px; }
+.sre-wz-bulk-row { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 4px 6px; border: 1px solid var(--sre-line); background: var(--sre-tile); font-size: 12px; }
+.sre-wz-bulk-row span { color: var(--sre-text-dim); }
+
+.sre-wz-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 8px 10px; }
+.sre-wz-f { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.sre-wz-f.span2 { grid-column: span 2; }
+.application.sre-dialog .sre-wz-f > label { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sre-text-dim); }
+.sre-wz-f :is(input, select) { width: 100%; box-sizing: border-box; }
+.sre-wz-f .sre-ed-chip { align-self: flex-start; }
+.sre-wz-calc { font-size: 11px; color: var(--sre-cyan); }
+.sre-wz-ar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.sre-wz-ar input { text-align: center; }
+.sre-wz-effect { display: grid; grid-template-columns: 1.4fr 1.2fr 0.6fr auto auto; gap: 6px; align-items: center; }
+.sre-wz-dropzone { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 10px; padding: 8px; min-height: 34px; border: 1px dashed var(--sre-accent-line); background: var(--sre-tile); }
+.sre-wz-mod { display: inline-flex; align-items: center; gap: 6px; padding: 2px 2px 2px 8px; border: 1px solid var(--sre-line); font-size: 12px; }
+.sre-wz-empty { font-size: 12px; color: var(--sre-text-dim); }
+
+.sre-wz-preview { position: sticky; top: 0; border: 1px solid var(--sre-accent-line); background: var(--sre-panel); }
+.sre-wz-preview-top { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid var(--sre-line); background: linear-gradient(135deg, var(--sre-accent-soft), transparent); }
+.sre-wz-preview-img {
+  flex: 0 0 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  color: var(--sre-accent);
+  border: 1px solid var(--sre-accent-line);
+  clip-path: polygon(0 0, 80% 0, 100% 20%, 100% 100%, 20% 100%, 0 80%);
+}
+.sre-wz-preview-name { font-weight: bold; letter-spacing: 0.03em; text-transform: uppercase; word-break: break-word; }
+.sre-wz-preview-kind { margin-top: 2px; font-size: 11px; color: var(--sre-text-dim); }
+.sre-wz-preview-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 10px; }
+.sre-wz-preview-chips > .sre-wz-empty { grid-column: span 2; }
+.sre-wz-chip { padding: 5px 8px; background: var(--sre-tile); border: 1px solid var(--sre-line); min-width: 0; }
+.sre-wz-chip.wide { grid-column: span 2; }
+.sre-wz-chip i { display: block; font-style: normal; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sre-text-dim); }
+.sre-wz-chip b { font-size: 14px; word-break: break-word; }
+.sre-wz-preview-foot { padding: 0 10px 10px; font-size: 12px; color: var(--sre-text-dim); }
+
+.application.sre-dialog:has(.sre-ed) .form-footer.sre-wz-footer { grid-template-columns: auto auto 1fr 1.3fr; }

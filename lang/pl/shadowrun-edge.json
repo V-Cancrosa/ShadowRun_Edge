@@ -7,9 +7,10 @@
       "TargetWorld": "Zakładka Przedmioty",
       "TargetActor": "Ekwipunek: {name}",
       "Step": {
-        "Kind": "1. Rodzaj",
-        "Paste": "2. Wiersz z podręcznika (opcjonalnie)",
-        "Stats": "3. Parametry"
+        "Kind": "Rodzaj",
+        "Paste": "Wiersz z podręcznika",
+        "Stats": "Parametry",
+        "Extras": "Efekty i dodatki"
       },
       "Category": {
         "Label": "Kategoria",
@@ -123,7 +124,16 @@
       },
       "Note": {
         "CapacityCost": "Zajmuje pojemności: [{value}]"
-      }
+      },
+      "NewItem": "Nowy przedmiot",
+      "PasteShort": "moduł rozpozna kolumny",
+      "PreviewMods": "Wbudowane dodatki: {mods} · efekty: {effects}",
+      "PreviewEmpty": "Statystyki pojawią się tutaj",
+      "Legality": "Legalność",
+      "Attack": "Atak",
+      "Sleaze": "Podstęp",
+      "Data": "Przetwarzanie danych",
+      "Firewall": "Firewall"
     },
     "Catalog": {
       "Label": "Katalog własny (świat)",
