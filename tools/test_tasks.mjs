@@ -146,5 +146,9 @@ assert.match(renderTask(banish, 4), new RegExp(lookup("SRE.Summon.Departs").slic
 const blast = { kind: "blast", item: "Granat", pool: 8, range: "near", launched: false, ar: 7, exploded: false };
 assert.match(renderTask(blast, 2), /sre-task-apply"/);
 assert.match(renderTask({ ...blast, exploded: true }, 2), /disabled/);
+assert.match(renderTask(blast, 2), /sre-blast-avoid/, "Avoid Incoming until the blast");
+assert.doesNotMatch(renderTask({ ...blast, exploded: true }, 2), /sre-blast-avoid/);
+assert.match(renderTask({ ...blast, avoiders: [{ name: "Oda" }], edge: { highest: 6, gain: 1 } }, 2), /Oda/);
+assert.match(renderTask({ ...blast, edge: { highest: 6, gain: 1 } }, 2), /\+1 Edge/);
 
 console.log("tasks OK");

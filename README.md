@@ -244,7 +244,13 @@ Granaty z ekwipunku (z kodami DV w notatce katalogu, np. „DV 16P / 12P / 8P, w
   wybuchu, a karta czatu wypisuje wszystkie żetony w strefach Epicentrum / Blisko / Pobliże z ich DV.
 - Przyciski *Wytrzymaj* i *Padnij* (−2 DV) przy każdym celu: właściciel rzuca BUD (pojazdy BUD × 2) i obrażenia
   trafiają na monitor.
-- Ograniczenia: akcję *Uniknięcie nadlatującego* rozstrzyga MG; zasięgi powyżej Pobliża liczone jak dla broni palnej.
+- **Przewaga (s. 116):** po wskazaniu punktu, przed rzutem, WA granatu (rzucanego: z walki wręcz wg erraty, inaczej
+  WA samego granatu) porównuje się z najwyższą WO żetonów w promieniu; przy 4+ rzucający dostaje +1 Edge.
+- **Uniknięcie nadlatującego (s. 114–115):** do chwili „Wybuch!” każdy może kliknąć przycisk dla swojego
+  zaznaczonego żetonu (akcja mniejsza w liczniku akcji, raz na rundę) i przesunąć żeton. Kto wyjdzie z promienia,
+  nie jest celem; kto przesunął się o ponad 2 m, jest powalony — odporność z DV −2 (nie sumuje się z „Padnij”).
+  Czy postać nie użyła już w tej rundzie zwykłego ruchu, pilnuje stół (Foundry tego nie zapisuje).
+- Zasięgi powyżej Pobliża liczone jak dla broni palnej.
 
 ## Przywoływanie duchów
 

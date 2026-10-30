@@ -3,13 +3,15 @@
  * scatters (2D6 and the Scatter at Range table, direction from the diagram), and everyone in the blast radius
  * resists the Damage Value of their zone (Ground Zero / Close / Near) with Body (vehicles Body × 2).
  */
-import { RANGES, rangeCategory, scatterMeters, scatterAngle, scatterPoint, blastZone, parseBlast, thrownAttackRating } from "./blast-rules.mjs";
+import { RANGES, rangeCategory, scatterMeters, scatterAngle, scatterPoint, blastZone, parseBlast, thrownAttackRating, areaEdge, avoidMove } from "./blast-rules.mjs";
+import { spendAction, usedThisRound } from "./actions.mjs";
 import { errata } from "./errata.mjs";
 import * as rolls from "./sheet/system-rolls.mjs";
 import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
 
 const MODULE_ID = "shadowrun-edge";
+const SOCKET = `module.${MODULE_ID}`;
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
 const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
 
@@ -98,12 +100,60 @@ export async function throwExplosive(actor, item) {
   const mpp = metersPerPixel();
   const range = rangeCategory(Math.hypot(aimed.x - from.x, aimed.y - from.y) * mpp);
   const pool = launched ? launchPool : Number(s.skills?.athletics?.pool) || 0;
-  const ar = launched || !errata("thrownGrenadeAR") ? null : thrownAttackRating(s.attackrating?.physical?.pool, range);
+  const ownAR = Number(item.system?.attackRating?.[RANGES.indexOf(range)]) || 0;
+  const ar = !launched && errata("thrownGrenadeAR") ? thrownAttackRating(s.attackrating?.physical?.pool, range) : ownAR > 0 ? ownAR : null;
+  const edge = await grantAreaEdge(actor, ar, aimed, blast.radius);
   const task = {
     kind: "blast", item: item.name, blast, from, aimed, range, launched, airburst: choice.airburst, eachHit: errata("scatterEachHit"),
-    pool, ar, scene: canvas.scene.id, exploded: false,
+    pool, ar, edge, scene: canvas.scene.id, exploded: false, avoiders: [],
   };
   return runTest(actor, { pool, label: L("SRE.Blast.TestLabel", { name: item.name }), manualHits: choice.manualHits, task });
+}
+
+/** Defense Rating of a token's actor: the system's value, or Body + Armor for vehicles. */
+function defenseRating(actor) {
+  const s = actor?.system ?? {};
+  const dr = Number(s.defenserating?.physical?.pool);
+  if (Number.isFinite(dr) && dr > 0) return dr;
+  return (Number(s.vehicle?.bod ?? s.bod) || 0) + (Number(s.vehicle?.arm ?? s.arm) || 0);
+}
+
+/** Tokens in the blast radius around a point, with their distance in meters. */
+function tokensInBlast(point, radius) {
+  const mpp = metersPerPixel();
+  return canvas.tokens.placeables
+    .filter((t) => t.actor)
+    .map((t) => ({ t, m: Math.hypot(t.center.x - point.x, t.center.y - point.y) * mpp }))
+    .filter(({ m }) => blastZone(m, radius));
+}
+
+/** +1 Edge for the attacker when the AR beats the highest DR in the (aimed) blast by 4 or more, before the roll. */
+async function grantAreaEdge(actor, ar, point, radius) {
+  const result = areaEdge(ar, tokensInBlast(point, radius).map(({ t }) => defenseRating(t.actor)));
+  if (!result.gain) return result;
+  const now = Number(actor.system.edge?.value) || 0;
+  const max = Math.min(7, Number(actor.system.edge?.max) || 7);
+  if (now >= max) return { ...result, gain: 0, capped: true };
+  await actor.update({ "system.edge.value": now + 1 });
+  await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p class="sre-blast-result">${L("SRE.Blast.EdgeGain", { name: esc(actor.name), ar, dr: result.highest })}</p>` });
+  return result;
+}
+
+/** Avoid Incoming for the user's selected token: a Minor Action (with the action tracker), position noted. */
+async function avoidIncoming(message, task) {
+  const token = canvas.tokens.controlled.find((t) => t.actor?.isOwner);
+  if (!token) return ui.notifications.warn(L("SRE.Blast.AvoidSelect"));
+  if ((task.avoiders ?? []).some((a) => a.token === token.document.uuid)) return;
+  const combatant = game.combat?.started ? game.combat.combatants.find((c) => c.tokenId === token.id) : null;
+  if (combatant && game.settings.get(MODULE_ID, "trackActions")) {
+    if (usedThisRound(combatant, "avoid")) return ui.notifications.warn(L("SRE.Blast.AvoidUsed", { name: token.name }));
+    if (!(await spendAction(combatant, "minor", { mark: "avoid" }))) return ui.notifications.warn(L("SRE.Blast.AvoidNoMinor", { name: token.name }));
+  }
+  const entry = { token: token.document.uuid, name: token.name, x: token.center.x, y: token.center.y };
+  if (message.isOwner) await message.setFlag(MODULE_ID, "task", { ...task, avoiders: [...(task.avoiders ?? []), entry] });
+  else if (game.users.activeGM) game.socket.emit(SOCKET, { type: "blastAvoid", messageId: message.id, entry });
+  else return ui.notifications.warn(L("SRE.Give.NoGM"));
+  ui.notifications.info(L("SRE.Blast.AvoidNow", { name: token.name }));
 }
 
 /** Scatter, template and the victims card, from the attack's hits at the moment of the explosion. */
@@ -127,9 +177,13 @@ async function explode(message, task) {
     .map((t) => ({ t, m: Math.hypot(t.center.x - point.x, t.center.y - point.y) * mpp }))
     .map(({ t, m }) => ({ t, m, zone: blastZone(m, blast.radius) }))
     .filter((v) => v.zone && v.t.actor)
-    .map((v) => ({ token: v.t.document.uuid, name: v.t.name, zone: v.zone, meters: Math.round(v.m), dv: blast[v.zone] }));
+    .map((v) => {
+      const avoided = (task.avoiders ?? []).find((a) => a.token === v.t.document.uuid);
+      const moved = avoided ? avoidMove(avoided, v.t.center, mpp) : null;
+      return { token: v.t.document.uuid, name: v.t.name, zone: v.zone, meters: Math.round(v.m), dv: blast[v.zone], prone: !!moved?.prone, moved: moved?.meters ?? null };
+    });
 
-  const rows = victims.map((v, i) => `<li data-index="${i}"><b>${esc(v.name)}</b> — ${L(`SRE.Blast.Zone.${v.zone}`)} (${v.meters} m): <b>${v.dv}${blast.stun ? "S" : "P"}</b>
+  const rows = victims.map((v, i) => `<li data-index="${i}"><b>${esc(v.name)}</b> — ${L(`SRE.Blast.Zone.${v.zone}`)} (${v.meters} m): <b>${v.dv}${blast.stun ? "S" : "P"}</b>${v.prone ? ` <i>${L("SRE.Blast.ProneNote", { m: v.moved })}</i>` : ""}
     <span class="sre-blast-buttons"><button type="button" data-soak="${i}">${L("SRE.Blast.Soak")}</button><button type="button" data-soak="${i}" data-dirt="1">${L("SRE.Blast.SoakDirt")}</button></span></li>`).join("");
   await patchTask(message, { exploded: true });
   return ChatMessage.create({
@@ -149,11 +203,15 @@ registerTask("blast", {
     return `<div class="sre-blast-card">
       <h3>${esc(task.item)}</h3>
       <p>${L(task.launched ? "SRE.Blast.CardLaunched" : "SRE.Blast.CardThrown", { pool: task.pool, hits, range: L(`SRE.Blast.Range.${task.range}`), ar: task.ar ?? "—" })}</p>
+      ${task.edge?.highest !== null && task.edge?.highest !== undefined ? `<p>${L(task.edge.gain ? "SRE.Blast.EdgeYes" : "SRE.Blast.EdgeNo", { ar: task.ar, dr: task.edge.highest })}</p>` : ""}
+      ${task.avoiders?.length ? `<p>${L("SRE.Blast.Avoiders", { names: task.avoiders.map((a) => esc(a.name)).join(", ") })}</p>` : ""}
+      ${task.exploded ? "" : `<button type="button" class="sre-blast-avoid">${L("SRE.Blast.Avoid")}</button>`}
       <button type="button" class="sre-task-apply"${task.exploded ? " disabled" : ""}>${L(task.exploded ? "SRE.Blast.Exploded" : "SRE.Blast.Explode")}</button>
       <p class="hint">${L("SRE.Blast.ExplodeHint")}</p>
     </div>`;
   },
   bind(root, message, task) {
+    root.querySelector(".sre-blast-avoid")?.addEventListener("click", () => avoidIncoming(message, task));
     root.querySelector(".sre-task-apply")?.addEventListener("click", (event) => {
       if (!message.isOwner && !game.user.isGM) return ui.notifications.warn(L("SRE.Blast.NotOwner"));
       event.currentTarget.disabled = true;
@@ -178,7 +236,8 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       // Lifeforms: the system's damage resistance pool (Body and its modifiers); vehicles: Body × 2 (p. 114).
       const pool = vehicle ? body * 2 : Number(actor.system.defensepool?.damage_physical?.pool) || body;
       const dirt = !!button.dataset.dirt;
-      const dv = Math.max(0, v.dv - (dirt ? 2 : 0));
+      // Drop Prone and Prone from Avoid Incoming both lower the DV by 2; they don't stack.
+      const dv = Math.max(0, v.dv - (dirt || v.prone ? 2 : 0));
       const stun = data.stun && !vehicle;
       return rolls.rollSoakTest(actor, {
         soakType: stun ? "damage_stun" : "damage_phys", damage: dv, monitor: stun ? "stun" : "physical", pool,
@@ -186,4 +245,20 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       });
     });
   }
+});
+
+/** GM side of Avoid Incoming for players who don't own the attack's message: only their own token, once. */
+Hooks.once("ready", () => {
+  game.socket.on(SOCKET, async (data, senderId) => {
+    if (data?.type !== "blastAvoid" || !game.users.activeGM?.isSelf) return;
+    const message = game.messages.get(data.messageId);
+    const task = message?.getFlag(MODULE_ID, "task");
+    const user = game.users.get(senderId);
+    if (task?.kind !== "blast" || task.exploded || !user || !data.entry?.token) return;
+    const token = await fromUuid(data.entry.token);
+    if (!token?.actor?.testUserPermission(user, "OWNER")) return;
+    if ((task.avoiders ?? []).some((a) => a.token === data.entry.token)) return;
+    const entry = { token: data.entry.token, name: token.name, x: Number(data.entry.x) || 0, y: Number(data.entry.y) || 0 };
+    await message.setFlag(MODULE_ID, "task", { ...task, avoiders: [...(task.avoiders ?? []), entry] });
+  });
 });

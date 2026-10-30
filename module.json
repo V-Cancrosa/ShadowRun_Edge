@@ -2,7 +2,7 @@
   "id": "shadowrun-edge",
   "title": "Shadowrun Edge",
   "description": "Moduł współpracujący z systemem Shadowrun 6th Edition (shadowrun6-eden): pełne polskie tłumaczenie, katalog sprzętu z podręcznika podstawowego (z dodatkami montowanymi automatycznie) i kreator przedmiotów, bez zmian w kodzie systemu.",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "compatibility": {
     "minimum": "13",
     "verified": "14"

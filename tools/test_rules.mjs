@@ -144,3 +144,34 @@ console.log("blast & summoning OK");
   assert.equal(monitorBoxes({ max: 10, dmg: 0 })[2].label, "−1");
   console.log("traits OK");
 }
+
+// ── Area attack Edge, Avoid Incoming, actions used this round ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { areaEdge, avoidMove } = await import("../scripts/blast-rules.mjs");
+  // Book example (p. 116): AR 12 vs bikes' DR 6 → Edge; AR 14 vs highest DR 10 (Oda) → Edge.
+  assert.deepEqual(areaEdge(12, [6, 6, 4]), { highest: 6, gain: 1 });
+  assert.deepEqual(areaEdge(14, [7, 4, 10]), { highest: 10, gain: 1 });
+  assert.deepEqual(areaEdge(12, [9]), { highest: 9, gain: 0 }, "less than 4: no Edge");
+  assert.deepEqual(areaEdge(null, [3]), { highest: null, gain: 0 }, "no known AR");
+  assert.deepEqual(areaEdge(12, []), { highest: null, gain: 0 }, "nobody in the blast");
+  // Oda moves 5 m around the corner: Prone; 2 m or less: not.
+  assert.deepEqual(avoidMove({ x: 0, y: 0 }, { x: 3, y: 4 }), { meters: 5, prone: true });
+  assert.equal(avoidMove({ x: 0, y: 0 }, { x: 2, y: 0 }).prone, false);
+  assert.equal(avoidMove({ x: 0, y: 0 }, { x: 300, y: 0 }, 0.01).meters, 3, "canvas pixels to meters");
+
+  const { spendAction, usedThisRound, actionsLeft } = await import("../scripts/actions.mjs");
+  const combatant = {
+    flags: {},
+    actor: { system: { initiative: { physical: { dicePool: 1 } } } },
+    getFlag(scope, key) { return this.flags[scope]?.[key]; },
+    async setFlag(scope, key, value) { (this.flags[scope] ??= {})[key] = value; },
+  };
+  assert.equal(usedThisRound(combatant, "avoid"), false);
+  assert.equal(await spendAction(combatant, "minor", { mark: "avoid" }), true);
+  assert.equal(usedThisRound(combatant, "avoid"), true);
+  assert.equal(actionsLeft(combatant).minor.left, 1, "2 Minor Actions, one spent");
+  assert.equal(await spendAction(combatant, "minor"), true);
+  assert.equal(await spendAction(combatant, "minor"), false, "none left");
+  console.log("avoid & area edge OK");
+}

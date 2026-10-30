@@ -846,7 +846,17 @@
       "Explode": "Wybuch! (rozrzut i strefy)",
       "Exploded": "Wybuchło",
       "ExplodeHint": "Rozrzut liczy się z sukcesów w chwili kliknięcia, więc Edge wydany po rzucie się liczy.",
-      "SoakLabel": "Odporność: {item} ({dv}{type})"
+      "SoakLabel": "Odporność: {item} ({dv}{type})",
+      "EdgeGain": "{name}: +1 Edge za przewagę ataku obszarowego (WA {ar} kontra najwyższa WO {dr}).",
+      "EdgeYes": "Przewaga: WA {ar} kontra najwyższa WO {dr} — rzucający dostał +1 Edge.",
+      "EdgeNo": "Przewaga: WA {ar} kontra najwyższa WO {dr} — bez Edge.",
+      "Avoid": "Uniknięcie nadlatującego (akcja mniejsza)",
+      "Avoiders": "Unikają: {names} — przesuń żeton przed wybuchem.",
+      "AvoidSelect": "Zaznacz swój żeton na scenie.",
+      "AvoidUsed": "{name} użył(a) już uniknięcia w tej rundzie.",
+      "AvoidNoMinor": "{name} nie ma wolnej akcji mniejszej.",
+      "AvoidNow": "{name}: przesuń żeton (ruch do Szybkości). Ponad 2 m = powalony przy odporności.",
+      "ProneNote": "(unik {m} m, powalony: DV −2)"
     },
     "Summon": {
       "Button": "Przywołaj",

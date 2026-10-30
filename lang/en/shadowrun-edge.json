@@ -846,7 +846,17 @@
       "Explode": "Blast! (scatter and zones)",
       "Exploded": "Exploded",
       "ExplodeHint": "Scatter uses the hits at the moment of the click, so Edge spent after the roll counts.",
-      "SoakLabel": "Resist: {item} ({dv}{type})"
+      "SoakLabel": "Resist: {item} ({dv}{type})",
+      "EdgeGain": "{name}: +1 Edge for the area attack advantage (AR {ar} vs highest DR {dr}).",
+      "EdgeYes": "Advantage: AR {ar} vs highest DR {dr} — the attacker gained +1 Edge.",
+      "EdgeNo": "Advantage: AR {ar} vs highest DR {dr} — no Edge.",
+      "Avoid": "Avoid Incoming (Minor Action)",
+      "Avoiders": "Avoiding: {names} — move the token before the blast.",
+      "AvoidSelect": "Select your token on the scene.",
+      "AvoidUsed": "{name} already used Avoid Incoming this round.",
+      "AvoidNoMinor": "{name} has no Minor Action left.",
+      "AvoidNow": "{name}: move the token (up to the Move rate). Over 2 m = Prone for damage resistance.",
+      "ProneNote": "(avoided {m} m, Prone: DV −2)"
     },
     "Summon": {
       "Button": "Summon",

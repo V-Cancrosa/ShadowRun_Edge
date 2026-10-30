@@ -88,3 +88,23 @@ export function thrownAttackRating(unarmedAR, range) {
 export function blastDamage(dv, soakHits, { hitTheDirt = false } = {}) {
   return Math.max(0, num(dv) - (hitTheDirt ? 2 : 0) - num(soakHits));
 }
+
+/**
+ * Edge for an area attack (example on p. 116): the attack's AR against the highest Defense Rating among the
+ * targets in the blast; +1 Edge to the attacker at 4 or more. No AR (none known) or no targets: no Edge.
+ */
+export function areaEdge(ar, defenseRatings = []) {
+  const drs = defenseRatings.map(Number).filter(Number.isFinite);
+  if (ar === null || ar === undefined || !Number.isFinite(Number(ar)) || !drs.length) return { highest: null, gain: 0 };
+  const highest = Math.max(...drs);
+  return { highest, gain: Number(ar) - highest >= 4 ? 1 : 0 };
+}
+
+/**
+ * Avoid Incoming (pp. 114–115): a Minor Action to make a Move before the blast; moving more than 2 meters leaves
+ * the character Prone for the Damage Resistance test (DV −2, like Drop Prone; the two don't stack).
+ */
+export function avoidMove(start, end, metersPerUnit = 1) {
+  const meters = Math.hypot(num(end?.x) - num(start?.x), num(end?.y) - num(start?.y)) * num(metersPerUnit, 1);
+  return { meters: Math.round(meters * 10) / 10, prone: meters > 2 };
+}

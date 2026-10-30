@@ -23,6 +23,22 @@ export function actionsLeft(combatant) {
   };
 }
 
+/**
+ * Spends one action of a kind, optionally noting what it was for (e.g. "avoid"), for this round.
+ * @returns {Promise<boolean>} false when none of that kind is left
+ */
+export async function spendAction(combatant, kind, { mark } = {}) {
+  if (actionsLeft(combatant)[kind]?.left <= 0) return false;
+  const flag = combatant.getFlag(MODULE_ID, "actions") ?? {};
+  await combatant.setFlag(MODULE_ID, "actions", { ...flag, [kind]: (Number(flag[kind]) || 0) + 1, ...(mark ? { [mark]: true } : {}) });
+  return true;
+}
+
+/** Whether an action noted with `mark` was used this round (the notes reset with the actions). */
+export function usedThisRound(combatant, mark) {
+  return !!combatant?.flags?.[MODULE_ID]?.actions?.[mark];
+}
+
 /** Clicking a used pip gives the action back, clicking a free one spends it. */
 async function toggle(combatant, kind, index) {
   const { [kind]: a } = actionsLeft(combatant);
