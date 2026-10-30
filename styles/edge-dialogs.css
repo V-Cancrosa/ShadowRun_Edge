@@ -51,22 +51,22 @@
 }
 
 body.sre-edge-light .application.sre-dialog {
-  --sre-accent: #c2187a;
-  --sre-accent-soft: rgba(194, 24, 122, 0.1);
-  --sre-accent-line: rgba(194, 24, 122, 0.4);
-  --sre-cyan: #0f8ea0;
-  --sre-ok: #1f9a57;
-  --sre-warn: #b9770e;
-  --sre-bad: #d42a4a;
-  --sre-bg: #f5f3f7;
-  --sre-bg-deep: #e9e6ee;
-  --sre-panel: rgba(255, 255, 255, 0.8);
-  --sre-panel-strong: rgba(0, 0, 0, 0.05);
-  --sre-line: rgba(0, 0, 0, 0.12);
-  --sre-text: #1d1b24;
-  --sre-text-dim: #5f5a6a;
-  --sre-input: #ffffff;
-  --sre-tile: #ffffff;
+  --sre-accent: #a33b6e;
+  --sre-accent-soft: rgba(163, 59, 110, 0.1);
+  --sre-accent-line: rgba(163, 59, 110, 0.35);
+  --sre-cyan: #2c7480;
+  --sre-ok: #3c8a55;
+  --sre-warn: #a8721b;
+  --sre-bad: #b8364f;
+  --sre-bg: #eceae4;
+  --sre-bg-deep: #e1ddd4;
+  --sre-panel: #f5f3ee;
+  --sre-panel-strong: rgba(60, 50, 40, 0.06);
+  --sre-line: rgba(60, 50, 40, 0.15);
+  --sre-text: #2b2925;
+  --sre-text-dim: #6e6a62;
+  --sre-input: #faf9f6;
+  --sre-tile: #f6f4ef;
 }
 
 .application.sre-dialog .window-header {
@@ -187,9 +187,9 @@ body.sre-edge-light .application.sre-dialog {
 }
 
 body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) {
-  --sre-accent: #c2187a;
-  --sre-accent-soft: rgba(194, 24, 122, 0.08);
-  --sre-accent-line: rgba(194, 24, 122, 0.4);
+  --sre-accent: #a33b6e;
+  --sre-accent-soft: rgba(163, 59, 110, 0.1);
+  --sre-accent-line: rgba(163, 59, 110, 0.35);
 }
 
 .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) h3 {
@@ -528,3 +528,14 @@ body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karm
 .sre-wz-preview-foot { padding: 0 10px 10px; font-size: 12px; color: var(--sre-text-dim); }
 
 .application.sre-dialog:has(.sre-ed) .form-footer.sre-wz-footer { grid-template-columns: auto auto 1fr 1.3fr; }
+
+/* Light ("Papier"): no pink glow, accents from the palette. */
+body.sre-edge-light .application.sre-dialog { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); }
+body.sre-edge-light .application.sre-dialog .window-content { background: var(--sre-bg); }
+body.sre-edge-light .application.sre-dialog a.button:hover { box-shadow: none; }
+body.sre-edge-light .application.sre-dialog:has(.sre-ed) .form-footer button:is([data-action="ok"], .sre-ed-main) { box-shadow: none; }
+body.sre-edge-light .chat-message .sre-defend button { border-color: var(--sre-accent-line); background: var(--sre-accent-soft); }
+body.sre-edge-light .chat-message .sre-defend button:hover { background: rgba(163, 59, 110, 0.2); box-shadow: none; }
+body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) button { background: var(--sre-accent-soft); }
+body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) button:hover { background: rgba(163, 59, 110, 0.2); box-shadow: none; }
+body.sre-edge-light .chat-message :is(.sre-blast-result, .sre-give-msg) { border-left-color: var(--sre-accent); background: var(--sre-accent-soft); }

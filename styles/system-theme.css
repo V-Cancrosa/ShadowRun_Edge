@@ -31,23 +31,23 @@ body.sre-theme-dark #chat-log {
 
 body.sre-theme-light :is(.app.shadowrun6, .application.shadowrun6, .application.sr6, .app.sre-roll-dialog, .chat-message),
 body.sre-theme-light #chat-log {
-  --sre-accent: #c2187a;
-  --sre-accent-soft: rgba(194, 24, 122, 0.1);
-  --sre-accent-line: rgba(194, 24, 122, 0.4);
-  --sre-cyan: #0f8ea0;
-  --sre-cyan-soft: rgba(15, 142, 160, 0.1);
-  --sre-ok: #1f9a57;
-  --sre-warn: #b9770e;
-  --sre-bad: #d42a4a;
-  --sre-bg: #f5f3f7;
-  --sre-bg-deep: #e9e6ee;
-  --sre-panel: rgba(255, 255, 255, 0.75);
-  --sre-panel-strong: rgba(0, 0, 0, 0.05);
-  --sre-line: rgba(0, 0, 0, 0.12);
-  --sre-text: #1d1b24;
-  --sre-text-dim: #5f5a6a;
-  --sre-input: #ffffff;
-  --sre-head: linear-gradient(180deg, rgba(194, 24, 122, 0.06), transparent);
+  --sre-accent: #a33b6e;
+  --sre-accent-soft: rgba(163, 59, 110, 0.1);
+  --sre-accent-line: rgba(163, 59, 110, 0.35);
+  --sre-cyan: #2c7480;
+  --sre-cyan-soft: rgba(44, 116, 128, 0.1);
+  --sre-ok: #3c8a55;
+  --sre-warn: #a8721b;
+  --sre-bad: #b8364f;
+  --sre-bg: #eceae4;
+  --sre-bg-deep: #e1ddd4;
+  --sre-panel: #f5f3ee;
+  --sre-panel-strong: rgba(60, 50, 40, 0.06);
+  --sre-line: rgba(60, 50, 40, 0.15);
+  --sre-text: #2b2925;
+  --sre-text-dim: #6e6a62;
+  --sre-input: #faf9f6;
+  --sre-head: linear-gradient(180deg, rgba(0, 0, 0, 0.03), transparent);
 }
 
 /* Map the system's own variables (and the Foundry ones it relies on) onto the palette. */

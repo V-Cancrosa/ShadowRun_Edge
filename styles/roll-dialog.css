@@ -23,21 +23,21 @@
 }
 
 body.sre-edge-light .app.sre-rd-app {
-  --sre-accent: #c2187a;
-  --sre-accent-soft: rgba(194, 24, 122, 0.1);
-  --sre-accent-line: rgba(194, 24, 122, 0.4);
-  --sre-cyan: #0f8ea0;
-  --sre-ok: #1f9a57;
-  --sre-warn: #b9770e;
-  --sre-bg: #f5f3f7;
-  --sre-bg-deep: #e9e6ee;
-  --sre-panel: rgba(255, 255, 255, 0.8);
-  --sre-panel-strong: rgba(0, 0, 0, 0.05);
-  --sre-line: rgba(0, 0, 0, 0.12);
-  --sre-text: #1d1b24;
-  --sre-text-dim: #5f5a6a;
-  --sre-input: #ffffff;
-  --sre-tile: #ffffff;
+  --sre-accent: #a33b6e;
+  --sre-accent-soft: rgba(163, 59, 110, 0.1);
+  --sre-accent-line: rgba(163, 59, 110, 0.35);
+  --sre-cyan: #2c7480;
+  --sre-ok: #3c8a55;
+  --sre-warn: #a8721b;
+  --sre-bg: #eceae4;
+  --sre-bg-deep: #e1ddd4;
+  --sre-panel: #f5f3ee;
+  --sre-panel-strong: rgba(60, 50, 40, 0.06);
+  --sre-line: rgba(60, 50, 40, 0.15);
+  --sre-text: #2b2925;
+  --sre-text-dim: #6e6a62;
+  --sre-input: #faf9f6;
+  --sre-tile: #f6f4ef;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
@@ -268,3 +268,4 @@ body.sre-edge-light .app.sre-rd-app {
   box-shadow: 0 0 12px var(--sre-accent-soft);
 }
 .app.sre-rd-app .dialog-buttons button.sre-rd-roll:hover { filter: brightness(1.1); }
+body.sre-edge-light .app.sre-rd-app .dialog-buttons button.sre-rd-roll { box-shadow: none; }
