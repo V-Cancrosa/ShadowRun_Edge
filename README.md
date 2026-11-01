@@ -53,8 +53,9 @@ są ułożone w folderach jak w rozdziale *Gear* (s. 245–301): np. *Broń paln
   mocowań zależy od rodzaju broni (s. 251–258; np. paralizator — tylko góra, Colt M23 — trzy pod lufą,
   pistolety bez spodu). Akcesorium „góra lub pod lufą” zajmuje pierwsze wolne. Modyfikacje pancerza
   i ulepszenia urządzeń nie mogą przekroczyć ich pojemności. Na karcie broni lub pancerza postaci widać,
-  co jest zamontowane i ile pojemności zostało. W ustawieniach modułu: blokuj montaż / tylko ostrzegaj /
-  wyłącz. Mody z kompendium systemu nie mają zapisanych mocowań, więc nie są sprawdzane.
+  co jest zamontowane i ile pojemności zostało. Przy konflikcie moduł pyta, co zrobić (zdjąć zajmujący
+  dodatek, zamontować mimo to — patrz „MG zawsze decyduje”). Mody z kompendium systemu nie mają zapisanych
+  mocowań, więc nie są sprawdzane.
 - Modyfikacje pancerza (odporność na ogień, zimno, prąd, chemię) i akcesoria do broni montujesz,
   przeciągając je na kartę pancerza/broni postaci.
 
@@ -208,6 +209,20 @@ System nie ma ani danych, ani zasad dla tych dwóch rzeczy, więc moduł je doda
   [Pain Resistance](https://github.com/zychuk/foundry-shadowrun6-eden-pain-resistance), MIT): te same pola i zasady.
   Gdy któryś z nich jest włączony, moduł Edge oddaje mu tę część i niczego nie liczy podwójnie; Karta Edge, katalog
   i kreator działają z nim tak samo.
+
+## MG zawsze decyduje
+
+Moduł nie blokuje niczego z powodu zasad gry. Przy konflikcie pokazuje okno z tym, co łamie zasady, i opcjami:
+- **Montaż dodatku** (zajęte mocowanie, brak mocowania, ponad pojemność): Anuluj · Zdejmij i zamontuj · Zdejmij
+  wybrany dodatek (pojemność) · Zamontuj mimo to.
+- **Kreator postaci z błędami:** Wróć do poprawek · Utwórz mimo to.
+- **Zakup bez nuyenów:** Zostaw bez płacenia · Usuń · Za darmo · Zapłać na minus.
+- **Leczenie martwej postaci**, **przywołanie ponad limit Mocy**, **przywołanie mimo porażki** (1 usługa),
+  **uniknięcie nadlatującego bez akcji**, **Edge ponad atrybut** (pułap 7 zostaje): „…mimo to”.
+
+Opcje łamiące zasady widzi zawsze MG, a gracze tylko, gdy MG włączy *Gracze mogą łamać zasady* w ustawieniach
+świata (domyślnie wyłączone). Ustawienie „Zasady mocowań i pojemności” zostało zastąpione tym oknem. Kontrole
+uprawnień Foundry (czyja jest postać, co gracz może zmienić przez MG) zostają — to nie są zasady gry.
 
 ## Rzuty modułu przez okno rzutu systemu
 

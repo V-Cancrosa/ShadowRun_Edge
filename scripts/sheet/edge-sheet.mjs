@@ -16,6 +16,7 @@ import { forceBudget } from "../summoning-rules.mjs";
 import { throwExplosive } from "../blast.mjs";
 import { isLightTheme, toggleTheme } from "../theme.mjs";
 import * as ui2 from "../ui/edge-ui.mjs";
+import { resolveConflict } from "../ui/conflict.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key) => game.i18n.localize(key);
@@ -151,8 +152,17 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     let next;
     if (target.dataset.delta) next = Number(value) + Number(target.dataset.delta);
     else next = pip === Number(value) ? pip - 1 : pip;
-    next = Math.max(0, Math.min(Number(max) || 0, 7, next));
-    if (next !== Number(value)) await this.document.update({ "system.edge.value": next });
+    next = Math.max(0, Math.min(7, next));
+    if (next === Number(value)) return;
+    // Above the character's Edge attribute (the hard cap of 7 stays): the user decides.
+    if (next > (Number(max) || 0)) {
+      const choice = await resolveConflict({
+        title: this.document.name, name: this.document.name, problems: [L("SRE.Sheet.EdgeOverMax").replace("{max}", Number(max) || 0)],
+        options: [{ id: "set", label: L("SRE.Sheet.EdgeAnyway").replace("{n}", next), breaksRules: true }],
+      });
+      if (choice !== "set") return;
+    }
+    await this.document.update({ "system.edge.value": next });
   }
 
   /** Clicking a box sets the damage to it; clicking the last damaged box clears it (like a toggle). */

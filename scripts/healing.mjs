@@ -7,6 +7,7 @@
 import { METHODS, ONCE_PER_INJURIES, healingPool, healingResult, treatmentThreshold, isDead } from "./healing-rules.mjs";
 import { errataFlags } from "./errata.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
+import { resolveConflict } from "./ui/conflict.mjs";
 import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 
 const MODULE_ID = "shadowrun-edge";
@@ -34,7 +35,13 @@ const split = (label) => {
 
 export async function openHealing(target) {
   if (!target) return;
-  if (isDead(target.system)) return ui.notifications.error(L("SRE.Heal.Dead", { name: target.name }));
+  if (isDead(target.system)) {
+    const choice = await resolveConflict({
+      title: L("SRE.Heal.Title", { name: target.name }), name: target.name, problems: [L("SRE.Heal.Dead", { name: target.name })],
+      options: [{ id: "heal", label: L("SRE.Heal.HealAnyway"), breaksRules: true }],
+    });
+    if (choice !== "heal") return;
+  }
   const used = target.getFlag(MODULE_ID, "healed") ?? {};
   const list = healers(target);
   const d = damageOf(target);

@@ -3,6 +3,8 @@
  * Each weapon mount (top, barrel, under) holds one accessory; add-ons with a Capacity cost [x] must fit the
  * host's Capacity. The system installs mods without these checks, so the module checks every installation.
  */
+import { resolveConflict } from "./ui/conflict.mjs";
+
 const MODULE_ID = "shadowrun-edge";
 
 export const SLOTS = ["top", "barrel", "under"];
@@ -90,26 +92,56 @@ function slotLabel(slot) {
   return game.i18n.localize(`SRE.Mount.Slot.${slot}`);
 }
 
-/** Runs the checks for a mod about to be installed; returns the slot to record, or false to stop it. */
-function validate(mod, host, pending = []) {
+/** Checks a mod about to be installed in a host: { ok, slot, reason, detail, message }. */
+function check(mod, host, pending = []) {
   const result = checkFit(
     weaponMounts(host), Number(host.system.capacity) || 0, [...installedIn(host, mod.id), ...pending],
     modMounts(mod), capacityCost(mod),
   );
-  if (result.ok) return result.slot;
+  if (result.ok) return result;
   const d = result.detail ?? {};
   const message = game.i18n.format(`SRE.Mount.Error.${result.reason}`, {
     mod: mod.name, item: host.name, mounts: (d.mounts ?? []).map(slotLabel).join(" / "),
     used: d.used, cost: d.cost, capacity: d.capacity,
   });
-  const rule = game.settings.get(MODULE_ID, "mountRules");
-  if (rule === "off") return null;
-  if (rule === "warn") {
-    ui.notifications.warn(message);
-    return null;
+  return { ...result, message };
+}
+
+/** Mods installed in a host on a given mount slot. */
+function occupants(host, slot) {
+  return host.actor.items.filter((i) => i.type === "mod" && i.system.installedIn?.id === host.id && (i.getFlag(MODULE_ID, "slot") ?? null) === slot);
+}
+
+/**
+ * A mod that doesn't fit: the user picks what to do (never a hard stop for the GM). `retry(slot)` repeats the
+ * installation with the chosen slot, skipping the checks.
+ */
+async function askMount(mod, host, result, retry) {
+  const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
+  const options = [];
+  const slot = result.slot ?? result.detail?.mounts?.[0] ?? null;
+  if (result.reason === "mountTaken") {
+    const taken = occupants(host, slot);
+    options.push({ id: "replace", label: L("SRE.Mount.Choice.replace", { mods: taken.map((m) => m.name).join(", ") || "—", slot: slotLabel(slot) }), hint: L("SRE.Mount.Choice.replaceHint") });
   }
-  ui.notifications.error(message);
-  return false;
+  if (result.reason === "capacity") {
+    const need = result.detail.used + result.detail.cost - result.detail.capacity;
+    for (const m of host.actor.items.filter((i) => i.type === "mod" && i.system.installedIn?.id === host.id && capacityCost(i) >= need)) {
+      options.push({ id: `free:${m.id}`, label: L("SRE.Mount.Choice.free", { mod: m.name, cost: capacityCost(m) }), hint: L("SRE.Mount.Choice.replaceHint") });
+    }
+  }
+  options.push({ id: "force", label: L("SRE.Mount.Choice.force"), hint: L(`SRE.Mount.Choice.forceHint.${result.reason}`), breaksRules: true });
+  const choice = await resolveConflict({ title: L("SRE.Mount.Choice.Title", { mod: mod.name }), name: `${mod.name} → ${host.name}`, problems: [result.message], options });
+  if (!choice) return;
+  if (choice === "replace") {
+    for (const m of occupants(host, slot)) await m.update({ "system.embeddedInUuid": null });
+    return retry(slot);
+  }
+  if (choice.startsWith("free:")) {
+    await host.actor.items.get(choice.slice(5))?.update({ "system.embeddedInUuid": null });
+    return retry(result.slot ?? null);
+  }
+  if (choice === "force") return retry(result.reason === "noMount" ? null : slot);
 }
 
 // Mods created in one go (an item's built-in mods) are not on the actor yet while the next one is checked,
@@ -125,8 +157,18 @@ Hooks.on("preCreateItem", (item, data, options, userId) => {
   if (userId !== game.user.id || item.type !== "mod" || !(item.parent instanceof Actor)) return;
   const host = hostOf(item.parent, item.system.embeddedInUuid);
   if (!host) return;
-  const slot = validate(item, host, reserved.filter((r) => r.host === host.id));
-  if (slot === false) return false;
+  let slot;
+  if (options.sreMountChoice) slot = options.sreMountChoice.slot ?? null;
+  else {
+    const result = check(item, host, reserved.filter((r) => r.host === host.id));
+    if (!result.ok) {
+      // Stop this creation and ask; the chosen option creates it again.
+      const source = item.toObject();
+      askMount(item, host, result, (chosen) => item.parent.createEmbeddedDocuments("Item", [source], { sreMountChoice: { slot: chosen }, sreSkipAcquire: options.sreSkipAcquire }));
+      return false;
+    }
+    slot = result.slot;
+  }
   reserve({ host: host.id, name: item.name, slot, cost: capacityCost(item) });
   item.updateSource({ [`flags.${MODULE_ID}.slot`]: slot });
 });
@@ -142,9 +184,17 @@ Hooks.on("preUpdateItem", (item, changes, options, userId) => {
   }
   const host = hostOf(item.actor, uuid);
   if (!host) return;
-  const slot = validate(item, host);
-  if (slot === false) return false;
-  foundry.utils.setProperty(changes, `flags.${MODULE_ID}.slot`, slot);
+  if (options.sreMountChoice) {
+    foundry.utils.setProperty(changes, `flags.${MODULE_ID}.slot`, options.sreMountChoice.slot ?? null);
+    return;
+  }
+  const result = check(item, host);
+  if (!result.ok) {
+    const retryChanges = foundry.utils.deepClone(changes);
+    askMount(item, host, result, (chosen) => item.update(retryChanges, { sreMountChoice: { slot: chosen } }));
+    return false;
+  }
+  foundry.utils.setProperty(changes, `flags.${MODULE_ID}.slot`, result.slot);
 });
 
 /** Mount and Capacity overview on the sheet of an item that holds mods. */

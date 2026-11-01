@@ -8,6 +8,7 @@ import { CORE_SPIRITS, summoningResult, banishingResult, optionalPowers, forceBu
 import { errata } from "./errata.mjs";
 import * as rolls from "./sheet/system-rolls.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
+import { resolveConflict, canBreakRules } from "./ui/conflict.mjs";
 import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 
 const MODULE_ID = "shadowrun-edge";
@@ -70,7 +71,14 @@ export async function openSummon(actor) {
     rejectClose: false,
   }));
   if (!result) return;
-  if (result.force > budget.left) ui.notifications.warn(L("SRE.Summon.OverBudget", { max: budget.max }));
+  if (result.force > budget.left) {
+    const choice = await resolveConflict({
+      title: L("SRE.Summon.Title", { name: actor.name }), name: actor.name,
+      problems: [L("SRE.Summon.OverBudgetDetail", { force: result.force, left: budget.left, max: budget.max })],
+      options: [{ id: "summon", label: L("SRE.Summon.SummonAnyway"), breaksRules: true }],
+    });
+    if (choice !== "summon") return;
+  }
   // The spirit doesn't spend Edge: its Force × 2 dice are rolled here, the summoner rolls through the system.
   const spirit = await hits(result.force * 2);
   const label = spiritLabel(result.type);
@@ -97,7 +105,9 @@ registerTask("summon", {
   render(task, hits) {
     const res = summoningResult({ summonerHits: hits, spiritHits: task.spiritHits, magic: task.magic });
     let action = "";
-    if (res.success) {
+    if (!res.success && !task.created && canBreakRules()) {
+      action = `<button type="button" class="sre-task-apply" data-anyway="1">${L("SRE.Summon.CreateAnyway")}</button>`;
+    } else if (res.success) {
       action = task.created
         ? `<p>${L("SRE.Summon.CreatedShort")}</p>`
         : `<button type="button" class="sre-task-apply">${L("SRE.Summon.CreateButton", { services: res.services })}</button>`;
@@ -118,7 +128,9 @@ registerTask("summon", {
       const actor = await fromUuid(task.actor);
       if (!actor?.isOwner) return ui.notifications.warn(L("SRE.Blast.NotOwner"));
       const r = res();
-      if (!r.success) return;
+      const anyway = event.currentTarget.dataset.anyway === "1";
+      if (!r.success && !(anyway && canBreakRules())) return;
+      if (anyway) r.services = Math.max(1, r.services);
       event.currentTarget.disabled = true;
       const data = {
         name: L("SRE.Summon.SpiritName", { type: task.typeLabel, force: task.force }),

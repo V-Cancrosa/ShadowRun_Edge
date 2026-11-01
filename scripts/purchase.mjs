@@ -3,6 +3,7 @@
  * nuyen (SR6 core p. 245–246: Availability, legality, size cost adjustments). The system has no shop.
  */
 import * as ui2 from "./ui/edge-ui.mjs";
+import { resolveConflict } from "./ui/conflict.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 
@@ -115,9 +116,19 @@ export async function offerPurchase(item) {
   const total = purchaseTotal(item.system.price, choice.quantity, choice.markup);
   const nuyen = Number(actor.system.nuyen) || 0;
   if (total > nuyen) {
-    ui.notifications.warn(game.i18n.format("SRE.Purchase.NotEnough", { total: total.toLocaleString(), nuyen: nuyen.toLocaleString() }));
-    // Leave the decision to the table: the item stays, nothing is paid.
-    return;
+    const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
+    const choice = await resolveConflict({
+      title: L("SRE.Purchase.Title", { name: actor.name }), name: item.name,
+      problems: [L("SRE.Purchase.NotEnough", { total: total.toLocaleString(), nuyen: nuyen.toLocaleString() })],
+      options: [
+        { id: "keep", label: L("SRE.Purchase.Conflict.keep"), hint: L("SRE.Purchase.Conflict.keepHint") },
+        { id: "remove", label: L("SRE.Purchase.Remove") },
+        { id: "free", label: L("SRE.Purchase.Free") },
+        { id: "debt", label: L("SRE.Purchase.Conflict.debt", { left: (nuyen - total).toLocaleString() }), breaksRules: true },
+      ],
+    });
+    if (choice === "remove") return item.delete();
+    if (choice !== "debt") return;
   }
   await actor.update({ "system.nuyen": nuyen - total });
   await item.setFlag(MODULE_ID, "purchase", { price: total, quantity: choice.quantity, time: Date.now() });

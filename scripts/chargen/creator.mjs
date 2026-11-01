@@ -10,6 +10,7 @@ import { QUALITIES } from "./qualities.mjs";
 import { buildCharacter, repairUpdate } from "./build.mjs";
 import { errataFlags } from "../errata.mjs";
 import * as ui2 from "../ui/edge-ui.mjs";
+import { resolveConflict } from "../ui/conflict.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -60,7 +61,6 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
     // Not "state": ApplicationV2 already has a read-only `state` (its render state).
     this.draft = emptyDraft();
     this.tab = "priorities";
-    this.skipChecks = false;
   }
 
   static DEFAULT_OPTIONS = {
@@ -205,7 +205,6 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
         contacts: d.contacts.filter((c) => c.name?.trim()),
       },
       isGM: game.user.isGM,
-      skipChecks: this.skipChecks,
     };
   }
 
@@ -250,7 +249,6 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
 
   #readForm() {
     const data = foundry.utils.expandObject(new foundry.applications.ux.FormDataExtended(this.element).object);
-    if ("skipChecks" in data) this.skipChecks = !!data.skipChecks;
     this.draft = mergeForm(this.draft, data.draft ?? {});
   }
 
@@ -368,11 +366,21 @@ export class CharacterCreator extends HandlebarsApplicationMixin(ApplicationV2) 
   static async #onSubmit() {
     this.#readForm();
     const r = this.result;
-    if (r.errors.length && !(game.user.isGM && this.skipChecks)) {
-      ui.notifications.warn(L("SRE.Chargen.FixErrors"));
-      this.tab = "summary";
-      this.render();
-      return;
+    if (r.errors.length) {
+      // Rule errors never block the GM: show them and let the user go back or create anyway.
+      const choice = await resolveConflict({
+        title: L("SRE.Chargen.Title"), name: this.draft.name?.trim() || L("SRE.Chargen.Unnamed"),
+        problems: this.#errors(r).map((e) => e.text),
+        options: [
+          { id: "back", label: L("SRE.Chargen.Conflict.back"), hint: L("SRE.Chargen.Conflict.backHint") },
+          { id: "create", label: L("SRE.Chargen.Conflict.create"), breaksRules: true },
+        ],
+      });
+      if (choice !== "create") {
+        this.tab = "summary";
+        this.render();
+        return;
+      }
     }
     const { actor, items } = buildCharacter(this.draft, r, {
       metatype: L(`SRE.Chargen.Metatype.${this.draft.metatype}`),

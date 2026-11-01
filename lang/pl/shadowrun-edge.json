@@ -190,12 +190,17 @@
         "mountTaken": "Mocowanie ({mounts}) w {item} jest już zajęte — zdemontuj najpierw akcesorium, by zamontować „{mod}”.",
         "capacity": "„{mod}” nie zmieści się w {item}: pojemność {used} + {cost} > {capacity}."
       },
-      "Setting": {
-        "Name": "Zasady mocowań i pojemności",
-        "Hint": "Co robić, gdy dodatek nie ma wolnego mocowania albo przekracza pojemność przedmiotu.",
-        "block": "Blokuj montaż",
-        "warn": "Tylko ostrzegaj",
-        "off": "Wyłączone"
+      "Choice": {
+        "Title": "Montaż: {mod}",
+        "replace": "Zdejmij {mods} ({slot}) i zamontuj",
+        "replaceHint": "zdjęty dodatek wraca do ekwipunku",
+        "free": "Zdejmij „{mod}” (zwalnia {cost}) i zamontuj",
+        "force": "Zamontuj mimo to",
+        "forceHint": {
+          "mountTaken": "dwa dodatki na jednym mocowaniu",
+          "noMount": "bez mocowania",
+          "capacity": "ponad pojemność"
+        }
       }
     },
     "Purchase": {
@@ -223,7 +228,12 @@
       "Total": "Do zapłaty",
       "Left": "Zostanie",
       "Options": "Opcje",
-      "MarkupShort": "Dopłata za rozmiar"
+      "MarkupShort": "Dopłata za rozmiar",
+      "Conflict": {
+        "keep": "Zostaw przedmiot bez płacenia",
+        "keepHint": "rozliczycie to przy stole",
+        "debt": "Zapłać na minus (zostanie {left}¥)"
+      }
     },
     "KarmaVote": {
       "Button": "Głosowanie Karmy",
@@ -355,7 +365,6 @@
       "AddLanguage": "Dodaj język",
       "KarmaLeft": "Pozostała Karma",
       "SummaryHint": "Po utworzeniu postaci kupisz sprzęt, przeciągając przedmioty z katalogu na kartę (okno zakupu odejmie nuyeny). Na start można zachować najwyżej 5000¥ — resztę wydaj (także na Styl życia).",
-      "SkipChecks": "Utwórz mimo błędów (MG)",
       "AllGood": "Wszystko się zgadza.",
       "FixErrors": "Popraw błędy przed utworzeniem postaci.",
       "Reset": "Zacznij od nowa",
@@ -421,7 +430,12 @@
       "AdjustmentShort": "Dostos.",
       "Repaired": "Shadowrun Edge: naprawiono {count} postać/postaci z kreatora (brakujące modyfikatory atrybutów i umiejętności dawały rzuty 0d6).",
       "ResetKind": "Zacznij od nowa",
-      "ResetButton": "Wyczyść"
+      "ResetButton": "Wyczyść",
+      "Conflict": {
+        "back": "Wróć do poprawek",
+        "backHint": "przejdź do podsumowania z listą błędów",
+        "create": "Utwórz mimo to"
+      }
     },
     "Theme": {
       "ToLight": "Jasny motyw",
@@ -624,7 +638,9 @@
       "KarmaRep": "Karma i reputacja",
       "KarmaSpendTotal": "Karma (do wydania / łącznie)",
       "Description": "Opis postaci",
-      "Notes": "Notatki"
+      "Notes": "Notatki",
+      "EdgeOverMax": "Edge ponad wartość atrybutu Edge postaci ({max}).",
+      "EdgeAnyway": "Ustaw Edge na {n} mimo to"
     },
     "Give": {
       "Button": "Przekaż",
@@ -789,7 +805,8 @@
       "AssistanceShort": "Opieka medyczna",
       "HintShort": "Nadmiar leczy się najpierw. Pierwsza pomoc, apteczka i magia działają raz na zestaw ran; drenażu nie leczą.",
       "RollButton": "Lecz · rzuć {n} kośćmi",
-      "ApplyButton": "Lecz z wpisanych sukcesów"
+      "ApplyButton": "Lecz z wpisanych sukcesów",
+      "HealAnyway": "Lecz mimo to"
     },
     "Blast": {
       "Explosives": "Materiały wybuchowe",
@@ -856,7 +873,8 @@
       "AvoidUsed": "{name} użył(a) już uniknięcia w tej rundzie.",
       "AvoidNoMinor": "{name} nie ma wolnej akcji mniejszej.",
       "AvoidNow": "{name}: przesuń żeton (ruch do Szybkości). Ponad 2 m = powalony przy odporności.",
-      "ProneNote": "(unik {m} m, powalony: DV −2)"
+      "ProneNote": "(unik {m} m, powalony: DV −2)",
+      "AvoidAnyway": "Uniknij mimo to (bez zużycia akcji)"
     },
     "Summon": {
       "Button": "Przywołaj",
@@ -913,7 +931,10 @@
       "CreatedShort": "Duch przywołany.",
       "CreateButton": "Przywołaj ducha ({services} usług)",
       "ApplyBanish": "Zastosuj (odejmij usługi)",
-      "CardHintEdge": "Wynik uwzględnia Edge wydany po rzucie. Ducha tworzy przycisk, drenaż odpierasz przez kartę odporności systemu."
+      "CardHintEdge": "Wynik uwzględnia Edge wydany po rzucie. Ducha tworzy przycisk, drenaż odpierasz przez kartę odporności systemu.",
+      "OverBudgetDetail": "Moc {force} przekracza wolny limit Mocy ({left} z {max} = Magia × 3).",
+      "SummonAnyway": "Przywołaj mimo to",
+      "CreateAnyway": "Przywołaj mimo to (1 usługa)"
     },
     "Traits": {
       "Folder": "Cechy i moce",
@@ -941,6 +962,17 @@
       "RollN": "Rzuć {n} kośćmi",
       "RollOne": "Rzuć 1 kością",
       "Threshold": "Próg"
+    },
+    "Conflict": {
+      "Kind": "Konflikt z zasadami",
+      "Options": "Co zrobić?",
+      "BreaksRules": "łamie zasady",
+      "Apply": "Wykonaj",
+      "AskGM": "Opcje łamiące zasady może wybrać MG (albo gracze, jeśli MG pozwolił w ustawieniach).",
+      "Setting": {
+        "Name": "Gracze mogą łamać zasady",
+        "Hint": "Przy konflikcie z zasadami (zajęte mocowanie, błędy w kreatorze, brak nuyenów…) gracze widzą też opcje „mimo to”. MG widzi je zawsze."
+      }
     }
   }
 }

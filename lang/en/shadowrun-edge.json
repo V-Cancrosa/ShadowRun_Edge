@@ -190,12 +190,17 @@
         "mountTaken": "The mount ({mounts}) on {item} is taken; uninstall that accessory to install \"{mod}\".",
         "capacity": "\"{mod}\" does not fit {item}: capacity {used} + {cost} > {capacity}."
       },
-      "Setting": {
-        "Name": "Mount and Capacity rules",
-        "Hint": "What to do when a mod has no free mount or exceeds the item's Capacity.",
-        "block": "Block installation",
-        "warn": "Warn only",
-        "off": "Off"
+      "Choice": {
+        "Title": "Install: {mod}",
+        "replace": "Remove {mods} ({slot}) and install",
+        "replaceHint": "the removed mod goes back to the inventory",
+        "free": "Remove “{mod}” (frees {cost}) and install",
+        "force": "Install anyway",
+        "forceHint": {
+          "mountTaken": "two mods on one mount",
+          "noMount": "without a mount",
+          "capacity": "over Capacity"
+        }
       }
     },
     "Purchase": {
@@ -223,7 +228,12 @@
       "Total": "To pay",
       "Left": "Left after",
       "Options": "Options",
-      "MarkupShort": "Size surcharge"
+      "MarkupShort": "Size surcharge",
+      "Conflict": {
+        "keep": "Keep the item without paying",
+        "keepHint": "settle it at the table",
+        "debt": "Pay into the red ({left}¥ left)"
+      }
     },
     "KarmaVote": {
       "Button": "Karma vote",
@@ -355,7 +365,6 @@
       "AddLanguage": "Add language",
       "KarmaLeft": "Karma left",
       "SummaryHint": "After creating the character, buy gear by dragging catalog items onto the sheet (the purchase dialog takes the nuyen). At most 5,000¥ may be kept for play; spend the rest (a Lifestyle too).",
-      "SkipChecks": "Create despite errors (GM)",
       "AllGood": "Everything checks out.",
       "FixErrors": "Fix the errors before creating the character.",
       "Reset": "Start over",
@@ -421,7 +430,12 @@
       "AdjustmentShort": "Adj.",
       "Repaired": "Shadowrun Edge: repaired {count} character(s) from the creator (missing attribute and skill modifiers caused 0d6 rolls).",
       "ResetKind": "Start over",
-      "ResetButton": "Clear"
+      "ResetButton": "Clear",
+      "Conflict": {
+        "back": "Go back and fix",
+        "backHint": "open the summary with the error list",
+        "create": "Create anyway"
+      }
     },
     "Theme": {
       "ToLight": "Light theme",
@@ -624,7 +638,9 @@
       "KarmaRep": "Karma & reputation",
       "KarmaSpendTotal": "Karma (to spend / total)",
       "Description": "Description",
-      "Notes": "Notes"
+      "Notes": "Notes",
+      "EdgeOverMax": "Edge above the character’s Edge attribute ({max}).",
+      "EdgeAnyway": "Set Edge to {n} anyway"
     },
     "Give": {
       "Button": "Give",
@@ -789,7 +805,8 @@
       "AssistanceShort": "Medical care",
       "HintShort": "Overflow heals first. First aid, medkit and magic work once per set of injuries; they don't heal drain.",
       "RollButton": "Heal · roll {n} dice",
-      "ApplyButton": "Heal with the typed hits"
+      "ApplyButton": "Heal with the typed hits",
+      "HealAnyway": "Heal anyway"
     },
     "Blast": {
       "Explosives": "Explosives",
@@ -856,7 +873,8 @@
       "AvoidUsed": "{name} already used Avoid Incoming this round.",
       "AvoidNoMinor": "{name} has no Minor Action left.",
       "AvoidNow": "{name}: move the token (up to the Move rate). Over 2 m = Prone for damage resistance.",
-      "ProneNote": "(avoided {m} m, Prone: DV −2)"
+      "ProneNote": "(avoided {m} m, Prone: DV −2)",
+      "AvoidAnyway": "Avoid anyway (no action spent)"
     },
     "Summon": {
       "Button": "Summon",
@@ -913,7 +931,10 @@
       "CreatedShort": "Spirit summoned.",
       "CreateButton": "Summon the spirit ({services} services)",
       "ApplyBanish": "Apply (remove services)",
-      "CardHintEdge": "The result follows Edge spent after the roll. The button creates the spirit; resist drain through the system soak card."
+      "CardHintEdge": "The result follows Edge spent after the roll. The button creates the spirit; resist drain through the system soak card.",
+      "OverBudgetDetail": "Force {force} is over the free Force limit ({left} of {max} = Magic × 3).",
+      "SummonAnyway": "Summon anyway",
+      "CreateAnyway": "Summon anyway (1 service)"
     },
     "Traits": {
       "Folder": "Qualities and powers",
@@ -941,6 +962,17 @@
       "RollN": "Roll {n} dice",
       "RollOne": "Roll 1 die",
       "Threshold": "Threshold"
+    },
+    "Conflict": {
+      "Kind": "Rule conflict",
+      "Options": "What to do?",
+      "BreaksRules": "breaks the rules",
+      "Apply": "Do it",
+      "AskGM": "Options that break the rules are for the GM (or players, if the GM allows it in the settings).",
+      "Setting": {
+        "Name": "Players may break the rules",
+        "Hint": "On a rule conflict (taken mount, creator errors, not enough nuyen…) players also see the \"anyway\" options. The GM always does."
+      }
     }
   }
 }

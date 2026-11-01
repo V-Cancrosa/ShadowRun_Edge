@@ -175,3 +175,21 @@ console.log("blast & summoning OK");
   assert.equal(await spendAction(combatant, "minor"), false, "none left");
   console.log("avoid & area edge OK");
 }
+
+// ── Rule conflicts: "…anyway" options for the GM, for players only when the world allows it ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { allowedOptions, canBreakRules } = await import("../scripts/ui/conflict.mjs");
+  const options = [{ id: "replace" }, { id: "force", breaksRules: true }];
+  assert.deepEqual(allowedOptions(options, false).map((o) => o.id), ["replace"]);
+  assert.deepEqual(allowedOptions(options, true).map((o) => o.id), ["replace", "force"]);
+  const saved = globalThis.game;
+  globalThis.game = { user: { isGM: true }, settings: { get: () => false } };
+  assert.equal(canBreakRules(), true, "the GM always may");
+  globalThis.game = { user: { isGM: false }, settings: { get: () => false } };
+  assert.equal(canBreakRules(), false, "players not by default");
+  globalThis.game = { user: { isGM: false }, settings: { get: (m, k) => k === "playersBreakRules" } };
+  assert.equal(canBreakRules(), true, "players when the GM allows it");
+  globalThis.game = saved;
+  console.log("conflicts OK");
+}

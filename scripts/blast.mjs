@@ -4,7 +4,8 @@
  * resists the Damage Value of their zone (Ground Zero / Close / Near) with Body (vehicles Body × 2).
  */
 import { RANGES, rangeCategory, scatterMeters, scatterAngle, scatterPoint, blastZone, parseBlast, thrownAttackRating, areaEdge, avoidMove } from "./blast-rules.mjs";
-import { spendAction, usedThisRound } from "./actions.mjs";
+import { spendAction, usedThisRound, actionsLeft } from "./actions.mjs";
+import { resolveConflict } from "./ui/conflict.mjs";
 import { errata } from "./errata.mjs";
 import * as rolls from "./sheet/system-rolls.mjs";
 import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
@@ -146,8 +147,16 @@ async function avoidIncoming(message, task) {
   if ((task.avoiders ?? []).some((a) => a.token === token.document.uuid)) return;
   const combatant = game.combat?.started ? game.combat.combatants.find((c) => c.tokenId === token.id) : null;
   if (combatant && game.settings.get(MODULE_ID, "trackActions")) {
-    if (usedThisRound(combatant, "avoid")) return ui.notifications.warn(L("SRE.Blast.AvoidUsed", { name: token.name }));
-    if (!(await spendAction(combatant, "minor", { mark: "avoid" }))) return ui.notifications.warn(L("SRE.Blast.AvoidNoMinor", { name: token.name }));
+    const problem = usedThisRound(combatant, "avoid") ? L("SRE.Blast.AvoidUsed", { name: token.name })
+      : actionsLeft(combatant).minor.left <= 0 ? L("SRE.Blast.AvoidNoMinor", { name: token.name }) : null;
+    if (problem) {
+      // Never a hard stop for the GM: avoid anyway, without spending an action.
+      const choice = await resolveConflict({
+        title: L("SRE.Blast.Avoid"), name: token.name, problems: [problem],
+        options: [{ id: "avoid", label: L("SRE.Blast.AvoidAnyway"), breaksRules: true }],
+      });
+      if (choice !== "avoid") return;
+    } else await spendAction(combatant, "minor", { mark: "avoid" });
   }
   const entry = { token: token.document.uuid, name: token.name, x: token.center.x, y: token.center.y };
   if (message.isOwner) await message.setFlag(MODULE_ID, "task", { ...task, avoiders: [...(task.avoiders ?? []), entry] });

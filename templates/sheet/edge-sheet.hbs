@@ -17,7 +17,7 @@
         <span class="sre-es-pips">
           {{#each edge.pips}}
           <button type="button" class="sre-es-pip {{#if on}}on{{/if}} {{#unless available}}cap{{/unless}}"
-                  data-action="edge" data-value="{{index}}" {{#unless available}}disabled{{/unless}}></button>
+                  data-action="edge" data-value="{{index}}"></button>
           {{/each}}
         </span>
         <strong>{{edge.value}}/{{edge.max}}</strong>

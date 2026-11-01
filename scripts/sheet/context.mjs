@@ -71,7 +71,9 @@ export function buildSheetContext(actor, { L = (k) => k, config = {}, errata = {
     value: edgeValue,
     max: edgeMax,
     pips: Array.from({ length: EDGE_CAP }, (_, i) => ({ index: i + 1, on: i < edgeValue, available: i < edgeMax })),
-    canGain: edgeValue < Math.min(edgeMax, EDGE_CAP),
+    // Above the Edge attribute only through the rule-conflict dialog; 7 is the hard cap.
+    canGain: edgeValue < EDGE_CAP,
+    overMax: edgeValue > edgeMax,
     canSpend: edgeValue > 0,
   };
 

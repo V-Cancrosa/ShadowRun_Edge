@@ -17,6 +17,7 @@ import "./blast.mjs";
 import "./summoning.mjs";
 import "./traits.mjs";
 import "./roll-dialog.mjs";
+import "./ui/conflict.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";
 
@@ -52,15 +53,6 @@ Hooks.once("init", () => {
     default: true,
   });
 
-  game.settings.register(MODULE_ID, "mountRules", {
-    name: "SRE.Mount.Setting.Name",
-    hint: "SRE.Mount.Setting.Hint",
-    scope: "world",
-    config: true,
-    type: String,
-    choices: { block: "SRE.Mount.Setting.block", warn: "SRE.Mount.Setting.warn", off: "SRE.Mount.Setting.off" },
-    default: "block",
-  });
 
   game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote, openCharacterCreator };
 });

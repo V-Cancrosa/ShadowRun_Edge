@@ -57,7 +57,7 @@ globalThis.game = {
   user: { id: "u1", isGM: false },
   users: { activeGM: null, get: () => null },
   i18n: { localize: lookup, format: (key, data) => lookup(key).replace(/\{(\w+)\}/g, (_, k) => data?.[k] ?? "") },
-  settings: { get: () => true },
+  settings: { get: (module, key) => key !== "playersBreakRules" },
   socket: { on() {}, emit() {} },
   actors: { get: () => null, filter: () => [] },
 };
@@ -136,7 +136,10 @@ assert.match(renderTask({ ...heal, applied: true }, 3), /disabled/);
 const summon = { kind: "summon", typeLabel: "Ziemi", force: 3, magic: 6, spiritHits: 1, created: false };
 assert.match(renderTask(summon, 3), /2 usług/);
 assert.match(renderTask(summon, 3), /sre-task-apply/);
-assert.doesNotMatch(renderTask(summon, 1), /sre-task-apply/);
+assert.doesNotMatch(renderTask(summon, 1), /sre-task-apply/, "a player may not summon after a failure");
+game.user.isGM = true;
+assert.match(renderTask(summon, 1), /data-anyway="1"/, "the GM may summon anyway");
+game.user.isGM = false;
 
 // Banishing: 4 hits vs spirit 1 → 3 net, 2 services → the spirit departs.
 const banish = { kind: "banish", targetName: "Duch", force: 3, services: 2, spiritHits: 1, magic: 6, finalDrain: true, applied: false };

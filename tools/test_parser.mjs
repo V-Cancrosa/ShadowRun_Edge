@@ -62,7 +62,7 @@ assert.deepEqual(ratingUpdates(formulas, 3), {
 assert.equal(collectFormulas({ price: "750", ar: ["10", "", "", "", ""] }), null);
 
 // Implant grades (p. 282) from the standard values.
-globalThis.Hooks ??= { on() {} };
+globalThis.Hooks ??= { on() {}, once() {} };
 const { gradeUpdates, gradedName, baseValues } = await import("../scripts/grades.mjs");
 const base = baseValues({ essence: 0.3, price: 6000, avail: 3, availDef: "3(L)" });
 assert.deepEqual(gradeUpdates(base, "alpha"), {
