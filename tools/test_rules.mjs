@@ -193,3 +193,50 @@ console.log("blast & summoning OK");
   globalThis.game = saved;
   console.log("conflicts OK");
 }
+
+// ── Statuses (pp. 51–53) ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { poolChips, statusChanges, ongoingDamage, cancels, movement, barrierDamage, warnings } = await import("../scripts/status-rules.mjs");
+  const ids = (chips) => chips.map((c) => `${c.id}:${c.value}:${c.on ? "on" : "off"}`);
+  // Chilled −1 to all pools except Damage Resistance; Fatigued II −4; Confused 3 −3.
+  assert.deepEqual(ids(poolChips([{ id: "chilled" }, { id: "fatigued", level: 2 }, { id: "confused", level: 3 }], { kind: "test" })),
+    ["chilled:-1:on", "fatigued:-4:on", "confused:-3:on"]);
+  assert.deepEqual(ids(poolChips([{ id: "chilled" }, { id: "fatigued", level: 2 }], { kind: "soak" })), ["chilled:-1:off", "fatigued:-4:off"]);
+  // Blinded II −6, situational (off); III: automatic failure note.
+  assert.deepEqual(ids(poolChips([{ id: "blinding", level: 2 }])), ["blinding:-6:off"]);
+  assert.equal(poolChips([{ id: "blinding", level: 3 }])[0].note, "autoFail");
+  // Cover III: +3 on defense; Cover IV attack −2 with the August 2019 errata only.
+  assert.deepEqual(ids(poolChips([{ id: "cover", level: 3 }], { kind: "defense" })), ["cover:3:on"]);
+  assert.deepEqual(ids(poolChips([{ id: "cover", level: 4 }], { kind: "attack", errata: { coverIVAttack: true } })), ["cover:-2:on"]);
+  assert.deepEqual(poolChips([{ id: "cover", level: 4 }], { kind: "attack", errata: { coverIVAttack: false } }), []);
+  // Prone: −4 melee, AR +2 for firearms, ±2 defense by range (picked by the user).
+  assert.deepEqual(ids(poolChips([{ id: "prone" }], { kind: "attack", melee: true })), ["prone:-4:on"]);
+  assert.equal(poolChips([{ id: "prone" }], { kind: "attack", firearm: true })[0].arMod, 2);
+  assert.deepEqual(ids(poolChips([{ id: "prone" }], { kind: "defense" })), ["prone_far:2:off", "prone_near:-2:off"]);
+  // Immobilized: AR −3 and −3 attacks; defense without Reaction.
+  const imm = poolChips([{ id: "immobilized" }], { kind: "attack" })[0];
+  assert.deepEqual([imm.value, imm.arMod], [-3, -3]);
+  assert.equal(poolChips([{ id: "immobilized" }], { kind: "defense" })[0].reaction, true);
+  // Always-on values on the status effect.
+  assert.deepEqual(statusChanges("cover", 3), [{ key: "system.defenserating.physical.mod", mode: 2, value: "3" }]);
+  assert.equal(statusChanges("dazed").length, 3, "Initiative −4 on every initiative type");
+  assert.equal(statusChanges("zapped")[0].value, "-2");
+  assert.equal(statusChanges("stilled")[0].value, "-10");
+  // Ongoing damage; Stilled halts it; Poisoned may be Stun.
+  assert.deepEqual(ongoingDamage([{ id: "burning", level: 3 }, { id: "poisoned", level: 4, stun: true }]),
+    [{ id: "burning", dv: 3, monitor: "physical" }, { id: "poisoned", dv: 4, monitor: "stun" }]);
+  assert.deepEqual(ongoingDamage([{ id: "burning", level: 3 }, { id: "stilled" }]), []);
+  // Burning ↔ Wet/Chilled; Petrified cancels damaging statuses.
+  assert.deepEqual(cancels("burning"), ["wet", "chilled"]);
+  assert.deepEqual(cancels("wet"), ["burning"]);
+  assert.deepEqual(cancels("petrified"), ["burning", "corrosive", "poisoned"]);
+  // Movement: Fatigued 5/10, then Hobbled halves (round up); Prone 2 m, no sprint.
+  assert.deepEqual(movement([{ id: "fatigued" }, { id: "hobbled" }], 10, 15), { walk: 3, sprint: 5 });
+  assert.deepEqual(movement([{ id: "prone" }], 10, 15), { walk: 2, sprint: 0 });
+  // Barrier: half the Structure, rounded up (solid wood door 7 → 4).
+  assert.equal(barrierDamage(9, 7), 5);
+  assert.equal(barrierDamage(3, 7), 0);
+  assert.deepEqual(warnings([{ id: "dazed" }, { id: "cover", level: 1 }], { kind: "attack" }), ["dazed", "coverAttack"]);
+  console.log("statuses OK");
+}

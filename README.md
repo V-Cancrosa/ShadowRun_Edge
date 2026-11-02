@@ -210,6 +210,26 @@ System nie ma ani danych, ani zasad dla tych dwóch rzeczy, więc moduł je doda
   Gdy któryś z nich jest włączony, moduł Edge oddaje mu tę część i niczego nie liczy podwójnie; Karta Edge, katalog
   i kreator działają z nim tak samo.
 
+## Stany (s. 51–53)
+
+Stany systemu (z paska żetonu) mają teraz działanie według podręcznika (z erratą 08/2019 do Osłony):
+- **Okno rzutu — panel „Stany”:** modyfikatory jako chipy, włączone, gdy zasady dotyczą danego rzutu
+  (Wychłodzony −1, Zdezorientowany −#, Zmęczony −2/poz., Porażony −1, Osłona +poz. do obrony i −2 do ataku z
+  Osłony IV, Powalony −4 wręcz/łuk i WA +2 broni palnej, Unieruchomiony −3 i WA −3, obrona bez Reakcji).
+  Sytuacyjne (Oślepiony, Ogłuszony słuchowo, Przestraszony, Mokry, Powalony w obronie wg dystansu) do zaznaczenia.
+  Ograniczenia (Oszołomiony bez Edge, Spanikowany, Skamieniały, Unieruchomiony całkowicie, atak z osłony,
+  poziom III) jako ostrzeżenia — nic nie jest blokowane.
+- **Stałe wartości:** Inicjatywa (Wychłodzony/Oszołomiony −4, Porażony −2) i WO (Osłona +poz., Unieruchomiony
+  całkowicie −10, Skamieniały +10) zmieniają się przez efekt stanu i jego poziom.
+- **Koniec rundy walki:** karta stanów — odporność na Płonący/Żrący/Zatruty przez kartę odporności systemu, gaszenie
+  ZRE + REA (2), test Mdłości BUD + WOL (2); Zatruty słabnie o 1. Unieruchomiony całkowicie i Skamieniały
+  wstrzymują obrażenia trwające.
+- **Znoszenie się:** Płonący ↔ Mokry/Wychłodzony; Skamieniały zdejmuje stany zadające obrażenia.
+- **Karta Edge:** lista stanów z opisem, zmianą poziomu i zdejmowaniem; ruch uwzględnia Zmęczonego,
+  Kuśtykającego, Powalonego i Porażonego. Przycisk **Schowaj się** (akcja mniejsza) nakłada Osłonę I–IV.
+- **Bariery (s. 111–113):** w oknie odporności wybór „Za barierą” ze Strukturą 1–20 z tabeli odejmuje połowę
+  Struktury (w górę) od obrażeń.
+
 ## MG zawsze decyduje
 
 Moduł nie blokuje niczego z powodu zasad gry. Przy konflikcie pokazuje okno z tym, co łamie zasady, i opcjami:

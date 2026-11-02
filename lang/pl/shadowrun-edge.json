@@ -747,7 +747,7 @@
     "Errata": {
       "aug2019": {
         "Name": "Errata SR6: sierpień 2019",
-        "Hint": "Oficjalna errata Catalyst do podręcznika podstawowego (sierpień 2019). Wyłączona = tekst z pierwszego druku. W module: Wyjątkowy atrybut kupowany tylko raz (s. 71); kara za rany nie obejmuje regeneracji (s. 121); każdy sukces zmniejsza rozrzut (s. 114); WA rzucanego granatu z ataku bez broni (s. 115); granatnik: Broń egzotyczna + ZRĘ (s. 263); drenaż odpędzania fizyczny wg drenażu po odporności (s. 147)."
+        "Hint": "Oficjalna errata Catalyst do podręcznika podstawowego (sierpień 2019). Wyłączona = tekst z pierwszego druku. W module: Wyjątkowy atrybut kupowany tylko raz (s. 71); kara za rany nie obejmuje regeneracji (s. 121); każdy sukces zmniejsza rozrzut (s. 114); WA rzucanego granatu z ataku bez broni (s. 115); granatnik: Broń egzotyczna + ZRĘ (s. 263); drenaż odpędzania fizyczny wg drenażu po odporności (s. 147); Osłona IV: −2 do ataku (s. 52)."
       },
       "feb2020": {
         "Name": "Errata SR6: luty 2020",
@@ -973,6 +973,109 @@
         "Name": "Gracze mogą łamać zasady",
         "Hint": "Przy konflikcie z zasadami (zajęte mocowanie, błędy w kreatorze, brak nuyenów…) gracze widzą też opcje „mimo to”. MG widzi je zawsze."
       }
+    },
+    "Status": {
+      "Panel": "Stany",
+      "PanelHint": "włączone = liczone w tym rzucie",
+      "ARMod": "WA {n}",
+      "Note": {
+        "autoFail": "III: automatyczna porażka testów wzroku/słuchu",
+        "source": "tylko przeciw źródłu strachu",
+        "coldElectric": "tylko zimno i prąd",
+        "coverIV": "atak z Osłony IV (errata 08/2019)",
+        "proneFar": "obrona przed atakiem z dystansu Średniego+",
+        "proneNear": "obrona przed atakiem z Bliska/Krótkiego",
+        "proneAR": "broń palna/miotana",
+        "noReaction": "obrona bez Reakcji"
+      },
+      "Warn": {
+        "dazed": "Oszołomiony: nie może zdobywać ani wydawać Edge (może go spalić).",
+        "panicked": "Spanikowany: może działać tylko, by uniknąć źródła paniki.",
+        "petrified": "Skamieniały: nie może podejmować akcji.",
+        "stilled": "Unieruchomiony całkowicie: tylko Spostrzegawczość i komunikacja mentalna.",
+        "stilledDefense": "Unieruchomiony całkowicie: nie rzuca na obronę (tylko odporność).",
+        "coverAttack": "Atak z osłony: dodatkowa akcja mniejsza (stan Osłona, errata 08/2019; errata akcji Take Cover mówi inaczej — decyduje MG) i bez zdobywania Edge.",
+        "blindingIII": "Oślepiony III: testy wymagające wzroku kończą się automatyczną porażką.",
+        "deafenedIII": "Ogłuszony (słuch) III: testy wymagające słuchu kończą się automatyczną porażką."
+      },
+      "RoundTitle": "{name}: stany na koniec rundy {round}",
+      "Resist": "Odporność ({dv}{type})",
+      "Extinguish": "Gaś (ZRE + REA (2))",
+      "ExtinguishLabel": "Gaszenie ognia (akcja główna)",
+      "ExtinguishOk": "Ogień ugaszony ({hits} sukc.).",
+      "ExtinguishFail": "Nie udało się ugasić ({hits} sukc.).",
+      "RemoveBurning": "Zdejmij stan Płonący",
+      "NauseaTest": "Test BUD + WOL (2)",
+      "NauseaLabel": "Mdłości: BUD + WOL (2)",
+      "NauseaOk": "Udało się ({hits} sukc.): traci jedną akcję mniejszą w tej rundzie.",
+      "NauseaFail": "Porażka ({hits} sukc.): w tej rundzie nie może podjąć akcji.",
+      "SpendMinor": "Zużyj akcję mniejszą",
+      "TakeCover": "Schowaj się",
+      "CoverLevel": "Poziom osłony",
+      "CoverHint": {
+        "1": "¼ ciała osłonięta",
+        "2": "½ ciała",
+        "3": "¾ ciała",
+        "4": "całe ciało"
+      },
+      "CoverNote": "Akcja mniejsza (s. 111). Osłona: +poziom do WO i do testów obrony. Za pełną osłoną przy trafieniu odejmij połowę Struktury bariery (w górę) od obrażeń.",
+      "CoverAnyway": "Schowaj się mimo to",
+      "Remove": "Zdejmij stan",
+      "None": "Brak aktywnych stanów.",
+      "Barrier": "Za barierą (Struktura)",
+      "BarrierNone": "— bez bariery —",
+      "BarrierNote": "Odejmuje połowę Struktury (w górę) od obrażeń. Jeśli to więcej niż bazowe DV broni, obrażeń nie ma — rozstrzyga MG.",
+      "Summary": {
+        "blinding": "−3 na poziom do testów wzroku; III: automatyczna porażka",
+        "burning": "{n} obrażeń fizycznych na koniec rundy; gaszenie ZRE + REA (2)",
+        "chilled": "Inicjatywa −4; −1 do pul oprócz odporności",
+        "confused": "−{n} do wszystkich akcji",
+        "corrosive": "{n} obrażeń fizycznych na koniec rundy",
+        "cover": "+{n} do WO i testów obrony; atak z osłony: +1 akcja mniejsza, bez Edge",
+        "dazed": "Inicjatywa −4; nie zdobywa ani nie wydaje Edge",
+        "deafened": "−3 na poziom do testów słuchu; III: automatyczna porażka",
+        "fatigued": "−{n2} do pul oprócz odporności; ruch 5/10 m",
+        "frightened": "−4 do testów przeciw źródłu i obrony przed nim",
+        "hazed": "nie może projektować ani manifestować (może postrzegać astralnie)",
+        "hobbled": "ruch o połowę (w górę)",
+        "immobilized": "nie porusza się; WA −3, −3 do ataków; obrona bez Reakcji",
+        "invisible": "próg Spostrzegawczości {n} (żywe istoty)",
+        "invisibleImproved": "próg Spostrzegawczości {n} (także kamery)",
+        "nauseated": "na początku rundy BUD + WOL (2)",
+        "panicked": "działa tylko, by uniknąć źródła paniki",
+        "petrified": "bez akcji; pancerz +10; znosi stany zadające obrażenia",
+        "poisoned": "{n} obrażeń na koniec rundy, potem −1",
+        "prone": "ruch 2 m, bez sprintu; obrona +2 vs Średni+, −2 vs Bliski/Krótki; −4 wręcz i łuk; WA broni palnej +2",
+        "silent": "próg Spostrzegawczości (słuch) {n}",
+        "silentImproved": "próg Spostrzegawczości (słuch) {n}, także mikrofony",
+        "stilled": "WO −10; tylko Spostrzegawczość; bez obrony; wstrzymuje obrażenia trwające",
+        "wet": "−6 do odporności na zimno i prąd",
+        "zapped": "Inicjatywa −2; bez sprintu; −1 do wszystkich akcji"
+      },
+      "Structure": {
+        "1": "Papier (cienki)",
+        "2": "Szkło (cienkie)",
+        "3": "Papier, ryza (1 cm)",
+        "4": "Szkło (1 cm)",
+        "5": "Tynk, pusta drzwiowa płyta, meble",
+        "6": "Plastiboard",
+        "7": "Lite drewno, drzwi, meble",
+        "8": "Elektronika, siatka",
+        "9": "Szkło balistyczne, blacha",
+        "10": "Densiplast, małe drzewo",
+        "11": "Drewniane drzwi z metalowym rdzeniem, szkło pancerne",
+        "12": "Cegła, duże drzewo",
+        "13": "Ścianka kevlarowa",
+        "14": "Plascrete",
+        "15": "Beton",
+        "16": "Drzwi antywłamaniowe",
+        "17": "Belka metalowa, gruba blacha",
+        "18": "Płyta ze zubożonego uranu",
+        "19": "Żelbet",
+        "20": "Bunkier przeciwwybuchowy",
+        "Label": "Struktura bariery"
+      },
+      "BarrierNow": "Obrażenia {dv} (było {base}). Jeśli połowa Struktury przekracza bazowe DV broni, obrażeń nie ma — rozstrzyga MG."
     }
   }
 }

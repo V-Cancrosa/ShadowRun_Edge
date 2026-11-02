@@ -16,6 +16,9 @@ import { forceBudget } from "../summoning-rules.mjs";
 import { throwExplosive } from "../blast.mjs";
 import { isLightTheme, toggleTheme } from "../theme.mjs";
 import * as ui2 from "../ui/edge-ui.mjs";
+import { actorStatuses, statusLabel } from "../statuses.mjs";
+import { movement } from "../status-rules.mjs";
+import { spendAction, actionsLeft } from "../actions.mjs";
 import { resolveConflict } from "../ui/conflict.mjs";
 
 const MODULE_ID = "shadowrun-edge";
@@ -44,6 +47,9 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       openItem: EdgeActorSheet.#onOpenItem,
       systemSheet: EdgeActorSheet.#onSystemSheet,
       toggleTheme: () => toggleTheme(),
+      statusLevel: EdgeActorSheet.#onStatusLevel,
+      statusRemove: EdgeActorSheet.#onStatusRemove,
+      takeCover: EdgeActorSheet.#onTakeCover,
       rollAttribute: EdgeActorSheet.#onAttribute,
       rollSkill: EdgeActorSheet.#onSkill,
       toggleUntrained: EdgeActorSheet.#onToggleUntrained,
@@ -90,6 +96,8 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const config = CONFIG.SR6 ?? {};
     const errata = errataFlags();
     const data = buildSheetContext(this.document, { L, config, errata });
+    // Fatigued, Hobbled, Prone and Zapped change how far the character moves.
+    Object.assign(data.defense, movement(actorStatuses(this.document), data.defense.walk, data.defense.sprint));
     const tab = this.sheetTab;
     const awakened = ["magician", "mysticadept", "aspectedmagician", "adept"].includes(this.document.system.mortype);
     let social = null;
@@ -104,6 +112,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       ...context,
       ...data,
       themeSwitch: { light, icon: light ? "fa-moon" : "fa-sun", label: L(light ? "SRE.Theme.ToDark" : "SRE.Theme.ToLight") },
+      statuses: this.#statuses(),
       magic: tab === "magic" ? this.#magicContext(config) : null,
       matrix: tab === "matrix" ? buildMatrixContext(this.document, { L, config, showAllActions: this.showAllMatrixActions }) : null,
       gear: tab === "gear" ? buildGearContext(this.document, { L, config }) : null,
@@ -338,6 +347,62 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const ok = await ui2.confirm({ kind: L("SRE.Summon.DismissKind"), name: spirit.name, text: game.i18n.format("SRE.Summon.DismissConfirm", { name: spirit.name }), button: L("SRE.Summon.DismissButton"), icon: "fas fa-door-open", warn: true });
     if (ok) await spirit.delete();
     this.render();
+  }
+
+  /** Active statuses with their level and what they do (pp. 51–53). */
+  #statuses() {
+    return actorStatuses(this.document).map((st) => {
+      const def = CONFIG.statusEffects?.find((x) => x.id === st.id) ?? {};
+      return {
+        effectId: st.effect.id, label: statusLabel(st.id), img: st.effect.img, level: st.level, hasLevels: !!def.hasLevels,
+        summary: game.i18n.format(`SRE.Status.Summary.${st.id}`, { n: st.level, n3: 3 * st.level, n2: 2 * st.level }),
+      };
+    });
+  }
+
+  static async #onStatusLevel(event, target) {
+    const effect = this.document.effects.get(target.dataset.effectId);
+    if (!effect) return;
+    const next = (Number(effect.system?.level) || 1) + Number(target.dataset.delta);
+    if (next < 1) return effect.delete();
+    return effect.update({ "system.level": next });
+  }
+
+  static async #onStatusRemove(event, target) {
+    return this.document.effects.get(target.dataset.effectId)?.delete();
+  }
+
+  /** Take Cover (Minor Action, p. 111): the Cover status at the chosen level. */
+  static async #onTakeCover() {
+    const actor = this.document;
+    const level = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
+      classes: ["sre-dialog"],
+      window: { title: L("SRE.Status.TakeCover") },
+      position: { width: 440 },
+      content: `<div class="sre-ed">${ui2.head({ kind: L("SRE.Status.TakeCover"), name: actor.name })}
+        <div class="sre-ed-body">${ui2.panel(L("SRE.Status.CoverLevel"), ui2.options("level", [1, 2, 3, 4].map((n) => ({
+          value: String(n), label: `${statusLabel("cover")} ${["I", "II", "III", "IV"][n - 1]}`, small: game.i18n.localize(`SRE.Status.CoverHint.${n}`), checked: n === 2,
+        }))))}${ui2.note(L("SRE.Status.CoverNote"), "info")}</div></div>`,
+      buttons: ui2.buttons(L("SRE.Status.TakeCover"), (e, b) => Number(b.form.elements.level.value) || 1, { icon: "fas fa-shield-halved" }),
+      rejectClose: false,
+    }));
+    if (!level) return;
+    const combatant = game.combat?.started ? game.combat.combatants.find((c) => c.actorId === actor.id) : null;
+    if (combatant && game.settings.get(MODULE_ID, "trackActions")) {
+      if (actionsLeft(combatant).minor.left <= 0) {
+        const choice = await resolveConflict({
+          title: L("SRE.Status.TakeCover"), name: actor.name, problems: [L("SRE.Blast.AvoidNoMinor", { name: actor.name })],
+          options: [{ id: "cover", label: L("SRE.Status.CoverAnyway"), breaksRules: true }],
+        });
+        if (choice !== "cover") return;
+      } else await spendAction(combatant, "minor");
+    }
+    let effect = actor.effects.find((e) => e.statuses?.has("cover"));
+    if (!effect) {
+      await actor.toggleStatusEffect("cover", { active: true });
+      effect = actor.effects.find((e) => e.statuses?.has("cover"));
+    }
+    return effect?.update({ "system.level": level });
   }
 
   static async #onThrow(event, target) {

@@ -747,7 +747,7 @@
     "Errata": {
       "aug2019": {
         "Name": "SR6 errata: August 2019",
-        "Hint": "Catalyst's official core rulebook errata (August 2019). Off = first-print text. In the module: Exceptional bought only once (p. 71); no wound modifiers on recovery (p. 121); each hit reduces scatter (p. 114); thrown grenade AR from the unarmed AR (p. 115); launchers: Exotic Weapons + AGI (p. 263); banishing drain Physical by the drain after resistance (p. 147)."
+        "Hint": "Catalyst's official core rulebook errata (August 2019). Off = first-print text. In the module: Exceptional bought only once (p. 71); no wound modifiers on recovery (p. 121); each hit reduces scatter (p. 114); thrown grenade AR from the unarmed AR (p. 115); launchers: Exotic Weapons + AGI (p. 263); banishing drain Physical by the drain after resistance (p. 147); Cover IV: −2 to attacks (p. 52)."
       },
       "feb2020": {
         "Name": "SR6 errata: February 2020",
@@ -973,6 +973,109 @@
         "Name": "Players may break the rules",
         "Hint": "On a rule conflict (taken mount, creator errors, not enough nuyen…) players also see the \"anyway\" options. The GM always does."
       }
+    },
+    "Status": {
+      "Panel": "Statuses",
+      "PanelHint": "on = counted in this roll",
+      "ARMod": "AR {n}",
+      "Note": {
+        "autoFail": "III: tests involving sight/hearing fail",
+        "source": "only against the source of fear",
+        "coldElectric": "cold and electricity only",
+        "coverIV": "attacking from Cover IV (errata 08/2019)",
+        "proneFar": "defending against Medium range or farther",
+        "proneNear": "defending against Close/Near range",
+        "proneAR": "firearms/projectiles",
+        "noReaction": "defense without Reaction"
+      },
+      "Warn": {
+        "dazed": "Dazed: cannot gain or spend Edge (can burn it).",
+        "panicked": "Panicked: can only act to avoid the cause of the panic.",
+        "petrified": "Petrified: cannot take actions.",
+        "stilled": "Stilled: only Perception and mental communication.",
+        "stilledDefense": "Stilled: no Defense tests (Damage Resistance only).",
+        "coverAttack": "Attacking from Cover: an extra Minor Action (Cover status, errata 08/2019; the Take Cover errata says otherwise — the GM decides) and no Edge gained.",
+        "blindingIII": "Blinded III: tests involving sight fail automatically.",
+        "deafenedIII": "Deafened III: tests involving hearing fail automatically."
+      },
+      "RoundTitle": "{name}: statuses at the end of round {round}",
+      "Resist": "Resist ({dv}{type})",
+      "Extinguish": "Put out (AGI + REA (2))",
+      "ExtinguishLabel": "Putting out the fire (Major Action)",
+      "ExtinguishOk": "The fire is out ({hits} hits).",
+      "ExtinguishFail": "Still burning ({hits} hits).",
+      "RemoveBurning": "Remove Burning",
+      "NauseaTest": "BOD + WIL (2) test",
+      "NauseaLabel": "Nauseated: BOD + WIL (2)",
+      "NauseaOk": "Success ({hits} hits): loses one Minor Action this round.",
+      "NauseaFail": "Failure ({hits} hits): cannot take an action this round.",
+      "SpendMinor": "Spend a Minor Action",
+      "TakeCover": "Take Cover",
+      "CoverLevel": "Cover level",
+      "CoverHint": {
+        "1": "¼ of the body",
+        "2": "½ of the body",
+        "3": "¾ of the body",
+        "4": "the whole body"
+      },
+      "CoverNote": "Minor Action (p. 111). Cover: +level to DR and Defense tests. Completely behind cover and hit: subtract half the barrier Structure (rounded up) from the damage.",
+      "CoverAnyway": "Take Cover anyway",
+      "Remove": "Remove status",
+      "None": "No active statuses.",
+      "Barrier": "Behind a barrier (Structure)",
+      "BarrierNone": "— no barrier —",
+      "BarrierNote": "Subtracts half the Structure (rounded up) from the damage. If that is more than the weapon base DV, there is no damage — the GM decides.",
+      "Summary": {
+        "blinding": "−3 per level to sight tests; III: automatic failure",
+        "burning": "{n} Physical damage at the end of each round; put out with AGI + REA (2)",
+        "chilled": "Initiative −4; −1 to pools except Damage Resistance",
+        "confused": "−{n} to all actions",
+        "corrosive": "{n} Physical damage at the end of each round",
+        "cover": "+{n} to DR and Defense tests; attacking from cover: +1 Minor Action, no Edge",
+        "dazed": "Initiative −4; cannot gain or spend Edge",
+        "deafened": "−3 per level to hearing tests; III: automatic failure",
+        "fatigued": "−{n2} to pools except Damage Resistance; move 5/10 m",
+        "frightened": "−4 to tests against the source and defense against it",
+        "hazed": "cannot project or manifest (can perceive astrally)",
+        "hobbled": "movement halved (round up)",
+        "immobilized": "cannot move; AR −3, −3 to attacks; no Reaction on defense",
+        "invisible": "Perception threshold {n} (living beings)",
+        "invisibleImproved": "Perception threshold {n} (also cameras)",
+        "nauseated": "BOD + WIL (2) at the start of each round",
+        "panicked": "can only act to avoid the cause",
+        "petrified": "no actions; +10 Armor; cancels damaging statuses",
+        "poisoned": "{n} damage at the end of each round, then −1",
+        "prone": "move 2 m, no sprint; defense +2 vs Medium+, −2 vs Close/Near; −4 melee and bows; firearm AR +2",
+        "silent": "Perception (hearing) threshold {n}",
+        "silentImproved": "Perception (hearing) threshold {n}, also microphones",
+        "stilled": "DR −10; Perception only; no Defense tests; halts ongoing damage",
+        "wet": "−6 to resisting cold and electricity",
+        "zapped": "Initiative −2; no Sprint; −1 to all actions"
+      },
+      "Structure": {
+        "1": "Paper (thin)",
+        "2": "Glass (thin)",
+        "3": "Paper, stack (1 cm)",
+        "4": "Glass (1 cm)",
+        "5": "Plaster, hollow wood door, furniture",
+        "6": "Plastiboard",
+        "7": "Solid wood door/furniture",
+        "8": "Electronic equipment, chainlink",
+        "9": "Ballistic glass, sheet metal",
+        "10": "Densiplast, small tree",
+        "11": "Wood door with metal core or shell, armored glass",
+        "12": "Brick, large tree",
+        "13": "Kevlar wallboard",
+        "14": "Plascrete",
+        "15": "Concrete",
+        "16": "Security door",
+        "17": "Metal beam, thick metal plates",
+        "18": "Depleted-uranium plating",
+        "19": "Reinforced concrete",
+        "20": "Blast bunker",
+        "Label": "Barrier Structure"
+      },
+      "BarrierNow": "Damage {dv} (was {base}). If half the Structure exceeds the weapon base DV, there is no damage — the GM decides."
     }
   }
 }

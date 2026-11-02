@@ -881,3 +881,8 @@ body.sre-edge-light .sre-sheet {
 /* Light ("Papier"): no pink glow, quieter portrait and icon tiles. */
 body.sre-edge-light .sre-sheet { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); }
 body.sre-edge-light :is(.sre-es-portrait, .sre-it-icon) { background: linear-gradient(135deg, var(--sre-accent-soft), rgba(44, 116, 128, 0.08)); }
+
+/* Statuses on the main tab */
+.sre-es-status img { width: 22px; height: 22px; flex: 0 0 22px; border: 0; }
+.sre-es-status small { display: block; font-size: 11px; line-height: 1.25; }
+.sre-es-statuses .sre-es-empty { margin: 6px 10px; font-size: 12px; }

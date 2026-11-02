@@ -15,6 +15,7 @@ export const ERRATA = {
       { id: "thrownGrenadeAR", page: 115 }, // thrown grenades: thrower's unarmed AR by range
       { id: "launcherAgility", page: 263 }, // grenade launchers: Exotic Weapons + Agility (not Logic)
       { id: "banishFinalDrain", page: 147 }, // banishing drain is Physical if the final drain exceeds Magic
+      { id: "coverIVAttack", page: 52 }, // Cover IV: −2 dice to attacks made from it
     ],
   },
   feb2020: {

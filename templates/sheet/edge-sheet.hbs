@@ -71,6 +71,27 @@
           </div>
         </div>
 
+        {{!-- Statuses (pp. 51–53) --}}
+        <div class="sre-es-panel sre-es-statuses">
+          <h3>{{localize "SRE.Status.Panel"}} <span>
+            <button type="button" class="sre-es-mini" data-action="takeCover"><i class="fas fa-shield-halved"></i> {{localize "SRE.Status.TakeCover"}}</button></span></h3>
+          {{#each statuses}}
+          <div class="sre-es-row sre-es-status">
+            <img src="{{img}}" alt="">
+            <span class="sre-es-grow"><b>{{label}}{{#if hasLevels}} {{level}}{{/if}}</b> <small class="sre-es-dim">{{summary}}</small></span>
+            {{#if ../editable}}
+            {{#if hasLevels}}
+            <button type="button" class="sre-es-mini" data-action="statusLevel" data-effect-id="{{effectId}}" data-delta="-1">−</button>
+            <button type="button" class="sre-es-mini" data-action="statusLevel" data-effect-id="{{effectId}}" data-delta="1">+</button>
+            {{/if}}
+            <button type="button" class="sre-es-mini" data-action="statusRemove" data-effect-id="{{effectId}}" data-tooltip="SRE.Status.Remove"><i class="fas fa-xmark"></i></button>
+            {{/if}}
+          </div>
+          {{else}}
+          <p class="sre-es-dim sre-es-empty">{{localize "SRE.Status.None"}}</p>
+          {{/each}}
+        </div>
+
         {{!-- Initiative --}}
         <div class="sre-es-panel">
           <h3>{{localize "SRE.Sheet.InitiativeTitle"}}</h3>

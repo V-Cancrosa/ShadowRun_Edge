@@ -269,3 +269,7 @@ body.sre-edge-light .app.sre-rd-app {
 }
 .app.sre-rd-app .dialog-buttons button.sre-rd-roll:hover { filter: brightness(1.1); }
 body.sre-edge-light .app.sre-rd-app .dialog-buttons button.sre-rd-roll { box-shadow: none; }
+
+/* Statuses in the roll dialog */
+.sre-rd-status-chips { padding: 8px 10px; }
+.sre-rd-status-note { margin: 0 10px 8px; padding: 4px 8px; font-size: 12px; border-left: 2px solid var(--sre-warn); background: var(--sre-panel-strong); color: var(--sre-warn); }

@@ -3,6 +3,10 @@
  * opposed test, Edge spending, modifiers) and toggle chips. The system's own fields are moved, not copied, and
  * stay inside the form, so its listeners, recalculations and the roll itself work exactly as before.
  */
+import { poolChips, warnings, barrierDamage } from "./status-rules.mjs";
+import { actorStatuses, statusLabel } from "./statuses.mjs";
+import { errataFlags } from "./errata.mjs";
+
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
 
 function el(tag, cls, html) {
@@ -51,6 +55,92 @@ function stat(label, valueNode) {
 
 function textOf(node) {
   return (node?.textContent ?? "").replace(/\s+/g, " ").trim();
+}
+
+/** What kind of roll this is, for the status rules. */
+function rollContext(prepared) {
+  const type = prepared.rollType;
+  const item = prepared.item?.system ?? {};
+  const kind = type === "weapon" ? "attack" : type === "defense" ? "defense" : type === "soak" ? "soak" : "test";
+  return {
+    kind,
+    melee: item.type === "WEAPON_CLOSE_COMBAT",
+    bow: item.subtype === "BOWS",
+    firearm: ["WEAPON_FIREARMS", "WEAPON_RANGED", "WEAPON_SPECIAL"].includes(item.type),
+    errata: errataFlags(),
+  };
+}
+
+/**
+ * The status chips: each adds its dice modifier to the pool modifier field (and Attack Rating changes to the AR
+ * modifier) while on, so the system recalculates the pool as with any modifier. Nothing is enforced.
+ */
+function statusesPanel(actor, prepared, form) {
+  const statuses = actorStatuses(actor);
+  if (!statuses.length) return null;
+  const ctx = rollContext(prepared);
+  const chips = poolChips(statuses, ctx);
+  const notes = warnings(statuses, ctx);
+  if (!chips.length && !notes.length) return null;
+  const modifier = form.querySelector("#modifier");
+  const arMod = form.querySelector("#arMod");
+  const reaction = Number(actor?.system?.attributes?.rea?.pool) || 0;
+  const p = panel(L("SRE.Status.Panel"), L("SRE.Status.PanelHint"));
+  const box = el("div", "sre-rd-chips sre-rd-status-chips");
+  const bump = (input, delta) => {
+    if (!input || !delta) return;
+    input.value = (parseInt(input.value) || 0) + delta;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  };
+  for (const c of chips) {
+    const dice = c.reaction ? -reaction : c.value;
+    const toggle = document.createElement("input");
+    toggle.type = "checkbox";
+    toggle.checked = false;
+    const parts = [dice ? `${dice > 0 ? "+" : "−"}${Math.abs(dice)}` : "", c.arMod ? L("SRE.Status.ARMod", { n: `${c.arMod > 0 ? "+" : "−"}${Math.abs(c.arMod)}` }) : ""].filter(Boolean);
+    const label = `${statusLabel(c.id.replace(/_(far|near|ar)$/, ""))}${c.note ? ` · ${L(`SRE.Status.Note.${c.note}`)}` : ""}`;
+    const node = chip(toggle, label, parts.join(" "));
+    toggle.addEventListener("change", () => {
+      const sign = toggle.checked ? 1 : -1;
+      bump(modifier, sign * dice);
+      bump(arMod, sign * (c.arMod ?? 0));
+    });
+    box.append(node);
+    if (c.on) {
+      toggle.checked = true;
+      toggle.dispatchEvent(new Event("change"));
+    }
+  }
+  if (chips.length) p.append(box);
+  for (const n of notes) {
+    const note = el("div", "sre-rd-status-note", foundry.utils.escapeHTML(L(`SRE.Status.Warn.${n}`)));
+    p.append(note);
+  }
+  return p;
+}
+
+/**
+ * Completely behind a barrier and hit (p. 111): half its Structure (rounded up) comes off the damage. The damage
+ * of a soak roll is its threshold field, which the system reads when the dialog closes.
+ */
+function barrierPanel(form) {
+  const threshold = form.querySelector("#threshold");
+  if (!threshold) return null;
+  const base = parseInt(threshold.value) || 0;
+  const p = panel(L("SRE.Status.Barrier"));
+  const select = document.createElement("select");
+  select.innerHTML = `<option value="0">${foundry.utils.escapeHTML(L("SRE.Status.BarrierNone"))}</option>`
+    + Array.from({ length: 20 }, (_, i) => `<option value="${i + 1}">${i + 1} — ${foundry.utils.escapeHTML(L(`SRE.Status.Structure.${i + 1}`))}</option>`).join("");
+  select.addEventListener("change", () => {
+    threshold.value = barrierDamage(base, Number(select.value));
+    threshold.dispatchEvent(new Event("change", { bubbles: true }));
+    note.textContent = Number(select.value) ? L("SRE.Status.BarrierNow", { dv: threshold.value, base }) : L("SRE.Status.BarrierNote");
+  });
+  const row = el("div", "sre-rd-grid two");
+  row.append(el("label", "", foundry.utils.escapeHTML(L("SRE.Status.Structure.Label"))), select);
+  const note = el("div", "sre-rd-status-note", foundry.utils.escapeHTML(L("SRE.Status.BarrierNote")));
+  p.append(row, note);
+  return p;
 }
 
 export function restructure(app, form) {
@@ -264,6 +354,14 @@ export function restructure(app, form) {
   modBox.append(chips);
   mods.append(modBox);
   body.append(mods);
+
+  // ── Statuses: their dice pool modifiers as chips (on when the rules apply to this roll), and what they forbid ──
+  const statusPanel = statusesPanel(actor, prepared, form);
+  if (statusPanel) body.append(statusPanel);
+  if (prepared.rollType === "soak") {
+    const barrier = barrierPanel(form);
+    if (barrier) body.append(barrier);
+  }
 
   // ── Anything the layout above doesn't know (newer system versions): keep it usable ──
   const leftovers = el("div", "sre-rd-leftovers");
