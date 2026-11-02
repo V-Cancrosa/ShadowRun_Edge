@@ -352,6 +352,22 @@
     </div>
     {{/if}}
 
+    {{#if combat.substances.length}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Substance.Folder"}} <span>{{localize "SRE.Substance.PanelHint"}}</span></h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">{{localize "SRE.Sheet.Count"}}</th><th></th></tr>
+        {{#each combat.substances}}
+        <tr data-item-id="{{id}}">
+          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td>
+          <td class="c">{{#if count includeZero=true}}{{count}}{{else}}—{{/if}}</td>
+          <td><button type="button" class="sre-es-btn solid" data-action="useSubstance" {{#unless ../editable}}disabled{{/unless}}>{{#if drug}}{{localize "SRE.Substance.Take"}}{{else}}{{localize "SRE.Substance.Give"}}{{/if}}</button></td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+    {{/if}}
+
     <div class="sre-es-panel sre-es-gap">
       <h3>{{localize "SRE.Sheet.ResistTitle"}} <span>{{localize "SRE.Sheet.ClickToRoll"}}</span></h3>
       <div class="sre-es-quick">

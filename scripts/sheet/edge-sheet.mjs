@@ -17,6 +17,7 @@ import { throwExplosive } from "../blast.mjs";
 import { isLightTheme, toggleTheme } from "../theme.mjs";
 import * as ui2 from "../ui/edge-ui.mjs";
 import { actorStatuses, statusLabel } from "../statuses.mjs";
+import { useSubstance } from "../substances.mjs";
 import { movement } from "../status-rules.mjs";
 import { spendAction, actionsLeft } from "../actions.mjs";
 import { resolveConflict } from "../ui/conflict.mjs";
@@ -50,6 +51,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       statusLevel: EdgeActorSheet.#onStatusLevel,
       statusRemove: EdgeActorSheet.#onStatusRemove,
       takeCover: EdgeActorSheet.#onTakeCover,
+      useSubstance: EdgeActorSheet.#onUseSubstance,
       rollAttribute: EdgeActorSheet.#onAttribute,
       rollSkill: EdgeActorSheet.#onSkill,
       toggleUntrained: EdgeActorSheet.#onToggleUntrained,
@@ -403,6 +405,11 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       effect = actor.effects.find((e) => e.statuses?.has("cover"));
     }
     return effect?.update({ "system.level": level });
+  }
+
+  static async #onUseSubstance(event, target) {
+    const item = this.#item(target);
+    if (item) return useSubstance(this.document, item);
   }
 
   static async #onThrow(event, target) {

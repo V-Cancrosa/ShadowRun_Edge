@@ -313,7 +313,12 @@ export function buildCombatContext(actor, { L = (k) => k, config = {} } = {}) {
     return b ? { id: i.id, name: i.name, dv: `${b.gz}/${b.close}/${b.near}${b.stun ? "S" : "P"}`, radius: b.radius, count: i.system?.countable ? num(i.system?.count) : null } : null;
   }).filter(Boolean);
 
-  return { ranged, melee, unarmed, armor, explosives, defenseRating: num(s.defenserating?.physical?.pool), resist };
+  // Toxins and drugs from the catalog (pp. 121–125): the module's data is linked by the item flag.
+  const substances = gear.filter((i) => i.flags?.["shadowrun-edge"]?.substance).map((i) => ({
+    id: i.id, name: i.name, drug: i.system?.subtype === "DRUGS", count: i.system?.countable ? num(i.system?.count) : null,
+  }));
+
+  return { ranged, melee, unarmed, armor, explosives, substances, defenseRating: num(s.defenserating?.physical?.pool), resist };
 }
 
 // ───── Magic tab ─────

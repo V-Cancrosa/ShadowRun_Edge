@@ -986,7 +986,8 @@
         "proneFar": "obrona przed atakiem z dystansu Średniego+",
         "proneNear": "obrona przed atakiem z Bliska/Krótkiego",
         "proneAR": "broń palna/miotana",
-        "noReaction": "obrona bez Reakcji"
+        "noReaction": "obrona bez Reakcji",
+        "physicalOnly": "tylko akcje oparte na atrybutach fizycznych"
       },
       "Warn": {
         "dazed": "Oszołomiony: nie może zdobywać ani wydawać Edge (może go spalić).",
@@ -1076,6 +1077,68 @@
         "Label": "Struktura bariery"
       },
       "BarrierNow": "Obrażenia {dv} (było {base}). Jeśli połowa Struktury przekracza bazowe DV broni, obrażeń nie ma — rozstrzyga MG."
+    },
+    "Substance": {
+      "Folder": "Toksyny i narkotyki",
+      "Toxins": "Toksyny",
+      "Drugs": "Narkotyki",
+      "Drug": "Narkotyk",
+      "Toxin": "Toksyna",
+      "Sub": "Moc {power} · w ekwipunku: {count}",
+      "Targets": "Komu",
+      "Vector": "Wektor",
+      "Options": "Opcje",
+      "Doses": "Dawki (+1 do mocy za każdą dodatkową)",
+      "Forced": "Podanie wymuszone (test odporności)",
+      "Protection": "Ocena sprzętu ochronnego (dodaje kości)",
+      "Protected": "Chroniony przed tym wektorem (maska, uszczelnienie, wstrzymany oddech)",
+      "DrugHint": "Przyjęty dobrowolnie działa w pełni, bez testu. Podany siłą — test odporności na toksynę jak przy toksynach.",
+      "ToxinHint": "Cel rzuca BUD + WOL (+ ochrona); każdy sukces obniża moc. Skutek na koniec rundy wg szybkości.",
+      "Take": "Przyjmij",
+      "Give": "Podaj",
+      "PanelHint": "s. 121–125",
+      "Exposure": "{name} → {target}",
+      "Power": "Moc {power} (dawki: {doses})",
+      "Due": "działa na koniec rundy {round}",
+      "DueMinutes": "działa po {n} min",
+      "DueNow": "działa od razu",
+      "ProtectedNote": "Cel jest chroniony przed tym wektorem — według zasad toksyna nie działa (decyduje stół).",
+      "Neutralized": "Zneutralizowana antidotum przed działaniem.",
+      "Resist": "Test odporności {pool}",
+      "Antidote": "Antidotum (przed działaniem)",
+      "TestLabel": "Odporność na toksynę: {name} (moc {power})",
+      "Left": "Moc {power} − {hits} sukc. = {left}",
+      "Damage": "{n}{type} obrażeń",
+      "DrugWorks": "narkotyk działa",
+      "NoEffect": "Bez skutków (moc 0).",
+      "Apply": "Zastosuj skutki",
+      "Retest": "Kolejny test (+1 mocy, po 10 rundach)",
+      "AntidoteSpell": "Antidotum (czar)",
+      "AntidoteLabel": "Antidotum: Czarnoksięstwo + Magia (moc {power})",
+      "AntidoteResult": "Moc {power} − {hits} = {left}",
+      "EndEffects": "Zakończ skutki toksyny",
+      "Taken": "Działa przez {time}.",
+      "Unit": {
+        "minutes": "min",
+        "hours": "godz.",
+        "days": "dni"
+      },
+      "Crash": "zjazd",
+      "CrashTitle": "{name}: zjazd ({actor})",
+      "CrashStun": "Zadaj {n} ogłuszenia (bez testu)",
+      "Vectors": {
+        "contact": "kontakt",
+        "ingestion": "spożycie",
+        "inhalation": "wdychanie",
+        "injection": "wstrzyknięcie"
+      },
+      "Note": {
+        "astral": "Wymusza postrzeganie astralne u Przebudzonych.",
+        "noSleep": "Brak potrzeby snu; kolejne dawki: Zmęczony I–III, potem 8K6 godz. snu (s. 125).",
+        "psyche": "Przebudzeni i Wyłonieni: −1 zamiast −2 za podtrzymywany czar/formę.",
+        "zenPhysical": "−1 do akcji opartych na atrybutach fizycznych.",
+        "truthSerum": "Po głównym działaniu: serum prawdy (WOL −3, min. 1)."
+      }
     }
   }
 }

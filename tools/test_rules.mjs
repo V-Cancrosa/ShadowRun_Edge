@@ -240,3 +240,46 @@ console.log("blast & summoning OK");
   assert.deepEqual(warnings([{ id: "dazed" }, { id: "cover", level: 1 }], { kind: "attack" }), ["dazed", "coverAttack"]);
   console.log("statuses OK");
 }
+
+// ── Toxins and drugs (pp. 121–125) ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { exposurePower, powerLeft, toxinOutcome, durationSeconds, speedRounds, effectChanges, crashOf } = await import("../scripts/substance-rules.mjs");
+  const { SUBSTANCES, substance } = await import("../scripts/substances-data.mjs");
+  const { KNOWN } = await import("../scripts/status-rules.mjs");
+  assert.equal(SUBSTANCES.length, 20, "9 toxins (Neuro-Stun ×3) and 11 drugs");
+  for (const s of SUBSTANCES) {
+    assert.ok(s.power > 0 && s.vectors.length && s.duration, s.id);
+    for (const st of [...(s.statuses ?? []), ...(s.crash?.statuses ?? []).map((x) => (Array.isArray(x) ? x[0] : x))]) assert.ok(KNOWN.includes(st), `${s.id}: ${st}`);
+  }
+  // Errata 08/2019 costs: Narcoject 4(L) 50¥, Seven-7 10(I) 1,000¥.
+  assert.deepEqual([substance("narcoject").avail, substance("narcoject").cost], ["4(L)", 50]);
+  assert.equal(substance("seven_7").cost, 1000);
+  // Power: +1 per extra dose and per later test.
+  assert.equal(exposurePower(15, { doses: 3 }), 17);
+  assert.equal(exposurePower(9, { retests: 2 }), 11);
+  assert.equal(powerLeft(8, 10), 0);
+  // Narcoject 15 − 6 hits: 9 Stun; Nausea gas fully resisted: nothing.
+  assert.deepEqual(toxinOutcome(substance("narcoject"), 15, 6), { left: 9, damage: 9, monitor: "stun", statuses: [], changes: [] });
+  assert.equal(toxinOutcome(substance("nausea_gas"), 9, 9).statuses.length, 0);
+  assert.deepEqual(toxinOutcome(substance("seven_7"), 12, 4).monitor, "physical");
+  // Durations: Narcoject (6 − Body) hours, min 1: Body 4 → 2 h, Body 7 → 1 h; Jazz 10 × 1D6 min; Long Haul 4 days.
+  assert.equal(durationSeconds(substance("narcoject").duration, 4), 7200);
+  assert.equal(durationSeconds(substance("narcoject").duration, 7), 3600);
+  assert.equal(durationSeconds(substance("gamma_scopolamine").duration, 3), 90 * 60, "(6 − 3) × 30 minutes");
+  assert.equal(durationSeconds(substance("jazz").duration, 3, 4), 40 * 60);
+  assert.equal(durationSeconds(substance("long_haul").duration, 3), 4 * 86400);
+  assert.equal(speedRounds(substance("nausea_gas").speed), 3);
+  assert.equal(speedRounds(substance("cram").speed), null, "Speed in minutes");
+  // Kamikaze: attributes, +2D6 initiative, High Pain Tolerance; crash: 6 Stun, Fatigued II, twice the duration.
+  const k = effectChanges(substance("kamikaze"));
+  assert.ok(k.some((c) => c.key === "system.attributes.str.mod" && c.value === "2"));
+  assert.ok(k.some((c) => c.key === "system.initiative.physical.diceMod" && c.value === "2"));
+  assert.ok(k.some((c) => c.key === "system.painTolerance" && c.mode === 5 && c.value === "high"));
+  const crash = crashOf(substance("kamikaze"));
+  assert.deepEqual([crash.stun, crash.factor, crash.statuses[0]], [6, 2, { id: "fatigued", level: 2 }]);
+  assert.ok(crashOf(substance("novacoke")).changes.some((c) => c.key === "system.attributes.cha.pool" && c.value === "0"));
+  assert.equal(crashOf(substance("nitro")).pool, -2);
+  assert.equal(crashOf(substance("psyche")), null);
+  console.log("substances OK");
+}

@@ -54,6 +54,7 @@ const { parseStatLine, evaluate } = await import("../scripts/wizard/parser.mjs")
 const { collectFormulas } = await import("../scripts/wizard/formulas.mjs");
 const { buildItemData } = await import("../scripts/wizard/item-wizard.mjs");
 const { SECTIONS, AUGMENT_EFFECTS, TRAITS } = await import("../catalog/core.mjs");
+const { SUBSTANCES } = await import("../scripts/substances-data.mjs");
 
 const L = (key) => game.i18n.localize(key);
 
@@ -234,6 +235,34 @@ for (const trait of TRAITS) {
       };
     }),
     flags: { [MODULE_ID]: { trait: true } },
+  });
+}
+
+// Toxins and drugs (pp. 121–125; availability and cost per dose: August 2019 errata). Their rules data stays
+// in scripts/substances-data.mjs; the item only points at it, with a one-line summary of the numbers.
+const VECTOR_PL = { contact: "kontakt", ingestion: "spożycie", inhalation: "wdychanie", injection: "wstrzyknięcie" };
+const UNIT_PL = { minutes: "min", hours: "godz.", days: "dni" };
+const speedText = (sp) => (sp.minutes ? `${sp.minutes} min` : sp.rounds ? `${sp.rounds} rund.` : "natychmiast");
+const durationText = (du) => (du.fixed ? `${du.fixed} ${UNIT_PL[du.unit]}`
+  : du.dice ? `${du.mult} × ${du.dice.toUpperCase().replace("D", "K")} ${UNIT_PL[du.unit]}`
+  : `(${du.base} − BUD)${du.mult > 1 ? ` × ${du.mult}` : ""} ${UNIT_PL[du.unit]}, min. ${du.min}`);
+for (const sub of SUBSTANCES) {
+  const path = [L("SRE.Substance.Folder"), L(sub.kind === "toxin" ? "SRE.Substance.Toxins" : "SRE.Substance.Drugs")];
+  const folder = folderId(path);
+  const _id = stableId(`item:${path.join("/")}:${sub.name}`);
+  const summary = [
+    `Wektor: ${sub.vectors.map((v) => VECTOR_PL[v]).join(", ")}`, `szybkość: ${speedText(sub.speed)}`,
+    `czas: ${durationText(sub.duration)}`, `moc: ${sub.power}`,
+  ].join("; ");
+  items.push({
+    _id, folder, sort: items.length * 10, _key: `!items!${_id}`, name: sub.name, type: "gear",
+    img: `${ICON_ROOT}/${sub.kind === "toxin" ? "gear/chemical_analizer.svg" : "drugs/stim.svg"}`,
+    system: {
+      type: "CHEMICALS", subtype: sub.kind === "toxin" ? "TOXINS" : "DRUGS", countable: true, count: 1,
+      availDef: sub.avail, price: sub.cost, description: `<p><em>${escapeHTML(summary)}.</em></p>`, product: "core", page: sub.kind === "toxin" ? 122 : 124,
+    },
+    effects: [],
+    flags: { [MODULE_ID]: { substance: sub.id } },
   });
 }
 

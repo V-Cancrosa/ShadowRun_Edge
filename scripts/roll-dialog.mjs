@@ -71,15 +71,28 @@ function rollContext(prepared) {
   };
 }
 
+/** Drug effects with a dice pool change: a crash (Nitro −2 to all tests, Deepweed −1) and Zen (physical actions). */
+function substanceChips(actor) {
+  const chips = [];
+  for (const e of actor?.effects ?? []) {
+    if (e.disabled) continue;
+    const pool = Number(e.getFlag?.("shadowrun-edge", "pool")) || 0;
+    if (pool) chips.push({ id: "substance", label: e.name, value: pool, on: true });
+    const physical = Number(e.getFlag?.("shadowrun-edge", "physicalPool")) || 0;
+    if (physical) chips.push({ id: "substance", label: e.name, value: physical, on: false, note: "physicalOnly" });
+  }
+  return chips;
+}
+
 /**
  * The status chips: each adds its dice modifier to the pool modifier field (and Attack Rating changes to the AR
  * modifier) while on, so the system recalculates the pool as with any modifier. Nothing is enforced.
  */
 function statusesPanel(actor, prepared, form) {
   const statuses = actorStatuses(actor);
-  if (!statuses.length) return null;
   const ctx = rollContext(prepared);
-  const chips = poolChips(statuses, ctx);
+  const chips = [...poolChips(statuses, ctx), ...substanceChips(actor)];
+  if (!statuses.length && !chips.length) return null;
   const notes = warnings(statuses, ctx);
   if (!chips.length && !notes.length) return null;
   const modifier = form.querySelector("#modifier");
@@ -98,7 +111,7 @@ function statusesPanel(actor, prepared, form) {
     toggle.type = "checkbox";
     toggle.checked = false;
     const parts = [dice ? `${dice > 0 ? "+" : "−"}${Math.abs(dice)}` : "", c.arMod ? L("SRE.Status.ARMod", { n: `${c.arMod > 0 ? "+" : "−"}${Math.abs(c.arMod)}` }) : ""].filter(Boolean);
-    const label = `${statusLabel(c.id.replace(/_(far|near|ar)$/, ""))}${c.note ? ` · ${L(`SRE.Status.Note.${c.note}`)}` : ""}`;
+    const label = `${c.label ?? statusLabel(c.id.replace(/_(far|near|ar)$/, ""))}${c.note ? ` · ${L(`SRE.Status.Note.${c.note}`)}` : ""}`;
     const node = chip(toggle, label, parts.join(" "));
     toggle.addEventListener("change", () => {
       const sign = toggle.checked ? 1 : -1;

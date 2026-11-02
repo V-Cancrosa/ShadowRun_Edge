@@ -118,6 +118,7 @@ globalThis.canvas = { ready: false };
 await import("../scripts/healing.mjs");
 await import("../scripts/summoning.mjs");
 await import("../scripts/blast.mjs");
+await import("../scripts/substances.mjs");
 const renderTask = (task, hits) => {
   const m = new Message({ rolls: [{ total: hits }], flags: { "shadowrun-edge": { task } } });
   const out = fakeRoot();
@@ -153,5 +154,12 @@ assert.match(renderTask(blast, 2), /sre-blast-avoid/, "Avoid Incoming until the 
 assert.doesNotMatch(renderTask({ ...blast, exploded: true }, 2), /sre-blast-avoid/);
 assert.match(renderTask({ ...blast, avoiders: [{ name: "Oda" }], edge: { highest: 6, gain: 1 } }, 2), /Oda/);
 assert.match(renderTask({ ...blast, edge: { highest: 6, gain: 1 } }, 2), /\+1 Edge/);
+
+// Toxin Resistance: Narcoject 15, 6 hits → 9 Stun; after Edge (10 hits) → 5; fully resisted → no effect.
+const toxin = { kind: "toxin", id: "narcoject", power: 15, applied: false };
+assert.match(renderTask(toxin, 6), /9S/);
+assert.match(renderTask(toxin, 10), /5S/);
+assert.match(renderTask(toxin, 15), new RegExp(lookup("SRE.Substance.NoEffect").slice(0, 10)));
+assert.match(renderTask({ kind: "antidote", id: "narcoject", power: 4, applied: false }, 4), /sre-task-apply/, "Power 0: end the effects");
 
 console.log("tasks OK");

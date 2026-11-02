@@ -986,7 +986,8 @@
         "proneFar": "defending against Medium range or farther",
         "proneNear": "defending against Close/Near range",
         "proneAR": "firearms/projectiles",
-        "noReaction": "defense without Reaction"
+        "noReaction": "defense without Reaction",
+        "physicalOnly": "actions based on Physical attributes only"
       },
       "Warn": {
         "dazed": "Dazed: cannot gain or spend Edge (can burn it).",
@@ -1076,6 +1077,68 @@
         "Label": "Barrier Structure"
       },
       "BarrierNow": "Damage {dv} (was {base}). If half the Structure exceeds the weapon base DV, there is no damage — the GM decides."
+    },
+    "Substance": {
+      "Folder": "Toxins and drugs",
+      "Toxins": "Toxins",
+      "Drugs": "Drugs",
+      "Drug": "Drug",
+      "Toxin": "Toxin",
+      "Sub": "Power {power} · carried: {count}",
+      "Targets": "To whom",
+      "Vector": "Vector",
+      "Options": "Options",
+      "Doses": "Doses (+1 Power per extra dose)",
+      "Forced": "Given by force (resistance test)",
+      "Protection": "Protective gear rating (adds dice)",
+      "Protected": "Protected against this vector (mask, seal, held breath)",
+      "DrugHint": "Taken by choice it works fully, without a test. Given by force — a Toxin Resistance test, as for toxins.",
+      "ToxinHint": "The target rolls BOD + WIL (+ protection); each hit lowers the Power. The effect arrives at the end of a round by Speed.",
+      "Take": "Take",
+      "Give": "Give",
+      "PanelHint": "pp. 121–125",
+      "Exposure": "{name} → {target}",
+      "Power": "Power {power} (doses: {doses})",
+      "Due": "takes effect at the end of round {round}",
+      "DueMinutes": "takes effect after {n} min",
+      "DueNow": "takes effect now",
+      "ProtectedNote": "The target is protected against this vector — by the rules the toxin does nothing (the table decides).",
+      "Neutralized": "Neutralized by an antidote before taking effect.",
+      "Resist": "Resistance test {pool}",
+      "Antidote": "Antidote (before the effect)",
+      "TestLabel": "Toxin Resistance: {name} (Power {power})",
+      "Left": "Power {power} − {hits} hits = {left}",
+      "Damage": "{n}{type} damage",
+      "DrugWorks": "the drug works",
+      "NoEffect": "No effect (Power 0).",
+      "Apply": "Apply the effects",
+      "Retest": "Another test (+1 Power, after 10 rounds)",
+      "AntidoteSpell": "Antidote (spell)",
+      "AntidoteLabel": "Antidote: Sorcery + Magic (Power {power})",
+      "AntidoteResult": "Power {power} − {hits} = {left}",
+      "EndEffects": "End the toxin effects",
+      "Taken": "Works for {time}.",
+      "Unit": {
+        "minutes": "min",
+        "hours": "h",
+        "days": "days"
+      },
+      "Crash": "crash",
+      "CrashTitle": "{name}: crash ({actor})",
+      "CrashStun": "Apply {n} Stun (unresisted)",
+      "Vectors": {
+        "contact": "contact",
+        "ingestion": "ingestion",
+        "inhalation": "inhalation",
+        "injection": "injection"
+      },
+      "Note": {
+        "astral": "Forces Awakened users to perceive astrally.",
+        "noSleep": "No need for sleep; further doses: Fatigued I–III, then 8D6 hours of sleep (p. 125).",
+        "psyche": "Awakened and Emerged: −1 instead of −2 per sustained spell/form.",
+        "zenPhysical": "−1 to actions based on Physical attributes.",
+        "truthSerum": "After the main effect: truth serum (WIL −3, min. 1)."
+      }
     }
   }
 }

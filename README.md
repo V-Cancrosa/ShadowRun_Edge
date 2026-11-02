@@ -230,6 +230,25 @@ Stany systemu (z paska żetonu) mają teraz działanie według podręcznika (z e
 - **Bariery (s. 111–113):** w oknie odporności wybór „Za barierą” ze Strukturą 1–20 z tabeli odejmuje połowę
   Struktury (w górę) od obrażeń.
 
+## Toksyny i narkotyki (s. 121–125)
+
+- **Katalog** (folder *Toksyny i narkotyki*): 9 toksyn i 11 narkotyków z wektorem, szybkością, czasem, mocą
+  i skutkami; dostępność i cena za dawkę z erraty 08/2019. Na Karcie Edge (zakładka Walka) przyciski **Podaj** /
+  **Przyjmij**.
+- **Toksyny:** cele (zaznaczone żetony), dawki (+1 do mocy za każdą dodatkową), wektor, ochrona (ocena sprzętu
+  dodaje kości; „chroniony przed wektorem” = według zasad bez działania, decyduje stół). Karta ekspozycji mówi,
+  kiedy toksyna działa (koniec rundy wg szybkości). Test odporności BUD + WOL przez okno rzutu systemu; pod kartą
+  zostaje moc (przelicza się po Edge) i przycisk **Zastosuj skutki** — obrażenia z pozostałej mocy i stany na czas
+  działania (z BUD). Moc 0 = brak skutków. **Kolejny test** (+1 mocy) przy dłuższej ekspozycji.
+- **Narkotyki:** przyjęte dobrowolnie działają w pełni (atrybuty, kości Inicjatywy, Wysoka tolerancja bólu,
+  Spostrzegawczość); podane siłą — jak toksyna. Po upływie czasu (czas świata lub rundy) **zjazd**: obrażenia bez
+  odporności (przycisk), stany (Oszołomiony, Zmęczony II), zmiany atrybutów, kara do pul (chip w oknie rzutu),
+  CHA/WOL = 0 (Novacoke). Psyche, Deepweed, Long Haul — opis w efekcie.
+- **Antidotum:** przed działaniem neutralizuje ekspozycję; **Antidotum (czar)** (errata 02/2020) obniża moc
+  o sukcesy, przy 0 kończy skutki toksyny.
+- Gaz rozprzestrzeniający się w obszarze (s. 116–117: zasięg, stężenie, czas) nie jest jeszcze policzony: dla
+  granatów gazowych zaznacz cele w chmurze i użyj **Podaj** na toksynie.
+
 ## MG zawsze decyduje
 
 Moduł nie blokuje niczego z powodu zasad gry. Przy konflikcie pokazuje okno z tym, co łamie zasady, i opcjami:
