@@ -18,6 +18,7 @@ import "./summoning.mjs";
 import "./traits.mjs";
 import "./statuses.mjs";
 import "./substances.mjs";
+import "./welcome.mjs";
 import "./roll-dialog.mjs";
 import "./ui/conflict.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";

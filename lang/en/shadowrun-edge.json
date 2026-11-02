@@ -1139,6 +1139,17 @@
         "zenPhysical": "−1 to actions based on Physical attributes.",
         "truthSerum": "After the main effect: truth serum (WIL −3, min. 1)."
       }
+    },
+    "Welcome": {
+      "Title": "Shadowrun Edge {version}",
+      "Name": "What’s new in {version}",
+      "Sub": "The main changes in the latest versions.",
+      "SinceSeen": "Changes since version {seen}, the one you saw last.",
+      "Nothing": "Nothing to show.",
+      "Where": "The module guide is in the Journal (folder “Shadowrun Edge”) and in the Compendiums; the gear, qualities, powers, toxins and drugs catalog is in the Compendiums, folder “Shadowrun Edge”. Reopen this window with the “What’s new” button in the Journal tab.",
+      "Close": "Close",
+      "Guide": "Open the guide",
+      "Button": "What’s new"
     }
   }
 }

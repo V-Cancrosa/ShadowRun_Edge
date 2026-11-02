@@ -543,3 +543,9 @@ body.sre-edge-light .chat-message .sre-defend button:hover { background: rgba(16
 body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) button { background: var(--sre-accent-soft); }
 body.sre-edge-light .chat-message :is(.sre-heal-card, .sre-blast-card, .sre-karma-vote) button:hover { background: rgba(163, 59, 110, 0.2); box-shadow: none; }
 body.sre-edge-light .chat-message :is(.sre-blast-result, .sre-give-msg) { border-left-color: var(--sre-accent); background: var(--sre-accent-soft); }
+
+/* "What's new" window */
+.sre-welcome .sre-welcome-list { margin: 6px 0; padding: 0 10px 0 28px; }
+.sre-welcome .sre-welcome-list li { margin: 3px 0; font-size: 12px; }
+.sre-welcome .window-content { overflow-y: auto; }
+.directory .header-actions .sre-welcome-button { flex: 0 0 100%; }

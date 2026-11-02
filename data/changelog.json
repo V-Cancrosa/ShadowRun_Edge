@@ -1,0 +1,208 @@
+[
+  {
+    "version": "0.23.0",
+    "date": "2026-11-02",
+    "changes": [
+      "Przewodnik po module w Kompendiach i w Dzienniku (folder „Shadowrun Edge”), odświeżany przy nowej wersji.",
+      "Okno „Co nowego” po wejściu do świata z historią zmian od ostatnio widzianej wersji; przycisk „Co nowego” w zakładce Dziennik."
+    ]
+  },
+  {
+    "version": "0.22.0",
+    "date": "2026-11-02",
+    "changes": [
+      "Toksyny i narkotyki (s. 121–125): katalog z cenami z erraty, podawanie i przyjmowanie z Karty Edge, test odporności przez okno rzutu, skutki i stany na czas działania, zjazd po narkotykach, antidotum i czar Antidotum."
+    ]
+  },
+  {
+    "version": "0.21.0",
+    "date": "2026-11-02",
+    "changes": [
+      "Stany (s. 51–53) działają: modyfikatory w oknie rzutu, Inicjatywa i WO na efektach, obrażenia trwające na koniec rundy, znoszenie się stanów.",
+      "Lista stanów na Karcie Edge, przycisk „Schowaj się” (Osłona I–IV), bariery ze Strukturą przy odporności."
+    ]
+  },
+  {
+    "version": "0.20.0",
+    "date": "2026-11-01",
+    "changes": [
+      "MG zawsze decyduje: konflikty z zasadami (montaż, kreator, zakup, leczenie, przywoływanie, Edge…) otwierają okno z opcjami zamiast blokady.",
+      "Ustawienie świata „Gracze mogą łamać zasady” (domyślnie wyłączone)."
+    ]
+  },
+  {
+    "version": "0.19.1",
+    "date": "2026-10-30",
+    "changes": [
+      "Karta Edge domyślną kartą postaci gracza; czytelne nazwy na karcie głosowania Karmy."
+    ]
+  },
+  {
+    "version": "0.19.0",
+    "date": "2026-10-30",
+    "changes": [
+      "Granaty: Uniknięcie nadlatującego, Edge za przewagę ataku obszarowego, powalony przy odporności."
+    ]
+  },
+  {
+    "version": "0.18.0",
+    "date": "2026-10-30",
+    "changes": [
+      "Leczenie, granaty, przywoływanie i wypędzanie rzucają przez okno rzutu systemu (Edge, modyfikatory); wynik przelicza się po Edge, skutki po kliknięciu."
+    ]
+  },
+  {
+    "version": "0.17.1",
+    "date": "2026-10-30",
+    "changes": [
+      "Stonowany jasny motyw „Papier” we wszystkich oknach."
+    ]
+  },
+  {
+    "version": "0.17.0",
+    "date": "2026-10-30",
+    "changes": [
+      "Kreator przedmiotów w układzie Karty Edge: kroki, kafelki kategorii, podgląd na żywo."
+    ]
+  },
+  {
+    "version": "0.16.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Okna modułu (leczenie, granaty, duchy, przekazanie, głosowanie, zakup…) w układzie Karty Edge."
+    ]
+  },
+  {
+    "version": "0.15.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Okno rzutu systemu w układzie Karty Edge: kafelki puli i Edge, panele, chipy."
+    ]
+  },
+  {
+    "version": "0.14.2",
+    "date": "2026-10-29",
+    "changes": [
+      "Czytelny pasek okna i kafelki obrony w jasnym motywie."
+    ]
+  },
+  {
+    "version": "0.14.1",
+    "date": "2026-10-29",
+    "changes": [
+      "Przełącznik jasny/ciemny na karcie postaci zamiast ustawień."
+    ]
+  },
+  {
+    "version": "0.14.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Focused Concentration i Pain Resistance (zgodne z modułami zychu), w katalogu i kreatorze."
+    ]
+  },
+  {
+    "version": "0.13.1",
+    "date": "2026-10-29",
+    "changes": [
+      "Wygląd Edge dla okien modułu, kreatora przedmiotów i kart czatu."
+    ]
+  },
+  {
+    "version": "0.13.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Granaty z rozrzutem i strefami wybuchu; przywoływanie i wypędzanie duchów."
+    ]
+  },
+  {
+    "version": "0.12.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Leczenie wg podręcznika (s. 119–121): pierwsza pomoc, apteczka, magia, odpoczynek."
+    ]
+  },
+  {
+    "version": "0.11.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Erraty SR6 (sierpień 2019, luty 2020) jako przełączniki świata."
+    ]
+  },
+  {
+    "version": "0.10.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Licznik akcji głównych i mniejszych; obrona przed czarami niebojowymi i formami złożonymi."
+    ]
+  },
+  {
+    "version": "0.9.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Karta Edge przedmiotu; przekazywanie i usuwanie przedmiotów."
+    ]
+  },
+  {
+    "version": "0.8.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Karta Edge: zakładki Magia, Matryca, Wszczepy i ekwipunek, Kontakty i notatki."
+    ]
+  },
+  {
+    "version": "0.7.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Karta Edge: zakładki Atrybuty i umiejętności oraz Walka."
+    ]
+  },
+  {
+    "version": "0.6.0",
+    "date": "2026-10-29",
+    "changes": [
+      "Karta Edge postaci (zakładka Główna)."
+    ]
+  },
+  {
+    "version": "0.5.1",
+    "date": "2026-10-28",
+    "changes": [
+      "Poprawka rzutów 0k6 dla postaci z kreatora."
+    ]
+  },
+  {
+    "version": "0.5.0",
+    "date": "2026-10-28",
+    "changes": [
+      "Opcjonalny wygląd „Edge” dla systemu."
+    ]
+  },
+  {
+    "version": "0.4.0",
+    "date": "2026-10-28",
+    "changes": [
+      "Kreator postaci według systemu priorytetów SR6 (0.4.1–0.4.2: poprawki i nowy wygląd)."
+    ]
+  },
+  {
+    "version": "0.3.0",
+    "date": "2026-10-28",
+    "changes": [
+      "Głosowanie Karmy; zakup przy upuszczeniu; mocowania i pojemność; premie wszczepów i ich stopnie."
+    ]
+  },
+  {
+    "version": "0.2.0",
+    "date": "2026-10-28",
+    "changes": [
+      "Gotowy katalog sprzętu z podręcznika podstawowego; zgodność z systemem 3.3.9 i 4.x."
+    ]
+  },
+  {
+    "version": "0.1.0",
+    "date": "2026-10-15",
+    "changes": [
+      "Moduł towarzyszący dla shadowrun6-eden: polskie tłumaczenie i kreator przedmiotów z wierszy tabel podręcznika."
+    ]
+  }
+]

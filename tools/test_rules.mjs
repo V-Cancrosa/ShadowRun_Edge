@@ -283,3 +283,20 @@ console.log("blast & summoning OK");
   assert.equal(crashOf(substance("psyche")), null);
   console.log("substances OK");
 }
+
+// ── "What's new": versions after the last one seen ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { readFileSync } = await import("node:fs");
+  const cmp = (a, b) => { const x = a.split(".").map(Number), y = b.split(".").map(Number); for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] > y[i]; return false; };
+  globalThis.foundry ??= {};
+  globalThis.foundry.utils = { ...(globalThis.foundry.utils ?? {}), isNewerVersion: (a, b) => cmp(String(a), String(b)) };
+  const { changesSince } = await import("../scripts/welcome.mjs");
+  const log = JSON.parse(readFileSync(new URL("../data/changelog.json", import.meta.url), "utf8"));
+  const version = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8")).version;
+  assert.equal(log[0].version, version, "the changelog starts with the current version");
+  assert.deepEqual(changesSince(log, "0.21.0").map((v) => v.version), ["0.23.0", "0.22.0"], "newest first, only after the one seen");
+  assert.equal(changesSince(log, "").length, 3, "first time: the latest three");
+  assert.equal(changesSince(log, version).length, 0);
+  console.log("welcome OK");
+}

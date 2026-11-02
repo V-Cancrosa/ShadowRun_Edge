@@ -16,6 +16,15 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
 - **Karta Edge przedmiotu** i **przekazywanie przedmiotów** innym postaciom (z dodatkami), usuwanie przedmiotów.
 - **Wygląd „Edge”** kart postaci, czatu i okna rzutu (ciemny lub jasny, do wyłączenia).
 
+## Przewodnik i „Co nowego”
+
+- **Kompendia → folder „Shadowrun Edge”**: *Przewodnik Shadowrun Edge* (ten opis jako dziennik, strona na każdą
+  funkcję i historia zmian) oraz *Katalog Shadowrun Edge* (sprzęt, cechy i moce, toksyny i narkotyki).
+- **Dziennik → folder „Shadowrun Edge”**: MG przy pierwszym wejściu po aktualizacji dostaje świeżą kopię
+  przewodnika (poprzednia jest zastępowana).
+- **Okno „Co nowego”**: po nowej wersji każdy gracz widzi zmiany od wersji, którą widział ostatnio, z przyciskiem
+  do przewodnika. Ponownie otworzysz je przyciskiem **Co nowego** w zakładce Dziennik.
+
 ## Katalog sprzętu
 
 W zakładce *Kompendia* jest folder **Shadowrun Edge** z kompendium **Katalog Shadowrun Edge**. Przedmioty

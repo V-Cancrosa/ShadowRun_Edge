@@ -1139,6 +1139,17 @@
         "zenPhysical": "−1 do akcji opartych na atrybutach fizycznych.",
         "truthSerum": "Po głównym działaniu: serum prawdy (WOL −3, min. 1)."
       }
+    },
+    "Welcome": {
+      "Title": "Shadowrun Edge {version}",
+      "Name": "Co nowego w {version}",
+      "Sub": "Najważniejsze zmiany w ostatnich wersjach.",
+      "SinceSeen": "Zmiany od wersji {seen}, którą widziałeś ostatnio.",
+      "Nothing": "Brak zmian do pokazania.",
+      "Where": "Przewodnik po module jest w Dzienniku (folder „Shadowrun Edge”) i w Kompendiach; katalog sprzętu, cech, mocy, toksyn i narkotyków — w Kompendiach, folder „Shadowrun Edge”. To okno otworzysz ponownie przyciskiem „Co nowego” w zakładce Dziennik.",
+      "Close": "Zamknij",
+      "Guide": "Otwórz przewodnik",
+      "Button": "Co nowego"
     }
   }
 }
