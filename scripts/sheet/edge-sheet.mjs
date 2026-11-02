@@ -16,10 +16,9 @@ import { forceBudget } from "../summoning-rules.mjs";
 import { throwExplosive } from "../blast.mjs";
 import { isLightTheme, toggleTheme } from "../theme.mjs";
 import * as ui2 from "../ui/edge-ui.mjs";
-import { actorStatuses, statusLabel } from "../statuses.mjs";
+import { actorStatuses, statusLabel, takeCover } from "../statuses.mjs";
 import { useSubstance } from "../substances.mjs";
 import { movement } from "../status-rules.mjs";
-import { spendAction, actionsLeft } from "../actions.mjs";
 import { resolveConflict } from "../ui/conflict.mjs";
 
 const MODULE_ID = "shadowrun-edge";
@@ -374,37 +373,9 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     return this.document.effects.get(target.dataset.effectId)?.delete();
   }
 
-  /** Take Cover (Minor Action, p. 111): the Cover status at the chosen level. */
+  /** Take Cover (Minor Action, p. 111). */
   static async #onTakeCover() {
-    const actor = this.document;
-    const level = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
-      classes: ["sre-dialog"],
-      window: { title: L("SRE.Status.TakeCover") },
-      position: { width: 440 },
-      content: `<div class="sre-ed">${ui2.head({ kind: L("SRE.Status.TakeCover"), name: actor.name })}
-        <div class="sre-ed-body">${ui2.panel(L("SRE.Status.CoverLevel"), ui2.options("level", [1, 2, 3, 4].map((n) => ({
-          value: String(n), label: `${statusLabel("cover")} ${["I", "II", "III", "IV"][n - 1]}`, small: game.i18n.localize(`SRE.Status.CoverHint.${n}`), checked: n === 2,
-        }))))}${ui2.note(L("SRE.Status.CoverNote"), "info")}</div></div>`,
-      buttons: ui2.buttons(L("SRE.Status.TakeCover"), (e, b) => Number(b.form.elements.level.value) || 1, { icon: "fas fa-shield-halved" }),
-      rejectClose: false,
-    }));
-    if (!level) return;
-    const combatant = game.combat?.started ? game.combat.combatants.find((c) => c.actorId === actor.id) : null;
-    if (combatant && game.settings.get(MODULE_ID, "trackActions")) {
-      if (actionsLeft(combatant).minor.left <= 0) {
-        const choice = await resolveConflict({
-          title: L("SRE.Status.TakeCover"), name: actor.name, problems: [L("SRE.Blast.AvoidNoMinor", { name: actor.name })],
-          options: [{ id: "cover", label: L("SRE.Status.CoverAnyway"), breaksRules: true }],
-        });
-        if (choice !== "cover") return;
-      } else await spendAction(combatant, "minor");
-    }
-    let effect = actor.effects.find((e) => e.statuses?.has("cover"));
-    if (!effect) {
-      await actor.toggleStatusEffect("cover", { active: true });
-      effect = actor.effects.find((e) => e.statuses?.has("cover"));
-    }
-    return effect?.update({ "system.level": level });
+    return takeCover(this.document);
   }
 
   static async #onUseSubstance(event, target) {

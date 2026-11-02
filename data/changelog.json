@@ -1,5 +1,12 @@
 [
   {
+    "version": "0.24.0",
+    "date": "2026-11-02",
+    "changes": [
+      "Karty Edge dla NPC i stworzeń (z grupami płotek), duchów (usługi, wypędzanie) i pojazdów (osiągi, testy, broń zamontowana, autosofty) — domyślne dla tych typów."
+    ]
+  },
+  {
     "version": "0.23.0",
     "date": "2026-11-02",
     "changes": [

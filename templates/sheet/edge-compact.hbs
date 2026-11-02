@@ -1,0 +1,215 @@
+<div class="sre-es sre-cp">
+  <header class="sre-es-head">
+    <button type="button" class="sre-es-theme" data-action="toggleTheme" data-tooltip="{{themeSwitch.label}}" aria-label="{{themeSwitch.label}}">
+      <i class="fas {{themeSwitch.icon}}"></i>
+    </button>
+    <div class="sre-es-portrait" data-action="showPortraitArtwork">
+      {{#if img}}<img src="{{img}}" alt="{{name}}">{{else}}<span>{{initial}}</span>{{/if}}
+    </div>
+    <div class="sre-es-identity">
+      <input class="sre-es-name" type="text" name="name" value="{{name}}" {{#unless editable}}disabled{{/unless}}>
+      <div class="sre-es-tags">
+        {{#if isNpc}}
+          {{#if metatype}}<span class="sre-es-tag">{{metatype}}</span>{{/if}}
+          {{#if rating}}<span class="sre-es-tag sre-es-tag-cyan">{{localize "SRE.Compact.Rating"}} {{rating}}</span>{{/if}}
+          {{#if group.id}}<span class="sre-es-tag sre-es-tag-dim">{{localize "SRE.Compact.Grunt"}} #{{group.id}}</span>{{/if}}
+        {{/if}}
+        {{#if isSpirit}}
+          <span class="sre-es-tag">{{spiritType}}</span><span class="sre-es-tag sre-es-tag-cyan">{{localize "SRE.Compact.Force"}} {{force}}</span>
+        {{/if}}
+        {{#if isVehicle}}<span class="sre-es-tag">{{vtype}}</span>{{/if}}
+      </div>
+    </div>
+    <div class="sre-es-chips">
+      {{#each chips}}<div class="sre-es-chip"><span>{{label}}</span><strong>{{value}}</strong></div>{{/each}}
+    </div>
+  </header>
+
+  <section class="sre-compact-body">
+    <div class="sre-cp-cols">
+      <div class="sre-cp-col">
+        {{#if isVehicle}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Performance"}}</h3>
+          <div class="sre-cp-vtiles">
+            {{#each stats}}<div class="sre-cp-vt"><i>{{label}}</i><b>{{value}}</b>{{#if hint}}<small>{{hint}}</small>{{/if}}</div>{{/each}}
+          </div>
+        </div>
+        {{else}}
+        <div class="sre-es-panel">
+          <h3>{{#if isSpirit}}{{localize "SRE.Compact.AttributesForce"}}{{else}}{{localize "SRE.Compact.Attributes"}}{{/if}}</h3>
+          <div class="sre-cp-attrs">
+            {{#each attributes}}<div class="sre-cp-attr"><i>{{label}}</i><b>{{value}}</b></div>{{/each}}
+          </div>
+        </div>
+        {{/if}}
+
+        <div class="sre-es-panel">
+          <h3>{{#if isVehicle}}{{localize "SRE.Compact.Monitors"}}{{else}}{{localize "SRE.Sheet.Monitors"}}{{/if}}
+            <span>{{#unless isVehicle}}<button type="button" class="sre-es-mini" data-action="heal"><i class="fas fa-kit-medical"></i> {{localize "SRE.Heal.Button"}}</button>{{/unless}}</span></h3>
+          {{#each monitors}}
+          <div class="sre-es-monitor" data-monitor="{{id}}">
+            <span class="sre-es-label">{{label}}</span>
+            <span class="sre-es-boxes sre-es-boxes-{{id}}">
+              {{#each boxes}}
+              <button type="button" class="sre-es-box {{#if filled}}filled{{/if}}" data-action="monitor" data-monitor="{{../id}}" data-index="{{index}}"
+                      {{#unless ../../editable}}disabled{{/unless}}>{{label}}</button>
+              {{/each}}
+            </span>
+            <span class="sre-es-count">{{dmg}} / {{max}}</span>
+          </div>
+          {{/each}}
+          {{#if wound}}<div class="sre-es-wound active"><span>{{localize "SRE.Sheet.WoundPenalty"}}</span><strong>−{{wound}}</strong></div>{{/if}}
+        </div>
+
+        {{#if isVehicle}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Tests"}} <span>{{localize "SRE.Sheet.ClickToRoll"}}</span></h3>
+          <div class="sre-es-quick">
+            {{#each tests}}
+            <button type="button" class="sre-es-qb" data-action="vehicleTest" data-pool="{{pool}}" data-label="{{label}}">{{label}} <span class="sre-es-pool">{{pool}}</span></button>
+            {{/each}}
+            <button type="button" class="sre-es-qb" data-action="vehicleTest" data-soak="1" data-pool="{{soak}}" data-label="{{localize "SRE.Compact.SoakVehicle"}}">{{localize "SRE.Compact.SoakVehicle"}} <span class="sre-es-pool">{{soak}}</span></button>
+          </div>
+        </div>
+        {{else}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Skills"}} <span>{{localize "SRE.Sheet.ClickToRoll"}}</span></h3>
+          <div class="sre-es-quick">
+            <button type="button" class="sre-es-qb" data-action="rollInitiative">{{localize "SRE.Sheet.InitiativeTitle"}} <span class="sre-es-pool">{{initiative.base}}+{{initiative.dice}}K6</span></button>
+            {{#each skills}}
+            <button type="button" class="sre-es-qb" data-action="rollSkill" data-skill="{{id}}">{{label}} <span class="sre-es-pool">{{pool}}</span></button>
+            {{else}}
+            <span class="sre-es-dim sre-es-empty">{{localize "SRE.Compact.NoSkills"}}</span>
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+      </div>
+
+      <div class="sre-cp-col">
+        {{#if weapons.length}}
+        <div class="sre-es-panel">
+          <h3>{{#if isVehicle}}{{localize "SRE.Compact.Mounted"}}{{else}}{{localize "SRE.Compact.Attacks"}}{{/if}}</h3>
+          {{#each weapons}}
+          <div class="sre-es-row" data-item-id="{{id}}">
+            <span class="sre-es-grow"><a class="sre-es-itemname" data-action="openItem">{{name}}</a>
+              <small class="sre-es-dim">{{dv}}{{#if modes}} · {{modes}}{{/if}} · {{localize "SRE.Roll.AR"}} {{#each ar}}{{#if this}}{{this}}{{else}}—{{/if}}{{#unless @last}}/{{/unless}}{{/each}}{{#if ammo}} · {{ammo.count}}/{{ammo.cap}}{{/if}}</small></span>
+            {{#if ammo}}<button type="button" class="sre-es-btn" data-action="reload">{{localize "SRE.Sheet.Reload"}}</button>{{/if}}
+            <button type="button" class="sre-es-btn solid" data-action="rollWeapon">{{localize "SRE.Compact.Attack"}} {{pool.value}}</button>
+          </div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        {{#unless isVehicle}}
+        {{#if resist.length}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.DefenseResist"}}</h3>
+          <div class="sre-es-quick">
+            {{#each resist}}
+            <button type="button" class="sre-es-qb" data-action="rollQuick" data-kind="{{kind}}" data-id="{{id}}" data-pool="{{pool}}" data-label="{{label}}">{{label}} <span class="sre-es-pool">{{pool}}</span></button>
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+        {{/unless}}
+
+        {{#if isSpirit}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Services"}}</h3>
+          {{#if (ne services null)}}
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Compact.ServicesLeft"}}</span><b class="sre-cp-big">{{services}}</b>
+            {{#if editable}}<button type="button" class="sre-es-mini" data-action="services" data-delta="-1">−</button><button type="button" class="sre-es-mini" data-action="services" data-delta="1">+</button>{{/if}}</div>
+          {{else}}<p class="sre-es-dim sre-es-empty">{{localize "SRE.Compact.NotSummoned"}}</p>{{/if}}
+          <div class="sre-es-row">
+            <button type="button" class="sre-es-btn" data-action="banish">{{localize "SRE.Summon.BanishButton"}}</button>
+            {{#if editable}}<button type="button" class="sre-es-btn" data-action="dismiss">{{localize "SRE.Summon.DismissButton"}}</button>{{/if}}
+          </div>
+        </div>
+        {{/if}}
+
+        {{#if isNpc}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.GruntGroup"}} <span>{{localize "SRE.Compact.GruntHint"}}</span></h3>
+          {{#if group.id}}
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Compact.GroupMembers" n=group.members.length}}</span>
+            <span class="sre-es-dim">{{localize "SRE.Compact.GroupBonus" ar=group.arMod dice=group.diceMod}}</span></div>
+          <div class="sre-cp-members">
+            {{#each group.members}}<span class="sre-cp-member{{#if down}} down{{/if}}">{{name}}<small>{{dmg}}/{{max}}{{#if down}} ✕{{/if}}</small></span>{{/each}}
+          </div>
+          {{/if}}
+          {{#if editable}}
+          <div class="sre-es-row">
+            <button type="button" class="sre-es-btn" data-action="groupCreate">{{localize "SRE.Compact.GroupCreate"}}</button>
+            {{#if group.id}}<button type="button" class="sre-es-btn" data-action="groupLeave">{{localize "SRE.Compact.GroupLeave"}}</button>{{/if}}
+          </div>
+          {{/if}}
+        </div>
+        {{/if}}
+
+        {{#if spells.length}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Spells"}}</h3>
+          {{#each spells}}
+          <div class="sre-es-row" data-item-id="{{id}}"><span class="sre-es-grow"><a class="sre-es-itemname" data-action="openItem">{{name}}</a> <small class="sre-es-dim">{{localize "SRE.Compact.Drain"}} {{drain}}</small></span>
+            <button type="button" class="sre-es-btn solid" data-action="rollSpell">{{localize "SRE.Compact.Cast"}}</button></div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        {{#if powers.length}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Powers"}}</h3>
+          {{#each powers}}
+          <div class="sre-es-row" data-item-id="{{id}}"><a class="sre-es-itemname sre-es-grow" data-action="openItem">{{name}}</a></div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        {{#if autosofts.length}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Autosofts"}}</h3>
+          {{#each autosofts}}
+          <div class="sre-es-row" data-item-id="{{id}}"><a class="sre-es-itemname sre-es-grow" data-action="openItem">{{name}}</a>{{#if rating}}<span class="sre-es-dim">R{{rating}}</span>{{/if}}</div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        {{#unless isVehicle}}
+        <div class="sre-es-panel sre-es-statuses">
+          <h3>{{localize "SRE.Status.Panel"}} <span>
+            <button type="button" class="sre-es-mini" data-action="takeCover"><i class="fas fa-shield-halved"></i> {{localize "SRE.Status.TakeCover"}}</button></span></h3>
+          {{#each statuses}}
+          <div class="sre-es-row sre-es-status">
+            <img src="{{img}}" alt="">
+            <span class="sre-es-grow"><b>{{label}}{{#if hasLevels}} {{level}}{{/if}}</b></span>
+            {{#if ../editable}}
+            {{#if hasLevels}}
+            <button type="button" class="sre-es-mini" data-action="statusLevel" data-effect-id="{{effectId}}" data-delta="-1">−</button>
+            <button type="button" class="sre-es-mini" data-action="statusLevel" data-effect-id="{{effectId}}" data-delta="1">+</button>
+            {{/if}}
+            <button type="button" class="sre-es-mini" data-action="statusRemove" data-effect-id="{{effectId}}"><i class="fas fa-xmark"></i></button>
+            {{/if}}
+          </div>
+          {{else}}
+          <p class="sre-es-dim sre-es-empty">{{localize "SRE.Status.None"}}</p>
+          {{/each}}
+        </div>
+        {{/unless}}
+
+        {{#if gear.length}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Gear"}}</h3>
+          <p class="sre-cp-note">{{#each gear}}<a class="sre-es-itemname" data-item-id="{{id}}" data-action="openItem">{{name}}</a>{{#unless @last}} · {{/unless}}{{/each}}</p>
+        </div>
+        {{/if}}
+
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Notes"}} <span><button type="button" class="sre-es-mini" data-action="systemSheet">{{localize "SRE.Sheet.OpenSystemSheet"}}</button></span></h3>
+          <div class="sre-cp-note">{{{notesHTML}}}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

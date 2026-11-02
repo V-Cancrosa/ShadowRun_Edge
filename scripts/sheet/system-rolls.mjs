@@ -55,6 +55,17 @@ export async function rollSoakTest(actor, { soakType, damage, monitor, pool, lab
   return actor.rollCommonCheck(roll, { useModifier: true, useThreshold: false });
 }
 
+/** A vehicle test (piloting, sensors, evasion…), like the system's vehicle sheet: VehicleRoll with a pool. */
+export async function rollVehicle(actor, { pool, label, threshold }) {
+  const { VehicleRoll } = await types();
+  const roll = new VehicleRoll();
+  roll.pool = Number(pool) || 0;
+  roll.calcPool = roll.pool;
+  roll.checkText = label;
+  if (Number(threshold) > 0) roll.threshold = Number(threshold);
+  return actor.rollVehicle(roll);
+}
+
 /** Attribute test, like the system sheet's attribute tiles (attribute + optional second attribute in the dialog). */
 export async function rollAttribute(actor, { id, pool, label }) {
   const { PreparedRoll, RollType } = await types();

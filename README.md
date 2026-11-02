@@ -149,6 +149,20 @@ SIN-y, style życia, Karma/Reputacja/Heat/nuyeny do edycji, opis (system 4.x) i 
 Pule pokazują już karę za rany (i za podtrzymywane czary); rzut i tak przechodzi przez okno rzutu systemu,
 które odejmuje je samo.
 
+## Karty Edge NPC, ducha i pojazdu
+
+Domyślne karty dla NPC i stworzeń, duchów oraz pojazdów i dronów (kartę systemu przywrócisz w konfiguracji kart
+albo przyciskiem *Otwórz kartę systemu*). Jedna strona jak blok statystyk z podręcznika:
+- **NPC / stworzenie:** atrybuty, monitory z karą za rany i leczeniem, Inicjatywa i umiejętności (klik = rzut przez
+  system), ataki z przeładowaniem, obrona/odporność/toksyny, czary, moce, stany ze *Schowaj się*, sprzęt, notatki.
+  **Grupa płotek:** *Utwórz grupę z zaznaczonych żetonów* (flaga systemu `GruntGroupId`), członkowie z monitorami,
+  premia WA i puli liczona przez system w oknie rzutu, *Opuść grupę*.
+- **Duch:** Moc i typ, atrybuty z Mocy, Inicjatywa fizyczna i astralna, usługi (−/+, gdy przywołany modułem),
+  *Wypędź* (przez postać z zaznaczonego żetonu) i *Odpraw*, moce, umiejętności.
+- **Pojazd / dron:** prowadzenie (droga/teren), przyspieszenie, przedział, prędkość, Budowa, Pancerz, Pilot,
+  Czujniki; monitory fizyczny i matrycowy; testy pojazdu przez system (pilotowanie, unik, spostrzegawczość…),
+  odporność BUD × 2; broń zamontowana z atakiem i przeładowaniem; autosofty.
+
 ## Karta Edge przedmiotu
 
 Dodatkowa karta dla wszystkich przedmiotów (*Konfiguruj kartę → Karta Edge (Shadowrun Edge)* w nagłówku przedmiotu;

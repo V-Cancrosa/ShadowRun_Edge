@@ -154,8 +154,8 @@ async function createSpirit(data, userId) {
 }
 
 /** Banishing the targeted spirit (Conjuring + Magic vs Force × 2; net hits remove services). */
-export async function openBanish(actor) {
-  const target = [...game.user.targets][0]?.actor ?? canvas?.tokens?.controlled?.find((t) => t.actor?.type === "Spirit")?.actor;
+export async function openBanish(actor, chosen = null) {
+  const target = chosen ?? [...game.user.targets][0]?.actor ?? canvas?.tokens?.controlled?.find((t) => t.actor?.type === "Spirit")?.actor;
   if (!target || target.type !== "Spirit") return ui.notifications.warn(L("SRE.Summon.TargetSpirit"));
   const force = Number(target.system.rating) || 1;
   const flag = target.getFlag(MODULE_ID, "spirit");
