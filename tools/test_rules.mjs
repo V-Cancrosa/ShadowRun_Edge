@@ -558,3 +558,23 @@ console.log("blast & summoning OK");
   assert.equal(toXY(null), null);
   console.log("playtest fixes OK");
 }
+
+// ── Changelog segments ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { readFileSync } = await import("node:fs");
+  const { segments } = await import("../scripts/changelog-rules.mjs");
+  const log = JSON.parse(readFileSync(new URL("../data/changelog.json", import.meta.url), "utf8"));
+  const groups = JSON.parse(readFileSync(new URL("../data/changelog-groups.json", import.meta.url), "utf8"));
+  const known = new Set(log.map((v) => v.version));
+  for (const g of groups) for (const v of g.versions) assert.ok(known.has(v), `group ${g.id}: ${v} is in the changelog`);
+  const segs = segments(log, groups, "pl");
+  const motion = segs.find((s) => s.title.startsWith("Edge Motion"));
+  assert.equal(motion.versions, `0.31.0–${groups[0].versions[0]}`);
+  assert.ok(segs.length < log.length, "steps merged");
+  const sheet = segs.find((s) => s.versions === "0.6.0–0.9.0");
+  assert.equal(sheet.changes.length, 4);
+  assert.equal(segments(log, groups, "en").find((s) => s.versions === "0.6.0–0.9.0").title, "The Edge sheet");
+  assert.equal(segments([{ version: "1.0.0", date: "d", changes: ["a"] }], groups)[0].title, "1.0.0", "a lone version keeps its number");
+  console.log("changelog segments OK");
+}

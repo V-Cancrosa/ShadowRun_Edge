@@ -108,8 +108,11 @@ const sections = parts
 
 const changelog = JSON.parse(readFileSync(join(ROOT, "data/changelog.json"), "utf8"));
 const version = JSON.parse(readFileSync(join(ROOT, "module.json"), "utf8")).version;
-const historyHtml = changelog
-  .map((v) => `<h3>${v.version} <small>(${v.date})</small></h3><ul>${v.changes.map((c) => `<li>${escapeHTML(c)}</li>`).join("")}</ul>`)
+const { segments } = await import("../scripts/changelog-rules.mjs");
+const groups = JSON.parse(readFileSync(join(ROOT, "data/changelog-groups.json"), "utf8"));
+// Steps of one larger piece of work under one heading with their version range (data/changelog-groups.json).
+const historyHtml = segments(changelog, groups, "pl")
+  .map((sg) => `<h3>${escapeHTML(sg.title === sg.versions ? sg.versions : `${sg.title} · ${sg.versions}`)} <small>(${sg.date})</small></h3><ul>${sg.changes.map((c) => `<li>${escapeHTML(c)}</li>`).join("")}</ul>`)
   .join("\n");
 
 const entryId = stableId("journal:przewodnik");

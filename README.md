@@ -671,7 +671,9 @@ uruchom `npm run build` raz, żeby kompendium pojawiło się w Foundry.
 1. Podnieś `version` w `module.json`.
 2. Dodaj na początku `data/changelog.json` wpis z tą wersją: `changes` (PL) i `changes_en` (EN) — test pilnuje,
    że pierwszy wpis to bieżąca wersja i że angielska lista ma tyle samo pozycji.
-3. `npm test`, commit i push na `main` (lub gałąź roboczą z workflow).
+3. Jeśli wersja jest kolejnym krokiem większej całości, dopisz ją do grupy w `data/changelog-groups.json` — przewodnik
+   i okno „Co nowego” pokażą całą grupę jako jeden wpis z zakresem wersji.
+4. `npm test`, commit i push na `main` (lub gałąź roboczą z workflow).
 
 Workflow `.github/workflows/release.yml` sam zbuduje katalog i przewodnik, utworzy wydanie z tagiem `v<wersja>`
 i dołączy `shadowrun-edge.zip` oraz `module.json` — Foundry zobaczy aktualizację przez adres manifestu. Wypchnięcie

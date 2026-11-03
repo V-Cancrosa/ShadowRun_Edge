@@ -245,6 +245,21 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   }).join("");
   card.querySelector(".part-header")?.after(strip);
 
+  // Spending Edge stays the system's (its folded tooltip selects dice and checks who spends): this button opens it,
+  // and while it is open the system's own dice list shows instead of the strip.
+  if (card.querySelector(".dice-tooltip .spend_edge") && card.querySelector(".chat-edge-post")) {
+    const spend = document.createElement("button");
+    spend.type = "button";
+    spend.className = "sre-spend-edge";
+    spend.innerHTML = `<i class="fas fa-bolt"></i> ${game.i18n.localize("SRE.Motion.SpendEdge")}`;
+    spend.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      card.querySelector(".chat-edge-post")?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    });
+    strip.after(spend);
+  }
+
   // Verdict stamp.
   const header = card.querySelector(".part-header")?.textContent ?? "";
   const result = card.querySelector(".resulttext")?.textContent ?? "";

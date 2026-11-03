@@ -1722,7 +1722,8 @@
         "auto": "Automatic",
         "module": "The module's own",
         "off": "Off"
-      }
+      },
+      "SpendEdge": "Spend Edge"
     }
   }
 }

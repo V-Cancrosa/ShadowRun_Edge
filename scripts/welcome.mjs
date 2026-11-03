@@ -6,6 +6,7 @@
  *   (data/changelog.json), with a button to the guide; it can be reopened from the Journal tab.
  */
 import * as ui2 from "./ui/edge-ui.mjs";
+import { segments, changesOf as changesIn } from "./changelog-rules.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
@@ -17,7 +18,7 @@ const newer = (a, b) => foundry.utils.isNewerVersion(a, b);
 /** Versions after `seen` (all of them up to `limit` when nothing was seen yet), newest first. */
 /** The entries of a version in the client's language: Polish, else English (falls back to Polish). */
 export function changesOf(version, lang = globalThis.game?.i18n?.lang) {
-  return lang === "pl" ? version.changes : (version.changes_en ?? version.changes);
+  return changesIn(version, lang);
 }
 
 export function changesSince(changelog, seen, limit = 3) {
@@ -26,14 +27,15 @@ export function changesSince(changelog, seen, limit = 3) {
   return list.filter((v) => newer(v.version, seen));
 }
 
-async function loadChangelog() {
+async function loadJson(file) {
   try {
-    const response = await fetch(`modules/${MODULE_ID}/data/changelog.json`);
+    const response = await fetch(`modules/${MODULE_ID}/data/${file}`);
     return response.ok ? await response.json() : [];
   } catch {
     return [];
   }
 }
+const loadChangelog = () => loadJson("changelog.json");
 
 /** The world copy of the guide, else the compendium one. */
 async function guideEntry() {
@@ -63,8 +65,13 @@ async function importGuide() {
 export async function showWelcome({ all = false } = {}) {
   const changelog = await loadChangelog();
   const seen = game.settings.get(MODULE_ID, "welcomeSeen");
-  const list = all ? changesSince(changelog, null, changelog.length) : changesSince(changelog, seen);
-  const panels = list.map((v) => ui2.panel(`${v.version}`, `<ul class="sre-welcome-list">${changesOf(v).map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`, { hint: v.date })).join("");
+  const groups = await loadJson("changelog-groups.json");
+  const list = all || !seen ? changesSince(changelog, null, changelog.length) : changesSince(changelog, seen);
+  // Steps of one larger piece of work read as one entry; the first time, the latest three of them.
+  let segs = segments(list, groups, game.i18n.lang);
+  if (!all && !seen) segs = segs.slice(0, 3);
+  const panels = segs.map((sg) => ui2.panel(sg.title === sg.versions ? sg.versions : `${sg.title} · ${sg.versions}`,
+    `<ul class="sre-welcome-list">${sg.changes.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`, { hint: sg.date })).join("");
   const choice = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog", "sre-welcome"],
     window: { title: L("SRE.Welcome.Title", { version: version() }), icon: "fas fa-bolt" },

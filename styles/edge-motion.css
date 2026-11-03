@@ -168,5 +168,13 @@ body.sre-motion-full .application.sre-sheet.sre-fx-converge > .window-content { 
 body.sre-motion-full .application.sre-sheet.sre-fx-converge .sre-es-meter.os i { animation: sre-os-flicker 1200ms steps(6); }
 @keyframes sre-os-flicker { 0%, 40%, 80% { opacity: 1; } 20%, 60% { opacity: 0.2; } 100% { opacity: 1; } }
 
+/* Edge spending under the strip; with the system's tooltip open its own dice list replaces the strip. */
+body.sre-theme .chat-message .sre-spend-edge {
+  display: block; width: calc(100% - 1rem); margin: 4px 0.5rem 2px; padding: 3px 8px; font: 600 12px/1.6 var(--sre-font-display);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--sre-cyan); background: transparent; border: 1px solid var(--sre-cyan); border-radius: 3px;
+}
+body.sre-theme .chat-message .sre-spend-edge:hover { background: rgba(63, 212, 232, 0.12); box-shadow: 0 0 10px rgba(63, 212, 232, 0.35); }
+body.sre-theme .chat-message .dice-result:has(.dice-tooltip:not([style*="none"])) :is(.sre-dice-strip, .sre-spend-edge) { display: none; }
+
 /* Off: nothing moves, not even the module's existing transitions. */
 body.sre-motion-off :is(.sre-sheet, .sre-dialog) *, body.sre-motion-off :is(.sre-sheet, .sre-dialog) { transition: none !important; animation: none !important; }

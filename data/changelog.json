@@ -1,5 +1,17 @@
 [
   {
+    "version": "0.35.2",
+    "date": "2026-11-03",
+    "changes": [
+      "Historia zmian w przewodniku i w oknie „Co nowego” łączy kroki większych etapów w jeden wpis z zakresem wersji (np. Edge Motion 0.31.0–0.35.2, Karta Edge 0.6.0–0.9.0).",
+      "Pod paskiem kości na karcie rzutu przycisk „Wydaj Edge” otwiera systemowy wybór akcji Edge; gdy jest otwarty, widać tylko kości systemu (bez podwójnej listy)."
+    ],
+    "changes_en": [
+      "The history in the guide and the “What's new” window merges the steps of larger stages into one entry with a version range (e.g. Edge Motion 0.31.0–0.35.2, the Edge sheet 0.6.0–0.9.0).",
+      "Under the dice strip on roll cards a “Spend Edge” button opens the system's Edge actions; while open, only the system's dice show (no double list)."
+    ]
+  },
+  {
     "version": "0.35.1",
     "date": "2026-11-03",
     "changes": [
