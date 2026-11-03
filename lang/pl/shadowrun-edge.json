@@ -898,7 +898,8 @@
       "AvoidNoMinor": "{name} nie ma wolnej akcji mniejszej.",
       "AvoidNow": "{name}: przesuń żeton (ruch do Szybkości). Ponad 2 m = powalony przy odporności.",
       "ProneNote": "(unik {m} m, powalony: DV −2)",
-      "AvoidAnyway": "Uniknij mimo to (bez zużycia akcji)"
+      "AvoidAnyway": "Uniknij mimo to (bez zużycia akcji)",
+      "NoPoint": "Nie udało się odczytać miejsca na scenie — wskaż je jeszcze raz."
     },
     "Summon": {
       "Button": "Przywołaj",
@@ -1629,7 +1630,8 @@
       "NoOne": "Nikogo w obłoku.",
       "Next": "Następna runda",
       "Remove": "Usuń obłok",
-      "Gone": "{item}: obłok się rozwiał."
+      "Gone": "{item}: obłok się rozwiał.",
+      "NoCombat": "Bez walki: rundy obłoku przesuwa MG. Po rozpoczęciu walki obłok idzie za trackerem."
     },
     "Spray": {
       "Button": "Rozpyl",

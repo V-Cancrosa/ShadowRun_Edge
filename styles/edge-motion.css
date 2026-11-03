@@ -116,14 +116,17 @@ body.sre-theme .chat-message .sre-die.one { color: var(--sre-warn); border-color
 body.sre-theme .chat-message .sre-die.wild { outline: 2px solid var(--sre-cyan); outline-offset: 1px; }
 body.sre-theme .chat-message .sre-die.ignored { opacity: 0.35; text-decoration: line-through; }
 body.sre-theme .chat-message .sre-die.edged { box-shadow: 0 0 0 2px var(--sre-accent); }
+body.sre-theme .chat-message .sre-dice-strip { align-items: center; }
 body.sre-theme .chat-message .sre-stamp {
-  position: absolute; right: 8px; top: 4px; padding: 2px 7px; transform: rotate(-7deg); pointer-events: none;
+  margin-left: auto; padding: 2px 7px; transform: rotate(-4deg); pointer-events: none; white-space: nowrap;
   font: 700 12px/1.3 var(--sre-font-display); letter-spacing: 0.12em; text-transform: uppercase;
   border: 2px solid var(--sre-ok); color: var(--sre-ok); background: var(--sre-panel-strong, rgba(0, 0, 0, 0.4));
 }
 body.sre-theme .chat-message .sre-stamp-failure { border-color: var(--sre-text-dim); color: var(--sre-text-dim); }
 body.sre-theme .chat-message :is(.sre-stamp-glitch, .sre-stamp-critical) { border-color: var(--sre-bad); color: var(--sre-bad); }
-body.sre-theme .chat-message .sre-stamp-critical { box-shadow: 0 0 12px var(--sre-bad); }
+body.sre-theme .chat-message .sre-stamp-critical { box-shadow: 0 0 12px var(--sre-bad); background: rgba(255, 84, 112, 0.18); }
+body.sre-motion-full .chat-message .sre-stamp-critical.sre-fx-stamp { animation: sre-stamp 420ms cubic-bezier(0.2, 1.6, 0.4, 1) 700ms both, sre-crit 900ms ease-in-out 1200ms 3 alternate; }
+@keyframes sre-crit { from { box-shadow: 0 0 4px var(--sre-bad); } to { box-shadow: 0 0 20px var(--sre-bad); } }
 body.sre-motion-full .chat-message .sre-dice-strip.sre-fx-roll .sre-die { animation: sre-tumble 420ms var(--sre-ease) both; animation-delay: calc(var(--i) * 45ms); }
 body.sre-motion-reduced .chat-message .sre-dice-strip.sre-fx-roll .sre-die { animation: sre-fade var(--sre-fast) linear both; }
 body.sre-motion-full .chat-message .sre-die.sre-fx-reroll { animation: sre-tumble 520ms var(--sre-ease) both; box-shadow: 0 0 10px var(--sre-cyan); }
@@ -131,7 +134,7 @@ body.sre-motion-full .chat-message .sre-stamp.sre-fx-stamp { animation: sre-stam
 body.sre-motion-reduced .chat-message .sre-stamp.sre-fx-stamp { animation: sre-fade var(--sre-fast) linear both; }
 body.sre-motion-full .chat-message.sre-fx-glitch, body.sre-motion-full .chat-message.sre-fx-glitch .message-content { animation: sre-glitch 300ms steps(2) 3; animation-delay: 900ms; }
 @keyframes sre-tumble { 0% { opacity: 0; transform: translateY(-14px) rotate(-180deg); } 100% { opacity: 1; transform: none; } }
-@keyframes sre-stamp { from { opacity: 0; transform: rotate(-7deg) scale(2.2); } to { opacity: 1; transform: rotate(-7deg) scale(1); } }
+@keyframes sre-stamp { from { opacity: 0; transform: rotate(-4deg) scale(2.2); } to { opacity: 1; transform: rotate(-4deg) scale(1); } }
 @keyframes sre-glitch { 0% { clip-path: inset(10% 0 55% 0); transform: translateX(-3px); } 50% { clip-path: inset(45% 0 20% 0); transform: translateX(3px); } 100% { clip-path: none; transform: none; } }
 
 /* ───── 11E: turn banner and the active combatant ───── */

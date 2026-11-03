@@ -898,7 +898,8 @@
       "AvoidNoMinor": "{name} has no Minor Action left.",
       "AvoidNow": "{name}: move the token (up to the Move rate). Over 2 m = Prone for damage resistance.",
       "ProneNote": "(avoided {m} m, Prone: DV −2)",
-      "AvoidAnyway": "Avoid anyway (no action spent)"
+      "AvoidAnyway": "Avoid anyway (no action spent)",
+      "NoPoint": "The spot on the scene could not be read — pick it again."
     },
     "Summon": {
       "Button": "Summon",
@@ -1629,7 +1630,8 @@
       "NoOne": "No one in the cloud.",
       "Next": "Next round",
       "Remove": "Remove the cloud",
-      "Gone": "{item}: the cloud is gone."
+      "Gone": "{item}: the cloud is gone.",
+      "NoCombat": "No combat: the GM moves the cloud's rounds. Once combat starts, the cloud follows the tracker."
     },
     "Spray": {
       "Button": "Spray",

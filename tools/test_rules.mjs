@@ -542,3 +542,19 @@ console.log("blast & summoning OK");
   assert.equal(puffAlpha(3, 6, "open"), 0, "gone from the outer zone");
   console.log("motion fx OK");
 }
+
+// ── Fixes after the first playtest ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { cloudRound } = await import("../scripts/gas-rules.mjs");
+  assert.equal(cloudRound(3, 3), 1, "the round it landed in is round 1");
+  assert.equal(cloudRound(5, 3), 3);
+  assert.equal(cloudRound(2, 3), 1, "never before round 1");
+  globalThis.foundry ??= {};
+  globalThis.foundry.utils = { ...(globalThis.foundry.utils ?? {}) };
+  const { toXY } = await import("../scripts/blast.mjs");
+  assert.deepEqual(toXY({ x: "10", y: 20 }), { x: 10, y: 20 });
+  assert.equal(toXY({ _x: 1, _y: 2 }), null, "a PIXI point that lost x/y in a flag");
+  assert.equal(toXY(null), null);
+  console.log("playtest fixes OK");
+}

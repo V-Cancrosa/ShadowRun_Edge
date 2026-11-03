@@ -567,7 +567,7 @@ Hooks.once("init", () => {
 
 /** Every new combat round: OS for illegal access held on hosts (+1 User, +3 Admin per host). */
 Hooks.on("updateCombat", async (combat, changed) => {
-  if (!game.users.activeGM?.isSelf || !("round" in changed) || (changed.round ?? 0) < 2) return;
+  if (!game.users.activeGM?.isSelf || !("round" in changed) || !combat.started || (changed.round ?? 0) < 2) return;
   const seen = new Set();
   const lines = [];
   for (const c of combat.combatants) {

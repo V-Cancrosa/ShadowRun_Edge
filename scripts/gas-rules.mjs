@@ -47,6 +47,9 @@ export function gasLevel(zone, round, condition = "open") {
 /** Power of the gas's substance at a level: full, half or a quarter, rounded down. */
 export const gasPower = (power, level) => Math.floor(num(power) * (FRACTION[level] ?? 0));
 
+/** The cloud's round from the combat tracker: the round it landed in is round 1. */
+export const cloudRound = (combatRound, startRound) => Math.max(1, num(combatRound) - num(startRound) + 1);
+
 /** The cloud is gone: inert from round 10 when sealed, after round 10 otherwise. */
 export const cloudOver = (round, condition = "open") => (condition === "sealed" ? num(round) >= 10 : num(round) > 10);
 

@@ -52,6 +52,8 @@ export async function createCloud({ point, gas, item, source, scatter }) {
   const cloud = {
     id: foundry.utils.randomID(), x: point.x, y: point.y, range, kind, substance: gas.smoke ? null : gas.substance,
     condition: gas.condition ?? "open", round: 0, item, source: source?.uuid ?? null, templates, exposed: {},
+    // Rounds follow the combat tracker: the cloud remembers the combat and the round it landed in.
+    combat: game.combat?.started ? game.combat.id : null, startRound: game.combat?.started ? game.combat.round : null,
   };
   await ChatMessage.create({
     speaker: source ? ChatMessage.getSpeaker({ actor: source }) : ChatMessage.getSpeaker(),
@@ -67,13 +69,13 @@ export async function createCloud({ point, gas, item, source, scatter }) {
   return advanceCloud(scene, cloud.id);
 }
 
-/** One more round for a cloud: levels per zone, exposures, and the cloud gone when it is over (GM). */
-export async function advanceCloud(scene, id) {
+/** One more round for a cloud (or straight to `toRound`): levels per zone, exposures, the cloud gone when over (GM). */
+export async function advanceCloud(scene, id, toRound = null) {
   if (!game.user.isGM) return;
   const list = clouds(scene);
   const cloud = list.find((c) => c.id === id);
   if (!cloud) return;
-  cloud.round += 1;
+  cloud.round = toRound ?? cloud.round + 1;
   if (G.cloudOver(cloud.round, cloud.condition)) return removeCloud(scene, id, true);
   const def = cloud.substance ? substance(cloud.substance) : null;
   const source = cloud.source ? await fromUuid(cloud.source) : null;
@@ -96,6 +98,17 @@ export async function advanceCloud(scene, id) {
       note += ` — ${L("SRE.Gas.Exposed", { power })}`;
     }
     lines.push(`<li><b>${esc(token.name)}</b>: ${L("SRE.Gas.ZoneName", { n: zone + 1 })}, ${note}</li>`);
+  }
+  // Zones the gas no longer reaches leave the map.
+  const gone = [];
+  for (const tid of cloud.templates) {
+    const t = scene.templates.get(tid);
+    const zone = t?.getFlag(MODULE_ID, "zone");
+    if (t && zone !== undefined && G.gasLevel(zone, cloud.round, cloud.condition) === "none") gone.push(tid);
+  }
+  if (gone.length) {
+    await scene.deleteEmbeddedDocuments("MeasuredTemplate", gone);
+    cloud.templates = cloud.templates.filter((t) => !gone.includes(t));
   }
   await saveClouds(scene, list);
   return ChatMessage.create({
@@ -133,17 +146,35 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   if (!clouds(scene).some((c) => c.id === data.cloud)) return;
   const box = document.createElement("p");
   box.className = "sre-gas-actions";
-  box.innerHTML = `${game.combat?.started ? "" : `<button type="button" data-next>${L("SRE.Gas.Next")}</button> `}<button type="button" data-remove>${L("SRE.Gas.Remove")}</button>`;
+  box.innerHTML = `${game.combat?.started ? "" : `<button type="button" data-next>${L("SRE.Gas.Next")}</button> <small class="sre-task-dim">${L("SRE.Gas.NoCombat")}</small><br>`}<button type="button" data-remove>${L("SRE.Gas.Remove")}</button>`;
   card.append(box);
   box.querySelector("[data-next]")?.addEventListener("click", () => advanceCloud(scene, data.cloud));
   box.querySelector("[data-remove]")?.addEventListener("click", () => removeCloud(scene, data.cloud));
 });
 
-/** Every new combat round: the clouds on the combat's scene spread or thin out. */
+/**
+ * The combat tracker drives the clouds: the cloud's round is the combat's round counted from the one it landed in.
+ * A cloud thrown outside combat joins the first combat that starts, from the round it reached.
+ */
 Hooks.on("updateCombat", async (combat, changed) => {
-  if (!game.users.activeGM?.isSelf || !("round" in changed)) return;
+  if (!game.users.activeGM?.isSelf || !("round" in changed) || !combat.started) return;
   const scene = combat.scene ?? canvas.scene;
-  for (const cloud of clouds(scene)) await advanceCloud(scene, cloud.id);
+  if (!scene) return;
+  let list = clouds(scene);
+  let linked = false;
+  for (const cloud of list) {
+    if (cloud.combat && cloud.combat !== combat.id) continue;
+    if (!cloud.combat) {
+      cloud.combat = combat.id;
+      cloud.startRound = combat.round - cloud.round;
+      linked = true;
+    }
+  }
+  if (linked) await saveClouds(scene, list);
+  for (const cloud of clouds(scene).filter((c) => c.combat === combat.id)) {
+    const target = G.cloudRound(combat.round, cloud.startRound);
+    if (target > cloud.round) await advanceCloud(scene, cloud.id, target);
+  }
 });
 
 Hooks.once("ready", () => {

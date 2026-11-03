@@ -130,11 +130,14 @@ function drawClouds() {
       const r = cloud.range * ppm * (zone + 1);
       for (let i = 0; i < 10 + zone * 4; i++) {
         const g = layer.addChild(new PIXI.Graphics());
-        g.beginFill(color, alpha).drawCircle(0, 0, ppm * (1.2 + zone * 0.5) * (0.7 + Math.random() * 0.6)).endFill();
+        // A soft puff without filters: three nested circles fading outwards.
+        const size = ppm * (1.2 + zone * 0.5) * (0.7 + Math.random() * 0.6);
+        g.beginFill(color, alpha * 0.35).drawCircle(0, 0, size).endFill();
+        g.beginFill(color, alpha * 0.45).drawCircle(0, 0, size * 0.7).endFill();
+        g.beginFill(color, alpha * 0.6).drawCircle(0, 0, size * 0.4).endFill();
         puffs.push({ g, a: Math.random() * Math.PI * 2, d: r * (0.25 + Math.random() * 0.75), spin: (Math.random() - 0.5) * 0.15 });
       }
     }
-    if (PIXI.BlurFilter) layer.filters = [new PIXI.BlurFilter(8)];
     const start = performance.now();
     const tick = () => {
       const s = (performance.now() - start) / 1000;

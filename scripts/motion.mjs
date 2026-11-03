@@ -258,8 +258,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
     const stamp = document.createElement("span");
     stamp.className = `sre-stamp sre-stamp-${verdict}`;
     stamp.textContent = game.i18n.localize(`SRE.Motion.Verdict.${verdict}`);
-    card.style.position = "relative";
-    card.append(stamp);
+    strip.append(stamp);
   }
 
   if (lvl === "off") return;
@@ -273,7 +272,8 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       setTimeout(() => countUp(total, 0, to, 500), Math.min(900, dice.length * 45));
       setTimeout(() => { total.textContent = String(to); }, Math.min(900, dice.length * 45) + 650);
     }
-    if (verdict === "glitch" || verdict === "critical") playOnce(root, "sre-fx-glitch", 900);
+    // The distortion starts after the dice have landed (its delay is in the CSS), so the class stays long enough.
+    if (verdict === "glitch" || verdict === "critical") playOnce(root, "sre-fx-glitch", 2200);
   } else if (oldFaces && before !== faces) {
     // Edge after the roll (a reroll or a bought hit): the dice that changed spin again.
     const prev = sortDice(readDice(oldFaces.map((f) => `die_${parseInt(f, 10)}${f.endsWith("h") ? " hit" : ""}`)));

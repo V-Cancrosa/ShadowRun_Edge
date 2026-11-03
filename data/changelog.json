@@ -1,5 +1,21 @@
 [
   {
+    "version": "0.35.1",
+    "date": "2026-11-03",
+    "changes": [
+      "Poprawka: wybuchy, gaz i ładunki pojawiają się tam, gdzie klikniesz (wcześniej mogły trafić w lewy górny róg sceny).",
+      "Wskazywanie miejsca na scenie zwija otwarte okna i przywraca je po kliknięciu.",
+      "Obłok gazu idzie za trackerem walki (runda obłoku = runda walki od rundy wybuchu); obłok rzucony poza walką dołącza do pierwszej rozpoczętej walki. Strefy bez działania znikają z mapy.",
+      "Efekt obłoku bez filtra rozmycia (znikł wielki jasny prostokąt); pieczątka na karcie rzutu nie zasłania już wyniku, a krytyczna komplikacja widocznie zakłóca kartę."
+    ],
+    "changes_en": [
+      "Fix: blasts, gas and charges appear where you click (they could land in the scene's top left corner).",
+      "Picking a spot on the scene minimizes open windows and restores them after the click.",
+      "Gas clouds follow the combat tracker (the cloud's round is the combat round counted from the blast); a cloud thrown outside combat joins the first combat that starts. Zones with no effect leave the map.",
+      "The cloud effect has no blur filter (the large light rectangle is gone); the stamp on roll cards no longer covers the result, and a critical glitch visibly distorts the card."
+    ]
+  },
+  {
     "version": "0.35.0",
     "date": "2026-11-03",
     "changes": [

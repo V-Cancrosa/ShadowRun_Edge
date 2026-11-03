@@ -32,19 +32,43 @@ export function isExplosive(item) {
 
 const metersPerPixel = () => canvas.dimensions.distance / canvas.dimensions.size;
 
+/** A plain { x, y } in canvas pixels, or null (PIXI points lose x/y when saved in a chat message flag). */
+export function toXY(p) {
+  const x = Number(p?.x);
+  const y = Number(p?.y);
+  return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;
+}
+
+/** Open windows step aside while the player picks a spot on the scene, and come back after. */
+async function minimizeWindows() {
+  const apps = [...(foundry.applications.instances?.values?.() ?? []), ...Object.values(ui.windows ?? {})]
+    .filter((a) => a?.rendered && !a.minimized && typeof a.minimize === "function" && !(a.element?.id ?? a.id ?? "").includes("chat"));
+  for (const a of apps) {
+    try {
+      await a.minimize();
+    } catch {
+      /* some windows cannot minimize */
+    }
+  }
+  return () => apps.forEach((a) => a.maximize?.());
+}
+
 /** Waits for one click on the canvas and returns the point (or null on Escape / right click). */
-export function pickPoint() {
+export async function pickPoint() {
   ui.notifications.info(L("SRE.Blast.PickPoint"));
+  const restore = await minimizeWindows();
   return new Promise((resolve) => {
     const done = (value) => {
       canvas.stage.off("pointerdown", onDown);
       document.removeEventListener("keydown", onKey);
+      restore();
       resolve(value);
     };
     const onDown = (event) => {
       if (event.button === 2) return done(null);
-      const p = event.getLocalPosition(canvas.stage);
-      done({ x: p.x, y: p.y });
+      // The click in canvas coordinates; Foundry's own mouse position as a fallback.
+      const p = toXY(event.getLocalPosition?.(canvas.stage)) ?? toXY(canvas.mousePosition);
+      done(p);
     };
     const onKey = (event) => event.key === "Escape" && done(null);
     canvas.stage.on("pointerdown", onDown);
@@ -108,7 +132,7 @@ export async function throwExplosive(actor, item) {
   if (!aimed) return;
 
   const launched = choice.mode !== "thrown";
-  const from = actor.getActiveTokens()[0]?.center ?? aimed;
+  const from = toXY(actor.getActiveTokens()[0]?.center) ?? aimed;
   const mpp = metersPerPixel();
   const range = rangeCategory(Math.hypot(aimed.x - from.x, aimed.y - from.y) * mpp);
   const pool = launched ? launchPool : Number(s.skills?.athletics?.pool) || 0;
@@ -218,7 +242,10 @@ async function explode(message, task) {
   const distanceRoll = task.planted ? 0 : await roll2d6();
   const meters = task.planted ? 0 : scatterMeters({ roll: distanceRoll, hits, range: task.range, launched: task.launched, airburst: task.airburst, eachHit: task.eachHit });
   const directionRoll = task.planted ? 7 : await roll2d6();
-  const point = scatterPoint(task.from, task.aimed, meters, scatterAngle(directionRoll), 1 / mpp);
+  const aimed = toXY(task.aimed);
+  const from = toXY(task.from) ?? aimed;
+  if (!aimed) return ui.notifications.warn(L("SRE.Blast.NoPoint"));
+  const point = toXY(scatterPoint(from, aimed, meters, scatterAngle(directionRoll), 1 / mpp)) ?? aimed;
 
   // Gas and smoke: a cloud that spreads round by round instead of a blast (scripts/gas.mjs).
   if (task.gas) {
