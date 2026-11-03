@@ -1699,6 +1699,12 @@
       "Floating": {
         "Name": "Liczby obrażeń nad tokenami",
         "Hint": "Przy zmianie monitora fizycznego lub ogłuszenia nad tokenem na chwilę pojawia się liczba kratek (obrażenia lub leczenie)."
+      },
+      "Verdict": {
+        "success": "Sukces",
+        "failure": "Porażka",
+        "glitch": "Komplikacja",
+        "critical": "Krytyczna komplikacja"
       }
     }
   }

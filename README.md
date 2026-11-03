@@ -488,6 +488,11 @@ zdobyty punkt Edge obraca się i rozbłyskuje, wydany gaśnie, nowe kratki monit
 na zielono, a wyższa kara za rany drga. Po dumpshocku pipsy Edge są przygaszone i przekreślone. Ustawienie
 **Liczby obrażeń nad tokenami** pokazuje nad tokenem na scenie „−4P”, „−2S” albo „+3P” przy każdej zmianie monitora.
 
+Karty rzutu na czacie (przy wyglądzie Edge) mają widoczny pasek kości: sukcesy z przodu, jedynki na pomarańczowo,
+dzika kość w ramce. Przy świeżym rzucie kości spadają kaskadą, wynik odlicza, a pieczątka mówi werdykt: *Sukces*,
+*Porażka*, *Komplikacja* albo *Krytyczna komplikacja* (z zakłóceniem obrazu karty). Edge wydany po rzucie (przerzut,
+kupione sukcesy) obraca ponownie tylko te kości, które się zmieniły.
+
 ### Okno rzutu
 
 Okno rzutu systemu ma układ Karty Edge: nagłówek z nazwą testu i wyborem atrybutu, kafelki **Pula kości**

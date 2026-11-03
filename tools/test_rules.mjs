@@ -500,3 +500,19 @@ console.log("blast & summoning OK");
   assert.deepEqual(damageDelta({ physical: 1, stun: 1 }, { physical: 1, stun: 1 }), []);
   console.log("motion numbers OK");
 }
+
+// ── Edge Motion: roll cards ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { readDice, sortDice, verdictOf } = await import("../scripts/motion.mjs");
+  const dice = readDice(["die hit die_6", "die miss die_1", "die hit die_5_wild wild", "die miss die_3", "die ignored die_4"]);
+  assert.deepEqual(dice[2], { value: 5, hit: true, wild: true, ignored: false, edged: false });
+  assert.deepEqual(sortDice(dice).map((d) => d.value), [6, 5, 3, 1, 4], "hits, others high to low, ones, ignored last");
+  const words = { criticalText: "Krytyczna komplikacja", glitchText: "Komplikacja", successText: "Sukces", failureText: "Porażka" };
+  assert.equal(verdictOf({ ...words, header: "11d6 Krytyczna komplikacja", result: "Porażka: 0" }), "critical");
+  assert.equal(verdictOf({ ...words, header: "11d6 Komplikacja", result: "Sukces: 3" }), "glitch");
+  assert.equal(verdictOf({ ...words, header: "11d6", result: " Sukces: 5 sukcesów" }), "success");
+  assert.equal(verdictOf({ ...words, header: "4d6", result: "Porażka: 1" }), "failure");
+  assert.equal(verdictOf({ ...words, header: "2d6", result: "Razem: 7" }), null, "initiative and other rolls get no stamp");
+  console.log("motion chat OK");
+}

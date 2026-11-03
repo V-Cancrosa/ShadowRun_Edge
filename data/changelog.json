@@ -1,5 +1,17 @@
 [
   {
+    "version": "0.33.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Edge Motion, krok 3: karty rzutu na czacie pokazują pasek kości (sukcesy z przodu, jedynki, dzika kość), kości spadają kaskadą, wynik odlicza, a pieczątka mówi werdykt.",
+      "Komplikacja i krytyczna komplikacja zakłócają obraz karty; przerzut za Edge obraca ponownie tylko zmienione kości."
+    ],
+    "changes_en": [
+      "Edge Motion, step 3: roll cards in the chat show a dice strip (hits first, ones, the wild die), the dice tumble in, the total counts up and a stamp gives the verdict.",
+      "Glitches and critical glitches distort the card; an Edge reroll spins only the dice that changed."
+    ]
+  },
+  {
     "version": "0.32.0",
     "date": "2026-11-03",
     "changes": [

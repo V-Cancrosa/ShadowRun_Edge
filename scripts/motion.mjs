@@ -191,3 +191,95 @@ Hooks.on("updateActor", (actor, changes, options) => {
     });
   }
 });
+
+// ───── 11D: roll cards in the chat ─────
+
+/** Dice of a system roll card, from its tooltip list (classes die_N, hit, wild, ignored, edged). */
+export function readDice(items) {
+  return items.map((li) => {
+    const cls = String(li.className ?? li);
+    const value = Number(cls.match(/die_(\d)/)?.[1]) || 0;
+    return { value, hit: /\bhit\b/.test(cls), wild: /\bwild\b/.test(cls), ignored: /\bignored\b/.test(cls), edged: /\bedged\b/.test(cls) };
+  });
+}
+
+/** Hits first (6 before 5), then the rest high to low; ignored dice last. */
+export function sortDice(dice) {
+  const rank = (d) => (d.ignored ? 3 : d.hit ? 0 : d.value === 1 ? 2 : 1);
+  return [...dice].sort((a, b) => rank(a) - rank(b) || b.value - a.value);
+}
+
+/** The card's verdict: critical glitch, glitch, success or failure (the system's own words decide), or null. */
+export function verdictOf({ header = "", result = "", glitchText = "", criticalText = "", successText = "", failureText = "" }) {
+  if (criticalText && header.includes(criticalText)) return "critical";
+  if (glitchText && header.includes(glitchText)) return "glitch";
+  if (successText && result.trim().startsWith(successText)) return "success";
+  if (failureText && result.trim().startsWith(failureText)) return "failure";
+  return null;
+}
+
+const seenRolls = new Map(); // message id → faces string seen last
+const FRESH_MS = 6000;
+
+Hooks.on("renderChatMessageHTML", (message, html) => {
+  const root = html instanceof HTMLElement ? html : html?.[0];
+  const card = root?.querySelector(".dice-result");
+  const items = [...(root?.querySelectorAll(".dice-tooltip .dice-rolls li") ?? [])];
+  if (!card || !items.length || !document.body.classList.contains("sre-theme")) return;
+  const dice = readDice(items);
+  const faces = dice.map((d) => `${d.value}${d.hit ? "h" : ""}`).join(",");
+  const lvl = level();
+  const before = seenRolls.get(message.id);
+  const fresh = !before && Date.now() - (message.timestamp ?? 0) < FRESH_MS;
+  seenRolls.set(message.id, faces);
+  if (seenRolls.size > 200) seenRolls.delete(seenRolls.keys().next().value);
+
+  // The dice strip under the header (the system keeps its own list in the folded tooltip).
+  const sorted = sortDice(dice);
+  const strip = document.createElement("div");
+  strip.className = "sre-dice-strip";
+  const oldFaces = before ? before.split(",") : null;
+  strip.innerHTML = sorted.map((d, i) => {
+    const cls = ["sre-die", d.hit ? "hit" : "", d.value === 1 ? "one" : "", d.wild ? "wild" : "", d.ignored ? "ignored" : "", d.edged ? "edged" : ""].filter(Boolean).join(" ");
+    return `<span class="${cls}" style="--i:${i}">${d.value}</span>`;
+  }).join("");
+  card.querySelector(".part-header")?.after(strip);
+
+  // Verdict stamp.
+  const header = card.querySelector(".part-header")?.textContent ?? "";
+  const result = card.querySelector(".resulttext")?.textContent ?? "";
+  const L = (k) => game.i18n.localize(k);
+  const verdict = verdictOf({
+    header, result,
+    criticalText: L("shadowrun6.roll.criticalglitch"), glitchText: L("shadowrun6.roll.glitch"),
+    successText: L("shadowrun6.roll.success"), failureText: L("shadowrun6.roll.failure"),
+  });
+  if (verdict) {
+    const stamp = document.createElement("span");
+    stamp.className = `sre-stamp sre-stamp-${verdict}`;
+    stamp.textContent = game.i18n.localize(`SRE.Motion.Verdict.${verdict}`);
+    card.style.position = "relative";
+    card.append(stamp);
+  }
+
+  if (lvl === "off") return;
+  if (fresh) {
+    strip.classList.add("sre-fx-roll");
+    card.querySelector(".sre-stamp")?.classList.add("sre-fx-stamp");
+    const total = card.querySelector(".resulttext b");
+    const to = leadingNumber(total?.textContent);
+    if (total && to !== null && lvl === "full") {
+      total.textContent = "0";
+      setTimeout(() => countUp(total, 0, to, 500), Math.min(900, dice.length * 45));
+      setTimeout(() => { total.textContent = String(to); }, Math.min(900, dice.length * 45) + 650);
+    }
+    if (verdict === "glitch" || verdict === "critical") playOnce(root, "sre-fx-glitch", 900);
+  } else if (oldFaces && before !== faces) {
+    // Edge after the roll (a reroll or a bought hit): the dice that changed spin again.
+    const prev = sortDice(readDice(oldFaces.map((f) => `die_${parseInt(f, 10)}${f.endsWith("h") ? " hit" : ""}`)));
+    [...strip.children].forEach((el, i) => {
+      if (`${prev[i]?.value}${prev[i]?.hit}` !== `${sorted[i].value}${sorted[i].hit}`) el.classList.add("sre-fx-reroll");
+    });
+    card.querySelector(".sre-stamp")?.classList.add("sre-fx-stamp");
+  }
+});

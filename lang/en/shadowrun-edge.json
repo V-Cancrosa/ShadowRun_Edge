@@ -1699,6 +1699,12 @@
       "Floating": {
         "Name": "Damage numbers over tokens",
         "Hint": "When the Physical or Stun monitor changes, the number of boxes (damage or healing) briefly rises over the token."
+      },
+      "Verdict": {
+        "success": "Success",
+        "failure": "Failure",
+        "glitch": "Glitch",
+        "critical": "Critical glitch"
       }
     }
   }
