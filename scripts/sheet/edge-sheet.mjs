@@ -42,6 +42,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       showSheetTab: EdgeActorSheet.#onTab,
       edge: EdgeActorSheet.#onEdge,
       edgeBoost: EdgeActorSheet.#onEdgeBoost,
+      runningSilent: EdgeActorSheet.#onRunningSilent,
       monitor: EdgeActorSheet.#onMonitor,
       rollQuick: EdgeActorSheet.#onQuick,
       rollInitiative: EdgeActorSheet.#onInitiative,
@@ -191,6 +192,11 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (choice !== "set") return;
     }
     await this.document.update({ "system.edge.value": next });
+  }
+
+  /** Running Silent (the system's persona flag). */
+  static async #onRunningSilent() {
+    await this.document.update({ "system.persona.runningSilent": !this.document.system?.persona?.runningSilent });
   }
 
   /** Edge Boosts outside a roll (give an ally Edge, heal a box, special effect). */

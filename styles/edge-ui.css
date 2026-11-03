@@ -385,3 +385,19 @@ body.sre-ui-3 #combat-tracker li.combatant .token-initiative .initiative { font-
 body.sre-ui-3 #combat-round .encounter-title { font-family: var(--sre-font-display, inherit); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sre-accent); }
 body.sre-ui-3 #combat-round .combat-control { color: var(--sre-ctl-icon); }
 body.sre-ui-3 #combat-round .combat-control:hover { color: var(--sre-ctl-hover); }
+
+/* ═════════════════ Light Edge look on a dark Foundry interface ═════════════════ */
+/* Level 2 leaves Foundry's sidebar dark: the interface keeps the dark palette so buttons and fields stay readable. */
+body.sre-ui-2.sre-theme-light.theme-dark:not(.sre-ui-3) :is(#interface, #sidebar) {
+  --sre-text: #e8e8ee; --sre-text-dim: #9aa0ad; --sre-line: #2a2b38; --sre-panel: #14151d; --sre-panel-2: #1b1c26;
+  --input-background-color: rgba(0, 0, 0, 0.28); --sre-ctl-bg: rgba(16, 17, 23, 0.92); --sre-ctl-icon: #b9b7c6; --sre-ctl-border: rgba(224, 64, 154, 0.3);
+}
+/* Level 3 paints the whole sidebar light, so the dark text has a light ground everywhere. */
+body.sre-ui-3.sre-theme-light :is(#sidebar-content, #sidebar-content > .tab, #sidebar-content .sidebar-tab, #sidebar .directory, #sidebar .directory-header, #sidebar .directory-footer) {
+  background: #eceae4; color: #2b2925;
+}
+body.sre-ui-3.sre-theme-light #sidebar :is(.directory-item.entry .entry-name, .directory-item.document .entry-name, .directory-item.document a, h1, h2, h3, h4, label, p, .encounter-title, .combatant .name) { color: #2b2925; }
+body.sre-ui-3.sre-theme-light #sidebar :is(.directory-header .header-actions button, .directory-footer button, .header-search input, search input, .action-buttons button) {
+  color: #2b2925; background: #f7f5f0; border-color: rgba(163, 59, 110, 0.35);
+}
+body.sre-ui-3.sre-theme-light #sidebar .directory-item.folder > header.folder-header { color: #fff; }

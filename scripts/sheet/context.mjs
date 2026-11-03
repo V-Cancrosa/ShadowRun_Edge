@@ -443,6 +443,8 @@ export function buildMatrixContext(actor, { L = (k) => k, config = {}, showAllAc
     ],
     overwatch: { value: overwatch, pct: Math.min(100, Math.round((overwatch / 40) * 100)) },
     persona: ["a", "s", "d", "f"].map((k) => ({ k: L(`SRE.Sheet.Asdf.${k}`), v: num(used[k]) })),
+    // 13E: Running Silent (Matrix chapter; the system persona flag).
+    runningSilent: !!s.persona?.runningSilent,
     devices,
     activeDeck: devices.find((d) => d.deck && d.active) ?? null,
     actions, showAllActions,

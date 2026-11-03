@@ -36,6 +36,7 @@ import "./fx.mjs";
 import { uiDump } from "./edge-ui.mjs";
 import "./quench.mjs";
 import "./sheet/edge-host-sheet.mjs";
+import "./sheet/edge-sprite-sheet.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";
 
 const MODULE_ID = "shadowrun-edge";

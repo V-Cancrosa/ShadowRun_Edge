@@ -39,7 +39,10 @@ export function engineOn() {
 // ───── Actor data the engine reads (the system computes it) ─────
 
 export function edgeOf(actor) {
-  return { value: num(actor?.system?.edge?.value), max: num(actor?.system?.edge?.max) };
+  const e = actor?.system?.edge;
+  // System 4.x data models (sprites, hosts) keep current/rank; template actors value/max.
+  if (e && e.current !== undefined && e.rank !== undefined) return { value: num(e.current), max: num(e.pool, num(e.rank)), path: "system.edge.current" };
+  return { value: num(e?.value), max: num(e?.max), path: "system.edge.value" };
 }
 
 function woundOf(actor) {
@@ -94,15 +97,15 @@ export async function gainEdge(actor, want) {
   const { value } = edgeOf(actor);
   const n = R.gainable(want, { current: value, gainedRound: st.gainedRound, maxRound: st.maxRound, inCombat: st.inCombat });
   if (!n) return 0;
-  if (actor.isOwner) await actor.update({ "system.edge.value": value + n });
+  if (actor.isOwner) await actor.update({ [edgeOf(actor).path]: value + n });
   else gmDo({ type: "sre-edge-add", uuid: actor.uuid, n });
   if (st.combatant?.isOwner) await st.combatant.setFlag(MODULE_ID, "edgeGain", { round: game.combat.round, n: st.gainedRound + n });
   return n;
 }
 
 export async function spendEdge(actor, n) {
-  const { value } = edgeOf(actor);
-  await actor.update({ "system.edge.value": Math.max(0, value - n) });
+  const { value, path } = edgeOf(actor);
+  await actor.update({ [path]: Math.max(0, value - n) });
 }
 
 /** Something on another user's actor or message: the active GM does it. */
@@ -117,8 +120,8 @@ async function handleGm(data) {
   switch (data.type) {
     case "sre-edge-add": {
       if (!a) return;
-      const { value } = edgeOf(a);
-      return a.update({ "system.edge.value": Math.max(0, Math.min(R.EDGE_CAP, value + num(data.n))) });
+      const { value, path } = edgeOf(a);
+      return a.update({ [path]: Math.max(0, Math.min(R.EDGE_CAP, value + num(data.n))) });
     }
     case "sre-edge-twos":
       return a?.setFlag(MODULE_ID, "twosGlitch", true);

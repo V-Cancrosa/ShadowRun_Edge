@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import Handlebars from "handlebars";
-import { buildNpcContext, buildSpiritContext, buildVehicleContext, buildHostContext, gruntGroup } from "../scripts/sheet/compact-context.mjs";
+import { buildNpcContext, buildSpiritContext, buildVehicleContext, buildHostContext, buildSpriteContext, gruntGroup } from "../scripts/sheet/compact-context.mjs";
 import { IC, icStats } from "../scripts/matrix-rules.mjs";
 
 const lang = JSON.parse(readFileSync(new URL("../lang/pl/shadowrun-edge.json", import.meta.url), "utf8"));
@@ -106,4 +106,26 @@ assert.equal(h.personas[0].cls, "a");
 const hostTemplate = H.compile(readFileSync(new URL("../templates/sheet/edge-host.hbs", import.meta.url), "utf8"));
 const htmlHost = hostTemplate({ ...h, name: "Stuffer Shack HQ", initial: "S", editable: true, themeSwitch: { icon: "fa-sun", label: "" } });
 assert.ok(htmlHost.includes('data-action="icAttack"') && htmlHost.includes("Glitch") && htmlHost.includes('name="system.rating"'));
+
+// Sprites (13E): attributes, ASDF, skills from the system's testPool, Matrix monitor from value/max, powers.
+const sprite = {
+  system: {
+    level: 4, type: "courier", tasksOwned: 3, registered: true,
+    attributes: { willpower: { pool: 4 }, logic: { pool: 5 }, intuition: { pool: 4 }, charisma: { pool: 4 }, resonance: { pool: 4 } },
+    matrix: { attributes: { attack: 4, sleaze: 7, dataProcessing: 5, firewall: 6 }, matrixCM: { max: 10, value: 7 } },
+    skills: { electronics: { testPool: () => 9 }, engineering: { testPool: () => 0 }, cracking: { testPool: () => 9 }, con: { testPool: () => 0 } },
+    initiative: { matrix: { rank: 9, dice: 4 } },
+  },
+  items: [{ id: "p1", type: "spritepower", name: "Cookie" }, { id: "x", type: "gear", name: "x" }],
+};
+const spr = buildSpriteContext(sprite, { L });
+assert.equal(spr.level, 4);
+assert.deepEqual(spr.skills.map((x) => x.id), ["electronics", "cracking"], "skills with a pool only");
+assert.equal(spr.monitor.dmg, 3, "max − value");
+assert.equal(spr.asdf[1].value, 7);
+assert.deepEqual(spr.initiative, { base: 9, dice: 4 });
+assert.deepEqual(spr.powers.map((p) => p.name), ["Cookie"]);
+const spriteTemplate = H.compile(readFileSync(new URL("../templates/sheet/edge-sprite.hbs", import.meta.url), "utf8"));
+const htmlSprite = spriteTemplate({ ...spr, name: "Courier", initial: "C", editable: true, levels: [{ value: 4, selected: true }], types: [], themeSwitch: { icon: "fa-sun", label: "" } });
+assert.ok(htmlSprite.includes('data-action="rollSkill"') && htmlSprite.includes("Cookie") && htmlSprite.includes('name="system.tasksOwned"'));
 console.log("compact sheets OK");

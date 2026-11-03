@@ -1,0 +1,63 @@
+<div class="sre-es sre-cp sre-sprite">
+  <header class="sre-es-head">
+    <button type="button" class="sre-es-theme" data-action="toggleTheme" data-tooltip="{{themeSwitch.label}}" aria-label="{{themeSwitch.label}}">
+      <i class="fas {{themeSwitch.icon}}"></i>
+    </button>
+    <div class="sre-es-portrait">{{#if img}}<img src="{{img}}" alt="{{name}}">{{else}}<span>{{initial}}</span>{{/if}}</div>
+    <div class="sre-es-identity">
+      <input class="sre-es-name" type="text" name="name" value="{{name}}" {{#unless editable}}disabled{{/unless}}>
+      <div class="sre-es-tags">
+        <span class="sre-es-tag">{{localize "SRE.Sprite.Kind"}}</span>
+        <span class="sre-es-tag sre-es-tag-cyan">{{localize "SRE.Sprite.Level"}} {{level}}</span>
+        {{#if registered}}<span class="sre-es-tag sre-es-tag-dim">{{localize "SRE.Sprite.Registered"}}</span>{{/if}}
+      </div>
+    </div>
+    <div class="sre-es-chips">
+      <div class="sre-es-chip"><span>{{localize "SRE.Sprite.Tasks"}}</span><strong>{{tasks}}</strong></div>
+      <div class="sre-es-chip"><span>{{localize "SRE.Sheet.InitiativeTitle"}}</span><strong>{{initiative.base}}+{{initiative.dice}}K6</strong></div>
+    </div>
+  </header>
+  <section class="sre-compact-body">
+    <div class="sre-cp-cols">
+      <div class="sre-cp-col">
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Sprite.Identity"}}</h3>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sprite.Type"}}</span>
+            <select name="system.type" {{#unless editable}}disabled{{/unless}}>{{#each types}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sprite.Level"}}</span>
+            <select name="system.level" data-dtype="Number" {{#unless editable}}disabled{{/unless}}>{{#each levels}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>{{/each}}</select></div>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sprite.Tasks"}}</span>
+            <input type="number" name="system.tasksOwned" value="{{tasks}}" min="0" {{#unless editable}}disabled{{/unless}}></div>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sprite.Registered"}}</span>
+            <button type="button" class="sre-es-toggle {{#if registered}}on{{/if}}" data-action="toggleRegistered" {{#unless editable}}disabled{{/unless}}></button></div>
+        </div>
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Attributes"}}</h3>
+          <div class="sre-cp-attrs">{{#each attributes}}<div class="sre-cp-attr"><i>{{label}}</i><b>{{value}}</b></div>{{/each}}</div>
+          <div class="sre-cp-attrs">{{#each asdf}}<div class="sre-cp-attr"><i>{{label}}</i><b>{{value}}</b></div>{{/each}}</div>
+        </div>
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Monitors"}}</h3>
+          <div class="sre-es-monitor" data-monitor="matrix"><span class="sre-es-label">{{localize "SRE.Compact.MatrixMonitor"}}</span>
+            <span class="sre-es-boxes">{{#each monitor.boxes}}<button type="button" class="sre-es-box {{#if on}}stun{{/if}}" data-action="monitor" data-index="{{index}}" {{#unless ../editable}}disabled{{/unless}}></button>{{/each}}</span>
+            <strong>{{monitor.dmg}}/{{monitor.max}}</strong></div>
+        </div>
+      </div>
+      <div class="sre-cp-col">
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Compact.Tests"}} <span>{{localize "SRE.Sheet.ClickToRoll"}}</span></h3>
+          <div class="sre-es-quick">
+            <button type="button" class="sre-es-qb" data-action="rollInitiative">{{localize "SRE.Sheet.InitiativeTitle"}} <span class="sre-es-pool">{{initiative.base}}+{{initiative.dice}}K6</span></button>
+            {{#each skills}}<button type="button" class="sre-es-qb" data-action="rollSkill" data-skill="{{id}}">{{label}} + {{attr}} <span class="sre-es-pool">{{pool}}</span></button>{{/each}}
+          </div>
+        </div>
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Sprite.Powers"}}</h3>
+          {{#each powers}}<div class="sre-es-row" data-item-id="{{id}}"><span class="sre-es-grow"><a class="sre-es-itemname" data-action="openItem">{{name}}</a></span></div>
+          {{else}}<span class="sre-es-dim sre-es-empty">{{localize "SRE.Sprite.NoPowers"}}</span>{{/each}}
+        </div>
+        {{#if notesHTML}}<div class="sre-es-panel"><h3>{{localize "SRE.Sheet.Notes"}}</h3><div class="sre-es-notes">{{{notesHTML}}}</div></div>{{/if}}
+      </div>
+    </div>
+  </section>
+</div>

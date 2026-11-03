@@ -1,5 +1,23 @@
 [
   {
+    "version": "0.40.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Karta Edge dla sprite'ów technomanty (etap 13E): poziom, typ, zadania, rejestracja, atrybuty i ASDF, testy umiejętności i inicjatywa matrycowa na silniku Edge, monitor matrycowy do klikania i lista mocy.",
+      "Karta postaci, zakładka Matryca: przełącznik Running Silent.",
+      "Karta przedmiotu Edge jest teraz domyślna dla wszystkich przedmiotów (karta systemu nadal do wyboru w nagłówku okna).",
+      "Silnik Edge obsługuje Edge aktorów z nowym modelem danych systemu (sprite'y, hosty).",
+      "Jasny motyw: na poziomie 3 cały pasek boczny dostaje jasne tło z ciemnym tekstem (przyciski nagłówka katalogów są czytelne); na poziomie 2 przy ciemnym interfejsie Foundry przyciski i pola w pasku zostają w ciemnej palecie."
+    ],
+    "changes_en": [
+      "An Edge sheet for technomancer sprites (stage 13E): level, type, tasks, registration, attributes and ASDF, skill tests and Matrix Initiative on the Edge engine, a clickable Matrix monitor and the powers list.",
+      "Character sheet, Matrix tab: a Running Silent switch.",
+      "The Edge item sheet is now the default for every item (the system's sheet stays available from the window header).",
+      "The Edge engine handles Edge of actors on the system's new data model (sprites, hosts).",
+      "Light look: at level 3 the whole sidebar gets a light background with dark text (directory header buttons are readable); at level 2 with a dark Foundry interface the sidebar's buttons and fields keep the dark palette."
+    ]
+  },
+  {
     "version": "0.39.0",
     "date": "2026-11-03",
     "changes": [

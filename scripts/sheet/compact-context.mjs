@@ -189,3 +189,44 @@ export function buildHostContext(actor, { L = (k) => k, IC = {}, icStats = () =>
     notes: s.description ?? s.notes ?? "",
   };
 }
+
+/**
+ * Sprites (system 4.x "sprite" actors, core pp. 192–195): level, type, tasks, the five attributes, Matrix
+ * attributes, skills as test pools (skill + attribute as the system computes them), Matrix Initiative and monitor,
+ * and the sprite's powers. Pure for tests.
+ */
+export function buildSpriteContext(actor, { L = (k) => k } = {}) {
+  const s = actor.system ?? {};
+  const attrs = s.attributes ?? {};
+  const pool = (a) => num(a?.pool, num(a?.rank) + num(a?.mod));
+  const m = s.matrix?.attributes ?? {};
+  const skillAttr = { electronics: "logic", engineering: "logic", cracking: "logic", con: "charisma" };
+  const skills = Object.entries(skillAttr).map(([id, attr]) => {
+    const sk = s.skills?.[id];
+    let value = 0;
+    try {
+      value = typeof sk?.testPool === "function" ? num(sk.testPool()) : num(sk?.rank) + num(sk?.mod) + pool(attrs[attr]);
+    } catch {
+      value = 0;
+    }
+    return { id, label: L(`skill.${id}`), attr: L(`SRE.Sprite.Attr.${attr}`), pool: value };
+  }).filter((x) => x.pool > 0);
+  const cm = s.matrix?.matrixCM ?? {};
+  const max = num(cm.max);
+  const dmg = cm.dmg !== undefined ? num(cm.dmg) : Math.max(0, max - num(cm.value, max));
+  const ini = s.initiative?.matrix ?? {};
+  return {
+    kind: "sprite",
+    level: num(s.level, 1),
+    type: s.type ?? "",
+    tasks: num(s.tasksOwned),
+    registered: !!s.registered,
+    attributes: ["willpower", "logic", "intuition", "charisma", "resonance"].map((id) => ({ id, label: L(`SRE.Sprite.Attr.${id}`), value: pool(attrs[id]) })),
+    asdf: [["attack", "a"], ["sleaze", "s"], ["dataProcessing", "d"], ["firewall", "f"]].map(([id, k]) => ({ id, label: L(`SRE.Sheet.Asdf.${k}`), value: num(m[id]) })),
+    skills,
+    initiative: { base: num(ini.rank, num(ini.pool)), dice: num(ini.dice, 1) },
+    monitor: { max, dmg, boxes: Array.from({ length: max }, (_, i) => ({ index: i + 1, on: i < dmg })) },
+    powers: [...(actor.items ?? [])].filter((i) => i.type === "spritepower").map((i) => ({ id: i.id, name: i.name, img: i.img })),
+    notes: s.description ?? s.notes ?? "",
+  };
+}

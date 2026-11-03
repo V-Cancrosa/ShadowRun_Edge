@@ -462,6 +462,10 @@
     <div class="sre-es-tiles6">
       {{#each matrix.tiles}}<div class="sre-es-ktile"><span>{{label}}</span><strong class="{{#if warn}}warn{{/if}}">{{value}}</strong></div>{{/each}}
     </div>
+    <div class="sre-es-panel sre-es-gap">
+      <div class="sre-es-row"><span class="sre-es-grow"><b>{{localize "SRE.Matrix.RunningSilent"}}</b> <small class="sre-es-dim">{{localize "SRE.Matrix.RunningSilentHint"}}</small></span>
+        <button type="button" class="sre-es-toggle {{#if matrix.runningSilent}}on{{/if}}" data-action="runningSilent" {{#unless editable}}disabled{{/unless}}></button></div>
+    </div>
     {{#if matrix.edge.visible}}
     <div class="sre-es-panel sre-mx-os">
       <h3>{{localize "SRE.Sheet.Overwatch"}} <span>{{matrix.edge.os}} / {{matrix.edge.threshold}}{{#if matrix.edge.gm}} · {{localize "SRE.Matrix.GMOnly"}}{{/if}}</span></h3>

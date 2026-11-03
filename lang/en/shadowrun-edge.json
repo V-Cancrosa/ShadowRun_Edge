@@ -1682,7 +1682,9 @@
       "BackdoorLeft": "+{bonus} dice, {hours} h left",
       "Expired": "expired",
       "IllegalAccess": "illegal",
-      "LegalAccess": "legal"
+      "LegalAccess": "legal",
+      "RunningSilent": "Running Silent",
+      "RunningSilentHint": "you have to be found with Matrix Perception"
     },
     "Vehicle": {
       "AR": "AR (Piloting + Sensor)",
@@ -1983,6 +1985,24 @@
         "accOff": "Accel (off-road)",
         "spdiOn": "Interval (on-road)",
         "spdiOff": "Interval (off-road)"
+      }
+    },
+    "Sprite": {
+      "Sheet": "Edge sheet (sprite)",
+      "Kind": "Sprite",
+      "Level": "Level",
+      "Tasks": "Tasks",
+      "Registered": "Registered",
+      "Identity": "Sprite",
+      "Type": "Type",
+      "Powers": "Powers",
+      "NoPowers": "No powers",
+      "Attr": {
+        "willpower": "Willpower",
+        "logic": "Logic",
+        "intuition": "Intuition",
+        "charisma": "Charisma",
+        "resonance": "Resonance"
       }
     }
   }

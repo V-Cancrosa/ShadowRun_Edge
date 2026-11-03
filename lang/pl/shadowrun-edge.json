@@ -1682,7 +1682,9 @@
       "BackdoorLeft": "+{bonus} kości, jeszcze {hours} h",
       "Expired": "wygasł",
       "IllegalAccess": "nielegalny",
-      "LegalAccess": "legalny"
+      "LegalAccess": "legalny",
+      "RunningSilent": "Running Silent",
+      "RunningSilentHint": "trzeba cię znaleźć Percepcją matrycową"
     },
     "Vehicle": {
       "AR": "AR (Pilotowanie + Sensor)",
@@ -1983,6 +1985,24 @@
         "accOff": "Przysp. (teren)",
         "spdiOn": "Interwał (droga)",
         "spdiOff": "Interwał (teren)"
+      }
+    },
+    "Sprite": {
+      "Sheet": "Karta Edge (sprite)",
+      "Kind": "Sprite",
+      "Level": "Poziom",
+      "Tasks": "Zadania",
+      "Registered": "Zarejestrowany",
+      "Identity": "Sprite",
+      "Type": "Typ",
+      "Powers": "Moce",
+      "NoPowers": "Brak mocy",
+      "Attr": {
+        "willpower": "Siła Woli",
+        "logic": "Logika",
+        "intuition": "Intuicja",
+        "charisma": "Charyzma",
+        "resonance": "Rezonans"
       }
     }
   }

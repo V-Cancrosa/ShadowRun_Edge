@@ -234,5 +234,5 @@ export class EdgeItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 Hooks.once("init", () => {
   if (game.system.id !== "shadowrun6-eden") return;
   const collection = foundry.documents?.collections?.Items ?? globalThis.Items;
-  collection.registerSheet(MODULE_ID, EdgeItemSheet, { makeDefault: false, label: "SRE.ItemSheet.Label" });
+  collection.registerSheet(MODULE_ID, EdgeItemSheet, { makeDefault: true, label: "SRE.ItemSheet.Label" });
 });
