@@ -88,3 +88,56 @@ Hooks.once("diceSoNiceReady", (dice3d) => {
     }
   }
 });
+
+// ───── Diagnostics: the interface's skeleton for precise styling ─────
+
+/** "tag#id.class1.class2" for an element (data-* names kept for buttons and tabs, no text, no values). */
+export function describe(el) {
+  if (!el?.tagName) return "";
+  const id = el.id ? `#${el.id}` : "";
+  const cls = [...(el.classList ?? [])].filter((c) => !c.startsWith("sre-fx")).map((c) => `.${c}`).join("");
+  const data = ["data-tab", "data-action", "data-tool", "data-control", "data-group", "aria-pressed"]
+    .filter((a) => el.getAttribute?.(a) !== null && el.getAttribute?.(a) !== undefined).map((a) => `[${a}=${el.getAttribute(a)}]`).join("");
+  return `${el.tagName.toLowerCase()}${id}${cls}${data}`;
+}
+
+/** An indented tree of the element's structure; repeated sibling shapes collapse to one line with a count. */
+export function skeleton(el, depth = 0, maxDepth = 6, out = []) {
+  if (!el || depth > maxDepth) return out;
+  out.push(`${"  ".repeat(depth)}${describe(el)}`);
+  const kids = [...(el.children ?? [])].filter((c) => !["SCRIPT", "STYLE", "SVG", "PATH", "svg", "path"].includes(c.tagName));
+  const seen = new Map();
+  for (const c of kids) {
+    const key = describe(c).replace(/#[\w-]+/, "#…");
+    seen.set(key, (seen.get(key) ?? 0) + 1);
+    if (seen.get(key) > 2) continue;
+    skeleton(c, depth + 1, maxDepth, out);
+  }
+  for (const [key, n] of seen) if (n > 2) out.push(`${"  ".repeat(depth + 1)}… ${n - 2} × ${key}`);
+  return out;
+}
+
+/** The skeleton of the interface (and of every open window) copied to the clipboard, to paste into a bug report. */
+export async function uiDump() {
+  const roots = ["#interface", "#sidebar", "#chat", "#hotbar", "#players", "#scene-controls", "#navigation", "#scene-navigation",
+    "#combat", "#combat-dock", "#pause", "#notifications", "#context-menu", "#tooltip", "#chat-form", "#chat-message"];
+  const parts = [`Foundry ${game.version} · ${game.system.id} ${game.system.version} · Shadowrun Edge ${game.modules.get(MODULE_ID)?.version}`,
+    `body${[...document.body.classList].map((c) => `.${c}`).join("")}`,
+    `modules: ${game.modules.filter((m) => m.active).map((m) => m.id).join(", ")}`];
+  for (const sel of roots) {
+    const el = document.querySelector(sel);
+    if (el) parts.push(`\n=== ${sel}\n${skeleton(el, 0, 5).join("\n")}`);
+  }
+  for (const app of document.querySelectorAll(".application, .app.window-app")) {
+    parts.push(`\n=== window ${describe(app)}\n${skeleton(app, 0, 4).join("\n")}`);
+  }
+  const text = parts.join("\n");
+  try {
+    await navigator.clipboard.writeText(text);
+    ui.notifications.info(game.i18n.localize("SRE.UI.DumpCopied"));
+  } catch {
+    console.log(text);
+    ui.notifications.warn(game.i18n.localize("SRE.UI.DumpConsole"));
+  }
+  return text;
+}

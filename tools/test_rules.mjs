@@ -570,7 +570,7 @@ console.log("blast & summoning OK");
   for (const g of groups) for (const v of g.versions) assert.ok(known.has(v), `group ${g.id}: ${v} is in the changelog`);
   const segs = segments(log, groups, "pl");
   const motion = segs.find((s) => s.title.startsWith("Edge Motion"));
-  assert.equal(motion.versions, `0.31.0–${groups[0].versions[0]}`);
+  assert.equal(motion.versions, `0.31.0–${groups.find((g) => g.id === "motion").versions[0]}`);
   assert.ok(segs.length < log.length, "steps merged");
   const sheet = segs.find((s) => s.versions === "0.6.0–0.9.0");
   assert.equal(sheet.changes.length, 4);
@@ -597,4 +597,31 @@ console.log("blast & summoning OK");
   }
   assert.ok(manifest.styles.includes("styles/edge-ui.css"));
   console.log("edge ui OK");
+}
+
+// ── Verdict from the roll data ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { verdictFromRoll } = await import("../scripts/motion.mjs");
+  assert.equal(verdictFromRoll({ success: true, glitch: false, criticalglitch: false }), "success");
+  assert.equal(verdictFromRoll({ success: false }), "failure");
+  assert.equal(verdictFromRoll({ success: true, glitch: true }), "glitch");
+  assert.equal(verdictFromRoll({ success: false, glitch: true, criticalglitch: true }), "critical");
+  assert.equal(verdictFromRoll({}), null);
+  assert.equal(verdictFromRoll(undefined), null);
+  console.log("verdict OK");
+}
+
+// ── UI skeleton for diagnostics ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { describe, skeleton } = await import("../scripts/edge-ui.mjs");
+  const el = (tag, { id = "", cls = [], attrs = {}, kids = [] } = {}) => ({
+    tagName: tag.toUpperCase(), id, classList: cls, children: kids, getAttribute: (a) => attrs[a] ?? null,
+  });
+  assert.equal(describe(el("button", { id: "b", cls: ["control", "active", "sre-fx-open"], attrs: { "data-tool": "select" } })), "button#b.control.active[data-tool=select]");
+  const li = () => el("li", { cls: ["directory-item"] });
+  const tree = skeleton(el("ol", { id: "list", kids: [li(), li(), li(), li()] }));
+  assert.deepEqual(tree, ["ol#list", "  li.directory-item", "  li.directory-item", "  … 2 × li.directory-item"], "repeats collapse");
+  console.log("ui skeleton OK");
 }

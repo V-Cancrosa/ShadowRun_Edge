@@ -29,7 +29,7 @@ import "./vehicles.mjs";
 import "./gas.mjs";
 import "./motion.mjs";
 import "./fx.mjs";
-import "./edge-ui.mjs";
+import { uiDump } from "./edge-ui.mjs";
 import "./quench.mjs";
 import "./sheet/edge-host-sheet.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";
@@ -67,7 +67,7 @@ Hooks.once("init", () => {
   });
 
 
-  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote, openCharacterCreator };
+  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote, openCharacterCreator, uiDump };
 });
 
 Hooks.once("ready", () => {

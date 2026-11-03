@@ -1745,7 +1745,9 @@
         "3": "The whole interface"
       },
       "Whisper": "WHISPER",
-      "Blind": "BLIND"
+      "Blind": "BLIND",
+      "DumpCopied": "The interface skeleton is in the clipboard — paste it into the conversation.",
+      "DumpConsole": "Copying failed — the interface skeleton is in the console (F12)."
     }
   }
 }

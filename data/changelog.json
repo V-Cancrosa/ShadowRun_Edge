@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.36.1",
+    "date": "2026-11-03",
+    "changes": [
+      "Pieczątka werdyktu bierze sukces i komplikację wprost z rzutu systemu (wcześniej rzuty z sukcesem nie dostawały pieczątki).",
+      "Carousel Combat Tracker i Break Time w wyglądzie Edge według ich prawdziwej budowy: ramki portretów, pulsujący aktywny, kafle graczy z kolorem stanu.",
+      "Narzędzie diagnostyczne: game.modules.get(\"shadowrun-edge\").api.uiDump() kopiuje szkielet interfejsu (same klasy, bez treści) do dokładnego dopasowania wyglądu."
+    ],
+    "changes_en": [
+      "The verdict stamp takes success and glitches straight from the system's roll (successful rolls got no stamp before).",
+      "Carousel Combat Tracker and Break Time in the Edge look by their real markup: framed portraits, a pulsing active one, player tiles colored by state.",
+      "A diagnostic tool: game.modules.get(\"shadowrun-edge\").api.uiDump() copies the interface skeleton (classes only, no content) for precise styling."
+    ]
+  },
+  {
     "version": "0.36.0",
     "date": "2026-11-03",
     "changes": [

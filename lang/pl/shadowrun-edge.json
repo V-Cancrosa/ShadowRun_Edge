@@ -1745,7 +1745,9 @@
         "3": "Cały interfejs"
       },
       "Whisper": "SZEPT",
-      "Blind": "UKRYTY"
+      "Blind": "UKRYTY",
+      "DumpCopied": "Skopiowano szkielet interfejsu do schowka — wklej go w rozmowie.",
+      "DumpConsole": "Nie udało się skopiować — szkielet interfejsu jest w konsoli (F12)."
     }
   }
 }

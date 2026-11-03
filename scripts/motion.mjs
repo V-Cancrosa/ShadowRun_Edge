@@ -209,6 +209,16 @@ export function sortDice(dice) {
   return [...dice].sort((a, b) => rank(a) - rank(b) || b.value - a.value);
 }
 
+/** The verdict from the system's roll data (SR6Roll.finished), or null when the roll has none (e.g. initiative). */
+export function verdictFromRoll(finished) {
+  if (!finished || typeof finished !== "object") return null;
+  if (finished.criticalglitch) return "critical";
+  if (finished.glitch) return "glitch";
+  if (finished.success === true) return "success";
+  if (finished.success === false) return "failure";
+  return null;
+}
+
 /** The card's verdict: critical glitch, glitch, success or failure (the system's own words decide), or null. */
 export function verdictOf({ header = "", result = "", glitchText = "", criticalText = "", successText = "", failureText = "" }) {
   if (criticalText && header.includes(criticalText)) return "critical";
@@ -264,7 +274,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   const header = card.querySelector(".part-header")?.textContent ?? "";
   const result = card.querySelector(".resulttext")?.textContent ?? "";
   const L = (k) => game.i18n.localize(k);
-  const verdict = verdictOf({
+  const verdict = verdictFromRoll(message.rolls?.[0]?.finished) ?? verdictOf({
     header, result,
     criticalText: L("shadowrun6.roll.criticalglitch"), glitchText: L("shadowrun6.roll.glitch"),
     successText: L("shadowrun6.roll.success"), failureText: L("shadowrun6.roll.failure"),
