@@ -59,7 +59,7 @@ jobs:
       - name: Build zip
         if: steps.version.outputs.skip != 'true'
         run: |
-          zip -r shadowrun-edge.zip module.json scripts templates styles fonts data lang packs/katalog packs/przewodnik README.md README.en.md
+          zip -r shadowrun-edge.zip module.json scripts templates styles fonts assets data lang packs/katalog packs/przewodnik README.md README.en.md
           # The Forge rejects packages with more than one file named module.json.
           count=$(unzip -Z1 shadowrun-edge.zip | grep -c '\(^\|/\)module\.json$')
           [ "$count" -eq 1 ] || { echo "Expected one module.json in the zip, found $count"; exit 1; }

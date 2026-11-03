@@ -1,5 +1,21 @@
 [
   {
+    "version": "0.36.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Wygląd Edge w całym interfejsie: ustawienie świata i gracza (tylko moduł / czat i przyciski / cały interfejs).",
+      "Czat z plakietkami szeptu i rzutu ukrytego, portrety w ramce (także Chat Portrait), pole wpisywania, tryby rzutu, przyciski i pola Foundry, wsuwanie wiadomości.",
+      "Cały interfejs: okna Foundry i modułów, pasek boczny, narzędzia sceny, gracze, pasek makr, nawigacja, pauza z zakłóceniem, powiadomienia, podpowiedzi, menu, tracker walki, Carousel Combat Tracker, Break Time, Dice Tray, PopOut!.",
+      "Dice So Nice: kości „Edge” i „Edge cyan”. Banery kompendiów modułu, nazwy folderów cyberprogramów w katalogu."
+    ],
+    "changes_en": [
+      "The Edge look across the interface: a world and a player setting (module only / chat and buttons / whole interface).",
+      "Chat with whisper and blind badges, framed portraits (Chat Portrait too), the input, roll modes, Foundry's buttons and fields, messages sliding in.",
+      "Whole interface: Foundry's and modules' windows, the sidebar, scene controls, players, hotbar, navigation, a glitching pause, notifications, tooltips, menus, the combat tracker, Carousel Combat Tracker, Break Time, Dice Tray, PopOut!.",
+      "Dice So Nice: “Edge” and “Edge cyan” dice. Banners for the module's compendiums, names for the cyberprogram folders in the catalog."
+    ]
+  },
+  {
     "version": "0.35.2",
     "date": "2026-11-03",
     "changes": [

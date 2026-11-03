@@ -111,7 +111,12 @@ function normalizeRow(row) {
 }
 
 function sectionFolder(section, category) {
-  if (section.itemType === "software") return [L("TYPES.Item.software"), L(`shadowrun6.gear.subtype.${section.softwareType}`)];
+  if (section.itemType === "software") {
+    // The system has no names for some software kinds (HACKING, STANDARD): the module's own then.
+    const key = `shadowrun6.gear.subtype.${section.softwareType}`;
+    const name = L(key) === key ? L(`SRE.Catalog.Software.${section.softwareType}`) : L(key);
+    return [L("TYPES.Item.software"), name];
+  }
   if (section.itemType === "focus") return [L("shadowrun6.itemtype.MAGICAL"), L("TYPES.Item.focus")];
   const subtypeLabel = section.subtype ? L(`shadowrun6.gear.subtype.${section.subtype}`) : null;
   if (section.vehicle) return [...section.folder, L(`shadowrun6.itemtype.${section.type}`), subtypeLabel];

@@ -578,3 +578,23 @@ console.log("blast & summoning OK");
   assert.equal(segments([{ version: "1.0.0", date: "d", changes: ["a"] }], groups)[0].title, "1.0.0", "a lone version keeps its number");
   console.log("changelog segments OK");
 }
+
+// ── Stage 12: interface levels, banners, Dice So Nice ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { readFileSync, existsSync } = await import("node:fs");
+  const { uiLevel, levelClasses, COLORSETS } = await import("../scripts/edge-ui.mjs");
+  assert.equal(uiLevel("world", "3"), 3, "the world's default");
+  assert.equal(uiLevel("1", "3"), 1, "the player's choice wins");
+  assert.equal(uiLevel(undefined, undefined), 2);
+  assert.deepEqual(levelClasses(1), { "sre-ui-2": false, "sre-ui-3": false });
+  assert.deepEqual(levelClasses(3), { "sre-ui-2": true, "sre-ui-3": true }, "level 3 includes level 2");
+  assert.ok(COLORSETS.every((c) => c.name.startsWith("sre-") && c.category === "Shadowrun Edge"));
+  const manifest = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8"));
+  for (const pack of manifest.packs) {
+    assert.ok(pack.banner, `${pack.name} has a banner`);
+    assert.ok(existsSync(new URL(`../${pack.banner.replace("modules/shadowrun-edge/", "")}`, import.meta.url)), pack.banner);
+  }
+  assert.ok(manifest.styles.includes("styles/edge-ui.css"));
+  console.log("edge ui OK");
+}

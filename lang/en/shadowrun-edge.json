@@ -163,7 +163,11 @@
       "Echoes": "Echoes",
       "Qualities": "Qualities",
       "Positive": "Positive",
-      "Negative": "Negative"
+      "Negative": "Negative",
+      "Software": {
+        "HACKING": "Hacking cyberprograms",
+        "STANDARD": "Basic cyberprograms"
+      }
     },
     "Grade": {
       "Title": "Implant grade: {name}",
@@ -1724,6 +1728,24 @@
         "off": "Off"
       },
       "SpendEdge": "Spend Edge"
+    },
+    "UI": {
+      "World": {
+        "Name": "Edge look in the interface (default)",
+        "Hint": "How far the Edge look reaches for players who have not chosen: the module's windows only, also the chat and buttons, or the whole interface."
+      },
+      "Player": {
+        "Name": "Edge look in the interface",
+        "Hint": "Your choice instead of the world's default."
+      },
+      "Level": {
+        "world": "As the world",
+        "1": "The module's windows only",
+        "2": "Module windows, chat and buttons",
+        "3": "The whole interface"
+      },
+      "Whisper": "WHISPER",
+      "Blind": "BLIND"
     }
   }
 }

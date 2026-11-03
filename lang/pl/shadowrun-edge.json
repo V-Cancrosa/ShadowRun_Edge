@@ -163,7 +163,11 @@
       "Echoes": "Echa",
       "Qualities": "Cechy",
       "Positive": "Pozytywne",
-      "Negative": "Negatywne"
+      "Negative": "Negatywne",
+      "Software": {
+        "HACKING": "Cyberprogramy hakerskie",
+        "STANDARD": "Cyberprogramy podstawowe"
+      }
     },
     "Grade": {
       "Title": "Klasa wszczepu: {name}",
@@ -1724,6 +1728,24 @@
         "off": "Wyłączone"
       },
       "SpendEdge": "Wydaj Edge"
+    },
+    "UI": {
+      "World": {
+        "Name": "Wygląd Edge w interfejsie (domyślny)",
+        "Hint": "Jak daleko sięga wygląd Edge u graczy, którzy nie wybrali sami: tylko okna modułu, także czat i przyciski, albo cały interfejs."
+      },
+      "Player": {
+        "Name": "Wygląd Edge w interfejsie",
+        "Hint": "Twój wybór zamiast domyślnego ustawienia świata."
+      },
+      "Level": {
+        "world": "Jak w świecie",
+        "1": "Tylko okna modułu",
+        "2": "Okna modułu, czat i przyciski",
+        "3": "Cały interfejs"
+      },
+      "Whisper": "SZEPT",
+      "Blind": "UKRYTY"
     }
   }
 }

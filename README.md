@@ -503,6 +503,21 @@ i dymu falują, a ich gęstość w każdej strefie idzie za tabelą gazu w bież
 winietę, zakłócenie i migający pasek Overwatch na karcie hakera (dla jego właścicieli i MG). Przy *Automatycznie*
 wybuch korzysta z modułów **Sequencer** i **JB2A**, jeśli są włączone w świecie.
 
+### Edge w całym interfejsie
+
+Ustawienie świata **Wygląd Edge w interfejsie (domyślny)** i ustawienie gracza o tej samej nazwie (gracz może wybrać
+inaczej niż świat):
+1. **Tylko okna modułu** — jak wcześniej.
+2. **Okna modułu, czat i przyciski** — wiadomości z plakietką *SZEPT* (cyjan) albo *UKRYTY* (bursztyn), portrety
+   w ściętej ramce (także z modułu Chat Portrait), pole wpisywania z neonową linią, aktywny tryb rzutu podświetlony,
+   przyciski i pola w całym Foundry w palecie Edge, nowe wiadomości wsuwają się z boku, przyciski Dice Tray jako kafle.
+3. **Cały interfejs** — do tego okna Foundry i innych modułów w ramce Edge, pasek boczny (zakładki, foldery z kolorem MG
+   jako paskiem, wiersze podświetlane), narzędzia sceny, lista graczy, pasek makr, nawigacja scen, pauza z zakłóceniem,
+   powiadomienia, podpowiedzi, menu kontekstowe, tracker walki, karty Carousel Combat Tracker i lista Break Time.
+
+Okna PopOut! dostają ten sam wygląd. Własne reguły z Custom CSS mają pierwszeństwo. **Dice So Nice** ma dwa zestawy
+kości w kategorii *Shadowrun Edge*: „Edge” (magenta) i „Edge cyan”. Kompendia modułu mają własne banery.
+
 ### Okno rzutu
 
 Okno rzutu systemu ma układ Karty Edge: nagłówek z nazwą testu i wyborem atrybutu, kafelki **Pula kości**

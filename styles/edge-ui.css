@@ -1,0 +1,175 @@
+/*
+ * Stage 12 — the Edge look beyond the module's windows (scripts/edge-ui.mjs).
+ * body.sre-ui-2: the chat, buttons, fields and lists everywhere. body.sre-ui-3 (has sre-ui-2 too): the whole
+ * interface and the supported modules. Colors come from the module palette; Foundry v13's own variables are set
+ * on the same themed elements so core and module styles follow them. Rules stay at modest specificity, so a
+ * module's or the user's own CSS (Custom CSS) still wins where it is more specific.
+ */
+
+/* ───── Palette on the whole page (levels 2 and 3) ───── */
+body.sre-ui-2.sre-theme-dark,
+body.sre-ui-2.sre-theme-dark :is(.themed, #interface, #sidebar, .application, .app, #tooltip, #context-menu, .notification) {
+  --sre-accent: #e0409a; --sre-accent-soft: rgba(224, 64, 154, 0.16); --sre-accent-line: rgba(224, 64, 154, 0.45);
+  --sre-cyan: #3fd4e8; --sre-ok: #4fd68a; --sre-warn: #f0b24a; --sre-bad: #ff5470;
+  --sre-bg: #101117; --sre-panel: #14151d; --sre-panel-2: #1b1c26; --sre-line: #2a2b38; --sre-text: #e8e8ee; --sre-text-dim: #9aa0ad;
+}
+body.sre-ui-2.sre-theme-light,
+body.sre-ui-2.sre-theme-light :is(.themed, #interface, #sidebar, .application, .app, #tooltip, #context-menu, .notification) {
+  --sre-accent: #a33b6e; --sre-accent-soft: rgba(163, 59, 110, 0.1); --sre-accent-line: rgba(163, 59, 110, 0.35);
+  --sre-cyan: #2c7480; --sre-ok: #3c8a55; --sre-warn: #a8721b; --sre-bad: #b8364f;
+  --sre-bg: #eceae4; --sre-panel: #f5f3ee; --sre-panel-2: #ebe8e1; --sre-line: rgba(60, 50, 40, 0.18); --sre-text: #2b2925; --sre-text-dim: #6e6a62;
+}
+
+/* Foundry v13 variables for buttons and fields, so its own rules draw them in the Edge palette. */
+body.sre-ui-2 :is(.themed, #interface, #sidebar, .application, .app) {
+  --button-background-color: transparent;
+  --button-border-color: var(--sre-accent-line);
+  --button-text-color: var(--sre-text);
+  --button-hover-background-color: var(--sre-accent-soft);
+  --button-hover-border-color: var(--sre-accent);
+  --button-hover-text-color: var(--sre-text);
+  --button-focus-outline-color: var(--sre-cyan);
+  --input-background-color: rgba(0, 0, 0, 0.28);
+  --input-border-color: var(--sre-line);
+  --input-text-color: var(--sre-text);
+  --input-focus-outline-color: var(--sre-cyan);
+}
+body.sre-ui-2.sre-theme-light :is(.themed, #interface, #sidebar, .application, .app) { --input-background-color: #faf9f6; }
+
+/* ───── Level 2: buttons, fields, the chat ───── */
+body.sre-ui-2 :is(#interface, .application, .app, #sidebar) button:not(.sre-es-pip, .sre-es-box, .sre-es-mini, .sre-ed-step button, [class*="sre-ed-"], .icon, .header-control, .control) {
+  transition: box-shadow 160ms, border-color 160ms, background-color 160ms;
+}
+body.sre-ui-2:not(.sre-motion-off) :is(#interface, .application, .app, #sidebar) button:not(.sre-es-pip, .sre-es-box, .icon, .header-control, .control):hover {
+  box-shadow: 0 0 0 1px var(--sre-accent), 0 0 12px var(--sre-accent-soft);
+}
+body.sre-ui-2 :is(#interface, .application, .app, #sidebar) :is(input[type="text"], input[type="number"], input[type="search"], select, textarea):focus {
+  border-color: var(--sre-accent); box-shadow: 0 0 0 1px var(--sre-accent), 0 0 10px var(--sre-accent-soft); outline: none;
+}
+
+/* Chat: whisper and blind messages, the input, the roll-privacy buttons. */
+body.sre-ui-2 #chat-log .chat-message.whisper,
+body.sre-ui-2 .chat-log .chat-message.whisper { border-left: 3px solid var(--sre-cyan) !important; }
+body.sre-ui-2 .chat-message.blind .message-header::after { content: var(--sre-blind-label, "◌") !important; border-color: var(--sre-warn) !important; color: var(--sre-warn) !important; }
+body.sre-ui-2 .chat-message.whisper .message-header::after,
+body.sre-ui-2 .chat-message.blind .message-header::after {
+  content: var(--sre-whisper-label, "⟟"); font: 700 9px/1.6 var(--sre-font-display, sans-serif); letter-spacing: 0.14em;
+  color: var(--sre-cyan); border: 1px solid var(--sre-cyan); padding: 0 5px; margin-left: 6px; align-self: center;
+}
+body.sre-ui-2 .chat-message.blind { border-left: 3px solid var(--sre-warn) !important; }
+body.sre-ui-2 .chat-message .message-header :is(.message-sender, .chat-portrait-text-content-name-generic) {
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase;
+}
+body.sre-ui-2 .chat-message .message-header .message-metadata { font-family: ui-monospace, "Cascadia Mono", monospace; font-size: 10px; color: var(--sre-text-dim); }
+/* Portraits in message headers (Chat Portrait included): a cut frame. */
+body.sre-ui-2 .chat-message .message-header img {
+  border: 1px solid var(--sre-accent) !important; border-radius: 0 !important;
+  clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%);
+}
+body.sre-ui-2 :is(#chat-form, .chat-form, #chat-message, .chat-input) {
+  border-color: var(--sre-line);
+}
+body.sre-ui-2 :is(#chat-message, .chat-form textarea, .chat-form prose-mirror, .chat-form .editor-content) {
+  background: rgba(0, 0, 0, 0.3); border-bottom: 2px solid var(--sre-accent) !important;
+}
+body.sre-ui-2.sre-theme-light :is(#chat-message, .chat-form textarea, .chat-form prose-mirror, .chat-form .editor-content) { background: #faf9f6; }
+body.sre-ui-2 :is(#roll-privacy, .roll-privacy, #chat-controls .roll-type-select) button[aria-pressed="true"],
+body.sre-ui-2 :is(#roll-privacy, .roll-privacy) button.active {
+  border-color: var(--sre-accent); background: var(--sre-accent-soft); color: var(--sre-text);
+}
+body.sre-ui-2.sre-motion-full .chat-message.sre-fx-msg { animation: sre-msg-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes sre-msg-in { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+
+/* Dice Tray (under the chat). */
+body.sre-ui-2 :is(.dice-tray, #dice-tray) :is(button, .dice-tray__button) {
+  font-family: var(--sre-font-display, inherit); color: var(--sre-cyan); border: 1px solid var(--sre-line); border-radius: 2px; background: transparent;
+}
+body.sre-ui-2 :is(.dice-tray, #dice-tray) :is(button, .dice-tray__button):hover { border-color: var(--sre-accent); color: var(--sre-accent); }
+
+/* ───── Level 3: windows of Foundry and other modules ───── */
+body.sre-ui-3 :is(.application, .app.window-app):not(.sre-sheet, .sre-dialog, .shadowrun6, .sr6, .sre-roll-dialog, .sre-character-creator) {
+  border: 1px solid var(--sre-line); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(224, 64, 154, 0.12);
+}
+body.sre-ui-3 :is(.application, .app.window-app):not(.sre-sheet, .sre-dialog, .shadowrun6, .sr6, .sre-roll-dialog, .sre-character-creator) > .window-header {
+  background: linear-gradient(90deg, rgba(224, 64, 154, 0.22), transparent 70%), var(--sre-bg);
+  border-bottom: 1px solid var(--sre-accent-line); color: var(--sre-text);
+}
+body.sre-ui-3 :is(.application, .app.window-app) > .window-header .window-title {
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+/* Sidebar: tabs, search, directories (folder colors set by the GM stay as the left bar). */
+body.sre-ui-3 #sidebar { background: var(--sre-bg); }
+body.sre-ui-3 :is(#sidebar-tabs, #sidebar nav.tabs) :is(button, a, .item) { border-radius: 0; color: var(--sre-text-dim); border-bottom: 2px solid transparent; }
+body.sre-ui-3 :is(#sidebar-tabs, #sidebar nav.tabs) :is(button, a, .item):is(.active, [aria-pressed="true"]) {
+  color: var(--sre-text); border-bottom-color: var(--sre-accent); background: linear-gradient(180deg, transparent, var(--sre-accent-soft));
+}
+body.sre-ui-3 #sidebar :is(.directory-list, .directory) .folder > :is(header, .folder-header) {
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.08em; text-transform: uppercase;
+  border-left: 3px solid var(--sre-accent); background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent);
+}
+body.sre-ui-3 #sidebar :is(.directory-list, .directory) :is(.directory-item.document, .directory-item.entry, .document.entry) { border-bottom: 1px solid var(--sre-line); }
+body.sre-ui-3 #sidebar :is(.directory-list, .directory) :is(.directory-item.document, .directory-item.entry, .document.entry):hover {
+  background: var(--sre-accent-soft); box-shadow: inset 3px 0 0 var(--sre-accent);
+}
+body.sre-ui-3 #sidebar :is(.header-search, .directory-header) input { border-bottom: 2px solid var(--sre-accent); }
+/* Compendium entries: the banner keeps its picture, the title gets the display face. */
+body.sre-ui-3 #sidebar .compendium-name, body.sre-ui-3 #sidebar .directory-item.compendium .entry-name { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; }
+
+/* Scene controls, players, hotbar, scene navigation. */
+body.sre-ui-3 #scene-controls :is(button.control, .control, .ui-control) {
+  border-radius: 0; clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+}
+body.sre-ui-3 #scene-controls :is(button.control, .control, .ui-control):is(.active, [aria-pressed="true"]) {
+  border-color: var(--sre-accent); color: var(--sre-accent); box-shadow: inset 0 0 0 1px var(--sre-accent), 0 0 10px var(--sre-accent-soft);
+}
+body.sre-ui-3 #players { border-left: 3px solid var(--sre-cyan); border-radius: 0; font-family: var(--sre-font-display, inherit); letter-spacing: 0.04em; }
+body.sre-ui-3 #hotbar :is(.slot, .macro) { border-radius: 0; border-color: var(--sre-line); }
+body.sre-ui-3 #hotbar :is(.slot, .macro):hover { border-color: var(--sre-accent); box-shadow: 0 0 10px var(--sre-accent-soft); }
+body.sre-ui-3 :is(#navigation, #scene-navigation) :is(.scene, .scene-navigation-menu li, li) { border-radius: 0; }
+body.sre-ui-3 :is(#navigation, #scene-navigation) :is(.scene, li).active { border-color: var(--sre-accent); box-shadow: inset 0 -2px 0 var(--sre-accent); }
+
+/* Pause: the caption with split colors and a rare glitch. */
+body.sre-ui-3 #pause :is(figcaption, .caption, label) {
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.3em; text-transform: uppercase;
+  text-shadow: 2px 0 var(--sre-accent), -2px 0 var(--sre-cyan);
+}
+body.sre-ui-3.sre-motion-full #pause :is(figcaption, .caption, label) { animation: sre-pause-glitch 2.6s steps(1) infinite; }
+@keyframes sre-pause-glitch { 0%, 92%, 100% { transform: none; clip-path: none; } 93% { transform: translateX(-3px); clip-path: inset(10% 0 50% 0); } 95% { transform: translateX(3px); clip-path: inset(50% 0 10% 0); } }
+
+/* Notifications, tooltips, context menus. */
+body.sre-ui-3 #notifications .notification {
+  border-radius: 0; border: 1px solid var(--sre-line); border-left: 3px solid var(--sre-cyan);
+  background: var(--sre-panel); color: var(--sre-text); font-family: var(--sre-font-display, inherit); letter-spacing: 0.03em;
+}
+body.sre-ui-3 #notifications .notification.warning { border-left-color: var(--sre-warn); }
+body.sre-ui-3 #notifications .notification.error { border-left-color: var(--sre-bad); }
+body.sre-ui-3.sre-motion-full #notifications .notification { animation: sre-msg-in 260ms ease-out both; }
+body.sre-ui-3 #tooltip { border-radius: 0; border: 1px solid var(--sre-accent-line); background: var(--sre-bg); color: var(--sre-text); }
+body.sre-ui-3 #context-menu { border-radius: 0; border: 1px solid var(--sre-accent-line); background: var(--sre-bg); }
+body.sre-ui-3 #context-menu :is(li, .context-item):hover { background: var(--sre-accent-soft); box-shadow: inset 3px 0 0 var(--sre-accent); }
+
+/* Combat tracker (core). */
+body.sre-ui-3 #combat .combatant { border-bottom: 1px solid var(--sre-line); }
+body.sre-ui-3 #combat .combatant :is(.token-name, .name) { font-family: var(--sre-font-display, inherit); letter-spacing: 0.05em; }
+body.sre-ui-3 #combat .combatant .token-initiative { font-family: var(--sre-font-display, inherit); font-weight: 700; color: var(--sre-accent); }
+
+/* ───── Level 3: modules (only matched when the module draws them) ───── */
+
+/* Carousel Combat Tracker: portraits in Edge frames, the active one glows. */
+body.sre-ui-3 #combat-dock :is(.combatant-portrait, .combatant) {
+  border-radius: 0; border: 1px solid var(--sre-line); clip-path: polygon(0 0, 100% 0, 100% 86%, 84% 100%, 0 100%);
+}
+body.sre-ui-3 #combat-dock :is(.combatant-portrait, .combatant).active { border-color: var(--sre-accent); box-shadow: 0 0 14px var(--sre-accent-soft); }
+body.sre-ui-3.sre-motion-full #combat-dock :is(.combatant-portrait, .combatant).active { animation: sre-active 1.8s ease-in-out infinite alternate; }
+body.sre-ui-3 #combat-dock :is(.combatant-name, .name, .initiative) { font-family: var(--sre-font-display, inherit); letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* Break Time: the players as tiles, back = green, away = amber. */
+body.sre-ui-3 :is(#breaktime, .breaktime, [id^="breaktime"]) :is(li, .player, .user) {
+  border: 1px solid var(--sre-line); background: var(--sre-panel-2); padding: 4px 8px; margin: 3px 0;
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.05em; text-transform: uppercase;
+}
+body.sre-ui-3 :is(#breaktime, .breaktime, [id^="breaktime"]) :is(li, .player, .user):is(.back, .returned, .active) { border-color: var(--sre-ok); box-shadow: 0 0 10px rgba(79, 214, 138, 0.25); }
+body.sre-ui-3 :is(#breaktime, .breaktime, [id^="breaktime"]) :is(li, .player, .user):is(.away, .afk) { border-color: var(--sre-warn); }
+
+/* Tokenizer and Levels: their windows follow the window frame above; their buttons follow level 2. */
