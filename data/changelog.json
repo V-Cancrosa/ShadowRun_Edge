@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.30.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Gaz (s. 116–117): granaty i rakiety gazowe/dymne zostawiają obłok w czterech strefach, który co rundę słabnie według tabeli (z erratą); osoby w obłoku dostają ekspozycję na toksynę z mocą strefy, maska gazowa chroni.",
+      "Rozpylacze: styl prosty, chwiejny lub zamaszysty (AR i DV wg podręcznika), szybki strumień z dziką kością, obrona i obrażenia dla każdego celu.",
+      "Ładunki burzące: test Inżynieria + Logika przy granacie lub pakiecie materiałów wybuchowych, DV przeciw ludziom lub konstrukcji, detonacja bez rozrzutu."
+    ],
+    "changes_en": [
+      "Gas (pp. 116–117): gas and smoke grenades and rockets leave a four-zone cloud that thins out round by round by the table (with the errata); those inside are exposed to the toxin at the zone's Power, a gas mask protects.",
+      "Spray weapons: straight, wobbly or sweeping style (AR and DV by the rulebook), fast stream with the wild die, defense and damage per target.",
+      "Demolitions: Engineering + Logic on a grenade or explosive package, DV against personnel or structures, detonation without scatter."
+    ]
+  },
+  {
     "version": "0.29.0",
     "date": "2026-11-03",
     "changes": [

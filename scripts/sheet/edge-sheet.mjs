@@ -20,6 +20,7 @@ import { actorStatuses, statusLabel, takeCover } from "../statuses.mjs";
 import { useSubstance } from "../substances.mjs";
 import { openAdvancement } from "../advancement.mjs";
 import * as mx from "../matrix.mjs";
+import { openSpray, openPlant } from "../gas.mjs";
 import { movement } from "../status-rules.mjs";
 import { resolveConflict } from "../ui/conflict.mjs";
 
@@ -86,6 +87,8 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       openSpirit: EdgeActorSheet.#onOpenSpirit,
       dismissSpirit: EdgeActorSheet.#onDismissSpirit,
       throwExplosive: EdgeActorSheet.#onThrow,
+      spray: EdgeActorSheet.#onSpray,
+      plantCharge: EdgeActorSheet.#onPlant,
     },
   };
 
@@ -434,6 +437,18 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   /** Karma advancement window (pp. 68–70). */
+  /** Spray attack: style, fast stream, the targeted tokens (p. 117). */
+  static #onSpray(event, target) {
+    const item = this.#item(target);
+    if (item) return openSpray(this.document, item);
+  }
+
+  /** Building a Bigger Boom: Engineering + Logic on a planted charge (p. 117). */
+  static #onPlant(event, target) {
+    const item = this.#item(target);
+    if (item) return openPlant(this.document, item);
+  }
+
   static async #onAdvance() {
     return openAdvancement(this.document);
   }

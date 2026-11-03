@@ -26,6 +26,7 @@ import { startKarmaVote } from "./karma-vote.mjs";
 import "./advancement.mjs";
 import "./matrix.mjs";
 import "./vehicles.mjs";
+import "./gas.mjs";
 import "./quench.mjs";
 import "./sheet/edge-host-sheet.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";

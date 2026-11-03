@@ -17,7 +17,7 @@ const isV4 = () => !foundry.utils.isNewerVersion("4.0.0", game.system.version);
  * A plain pool check (defense, soak, derived values), built like the system sheet's _onCommonCheck.
  * `useWoundModifier` (true/false) presets the dialog's wound-modifier box when the rule decides it.
  */
-export async function rollPool(actor, { pool, label, kind, threshold, useWoundModifier }) {
+export async function rollPool(actor, { pool, label, kind, threshold, useWoundModifier, wildDie }) {
   const { PreparedRoll, RollType } = await types();
   const roll = new PreparedRoll();
   roll.pool = Number(pool) || 0;
@@ -30,7 +30,8 @@ export async function rollPool(actor, { pool, label, kind, threshold, useWoundMo
     dialogConfig = { useModifier: kind !== "soak", useThreshold: false };
   } else {
     roll.allowBuyHits = true;
-    roll.useWildDie = 1;
+    // Wild die by default; a spray's fast stream asks for it, a normal spray turns it off (p. 117).
+    roll.useWildDie = wildDie === undefined ? 1 : Number(wildDie) ? 1 : 0;
     if (Number(threshold) > 0) roll.threshold = Number(threshold);
     dialogConfig = { useModifier: true, useThreshold: true };
   }

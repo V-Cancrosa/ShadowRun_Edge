@@ -1589,6 +1589,101 @@
       "TooManyDrones": "Do RCC podpiętych jest {n} dronów, a może najwyżej {max} (ocena × 3).",
       "Wins": "{name} wygrywa",
       "SoakHint": "Ciało × 2 (s. 114); taranowanie: Ciało"
+    },
+    "Gas": {
+      "Kind": "Granat gazowy / dymny",
+      "Sub": {
+        "gas": "Gaz rozchodzi się przez 10 rund (s. 116–117)",
+        "smoke": "Dym: obłok bez substancji"
+      },
+      "Cloud": "Obłok",
+      "Substance": "Substancja",
+      "Range": "Zasięg (pełne działanie, m)",
+      "Condition": "Otoczenie",
+      "PowerShort": "moc",
+      "Conditions": {
+        "open": "Otwarta przestrzeń",
+        "barrier": "Za przeszkodą",
+        "sealed": "Zamknięte pomieszczenie"
+      },
+      "Hint": "Zasięg 5 jak w przykładzie z podręcznika; strefy do × 4. Co rundę osoby w obłoku dostają ekspozycję z mocą strefy.",
+      "SmokeHint": "Dym zasłania widok — Edge za lepsze widzenie przyznaje MG (s. 118).",
+      "Kinds": {
+        "gas": "gaz",
+        "smoke": "dym"
+      },
+      "Released": {
+        "gas": "Gaz: pełne działanie do {range} m, potem {r2} / {r3} / {r4} m · {condition}.",
+        "smoke": "Dym: do {range} m, potem {r2} / {r3} / {r4} m · {condition}."
+      },
+      "Level": {
+        "full": "pełne działanie",
+        "half": "połowa",
+        "quarter": "ćwierć",
+        "none": "brak"
+      },
+      "Mask": "chroni maska",
+      "Exposed": "ekspozycja, moc {power}",
+      "ZoneName": "strefa {n}",
+      "Round": "runda {n}",
+      "NoOne": "Nikogo w obłoku.",
+      "Next": "Następna runda",
+      "Remove": "Usuń obłok",
+      "Gone": "{item}: obłok się rozwiał."
+    },
+    "Spray": {
+      "Button": "Rozpyl",
+      "Title": "Rozpylanie",
+      "Kind": "Broń rozpylająca (s. 117)",
+      "NoTargets": "Zaznacz (target) cele w strumieniu.",
+      "Style": "Styl",
+      "Styles": {
+        "straight": "Prosty",
+        "wobbly": "Chwiejny",
+        "sweeping": "Zamaszysty"
+      },
+      "Straight": "bez zmian AR i DV",
+      "StyleHint": "pas ok. {w} m · AR +{ar}, DV {dv}",
+      "Options": "Opcje",
+      "Fast": "Szybki strumień (dzika kość)",
+      "TargetHint": "Edge za przewagę: AR wobec najwyższej DR wśród celów.",
+      "Roll": "Rzuć {n} kośćmi",
+      "RollShort": "Rzuć",
+      "Summary": "Styl: {style} · AR {ar} {fast}",
+      "FastOn": "· szybki strumień",
+      "Miss": "obrona {def} — pudło",
+      "Hit": "obrona {def}, netto {net}",
+      "Delivered": "trafienie — substancja kontaktowa dostarczona"
+    },
+    "Demo": {
+      "Button": "Podłóż",
+      "Title": "Ładunek",
+      "Kind": "Ładunek burzący (s. 117)",
+      "Sub": "Inżynieria + Logika: {pool} kości",
+      "Against": "Przeciw",
+      "Personnel": "Ludziom",
+      "Structure": "Konstrukcji",
+      "Hint": {
+        "grenade": {
+          "personnel": "próg 2; każdy sukces ponad próg +1 DV w wybranej strefie",
+          "structure": "DV strefy Bliskiej, +1 za sukces ponad 2, najwyżej DV strefy zero"
+        },
+        "package": {
+          "personnel": "próg 2; sukcesy ponad próg podnoszą ocenę (SZ ocena, B /2, D /4, promień = ocena)",
+          "structure": "+1 do oceny za każdy sukces, bez progu"
+        }
+      },
+      "Roll": "Rzuć {n} kośćmi",
+      "TestLabel": "Ładunek: {name} (Inżynieria + Logika)",
+      "PersonnelResult": "DV {gz} / {close} / {near}, promień {radius} m",
+      "StructureDV": "DV przeciw Strukturze: {dv}",
+      "StructureRating": "Ocena przeciw Strukturze: {rating}",
+      "Split": "Rozdziel +{n} DV:",
+      "Detonate": "Zdetonuj (wskaż miejsce)",
+      "StructureNote": "Obrażenia Struktury nakłada MG.",
+      "Detonation": "Detonacja: {name}",
+      "Planted": "Podłożony ładunek — bez testu ataku i bez rozrzutu.",
+      "NoScatter": "Bez rozrzutu: wybuch w miejscu ładunku."
     }
   }
 }

@@ -113,12 +113,13 @@ export async function useSubstance(actor, item) {
 }
 
 /** An exposure card for one target: when it takes effect, the resistance test, the antidote. */
-async function exposure(source, target, def, choice) {
+export async function exposure(source, target, def, choice) {
   const rounds = speedRounds(def.speed);
   const combat = game.combat?.started ? game.combat : null;
-  const power = exposurePower(def.power, { doses: choice.doses });
+  // A gas cloud gives the Power of its zone (full, half, a quarter); otherwise the doses decide.
+  const power = choice.power ?? exposurePower(def.power, { doses: choice.doses });
   return ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor: source }),
+    speaker: source ? ChatMessage.getSpeaker({ actor: source }) : ChatMessage.getSpeaker(),
     content: `<div class="sre-blast-card"><h3>${L("SRE.Substance.Exposure", { name: esc(def.name), target: esc(target.name) })}</h3></div>`,
     flags: {
       [MODULE_ID]: {

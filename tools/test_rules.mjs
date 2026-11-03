@@ -433,3 +433,37 @@ console.log("blast & summoning OK");
   assert.equal(by(METAMAGIC, "Power Point").adepts, true);
   console.log("magic catalog OK");
 }
+
+// ── Gas, spray and demolitions (pp. 116–117, errata Aug 2019) ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const G = await import("../scripts/gas-rules.mjs");
+  assert.deepEqual([3, 5, 10, 15, 20, 21].map((m) => G.gasZone(m, 5)), [0, 0, 1, 2, 3, null]);
+  const row = (z) => [1, 4, 5, 6, 7, 8, 9, 10, 11].map((r) => G.gasLevel(z, r));
+  assert.deepEqual(row(0), ["full", "full", "full", "half", "half", "half", "quarter", "quarter", "none"]);
+  assert.deepEqual(row(1), ["half", "half", "half", "quarter", "quarter", "quarter", "none", "none", "none"]);
+  assert.deepEqual(row(2), ["half", "half", "quarter", "quarter", "none", "none", "none", "none", "none"], "errata: half in rounds 1–4");
+  assert.deepEqual(row(3), ["quarter", "quarter", "quarter", "none", "none", "none", "none", "none", "none"]);
+  assert.equal(G.gasLevel(0, 0), "none", "nothing before the attack lands");
+  assert.deepEqual([8, 9, 11].map((r) => G.gasLevel(1, r, "barrier")), ["half", "quarter", "none"]);
+  assert.deepEqual([9, 10].map((r) => G.gasLevel(0, r, "sealed")), ["full", "none"]);
+  assert.equal(G.cloudOver(10, "sealed"), true);
+  assert.equal(G.cloudOver(10, "open"), false);
+  assert.equal(G.gasPower(9, "half"), 4, "rounded down");
+  assert.equal(G.gasPower(9, "quarter"), 2);
+  assert.equal(G.gasKind({ name: "Gas grenade" }), "gas");
+  assert.equal(G.gasKind({ name: "Smoke/thermal smoke rocket" }), "smoke");
+  assert.equal(G.gasKind({ name: "Fragmentation grenade" }), null);
+  assert.equal(G.sprayDamage(3, "sweeping", 1), 1, "3P − 3 + 1 net");
+  assert.equal(G.sprayDamage(3, "wobbly", 0), 2);
+  assert.equal(G.fastStreamAllowed("straight"), false);
+  assert.equal(G.isSpray({ name: "Ares Super Squirt", system: { subtype: "DMSO" } }), true);
+  const frag = { gz: 16, close: 12, near: 8, stun: false, radius: 20 };
+  assert.deepEqual(G.demolition({ kind: "grenade", target: "personnel", hits: 5, blast: frag }), { bonus: 3 });
+  assert.deepEqual(G.demolition({ kind: "grenade", target: "structure", hits: 9, blast: frag }), { structureDV: 16 }, "never beyond Ground Zero (errata)");
+  assert.deepEqual(G.demolition({ kind: "package", target: "structure", hits: 3, rating: 6 }), { structureRating: 9 });
+  assert.deepEqual(G.demolition({ kind: "package", target: "personnel", hits: 4, rating: 6 }).blast, { gz: 8, close: 4, near: 2, stun: false, radius: 8 });
+  assert.deepEqual(G.spreadBonus(frag, 3, { close: 2, near: 1 }), { ...frag, close: 14, near: 9 });
+  assert.deepEqual(G.spreadBonus(frag, 3, {}), { ...frag, gz: 19 }, "unassigned points go to Ground Zero");
+  console.log("gas & spray OK");
+}

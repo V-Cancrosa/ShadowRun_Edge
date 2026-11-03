@@ -425,6 +425,28 @@ Granaty z ekwipunku (z kodami DV w notatce katalogu, np. „DV 16P / 12P / 8P, w
   Czy postać nie użyła już w tej rundzie zwykłego ruchu, pilnuje stół (Foundry tego nie zapisuje).
 - Zasięgi powyżej Pobliża liczone jak dla broni palnej.
 
+## Gaz, rozpylacze i ładunki burzące (s. 116–117)
+
+**Granat lub rakieta gazowa / dymna** rzuca się jak każdy granat (rozrzut, Uniknięcie nadlatującego). W oknie wybierasz
+substancję (toksyny z wektorem wdychania), zasięg pełnego działania (domyślnie 5, jak w przykładzie z podręcznika)
+i otoczenie: otwarta przestrzeń, za przeszkodą, zamknięte pomieszczenie. Po wybuchu na mapie zostaje **obłok** w czterech
+strefach (zasięg, × 2, × 3, × 4). Co rundę walki (poza walką: przycisk *Następna runda* dla MG) siła w strefie idzie
+według tabeli z podręcznika (z poprawką erraty 08/2019 dla × 3), a osoba w obłoku dostaje kartę ekspozycji na toksynę
+z mocą strefy (pełna, ½, ¼, w dół) — ponownie tylko gdy ta moc wzrośnie. Maska gazowa chroni. Za przeszkodą i w zamkniętym
+pomieszczeniu każda strefa trzyma swój najmocniejszy poziom (do rund 9–10 / do rundy 10). Dym to obłok bez substancji;
+Edge za lepsze widzenie przyznaje MG.
+
+**Rozpylacze** (np. Ares Super Squirt, miotacz ognia): przycisk *Rozpyl* przy broni. Styl prosty, chwiejny (pas ok. 3 m,
+AR +2, DV −1) albo zamaszysty (10 m, AR +4, DV −3), przy dwóch ostatnich *szybki strumień* (dzika kość). Cele zaznaczasz
+(target); każdy broni się osobno, obrażenia = DV + styl + sukcesy netto, odporność przez kartę systemu.
+
+**Ładunki burzące** (*Building a Bigger Boom*): przycisk *Podłóż* przy granacie lub pakiecie materiałów wybuchowych,
+test Inżynieria + Logika:
+- granat przeciw ludziom: próg 2, każdy sukces ponad próg +1 DV w wybranej strefie (rozdzielasz na karcie);
+- granat przeciw konstrukcji: DV strefy Bliskiej +1 za sukces ponad 2, najwyżej DV strefy zero (errata);
+- pakiet przeciw konstrukcji: ocena +1 za sukces; przeciw ludziom: próg 2, potem SZ ocena, B /2, D /4, promień = ocena.
+*Zdetonuj* wskazuje miejsce i odpala ładunek bez rozrzutu, z listą celów jak przy granatach.
+
 ## Przywoływanie duchów
 
 Magowie z umiejętnością Przywoływanie mają w zakładce Magia panel **Duchy** (s. 146–148):

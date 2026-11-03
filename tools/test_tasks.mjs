@@ -108,7 +108,7 @@ function fakeRoot() {
 }
 const html = fakeRoot();
 globalThis.HTMLElement = class {};
-globalThis.document = { createElement: () => ({ className: "", innerHTML: "", querySelector: () => null }) };
+globalThis.document = { createElement: () => ({ className: "", innerHTML: "", querySelector: () => null, querySelectorAll: () => [] }) };
 Hooks.callAll("renderChatMessageHTML", rendered, [html]);
 assert.equal(html.appended[0]?.innerHTML, "<b>2</b>");
 
@@ -204,5 +204,17 @@ assert.match(renderTask(ram, 3), /data-back="8"/);
 assert.doesNotMatch(renderTask({ ...ram, otherHits: 3 }, 3), /data-hit/, "a tie misses");
 assert.match(renderTask({ ...ram, otherHits: null }, 3), /data-other/);
 game.user.isGM = false;
+
+// Spray: per target, defense first, then damage with the style; demolitions: the charge's numbers.
+await import("../scripts/gas.mjs");
+const spray = { kind: "spray", item: "Flamethrower", style: "sweeping", fast: false, ar: 13, dv: 3, stun: false, targets: [{ token: "T.1", name: "Carson", def: null }, { token: "T.2", name: "Westwind", def: 0 }] };
+const sprayHtml = renderTask(spray, 5);
+assert.match(sprayHtml, /data-def="0"/);
+assert.match(sprayHtml, /data-dv="5"/, "3 − 3 + 5 net");
+const demo = { kind: "demolition", actor: "Actor.a", item: "i", name: "Fragmentation grenade", charge: "grenade", target: "personnel", blast: { gz: 16, close: 12, near: 8, stun: false, radius: 20 }, rating: 0, split: { gz: 0, close: 1, near: 0 } };
+assert.match(renderTask(demo, 4), /DV 17 \/ 13 \/ 8/);
+const structure = renderTask({ ...demo, target: "structure" }, 4);
+assert.match(structure, /14/, "Close 12 + 2 hits above the threshold");
+assert.doesNotMatch(structure, /data-detonate/, "structure damage is the GM's");
 
 console.log("tasks OK");

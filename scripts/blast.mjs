@@ -10,6 +10,8 @@ import { errata } from "./errata.mjs";
 import * as rolls from "./sheet/system-rolls.mjs";
 import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
+import { gasKind, DEFAULT_GAS_RANGE } from "./gas-rules.mjs";
+import { SUBSTANCES } from "./substances-data.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
@@ -24,13 +26,13 @@ export function itemBlast(item) {
 }
 
 export function isExplosive(item) {
-  return item?.type === "gear" && !!itemBlast(item);
+  return item?.type === "gear" && (!!itemBlast(item) || !!gasKind(item));
 }
 
 const metersPerPixel = () => canvas.dimensions.distance / canvas.dimensions.size;
 
 /** Waits for one click on the canvas and returns the point (or null on Escape / right click). */
-function pickPoint() {
+export function pickPoint() {
   ui.notifications.info(L("SRE.Blast.PickPoint"));
   return new Promise((resolve) => {
     const done = (value) => {
@@ -58,7 +60,8 @@ async function roll2d6() {
  * @param {Item} item    the explosive (grenade from the inventory)
  */
 export async function throwExplosive(actor, item) {
-  const blast = itemBlast(item);
+  const gas = gasKind(item);
+  const blast = itemBlast(item) ?? (gas ? { gz: 0, close: 0, near: 0, stun: false, radius: DEFAULT_GAS_RANGE * 4 } : null);
   if (!blast) return ui.notifications.warn(L("SRE.Blast.NoBlastData", { name: item.name }));
   if (!canvas?.ready) return ui.notifications.warn(L("SRE.Blast.NoScene"));
   const s = actor.system;
@@ -67,9 +70,10 @@ export async function throwExplosive(actor, item) {
   const launchPool = (Number(s.skills?.exotic_weapons?.points) || 0) + (Number(s.skills?.exotic_weapons?.modifier) || 0) + (Number(s.attributes?.[agiOrLog]?.pool) || 0);
   const athletics = Number(s.skills?.athletics?.pool) || 0;
   const content = `<div class="sre-ed">
-    ${ui2.head({ kind: L("SRE.Blast.Kind"), name: item.name, sub: L("SRE.Blast.Sub", { gz: blast.gz, close: blast.close, near: blast.near, type: blast.stun ? "S" : "P", radius: blast.radius }) })}
+    ${ui2.head({ kind: L(gas ? "SRE.Gas.Kind" : "SRE.Blast.Kind"), name: item.name, sub: gas ? L(`SRE.Gas.Sub.${gas}`) : L("SRE.Blast.Sub", { gz: blast.gz, close: blast.close, near: blast.near, type: blast.stun ? "S" : "P", radius: blast.radius }) })}
     <div class="sre-ed-body">
-      ${ui2.panel(L("SRE.Blast.Zones"), `<div class="sre-ed-zones">
+      ${gas ? gasPanel(item, gas) : ""}
+      ${gas ? "" : ui2.panel(L("SRE.Blast.Zones"), `<div class="sre-ed-zones">
         <div class="sre-ed-zone"><i>${L("SRE.Blast.Zone.gz")}</i><b>${blast.gz}${blast.stun ? "S" : "P"}</b></div>
         <div class="sre-ed-zone"><i>${L("SRE.Blast.Zone.close")} ≤3 m</i><b>${blast.close}${blast.stun ? "S" : "P"}</b></div>
         <div class="sre-ed-zone"><i>${L("SRE.Blast.Zone.near")} ≤${blast.radius} m</i><b>${blast.near}${blast.stun ? "S" : "P"}</b></div></div>`)}
@@ -89,7 +93,13 @@ export async function throwExplosive(actor, item) {
     position: { width: 480 },
     content,
     render: (event, dialog) => ui2.wire(dialog),
-    buttons: ui2.buttons(L("SRE.Blast.PickButton"), (e, b) => ({ mode: b.form.elements.mode.value, airburst: b.form.elements.airburst.checked, manualHits: b.form.elements.manualHits.value === "" ? null : Number(b.form.elements.manualHits.value) }), { icon: "fas fa-crosshairs" }),
+    buttons: ui2.buttons(L("SRE.Blast.PickButton"), (e, b) => {
+      const f = b.form.elements;
+      return {
+        mode: f.mode.value, airburst: f.airburst.checked, manualHits: f.manualHits.value === "" ? null : Number(f.manualHits.value),
+        gas: gas ? { smoke: gas === "smoke", substance: f.gasSubstance?.value || null, range: Number(f.gasRange?.value) || DEFAULT_GAS_RANGE, condition: f.gasCondition?.value ?? "open" } : null,
+      };
+    }, { icon: "fas fa-crosshairs" }),
     rejectClose: false,
   }));
   if (!choice) return;
@@ -103,12 +113,45 @@ export async function throwExplosive(actor, item) {
   const pool = launched ? launchPool : Number(s.skills?.athletics?.pool) || 0;
   const ownAR = Number(item.system?.attackRating?.[RANGES.indexOf(range)]) || 0;
   const ar = !launched && errata("thrownGrenadeAR") ? thrownAttackRating(s.attackrating?.physical?.pool, range) : ownAR > 0 ? ownAR : null;
-  const edge = await grantAreaEdge(actor, ar, aimed, blast.radius);
+  // Gas does not deal damage on landing: no Edge for the area attack.
+  const edge = choice.gas ? { highest: null, gain: 0 } : await grantAreaEdge(actor, ar, aimed, blast.radius);
   const task = {
     kind: "blast", item: item.name, blast, from, aimed, range, launched, airburst: choice.airburst, eachHit: errata("scatterEachHit"),
-    pool, ar, edge, scene: canvas.scene.id, exploded: false, avoiders: [],
+    pool, ar, edge, scene: canvas.scene.id, exploded: false, avoiders: [], gas: choice.gas, actor: actor.uuid,
   };
   return runTest(actor, { pool, label: L("SRE.Blast.TestLabel", { name: item.name }), manualHits: choice.manualHits, task });
+}
+
+/** Gas grenade options: the substance (inhalation toxins), the Range of full effect, the surroundings. */
+function gasPanel(item, gas) {
+  if (gas === "smoke") {
+    return ui2.panel(L("SRE.Gas.Cloud"), ui2.rows([
+      ui2.row(L("SRE.Gas.Range"), ui2.stepper("gasRange", DEFAULT_GAS_RANGE, { min: 1 })),
+      ui2.row(L("SRE.Gas.Condition"), conditionSelect()),
+    ]), { hint: L("SRE.Gas.SmokeHint") });
+  }
+  const options = SUBSTANCES.filter((d) => d.kind === "toxin" && d.vectors.includes("inhalation"))
+    .map((d) => `<option value="${d.id}">${esc(d.name)} (${L("SRE.Gas.PowerShort")} ${d.power})</option>`).join("");
+  return ui2.panel(L("SRE.Gas.Cloud"), ui2.rows([
+    ui2.row(L("SRE.Gas.Substance"), `<select name="gasSubstance">${options}</select>`),
+    ui2.row(L("SRE.Gas.Range"), ui2.stepper("gasRange", DEFAULT_GAS_RANGE, { min: 1 })),
+    ui2.row(L("SRE.Gas.Condition"), conditionSelect()),
+  ]), { hint: L("SRE.Gas.Hint") });
+}
+
+const conditionSelect = () => `<select name="gasCondition">${["open", "barrier", "sealed"].map((c) => `<option value="${c}">${esc(L(`SRE.Gas.Conditions.${c}`))}</option>`).join("")}</select>`;
+
+/** A planted charge goes off where it was set: no attack test, no scatter (p. 117). */
+export async function detonate(actor, { name, blast }) {
+  if (!canvas?.ready) return ui.notifications.warn(L("SRE.Blast.NoScene"));
+  const point = await pickPoint();
+  if (!point) return;
+  const task = {
+    kind: "blast", item: name, blast, from: point, aimed: point, range: "close", launched: false, airburst: false, eachHit: true,
+    pool: 0, ar: null, edge: { highest: null, gain: 0 }, scene: canvas.scene.id, exploded: false, avoiders: [], planted: true, actor: actor.uuid,
+  };
+  const { manualTest } = await import("./linked-roll.mjs");
+  return manualTest(actor, { label: L("SRE.Demo.Detonation", { name }), hits: 0, task });
 }
 
 /** Defense Rating of a token's actor: the system's value, or Body + Armor for vehicles. */
@@ -171,11 +214,18 @@ async function explode(message, task) {
   const hits = hitsOf(message);
   const { blast } = task;
   const mpp = metersPerPixel();
-  const distanceRoll = await roll2d6();
-  const meters = scatterMeters({ roll: distanceRoll, hits, range: task.range, launched: task.launched, airburst: task.airburst, eachHit: task.eachHit });
-  const directionRoll = await roll2d6();
+  const distanceRoll = task.planted ? 0 : await roll2d6();
+  const meters = task.planted ? 0 : scatterMeters({ roll: distanceRoll, hits, range: task.range, launched: task.launched, airburst: task.airburst, eachHit: task.eachHit });
+  const directionRoll = task.planted ? 7 : await roll2d6();
   const point = scatterPoint(task.from, task.aimed, meters, scatterAngle(directionRoll), 1 / mpp);
 
+  // Gas and smoke: a cloud that spreads round by round instead of a blast (scripts/gas.mjs).
+  if (task.gas) {
+    await patchTask(message, { exploded: true });
+    const { createCloud } = await import("./gas.mjs");
+    const source = task.actor ? await fromUuid(task.actor) : null;
+    return createCloud({ point, gas: task.gas, item: task.item, source, scatter: { roll: distanceRoll, meters, dir: directionRoll } });
+  }
   // Template for everyone to see, then who is in which zone.
   try {
     await canvas.scene.createEmbeddedDocuments("MeasuredTemplate", [{ t: "circle", x: point.x, y: point.y, distance: blast.radius, fillColor: "#e0409a", flags: { [MODULE_ID]: { blast: true } } }]);
@@ -199,7 +249,7 @@ async function explode(message, task) {
     speaker: message.speaker,
     content: `<div class="sre-blast-card">
       <h3>${esc(task.item)}</h3>
-      <p>${L("SRE.Blast.CardScatter", { roll: distanceRoll, meters, dir: directionRoll })}</p>
+      <p>${task.planted ? L("SRE.Demo.NoScatter") : L("SRE.Blast.CardScatter", { roll: distanceRoll, meters, dir: directionRoll })}</p>
       ${victims.length ? `<ul class="sre-blast-list">${rows}</ul>` : `<p>${L("SRE.Blast.NoOne")}</p>`}
       <p class="hint">${L("SRE.Blast.CardHint")}</p>
     </div>`,
@@ -211,7 +261,7 @@ registerTask("blast", {
   render(task, hits) {
     return `<div class="sre-blast-card">
       <h3>${esc(task.item)}</h3>
-      <p>${L(task.launched ? "SRE.Blast.CardLaunched" : "SRE.Blast.CardThrown", { pool: task.pool, hits, range: L(`SRE.Blast.Range.${task.range}`), ar: task.ar ?? "—" })}</p>
+      <p>${task.planted ? L("SRE.Demo.Planted") : L(task.launched ? "SRE.Blast.CardLaunched" : "SRE.Blast.CardThrown", { pool: task.pool, hits, range: L(`SRE.Blast.Range.${task.range}`), ar: task.ar ?? "—" })}</p>
       ${task.edge?.highest !== null && task.edge?.highest !== undefined ? `<p>${L(task.edge.gain ? "SRE.Blast.EdgeYes" : "SRE.Blast.EdgeNo", { ar: task.ar, dr: task.edge.highest })}</p>` : ""}
       ${task.avoiders?.length ? `<p>${L("SRE.Blast.Avoiders", { names: task.avoiders.map((a) => esc(a.name)).join(", ") })}</p>` : ""}
       ${task.exploded ? "" : `<button type="button" class="sre-blast-avoid">${L("SRE.Blast.Avoid")}</button>`}

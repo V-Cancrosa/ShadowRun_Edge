@@ -1,4 +1,5 @@
-import { parseBlast } from "../blast-rules.mjs";
+import { parseBlast, explosiveBlast } from "../blast-rules.mjs";
+import { gasKind, isSpray, isPackage } from "../gas-rules.mjs";
 import { boxLabel, focusedSustainedModifier, shiftedWoundModifier } from "../traits-rules.mjs";
 
 /**
@@ -277,7 +278,7 @@ export function buildCombatContext(actor, { L = (k) => k, config = {} } = {}) {
     const raw = num(g.pool) + num(g.modes?.dicePoolMod);
     const extras = [...modsOf(i), stripHtml(g.accessories)].filter(Boolean).join(", ");
     return {
-      id: i.id, name: i.name, dv: g.dmgDef ?? "", modes: fireModesText(g.modes, L), ar, arFirst: ar[0] ?? "—", extras,
+      id: i.id, name: i.name, dv: g.dmgDef ?? "", modes: fireModesText(g.modes, L), ar, arFirst: ar[0] ?? "—", extras, spray: isSpray(i),
       pool: { raw, value: Math.max(0, raw - wound), minus: wound },
       ammo: cap > 0 ? { count: Math.min(num(g.ammocount), cap), cap, loaded: g.ammoLoaded ?? "regular",
         types: ammoTypes.map((t) => ({ ...t, selected: t.value === (g.ammoLoaded ?? "regular") })) } : null,
@@ -308,9 +309,17 @@ export function buildCombatContext(actor, { L = (k) => k, config = {} } = {}) {
   });
 
   // Grenades and explosives: blast data set on the Edge item sheet, or read from the catalog note (pp. 114–117).
+  // Gas and smoke grenades (pp. 116–117) throw too; explosive packages can only be planted (p. 117).
   const explosives = gear.map((i) => {
+    const count = i.system?.countable ? num(i.system?.count) : null;
+    const gas = gasKind(i);
+    if (gas) return { id: i.id, name: i.name, dv: L(`SRE.Gas.Kinds.${gas}`), radius: null, count, throw: true, plant: false };
+    if (isPackage(i)) {
+      const b = explosiveBlast(num(i.system?.rating));
+      return { id: i.id, name: i.name, dv: `${b.gz}/${b.close}/${b.near}P`, radius: b.radius, count, throw: false, plant: true };
+    }
     const b = i.flags?.["shadowrun-edge"]?.blast?.gz ? i.flags["shadowrun-edge"].blast : parseBlast(`${i.system?.notes ?? ""} ${i.system?.description ?? ""}`);
-    return b ? { id: i.id, name: i.name, dv: `${b.gz}/${b.close}/${b.near}${b.stun ? "S" : "P"}`, radius: b.radius, count: i.system?.countable ? num(i.system?.count) : null } : null;
+    return b ? { id: i.id, name: i.name, dv: `${b.gz}/${b.close}/${b.near}${b.stun ? "S" : "P"}`, radius: b.radius, count, throw: true, plant: true } : null;
   }).filter(Boolean);
 
   // Toxins and drugs from the catalog (pp. 121–125): the module's data is linked by the item flag.

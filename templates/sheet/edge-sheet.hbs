@@ -293,7 +293,8 @@
             <button type="button" class="sre-es-btn" data-action="reload">{{localize "SRE.Sheet.Reload"}}</button>
           {{else}}—{{/if}}</td>
           <td class="c"><span class="sre-es-pool">{{pool.value}}{{#if pool.minus}}<small>−{{pool.minus}}</small>{{/if}}</span></td>
-          <td><button type="button" class="sre-es-btn solid" data-action="rollWeapon">{{localize "SRE.Sheet.Attack"}}</button></td>
+          <td><button type="button" class="sre-es-btn solid" data-action="rollWeapon">{{localize "SRE.Sheet.Attack"}}</button>
+            {{#if spray}}<button type="button" class="sre-es-btn" data-action="spray" {{#unless ../editable}}disabled{{/unless}}>{{localize "SRE.Spray.Button"}}</button>{{/if}}</td>
         </tr>
         {{else}}<tr><td colspan="7" class="sre-es-empty">{{localize "SRE.Sheet.NoWeapons"}}</td></tr>{{/each}}
       </table>
@@ -343,9 +344,10 @@
         <tr><th>{{localize "SRE.Sheet.Name"}}</th><th class="c">DV ({{localize "SRE.Blast.Zones"}})</th><th class="c">{{localize "SRE.Blast.Radius"}}</th><th class="c">{{localize "SRE.Sheet.Count"}}</th><th></th></tr>
         {{#each combat.explosives}}
         <tr data-item-id="{{id}}">
-          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td class="c"><b>{{dv}}</b></td><td class="c">{{radius}} m</td>
+          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td class="c"><b>{{dv}}</b></td><td class="c">{{#if radius}}{{radius}} m{{else}}—{{/if}}</td>
           <td class="c">{{#if count includeZero=true}}{{count}}{{else}}—{{/if}}</td>
-          <td><button type="button" class="sre-es-btn solid" data-action="throwExplosive" {{#unless ../editable}}disabled{{/unless}}>{{localize "SRE.Blast.Throw"}}</button></td>
+          <td>{{#if throw}}<button type="button" class="sre-es-btn solid" data-action="throwExplosive" {{#unless ../editable}}disabled{{/unless}}>{{localize "SRE.Blast.Throw"}}</button>{{/if}}
+            {{#if plant}}<button type="button" class="sre-es-btn" data-action="plantCharge" {{#unless ../editable}}disabled{{/unless}}>{{localize "SRE.Demo.Button"}}</button>{{/if}}</td>
         </tr>
         {{/each}}
       </table>

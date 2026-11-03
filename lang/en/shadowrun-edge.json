@@ -1589,6 +1589,101 @@
       "TooManyDrones": "{n} drones are slaved to the RCC; it allows at most {max} (rating × 3).",
       "Wins": "{name} wins",
       "SoakHint": "Body × 2 (p. 114); ramming: Body"
+    },
+    "Gas": {
+      "Kind": "Gas / smoke grenade",
+      "Sub": {
+        "gas": "The gas spreads over 10 rounds (pp. 116–117)",
+        "smoke": "Smoke: a cloud without a substance"
+      },
+      "Cloud": "Cloud",
+      "Substance": "Substance",
+      "Range": "Range (full effect, m)",
+      "Condition": "Surroundings",
+      "PowerShort": "power",
+      "Conditions": {
+        "open": "Open ground",
+        "barrier": "Behind a barrier",
+        "sealed": "Sealed space"
+      },
+      "Hint": "Range 5 as in the rulebook's example; zones out to × 4. Each round, those in the cloud are exposed at the zone's Power.",
+      "SmokeHint": "Smoke blocks sight — the GM grants Edge for better vision (p. 118).",
+      "Kinds": {
+        "gas": "gas",
+        "smoke": "smoke"
+      },
+      "Released": {
+        "gas": "Gas: full effect out to {range} m, then {r2} / {r3} / {r4} m · {condition}.",
+        "smoke": "Smoke: out to {range} m, then {r2} / {r3} / {r4} m · {condition}."
+      },
+      "Level": {
+        "full": "full effect",
+        "half": "half",
+        "quarter": "quarter",
+        "none": "none"
+      },
+      "Mask": "protected by a mask",
+      "Exposed": "exposure, Power {power}",
+      "ZoneName": "zone {n}",
+      "Round": "round {n}",
+      "NoOne": "No one in the cloud.",
+      "Next": "Next round",
+      "Remove": "Remove the cloud",
+      "Gone": "{item}: the cloud is gone."
+    },
+    "Spray": {
+      "Button": "Spray",
+      "Title": "Spray",
+      "Kind": "Spray weapon (p. 117)",
+      "NoTargets": "Target the tokens in the stream.",
+      "Style": "Style",
+      "Styles": {
+        "straight": "Straight",
+        "wobbly": "Wobbly",
+        "sweeping": "Sweeping"
+      },
+      "Straight": "no change to AR and DV",
+      "StyleHint": "about {w} m wide · AR +{ar}, DV {dv}",
+      "Options": "Options",
+      "Fast": "Fast stream (wild die)",
+      "TargetHint": "Edge for the advantage: AR against the highest DR among the targets.",
+      "Roll": "Roll {n} dice",
+      "RollShort": "Roll",
+      "Summary": "Style: {style} · AR {ar} {fast}",
+      "FastOn": "· fast stream",
+      "Miss": "defense {def} — miss",
+      "Hit": "defense {def}, net {net}",
+      "Delivered": "hit — contact substance delivered"
+    },
+    "Demo": {
+      "Button": "Plant",
+      "Title": "Charge",
+      "Kind": "Demolition charge (p. 117)",
+      "Sub": "Engineering + Logic: {pool} dice",
+      "Against": "Against",
+      "Personnel": "Personnel",
+      "Structure": "Structure",
+      "Hint": {
+        "grenade": {
+          "personnel": "threshold 2; each hit above it +1 DV in a range category you choose",
+          "structure": "Close DV, +1 per hit above 2, up to the Ground Zero DV"
+        },
+        "package": {
+          "personnel": "threshold 2; hits above it raise the rating (GZ rating, Close /2, Near /4, radius = rating)",
+          "structure": "+1 to the rating per hit, no threshold"
+        }
+      },
+      "Roll": "Roll {n} dice",
+      "TestLabel": "Charge: {name} (Engineering + Logic)",
+      "PersonnelResult": "DV {gz} / {close} / {near}, radius {radius} m",
+      "StructureDV": "DV against Structure: {dv}",
+      "StructureRating": "Rating against Structure: {rating}",
+      "Split": "Split +{n} DV:",
+      "Detonate": "Detonate (pick the spot)",
+      "StructureNote": "The GM applies Structure damage.",
+      "Detonation": "Detonation: {name}",
+      "Planted": "Planted charge — no attack test and no scatter.",
+      "NoScatter": "No scatter: it goes off where the charge is."
     }
   }
 }

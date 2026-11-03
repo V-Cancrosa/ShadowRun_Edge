@@ -51,11 +51,11 @@ function captureNextRoll(actor, timeout = 120000) {
  * Rolls `pool` through the system dialog and attaches `task` to the resulting chat message.
  * @returns {Promise<ChatMessage|null>} null when the dialog was cancelled
  */
-export async function systemTest(actor, { pool, label, threshold, useWoundModifier, task }) {
+export async function systemTest(actor, { pool, label, threshold, useWoundModifier, wildDie, task }) {
   const capture = captureNextRoll(actor);
   let result;
   try {
-    result = await rolls.rollPool(actor, { pool, label, kind: "test", threshold, useWoundModifier });
+    result = await rolls.rollPool(actor, { pool, label, kind: "test", threshold, useWoundModifier, wildDie });
   } catch (err) {
     capture.stop();
     throw err;
@@ -82,9 +82,9 @@ export async function manualTest(actor, { label, hits, task }) {
 }
 
 /** Rolls through the dialog, or posts a manual message when hits were typed in. */
-export function runTest(actor, { pool, label, threshold, useWoundModifier, manualHits, task }) {
+export function runTest(actor, { pool, label, threshold, useWoundModifier, wildDie, manualHits, task }) {
   if (manualHits !== null && manualHits !== undefined && manualHits !== "") return manualTest(actor, { label, hits: manualHits, task });
-  return systemTest(actor, { pool, label, threshold, useWoundModifier, task });
+  return systemTest(actor, { pool, label, threshold, useWoundModifier, wildDie, task });
 }
 
 /** Records something on the task (e.g. applied); the GM does it for users who don't own the message. */
