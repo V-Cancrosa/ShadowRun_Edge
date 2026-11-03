@@ -485,3 +485,18 @@ console.log("blast & summoning OK");
   assert.ok(manifest.styles.includes("styles/edge-motion.css"));
   console.log("motion OK");
 }
+
+// ── Edge Motion: numbers and damage deltas ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { leadingNumber, damageDelta } = await import("../scripts/motion.mjs");
+  assert.equal(leadingNumber("11"), 11);
+  assert.equal(leadingNumber("−2"), -2);
+  assert.equal(leadingNumber("12,450¥"), 12450);
+  assert.equal(leadingNumber("11+1K6"), 11);
+  assert.equal(leadingNumber("—"), null);
+  assert.deepEqual(damageDelta({ physical: 2, stun: 0 }, { physical: 6, stun: 0 }), [{ id: "physical", d: 4 }]);
+  assert.deepEqual(damageDelta({ physical: 6, stun: 3 }, { physical: 3, stun: 3 }), [{ id: "physical", d: -3 }]);
+  assert.deepEqual(damageDelta({ physical: 1, stun: 1 }, { physical: 1, stun: 1 }), []);
+  console.log("motion numbers OK");
+}

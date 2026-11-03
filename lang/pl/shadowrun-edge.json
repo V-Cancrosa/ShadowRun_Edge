@@ -1695,6 +1695,10 @@
         "full": "Pełne",
         "reduced": "Ograniczone (bez ruchu, krótkie przejścia)",
         "off": "Wyłączone"
+      },
+      "Floating": {
+        "Name": "Liczby obrażeń nad tokenami",
+        "Hint": "Przy zmianie monitora fizycznego lub ogłuszenia nad tokenem na chwilę pojawia się liczba kratek (obrażenia lub leczenie)."
       }
     }
   }

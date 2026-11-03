@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.32.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Edge Motion, krok 2: liczby w kaflach i pulach odliczają do nowej wartości, punkty Edge rozbłyskują przy zdobyciu i gasną przy wydaniu, nowe kratki monitora zapalają się po kolei, leczone gasną na zielono, wyższa kara za rany drga.",
+      "Blokada Edge po dumpshocku widoczna na pipsach.",
+      "Liczby obrażeń i leczenia nad tokenami na scenie (ustawienie gracza)."
+    ],
+    "changes_en": [
+      "Edge Motion, step 2: numbers in tiles and pools count to their new value, Edge points flare when gained and fade when spent, new monitor boxes light up one by one, healed ones fade green, a higher wound penalty shakes.",
+      "The dumpshock Edge lock shows on the pips.",
+      "Damage and healing numbers over tokens on the scene (player setting)."
+    ]
+  },
+  {
     "version": "0.31.0",
     "date": "2026-11-03",
     "changes": [

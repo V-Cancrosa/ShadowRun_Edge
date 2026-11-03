@@ -1695,6 +1695,10 @@
         "full": "Full",
         "reduced": "Reduced (no travel, short fades)",
         "off": "Off"
+      },
+      "Floating": {
+        "Name": "Damage numbers over tokens",
+        "Hint": "When the Physical or Stun monitor changes, the number of boxes (damage or healing) briefly rises over the token."
       }
     }
   }

@@ -483,6 +483,11 @@ skanera po nagłówku i kaskadą kafli, zakładki wsuwają treść, okna modułu
 podświetlają się po najechaniu (w jasnym motywie „Papier” bez poświaty). Nagłówki, nazwy, zakładki i etykiety używają
 kroju **Chakra Petch** (licencja SIL OFL, plik `fonts/OFL.txt`), dołączonego do modułu.
 
+Zmiany na karcie też się animują: liczby w kaflach i pulach odliczają do nowej wartości (z krótkim podświetleniem),
+zdobyty punkt Edge obraca się i rozbłyskuje, wydany gaśnie, nowe kratki monitora zapalają się po kolei, leczone gasną
+na zielono, a wyższa kara za rany drga. Po dumpshocku pipsy Edge są przygaszone i przekreślone. Ustawienie
+**Liczby obrażeń nad tokenami** pokazuje nad tokenem na scenie „−4P”, „−2S” albo „+3P” przy każdej zmianie monitora.
+
 ### Okno rzutu
 
 Okno rzutu systemu ma układ Karty Edge: nagłówek z nazwą testu i wyborem atrybutu, kafelki **Pula kości**

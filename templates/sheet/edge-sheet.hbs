@@ -12,7 +12,7 @@
       <div class="sre-es-tags">
         {{#each tags}}<span class="sre-es-tag sre-es-tag-{{kind}}">{{text}}</span>{{/each}}
       </div>
-      <div class="sre-es-edge">
+      <div class="sre-es-edge {{#if edge.locked}}locked{{/if}}" {{#if edge.locked}}data-tooltip="{{localize "SRE.Matrix.NoEdge"}}"{{/if}}>
         <span class="sre-es-edge-label">Edge</span>
         <span class="sre-es-pips">
           {{#each edge.pips}}

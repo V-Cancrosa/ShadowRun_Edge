@@ -112,6 +112,8 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const data = buildSheetContext(this.document, { L, config, errata });
     // Fatigued, Hobbled, Prone and Zapped change how far the character moves.
     Object.assign(data.defense, movement(actorStatuses(this.document), data.defense.walk, data.defense.sprint));
+    // Dumpshock: no Edge for (10 − Willpower) minutes (p. 176) — the pips show the lock.
+    if (data.edge) data.edge.locked = !!this.document.effects?.find((e) => e.getFlag?.("shadowrun-edge", "noEdge"));
     const tab = this.sheetTab;
     const awakened = ["magician", "mysticadept", "aspectedmagician", "adept"].includes(this.document.system.mortype);
     let social = null;

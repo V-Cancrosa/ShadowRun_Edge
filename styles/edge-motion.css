@@ -84,5 +84,26 @@ body.sre-motion-reduced .application.sre-sheet.sre-fx-tab :is(.sre-sheet-body, .
 @keyframes sre-pop { from { opacity: 0; transform: scale(0.97) translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes sre-fade { from { opacity: 0.4; } to { opacity: 1; } }
 
+/* ───── 11B: changed numbers, Edge pips ───── */
+body:not(.sre-motion-off) .sre-fx-changed { animation: sre-changed 700ms ease-out; }
+@keyframes sre-changed { 0% { box-shadow: 0 0 0 1px var(--sre-cyan), 0 0 18px var(--sre-cyan); border-color: var(--sre-cyan); } 100% { box-shadow: none; } }
+body.sre-motion-full .sre-es .sre-es-pip.sre-fx-gain { animation: sre-gain 800ms var(--sre-ease); }
+body.sre-motion-full .sre-es .sre-es-pip.sre-fx-spend { animation: sre-spend 400ms ease-in; }
+body.sre-motion-reduced .sre-es .sre-es-pip:is(.sre-fx-gain, .sre-fx-spend) { animation: sre-fade var(--sre-fast) linear; }
+@keyframes sre-gain { 0% { transform: rotate(45deg) scale(0.2); } 55% { transform: rotate(225deg) scale(1.45); box-shadow: 0 0 18px var(--sre-accent); } 100% { transform: rotate(405deg) scale(1); } }
+@keyframes sre-spend { 0% { transform: rotate(45deg) scale(1.3); background: #fff; box-shadow: 0 0 14px #fff; } 100% { transform: rotate(45deg) scale(1); } }
+/* No Edge (dumpshock lock): pips dimmed and struck through. */
+.sre-es .sre-es-edge.locked .sre-es-pips { opacity: 0.35; position: relative; }
+.sre-es .sre-es-edge.locked .sre-es-pips::after { content: ""; position: absolute; left: -2px; right: -2px; top: 50%; border-top: 2px solid var(--sre-bad); transform: rotate(-8deg); }
+
+/* ───── 11C: damage monitor ───── */
+body.sre-motion-full .sre-es .sre-es-box.sre-fx-hit { animation: sre-hit var(--sre-mid) var(--sre-ease) both; }
+body.sre-motion-full .sre-es .sre-es-box.sre-fx-heal { animation: sre-heal var(--sre-mid) ease-out both; }
+body.sre-motion-reduced .sre-es .sre-es-box:is(.sre-fx-hit, .sre-fx-heal) { animation: sre-fade var(--sre-fast) linear both; }
+@keyframes sre-hit { 0% { transform: scale(1.8); background: #fff; box-shadow: 0 0 16px #fff; } 100% { transform: none; } }
+@keyframes sre-heal { 0% { transform: scale(1.3); background: var(--sre-ok); border-color: var(--sre-ok); box-shadow: 0 0 12px var(--sre-ok); } 100% { transform: none; } }
+body.sre-motion-full .sre-es .sre-es-wound.sre-fx-shake { animation: sre-shake 300ms linear; }
+@keyframes sre-shake { 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
+
 /* Off: nothing moves, not even the module's existing transitions. */
 body.sre-motion-off :is(.sre-sheet, .sre-dialog) *, body.sre-motion-off :is(.sre-sheet, .sre-dialog) { transition: none !important; animation: none !important; }
