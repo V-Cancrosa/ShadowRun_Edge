@@ -69,11 +69,22 @@ function systemSetting(key, fallback) {
   }
 }
 
+/** The system's optional rules the engine applies (Sixth World Companion switches in the system's settings). */
+export function houseRules() {
+  return {
+    cap: !!systemSetting("hardDiceCap", false),
+    bullets: !!systemSetting("cantDodgeBullets", false),
+    armor: !!systemSetting("armorLessensDmg", false),
+    recoil: !!systemSetting("highStrengthReducesRecoil", false),
+  };
+}
+
 /** Targets of this user, with their physical Defense Rating. */
 function targets() {
   return [...(game.user?.targets ?? [])].map((t) => ({
     uuid: t.actor?.uuid ?? null, token: t.document?.uuid ?? null, name: t.name ?? t.actor?.name ?? "?",
     img: t.document?.texture?.src ?? t.actor?.img ?? "", dr: num(t.actor?.system?.defenserating?.physical?.pool),
+    defense: num(t.actor?.system?.defensepool?.physical?.pool),
   }));
 }
 
@@ -179,6 +190,8 @@ export function fireMode(attack, mode, faArea = 1) {
     case "BFW": rounds = 4; arMod = Math.min(0, num(m.SA, -2)); dmg = 1; break;
     case "FA": rounds = 10; arMod = Math.min(0, num(m.FA, -6)) - (Math.max(1, num(faArea, 1)) - 1) * 2; break;
   }
+  // High Strength reduces recoil (system option): penalties lessened, never into a bonus.
+  if (arMod < 0 && num(attack?.recoil)) arMod = Math.min(0, arMod + num(attack.recoil));
   const ar = base.map((v) => (num(v) > 0 ? Math.max(0, num(v) + arMod) : num(v)));
   return { ar, dv: num(attack?.dv) + dmg, rounds, arMod };
 }
@@ -257,6 +270,7 @@ async function rollWindow(actor, req) {
   const ranges = rangeLabels();
   // statuses.mjs is loaded here, not at the top: it registers linked tasks, which import this file.
   const st0 = statusChips(actor, req, await import("../statuses.mjs"));
+  const house = houseRules();
   const st = {};
   const tiles = [
     { id: "pool", big: req.pool, label: L("SRE.Roll.Pool"), calc: "", accent: true },
@@ -318,6 +332,8 @@ async function rollWindow(actor, req) {
       extended: f.has("extended") || !!req.extendedFrom,
     };
     if (req.extendedFrom) o.threshold = req.extendedFrom.threshold;
+    // You can't dodge bullets (system option): ranged attacks are Simple tests against the targets' defense.
+    if (req.attack?.ranged && house.bullets && tgts.length) o.threshold = R.bulletThreshold(Math.max(0, ...tgts.map((t) => t.defense)), range);
     o.untrainedFix = edge === "action:sudden_insight" && req.untrained ? 1 : 0;
     o.status = 0;
     o.statusAr = 0;
@@ -408,7 +424,8 @@ export async function edgeTest(actor, req, options = null) {
   }
 
   // Edge before the roll: one expenditure (p. 44, errata "per action").
-  let pool = o.pool;
+  const house = houseRules();
+  let pool = R.capPool(o.pool, house.cap);
   let explode = false;
   let twos = !!actor.getFlag?.(MODULE_ID, "twosGlitch");
   if (twos && actor.isOwner) await actor.unsetFlag(MODULE_ID, "twosGlitch");
@@ -465,7 +482,7 @@ export async function edgeTest(actor, req, options = null) {
     pool, basePool: num(req.pool), mods: { mod: o.mod, wound: o.wound, sustain: o.sustain, retry: o.retry, untrained: o.untrainedFix, status: num(o.status), statusNames: o.statusNames ?? [] },
     threshold: num(o.threshold) || num(req.threshold), wild: !!o.wild, buy: !!o.buy, twos, explode,
     dice, first, edge, gained, notes,
-    attack: req.attack ? { ar: o.ar, dv: o.dv, stun: !!req.attack.stun, mode: o.mode, rounds: o.fm?.rounds ?? 0, range: o.range, faArea: o.faArea, ranged: !!req.attack.ranged, theirGain, effects: edgeEffects(edge.action) } : null,
+    attack: req.attack ? { ar: o.ar, dv: o.dv, stun: !!req.attack.stun, mode: o.mode, rounds: o.fm?.rounds ?? 0, range: o.range, faArea: o.faArea, ranged: !!req.attack.ranged, theirGain, effects: edgeEffects(edge.action), bullets: !!(req.attack.ranged && house.bullets && tgts.length) } : null,
     spell: req.spell ? { ...req.spell, drain: o.drain, ampUp: o.ampUp, area: o.area, theirGain } : null,
     soak: req.soak ?? null,
     targets: tgts,
@@ -555,7 +572,7 @@ export function cardHtml(d) {
   if (d.soak) {
     const left = Math.max(0, num(d.soak.dv) - r.hits);
     const monitor = soakMonitor(d, left);
-    lines.push(`<div class="sre-rc-soak"><span>${esc(L("SRE.Roll.SoakLeft", { dv: d.soak.dv, hits: r.hits }))}</span><b class="${monitor}">${left}${monitor === "stun" ? L("SRE.Roll.StunShort") : L("SRE.Roll.PhysShort")}</b>${d.soak.applied ? `<em>${esc(L("SRE.Roll.Applied"))}</em>` : left ? `<button type="button" data-sre-roll="apply"><i class="fas fa-heart-crack"></i> ${esc(L("SRE.Roll.Apply"))}</button>` : ""}</div>`);
+    lines.push(`<div class="sre-rc-soak"><span>${esc(L("SRE.Roll.SoakLeft", { dv: d.soak.dv, hits: r.hits }))}</span><b class="${monitor}">${left}${monitor === "stun" ? L("SRE.Roll.StunShort") : L("SRE.Roll.PhysShort")}</b>${d.soak.applied ? `<em>${esc(d.soak.split?.stun ? L("SRE.Roll.AppliedSplit", d.soak.split) : L("SRE.Roll.Applied"))}</em>` : left ? `<button type="button" data-sre-roll="apply"><i class="fas fa-heart-crack"></i> ${esc(L("SRE.Roll.Apply"))}</button>` : ""}</div>`);
   }
   const resist = d.spell ? { kind: "drain", dv: num(d.spell.drain) } : d.kind === "complexform" ? { kind: "fading", dv: num(d.extra?.fading) } : null;
   if (resist && resist.dv > 0) {
@@ -659,8 +676,14 @@ async function applySoak(message) {
   if (!actor || !left) return;
   const monitor = soakMonitor(data, left);
   const { applyDamage } = await import("../sheet/system-rolls.mjs");
-  if (actor.isOwner) await applyDamage(actor, monitor, left);
-  else return ui.notifications.warn(L("SRE.Roll.NotYours"));
+  if (!actor.isOwner) return ui.notifications.warn(L("SRE.Roll.NotYours"));
+  // Armor lessens Physical damage (system option): damage resistance only, not toxins, drain or fading.
+  if (monitor === "physical" && data.soak?.kind === "damage" && houseRules().armor) {
+    const split = R.armorSplit(left, actor.system?.defenserating?.physical?.pool);
+    if (split.physical) await applyDamage(actor, "physical", split.physical);
+    if (split.stun) await applyDamage(actor, "stun", split.stun);
+    data.soak.split = split;
+  } else await applyDamage(actor, monitor, left);
   data.soak.applied = true;
   Hooks.callAll("sre.soakApplied", actor, data, left);
   return updateRoll(message, data);

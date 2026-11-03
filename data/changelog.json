@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.41.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Zasady opcjonalne systemu w silniku Edge (etap 13F): twardy limit 20 kości (Edge przed rzutem może go przekroczyć), „Nie da się unikać kul” (atak dystansowy jako test prosty z progiem z puli obrony celu i zasięgu; cele od razu robią odporność), „Pancerz zmniejsza obrażenia fizyczne” (po odporności kratka na każde 8 WO przechodzi w ogłuszenie) i „Wysoka Siła zmniejsza odrzut” (broń dwuręczna). Pozostałe przełączniki systemu działają przez jego wyliczenia.",
+      "Makra: przyciski rzutu z karty Edge (umiejętności ze specjalizacją, broń, czary, formy złożone) oraz broń, czar, rytuał lub forma z ekwipunku przeciągnięte na pasek makr tworzą makro rzutu przez silnik Edge.",
+      "Przewodnik i README opisują nowy silnik rzutów, łańcuch walki, Garaż i makra."
+    ],
+    "changes_en": [
+      "The system's optional rules in the Edge engine (stage 13F): hard dice cap of 20 (Edge before the roll may go above it), \"You can't dodge bullets\" (a ranged attack as a Simple test with a threshold from the target's defense pool and range; targets resist straight away), \"Armor lessens Physical damage\" (after resistance a box per 8 DR becomes Stun) and \"High Strength reduces recoil\" (two-handed weapons). The system's other switches work through its own calculations.",
+      "Macros: roll buttons from the Edge sheet (skills with a specialization, weapons, spells, complex forms) and a weapon, spell, ritual or complex form from the gear dragged onto the hotbar make a macro that rolls through the Edge engine.",
+      "The guide and README describe the new roll engine, the combat chain, the Garage and macros."
+    ]
+  },
+  {
     "version": "0.40.0",
     "date": "2026-11-03",
     "changes": [

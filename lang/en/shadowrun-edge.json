@@ -1179,7 +1179,8 @@
           "heal_physical": "{name} heals {n} Physical box(es)",
           "special_effect": "{name}: special effect — the GM says what happens"
         }
-      }
+      },
+      "AppliedSplit": "applied: {physical}P + {stun}S (armor)"
     },
     "Conflict": {
       "Kind": "Rule conflict",
@@ -1959,7 +1960,8 @@
       "Soaked": "resistance rolled",
       "SoakLabel": "Resisting {dv} damage",
       "Knockout": "{name}: Knockout Blow — unconscious",
-      "Prone": "{name}: Tumble — Prone"
+      "Prone": "{name}: Tumble — Prone",
+      "BulletsHit": "hit — targets resist straight away"
     },
     "Garage": {
       "Title": "Garage",
@@ -2004,6 +2006,10 @@
         "charisma": "Charisma",
         "resonance": "Resonance"
       }
+    },
+    "Macro": {
+      "NoActor": "Select a token or assign a character.",
+      "NoItem": "This character lacks the macro's item."
     }
   }
 }

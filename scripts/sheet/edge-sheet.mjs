@@ -159,6 +159,8 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** Item fields (ammo type…) live on embedded items, outside the actor form: save them directly. */
   _onRender(context, options) {
     super._onRender?.(context, options);
+    // Roll buttons can be dragged to the hotbar (13F).
+    import("../dice/macros.mjs").then((m) => m.makeDraggable(this));
     for (const field of this.element.querySelectorAll("[data-item-field]")) {
       field.addEventListener("change", (event) => {
         event.stopPropagation();

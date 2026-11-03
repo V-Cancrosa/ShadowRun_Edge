@@ -1179,7 +1179,8 @@
           "heal_physical": "{name} leczy {n} pole(a) fizyczne",
           "special_effect": "{name}: efekt specjalny — MG mówi, co się dzieje"
         }
-      }
+      },
+      "AppliedSplit": "zastosowano: {physical}F + {stun}O (pancerz)"
     },
     "Conflict": {
       "Kind": "Konflikt z zasadami",
@@ -1959,7 +1960,8 @@
       "Soaked": "odporność rzucona",
       "SoakLabel": "Odporność na {dv} obrażeń",
       "Knockout": "{name}: Nokaut — nieprzytomny",
-      "Prone": "{name}: Powalenie — Leżący"
+      "Prone": "{name}: Powalenie — Leżący",
+      "BulletsHit": "trafienie — cele od razu robią odporność"
     },
     "Garage": {
       "Title": "Garaż",
@@ -2004,6 +2006,10 @@
         "charisma": "Charyzma",
         "resonance": "Rezonans"
       }
+    },
+    "Macro": {
+      "NoActor": "Zaznacz żeton albo przypisz postać.",
+      "NoItem": "Tej postaci brakuje przedmiotu z makra."
     }
   }
 }

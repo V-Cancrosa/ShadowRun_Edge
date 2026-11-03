@@ -382,18 +382,30 @@ Opcje łamiące zasady widzi zawsze MG, a gracze tylko, gdy MG włączy *Gracze 
 świata (domyślnie wyłączone). Ustawienie „Zasady mocowań i pojemności” zostało zastąpione tym oknem. Kontrole
 uprawnień Foundry (czyja jest postać, co gracz może zmienić przez MG) zostają — to nie są zasady gry.
 
-## Rzuty modułu przez okno rzutu systemu
+## Silnik rzutów Edge (etap 13)
 
-Leczenie, rzut granatem i z granatnika, przywoływanie i wypędzanie rzucają przez okno rzutu systemu: działa
-w nich Edge (przed i po rzucie), modyfikatory, kary za rany (wg zasad: leczącego przy pierwszej pomocy, apteczce
-i magii; pacjenta przy odpoczynku, bez nich przy regeneracji naturalnej wg erraty 08/2019) i podtrzymywanie.
-- Wynik modułu (wyleczone kratki, usługi ducha, wynik wypędzenia) pojawia się pod kartą rzutu systemu i przelicza
-  się, gdy ktoś wyda Edge po rzucie.
-- Skutki dzieją się po kliknięciu: **Zastosuj leczenie**, **Przywołaj ducha**, **Zastosuj** (wypędzenie),
-  **Wybuch!** (rozrzut, szablon i lista celów) — zawsze z sukcesów w tej chwili.
-- Kości ducha (Moc × 2) rzuca moduł. Drenaż i odporność celów wybuchu idą przez kartę odporności systemu z jej
-  przyciskiem zadania obrażeń (dla pojazdów system każe wpisać je ręcznie).
-- Sukcesy można dalej wpisać ręcznie (np. rzut fizycznymi kośćmi): wtedy okno systemu się nie otwiera.
+Moduł rzuca sam: każdy rzut z kart Edge, okien modułu i testów powiązanych (leczenie, granaty, przywoływanie,
+toksyny, pojazdy, matryca) przechodzi przez jedno okno, kości Foundry (Dice So Nice działa) i jedną kartę czatu.
+Liczby — pule, WA i WO, obrażenia broni, kary za rany i podtrzymywanie — nadal liczy system z danych postaci.
+Ustawienie świata **Silnik rzutów** pozwala wrócić do okna i kart systemu.
+- **Okno rzutu:** pula z modyfikatorem, karami (rany, podtrzymywanie, ponowna próba −2), statusami i substancjami,
+  próg, kość dzika, kupowanie trafień, test rozszerzony; dla broni tryb ognia, zasięg z WA, obrażenia i amunicja;
+  dla czarów Wzmocnienie i Większy obszar z drenażem.
+- **Edge (s. 44–48 z erratą):** przed rzutem Dodaj Edge (szóstki wybuchają), Odbierz Edge wrogowi, Dwójki jako
+  komplikacje celu, akcje Edge pasujące do testu, Spalenie Edge; po rzucie na karcie przerzut wybranych kości,
+  +1 do kości, automatyczne trafienie, przerzut nieudanych. Jeden wydatek na akcję, Edge z przewagi WA/WO
+  (limit na rundę z ustawień systemu, maks. 7). Edge poza rzutem: przycisk ⚡ przy Edge na karcie postaci.
+- **Łańcuch walki:** na karcie ataku przycisk obrony dla każdego celu; karta obrony liczy trafienie z bieżących
+  trafień ataku (remis dla atakującego), obrażenia z trafieniami netto i prowadzi do odporności z **Zastosuj**.
+  Czary bojowe bezpośrednie i pośrednie wg s. 132; drenaż i zanik z karty czaru i formy złożonej.
+- **Inicjatywa:** ranga + kości (maks. 5K6), +3 za 1 Edge w oknie lub później z karty; wynik trafia do trackera.
+- **Zasady opcjonalne systemu** (ustawienia shadowrun6-eden): twardy limit 20 kości, „nie da się unikać kul”,
+  pancerz zamienia obrażenia fizyczne na ogłuszenie, wysoka Siła zmniejsza odrzut, limit Edge na rundę.
+- **Makra:** przyciski rzutu z karty Edge (umiejętności, broń, czary, formy) i broń lub czar z ekwipunku można
+  przeciągnąć na pasek makr.
+- **Garaż:** pojazd lub dron z ekwipunku ma na karcie przedmiotu przycisk **Wyprowadź pojazd** — powstaje aktor
+  Pojazdu z jego statystykami, a z przedmiotu można jeździć, taranować i synchronizować osiągi.
+- Sukcesy można dalej wpisać ręcznie (np. rzut fizycznymi kośćmi) w oknach modułu.
 
 ## Erraty SR6
 

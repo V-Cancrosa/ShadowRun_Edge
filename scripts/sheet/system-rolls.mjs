@@ -4,6 +4,15 @@
  * every difference is handled here and nowhere else.
  */
 import { engineOn, edgeTest } from "../dice/edge-roll.mjs";
+import { recoilReduction } from "../dice/dice-rules.mjs";
+
+function systemOption(key) {
+  try {
+    return !!game.settings.get("shadowrun6-eden", key);
+  } catch {
+    return false;
+  }
+}
 
 let rollTypes;
 const L = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -251,6 +260,8 @@ export function weaponRequest(actor, item) {
     attack: {
       ar, dv, stun: !!(item.calculatedStun ?? sys.stun), ranged, modes: sys.modes ?? {},
       arMods: { SA: sys.modes?.SA_ar_mod, BF: sys.modes?.BF_ar_mod, FA: sys.modes?.FA_ar_mod },
+      // High Strength reduces recoil (system option), for two-handed firearms.
+      recoil: systemOption("highStrengthReducesRecoil") && sys.dualHand ? recoilReduction(actor.system?.attributes?.str?.pool) : 0,
       ammo: n(sys.ammocap) > 0 ? { count: n(sys.ammocount), cap: n(sys.ammocap), item: item.uuid } : null,
     },
     extra: { itemUuid: item.uuid },

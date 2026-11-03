@@ -221,3 +221,30 @@ export function displayOrder(dice) {
   const rank = (d) => (d.v >= 5 ? 0 : d.v === 1 ? 2 : 1);
   return dice.map((d, i) => ({ ...d, i })).sort((a, b) => rank(a) - rank(b) || (b.wild ? 1 : 0) - (a.wild ? 1 : 0) || b.v - a.v);
 }
+
+// ───── The system's optional rules (shadowrun6-eden settings, from Sixth World Companion), as the system applies them ─────
+
+/** Hard dice cap: at most 20 dice; Edge added before the roll may go above it. */
+export function capPool(pool, cap = true) {
+  const n = Math.max(0, Number(pool) || 0);
+  return cap ? Math.min(20, n) : n;
+}
+
+/** High Strength reduces recoil: fire-mode AR penalties lessened by 1 at Strength 7+, by 2 at 10+ (both hands). */
+export function recoilReduction(strength) {
+  const s = Number(strength) || 0;
+  return (s >= 7 ? 1 : 0) + (s >= 10 ? 1 : 0);
+}
+
+/** You can't dodge bullets: a Simple test with threshold = highest target defense pool / 6 (down) + range index. */
+export function bulletThreshold(defensePool, rangeIndex = 0) {
+  return Math.floor((Number(defensePool) || 0) / 6) + Math.max(0, Number(rangeIndex) || 0);
+}
+
+/** Armor lessens Physical damage: one box per 8 full points of Defense Rating becomes Stun. */
+export function armorSplit(damage, dr) {
+  const d = Math.max(0, Number(damage) || 0);
+  const k = Math.floor((Number(dr) || 0) / 8);
+  const physical = Math.max(0, d - k);
+  return { physical, stun: d - physical };
+}

@@ -9,14 +9,18 @@ the Polish translation of the system and the catalog's folder names are Polish.
 ## What it adds
 
 - **Edge sheets** for player characters (seven tabs, from combat to contacts), NPCs and critters (with grunt groups),
-  spirits, vehicles and drones, Matrix hosts (system 4.x) and items — with a light/dark switch.
+  spirits, vehicles and drones, Matrix hosts and sprites (system 4.x) and items — with a light/dark switch.
 - **Catalog compendium** (about 710 entries, stats only): core rulebook gear with built-in accessories, toxins and
   drugs, spells, adept powers, metamagic, complex forms, echoes and qualities, with the SR6 errata applied.
 - **Character creator** (priority system) and an **item creator** that reads rulebook table rows.
-- **Rules that run through the system's roll dialog**, with results that follow Edge spent after the roll:
-  healing, grenades with scatter and blast zones, summoning and banishing, toxins, statuses (pp. 51–53),
-  Matrix (Overwatch, Convergence, dumpshock, access levels, IC), vehicles (Handling, crashes, ramming, drones)
-  and Karma advancement with an optional GM approval.
+- **Its own roll engine**: one Edge window, Foundry dice (Dice So Nice) and one chat card for every roll, with
+  Edge by the book (pp. 44–48: boosts before and after the roll, Edge Actions, Burning Edge), fire modes, Amp Up,
+  extended tests, the combat chain (defense, resistance, Apply), Initiative and hotbar macros. Pools, ratings and
+  damage still come from the system; a world setting switches back to the system's dialog and cards.
+- **Rules on top of it**, with results that follow Edge spent after the roll: healing, grenades with scatter and
+  blast zones, summoning and banishing, toxins, statuses (pp. 51–53), Matrix (Overwatch, Convergence, dumpshock,
+  access levels, IC), vehicles (Handling, crashes, ramming, drones, the Garage that turns a vehicle in the gear into
+  a Vehicle actor) and Karma advancement with an optional GM approval.
 - **The GM always decides**: a rule conflict opens a window with choices instead of blocking; players cannot
   break rules unless the world allows it.
 - **SR6 errata** (August 2019, February 2020) as world toggles; a “What's new” window after updates.

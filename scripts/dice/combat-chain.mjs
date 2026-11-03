@@ -23,7 +23,7 @@ const num = (v, d = 0) => (Number.isFinite(Number(v)) && v !== "" && v !== null 
 export function chainOf(data) {
   if (!data) return null;
   if (data.kind === "weapon" && data.attack) {
-    return { defense: "physical", soak: "damage_physical", base: num(data.attack.dv), stun: !!data.attack.stun, resist: true, ar: num(data.attack.ar), effects: data.attack.effects ?? [] };
+    return { defense: "physical", soak: "damage_physical", base: num(data.attack.dv), stun: !!data.attack.stun, resist: true, ar: num(data.attack.ar), effects: data.attack.effects ?? [], bullets: !!data.attack.bullets };
   }
   if ((data.kind === "spell") && data.spell?.combat) {
     const direct = !data.spell.indirect;
@@ -43,6 +43,13 @@ export function outcome(chain, attackHits, defenseHits, { tiesToAttacker = true 
   if (!o.wins) return { hit: false, net: 0 };
   if (chain.effects?.includes("disarm")) return { hit: true, net: o.net, disarm: true, dv: 0 };
   return { hit: true, net: o.net, dv: num(chain.base) + o.net, resist: !!chain.resist, monitor: chain.stun ? "stun" : "physical" };
+}
+
+/** You can't dodge bullets (system option): the attack's own Simple test decides; net hits over the threshold add. Pure. */
+export function bulletOutcome(chain, result) {
+  if (!result?.success) return { hit: false, net: 0 };
+  if (chain.effects?.includes("disarm")) return { hit: true, net: num(result.net), disarm: true, dv: 0 };
+  return { hit: true, net: num(result.net), dv: num(chain.base) + num(result.net), resist: true, monitor: chain.stun ? "stun" : "physical" };
 }
 
 /** After damage resistance: what the attack's Edge Actions do (Knockout Blow, Tumble). Pure. */
@@ -105,6 +112,21 @@ async function resist(defenseMessage, attackMessage) {
   if (m) await markDefense(defenseMessage, { soakId: m.id });
 }
 
+/** You can't dodge bullets: a target resists straight from the attack card. */
+async function resistFromAttack(attackMessage, target) {
+  const atk = engineData(attackMessage);
+  const chain = chainOf(atk);
+  const o = bulletOutcome(chain, atk.result);
+  const actor = target?.uuid ? await fromUuid(target.uuid) : pickedDefender();
+  const defender = actor?.actor ?? actor;
+  if (!defender?.isOwner || !o.hit || o.disarm) return;
+  return edgeTest(defender, {
+    kind: "soak", title: atk.title || atk.label, label: L("SRE.Chain.SoakLabel", { dv: o.dv }), pool: num(defender.system?.defensepool?.[chain.soak]?.pool),
+    useWound: false, allowBuy: false, allowThreshold: false, img: defender.img,
+    soak: { dv: o.dv, monitor: o.monitor, kind: "damage", effects: chain.effects, wil: num(defender.system?.attributes?.wil?.pool), bod: num(defender.system?.attributes?.bod?.pool) },
+  });
+}
+
 /** Direct Combat spells: the damage is not resisted (p. 132). */
 async function applyDirect(defenseMessage, defender, o) {
   const { applyDamage } = await import("../sheet/system-rolls.mjs");
@@ -136,14 +158,20 @@ Hooks.on("sre.renderRollCard", (message, card, data) => {
     const box = document.createElement("div");
     box.className = "sre-rc-chain";
     const list = data.targets?.length ? data.targets : [null];
-    box.innerHTML = `<div class="sre-rc-chain-title">${esc(L("SRE.Chain.Targets"))}</div>${list.map((t, i) => {
+    const bullets = chain.bullets ? bulletOutcome(chain, data.result) : null;
+    const button = (i) => (bullets
+      ? (bullets.hit && !bullets.disarm ? `<button type="button" data-sre-defend="${i}"><i class="fas fa-shield"></i> ${esc(L("SRE.Chain.Soak", { dv: bullets.dv, m: L(bullets.monitor === "stun" ? "SRE.Roll.StunShort" : "SRE.Roll.PhysShort") }))}</button>` : "")
+      : `<button type="button" data-sre-defend="${i}"><i class="fas fa-shield-halved"></i> ${esc(L(`SRE.Chain.Defense.${chain.defense}`))}</button>`);
+    box.innerHTML = `<div class="sre-rc-chain-title">${esc(L("SRE.Chain.Targets"))}${bullets ? ` · ${esc(L(bullets.hit ? "SRE.Chain.BulletsHit" : "SRE.Chain.Miss"))}` : ""}</div>${list.map((t, i) => {
       const can = t ? canUse(t.uuid) : true;
       return `<div class="sre-rc-target">${t ? `<span>${esc(t.name)} <small>${esc(L("SRE.Roll.DR"))} ${t.dr}</small></span>` : `<span><small>${esc(L("SRE.Chain.NoTarget"))}</small></span>`}
-        ${can ? `<button type="button" data-sre-defend="${i}"><i class="fas fa-shield-halved"></i> ${esc(L(`SRE.Chain.Defense.${chain.defense}`))}</button>` : ""}</div>`;
+        ${can ? button(i) : ""}</div>`;
     }).join("")}`;
     box.querySelectorAll("[data-sre-defend]").forEach((b) => b.addEventListener("click", (e) => {
       e.preventDefault();
-      defend(message, list[Number(b.dataset.sreDefend)]);
+      const t = list[Number(b.dataset.sreDefend)];
+      if (bullets) resistFromAttack(message, t);
+      else defend(message, t);
     }));
     card.querySelector(".sre-rc-result")?.after(box);
   }

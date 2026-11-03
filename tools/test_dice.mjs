@@ -190,3 +190,28 @@ assert.equal(G.vehicleData({ ...scoot, system: { ...scoot.system, type: "DRONES"
 assert.deepEqual(G.syncChanges(scoot, { name: "Dodge Scoot", system: { ...vd.system } }), {});
 assert.deepEqual(G.syncChanges({ ...scoot, system: { ...scoot.system, arm: 6 } }, { name: "Dodge Scoot", system: { ...vd.system } }), { "system.arm": 6 });
 console.log("garage OK");
+
+// ───── 13F: the system's optional rules and hotbar macros ─────
+assert.equal(R.capPool(26), 20, "hard dice cap");
+assert.equal(R.capPool(26, false), 26);
+assert.equal(R.recoilReduction(6), 0);
+assert.equal(R.recoilReduction(7), 1);
+assert.equal(R.recoilReduction(10), 2);
+assert.deepEqual(E.fireMode({ ...atk, recoil: 2 }, "BF").arMod, -2, "BF −4 lessened by 2");
+assert.deepEqual(E.fireMode({ ...atk, recoil: 2 }, "SA").arMod, 0, "never into a bonus");
+assert.equal(R.bulletThreshold(13, 2), 4, "13/6 → 2, + Medium (2)");
+assert.deepEqual(R.armorSplit(5, 17), { physical: 3, stun: 2 });
+assert.deepEqual(R.armorSplit(1, 9), { physical: 0, stun: 1 });
+ch = C.chainOf({ kind: "weapon", attack: { ar: 9, dv: 5, effects: [], bullets: true } });
+assert.equal(ch.bullets, true);
+assert.deepEqual(C.bulletOutcome(ch, { success: true, net: 2 }), { hit: true, net: 2, dv: 7, resist: true, monitor: "physical" });
+assert.equal(C.bulletOutcome(ch, { success: false }).hit, false);
+
+const M = await import("../scripts/dice/macros.mjs");
+assert.equal(M.rollableItem({ type: "gear", system: { type: "WEAPON_FIREARMS" } }), true);
+assert.equal(M.rollableItem({ type: "spell" }), true);
+assert.equal(M.rollableItem({ type: "gear", system: { type: "ARMOR" } }), false);
+const mac = M.macroFor({ actor: "Actor.a", kind: "skill", id: "firearms", spec: "pistols" }, { name: "Pistols" });
+assert.equal(mac.type, "script");
+assert.match(mac.command, /api\.roll\(\{"actor":"Actor\.a","kind":"skill","id":"firearms","spec":"pistols"\}\);$/);
+console.log("house rules and macros OK");
