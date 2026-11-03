@@ -13,6 +13,7 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
 - **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (siedem zakładek, od walki po kontakty).
+- **Matrix**: Overwatch Score, Konwergencja, dumpshock, poziomy dostępu i backdoory, IC i karta hosta.
 - **Rozwój postaci za Karmę** z kosztami i czasem treningu według podręcznika, z dziennikiem rozwoju.
 - **Karta Edge przedmiotu** i **przekazywanie przedmiotów** innym postaciom (z dodatkami), usuwanie przedmiotów.
 - **Wygląd „Edge”** kart postaci, czatu i okna rzutu (ciemny lub jasny, do wyłączenia).
@@ -175,6 +176,35 @@ Po zakupie Karma spada, zmiany trafiają na kartę, karta zakupu na czat, a wpis
 
 Ustawienie świata **Rozwój wymaga zgody MG**: zakup gracza trafia na czat jako prośba, którą MG
 zatwierdza (wtedy zostaje zastosowana) lub odrzuca.
+
+## Matrix (s. 175–187)
+
+Akcje Matrixa z zakładki **Matrix** Karty Edge otwierają okno w układzie Edge:
+- **cel**: zapamiętane cele persony, hosty ze świata (system 4.x) albo nowy cel (nazwa, rodzaj, ocena), z dostępem, który już masz;
+- **dostęp do zdobycia** przy Brute Force: User albo Admin (Admin bez User: obrona Firewall + 2 i +4 do DR celu, errata 02/2020);
+- **modyfikatory**: program hakerski (+1 OS), Under the Radar (3 Edge, ta akcja nie podnosi OS), hałas (−1 do puli za punkt);
+- backdoor z Probe dodaje swoje sukcesy netto do Backdoor Entry.
+
+Akcja, która wymaga wyższego dostępu niż posiadany, otwiera okno konfliktu (MG zawsze może kontynuować).
+Rzut idzie przez okno rzutu systemu, a pod kartą rzutu pojawia się zadanie:
+- **sukcesy obrońcy** (wpisane albo rzucone przez MG z podpowiedzianej puli);
+- **Overwatch** (tylko MG): +1 za każdy sukces obrońcy (wszystkie, nie netto), +1 za program hakerski; MG może zmienić liczbę przed doliczeniem;
+- **dostęp**: wygrany Brute Force daje nielegalny User/Admin, Backdoor Entry legalny Admin, Probe backdoor na (10 − ocena) godzin;
+- **Data Spike**: obrażenia [AR / 2 w górę] + sukcesy netto i przycisk odporności celu (Firewall), nakładane na urządzenie.
+
+**Overwatch Score** domyślnie widzi tylko MG; gracz poznaje go akcją *Check Overwatch Score* (ustawienie świata
+pozwala go pokazać). Co rundę walki nielegalny dostęp do hostów dolicza OS: +1 za User, +3 za Admin na każdym hoście.
+Przy **40 OS** MG dostaje okno **Konwergencji**: *Wykonaj* (urządzenie z ostatniego nielegalnego testu zcegłowane,
+wyrzucenie z Matrixa, dumpshock, lokalizacja zgłoszona władzom) albo *Odłóż*.
+
+**Dumpshock**: 3S w cold-sim, 3P w hot-sim, odporność Siłą Woli przez kartę systemu, a potem bez Edge przez
+(10 − Siła Woli) minut (stan schodzi sam). **Restart urządzenia** zeruje OS, exploity i backdoory (errata 02/2020).
+Panel zakładki Matrix pokazuje OS, dostęp do celów (MG zmienia poziom kliknięciem), tryb, link-lock i blokadę Edge.
+Urządzenie liczy obrażenia Matrixa (monitor: ocena / 2 w górę + 8) i przy pełnym monitorze staje się cegłą.
+
+**Karta Edge hosta** (system 4.x): ocena, ASDF, próg Konwergencji, IC (pula i monitor ocena × 2, inicjatywa
+Data Processing × 2 + 3K6, najwyżej ocena IC naraz) z obroną celu i efektem, przycisk ataku IC na wskazaną personę
+(obrażenia Matrixa, biozwrotne, link-lock, utrata atrybutu) oraz lista person w hoście z ich dostępem.
 
 ## Karty Edge NPC, ducha i pojazdu
 

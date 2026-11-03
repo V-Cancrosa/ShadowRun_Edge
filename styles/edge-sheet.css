@@ -913,3 +913,8 @@ body.sre-edge-light :is(.sre-es-portrait, .sre-it-icon) { background: linear-gra
 .sre-es-chip-action { cursor: pointer; }
 .sre-es-chip-action:hover { border-color: var(--sre-accent, var(--sre-cyan)); }
 .sre-es-advance h3 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+/* Matrix tab: Overwatch row; host sheet rating input. */
+.sre-mx-osrow { display: flex; align-items: center; gap: 6px; padding: 0 10px 8px; }
+.sre-mx-osrow .sre-es-meter { flex: 1; margin: 0; }
+.sre-es-ktile input.sre-host-rating { width: 3em; font-size: 22px; font-weight: bold; text-align: center; background: transparent; border: none; color: inherit; }

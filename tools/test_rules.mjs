@@ -328,3 +328,43 @@ console.log("blast & summoning OK");
   assert.deepEqual(keys([{ kind: "skill", id: "firearms", from: 9, to: 10 }], { karma: 99 }), ["skillMax"]);
   console.log("advancement OK");
 }
+
+// ── Matrix (pp. 175–187, errata Aug 2019 / Feb 2020) ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const R = await import("../scripts/matrix-rules.mjs");
+  assert.deepEqual(R.osFromAction({ illegal: true, defenderHits: 4, program: true }), { total: 5, hits: 4, program: 1 }, "all defender hits + 1 per hacking program");
+  assert.equal(R.osFromAction({ illegal: false, defenderHits: 4 }).total, 0, "legal actions add nothing");
+  assert.equal(R.osFromAction({ illegal: false, defenderHits: 0, program: true }).total, 1);
+  assert.equal(R.osFromAction({ illegal: true, defenderHits: 6, program: true, radar: true }).total, 0, "Under the Radar");
+  assert.equal(R.osPerRound([{ kind: "host", access: "admin", illegal: true }, { kind: "host", access: "user", illegal: true },
+    { kind: "host", access: "admin", illegal: false }, { kind: "device", access: "admin", illegal: true }]), 4, "+3 Admin, +1 User, hosts only, illegal only");
+  assert.equal(R.isConvergence(39), false);
+  assert.equal(R.isConvergence(40), true);
+  assert.equal(R.dumpshock("ar", 4), null);
+  assert.deepEqual(R.dumpshock("vrcold", 4), { damage: 3, monitor: "stun", minutes: 6 });
+  assert.deepEqual(R.dumpshock("vrhot", 12), { damage: 3, monitor: "physical", minutes: 0 });
+  assert.equal(R.deviceMonitor(4), 10);
+  assert.equal(R.deviceMonitor(3), 10, "(3 / 2) rounded up + 8");
+  assert.equal(R.dataSpikeDamage(9, 2), 7, "[9/2] = 5, + 2 net");
+  assert.deepEqual(R.bruteForceDefense("admin", "outsider"), { firewallBonus: 2, drBonus: 4 });
+  assert.deepEqual(R.bruteForceDefense("admin", "user"), { firewallBonus: 0, drBonus: 0 });
+  assert.deepEqual(R.bruteForceDefense("user", "outsider"), { firewallBonus: 0, drBonus: 0 });
+  assert.equal(R.backdoorHours(4), 6);
+  assert.equal(R.accessAllowed({ outsider: true, user: true, admin: true }, "outsider"), true);
+  assert.equal(R.accessAllowed({ admin: true }, "user"), false);
+  assert.equal(R.accessAllowed({ user: true, admin: true }, "admin"), true);
+  assert.equal(R.accessNeeded({ user: true, admin: true }), "user");
+  assert.deepEqual(R.accessResult("brute_force", { want: "admin", net: 1 }), { access: "admin", illegal: true });
+  assert.deepEqual(R.accessResult("backdoor_entry", { net: 2 }), { access: "admin", illegal: false }, "a backdoor is not illegal access");
+  assert.deepEqual(R.accessResult("probe", { net: 3, rating: 4 }), { backdoor: { bonus: 3, hours: 6 } });
+  assert.equal(R.accessResult("brute_force", { net: 0 }), null);
+  assert.deepEqual(R.icStats(4, 7), { pool: 8, monitor: 8, initiative: { base: 14, dice: 3 }, maxRunning: 4 });
+  assert.deepEqual(R.icHit("killer", 4, 2), { matrix: 6, bio: 0, attrLoss: null, linkLock: false, effect: "damage" });
+  assert.equal(R.icHit("black", 4, 1).bio, 5);
+  assert.equal(R.icHit("blaster", 4, 3).matrix, 4, "Blaster: (Rating) damage + link-lock");
+  assert.equal(R.icHit("blaster", 4, 3).linkLock, true);
+  assert.deepEqual(R.icHit("acid", 4, 2).attrLoss, { attr: "f", amount: 2 });
+  assert.equal(R.icHit("killer", 4, 0), null, "a miss does nothing");
+  console.log("matrix OK");
+}

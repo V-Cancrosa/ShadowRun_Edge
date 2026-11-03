@@ -1,5 +1,14 @@
 [
   {
+    "version": "0.26.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Matrix: okno akcji w układzie Edge (cel, dostęp do zdobycia, program hakerski, Under the Radar, hałas) i zadania na czacie: sukcesy obrońcy, Overwatch dla MG, zapis dostępu i backdoorów, obrażenia Data Spike.",
+      "Overwatch Score ukryty przed graczami (ustawienie świata), +OS co rundę za nielegalny dostęp do hostów, Konwergencja przy 40 z decyzją MG, dumpshock z blokadą Edge, restart urządzenia.",
+      "Karta Edge hosta (system 4.x): ASDF, IC z obroną i efektami, ataki IC na wskazaną personę, kto jest w hoście."
+    ]
+  },
+  {
     "version": "0.25.0",
     "date": "2026-11-03",
     "changes": [

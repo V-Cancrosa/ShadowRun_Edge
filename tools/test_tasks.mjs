@@ -162,4 +162,33 @@ assert.match(renderTask(toxin, 10), /5S/);
 assert.match(renderTask(toxin, 15), new RegExp(lookup("SRE.Substance.NoEffect").slice(0, 10)));
 assert.match(renderTask({ kind: "antidote", id: "narcoject", power: 4, applied: false }, 4), /sre-task-apply/, "Power 0: end the effects");
 
+// Matrix: OS for the GM (defender hits + program), access to record, Data Spike, IC hits.
+game.time = { worldTime: 0 };
+foundry.utils.getProperty = (o, p) => p.split(".").reduce((a, k) => a?.[k], o);
+const persona = { system: { overwatch: 30 }, items: { get: () => null } };
+globalThis.fromUuidSync = () => persona;
+await import("../scripts/matrix.mjs");
+const brute = { kind: "matrix", actionId: "brute_force", actor: "Actor.g", illegal: true, opposed: true, program: true, radar: false,
+  target: { key: "k", name: "Host", kind: "host", rating: 4, access: "outsider" }, want: "admin", ar: 9, defensePool: 8, defenderHits: null };
+assert.match(renderTask(brute, 4), /data-def-hits/, "the defender's hits first");
+game.user.isGM = true;
+const after = renderTask({ ...brute, defenderHits: 2 }, 4);
+assert.match(after, /data-os="3"/, "2 defender hits + 1 program");
+assert.match(after, /→ 33 \/ 40/);
+assert.match(after, /data-grant/, "Admin to record after a win");
+assert.doesNotMatch(renderTask({ ...brute, defenderHits: 5 }, 4), /data-grant/, "no access after a loss");
+assert.match(renderTask({ ...brute, actionId: "data_spike", defenderHits: 1 }, 4), /data-soak="8"/, "[9/2] + 3 net");
+game.user.isGM = false;
+assert.doesNotMatch(renderTask({ ...brute, defenderHits: 2 }, 4), /data-os/, "players do not see the OS amount");
+assert.match(renderTask({ ...brute, defenderHits: 2 }, 4), /\+3/, "with the OS shown to players: the amount, no button");
+const settingsGet = game.settings.get;
+game.settings.get = () => false;
+assert.match(renderTask({ ...brute, defenderHits: 2 }, 4), new RegExp(lookup("SRE.Matrix.OSByGM").slice(0, 10)), "hidden OS: the GM adds it");
+game.settings.get = settingsGet;
+assert.match(renderTask({ kind: "matrixSoak", actor: "Actor.g", deviceId: null, dv: 8 }, 3), /<b>5<\/b>/);
+game.user.isGM = true;
+assert.match(renderTask({ kind: "icAttack", ic: "sparky", rating: 4, target: "Actor.g", defensePool: 9, defenderHits: 1 }, 3), /data-bio="6"/, "Sparky: rating + net");
+assert.match(renderTask({ kind: "icAttack", ic: "tarbaby", rating: 4, target: "Actor.g", defensePool: 9, defenderHits: 0 }, 2), /data-lock/);
+game.user.isGM = false;
+
 console.log("tasks OK");

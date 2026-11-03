@@ -3,7 +3,8 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import Handlebars from "handlebars";
-import { buildNpcContext, buildSpiritContext, buildVehicleContext, gruntGroup } from "../scripts/sheet/compact-context.mjs";
+import { buildNpcContext, buildSpiritContext, buildVehicleContext, buildHostContext, gruntGroup } from "../scripts/sheet/compact-context.mjs";
+import { IC, icStats } from "../scripts/matrix-rules.mjs";
 
 const lang = JSON.parse(readFileSync(new URL("../lang/pl/shadowrun-edge.json", import.meta.url), "utf8"));
 const L = (key) => key.split(".").reduce((o, k) => o?.[k], lang) ?? key;
@@ -83,4 +84,16 @@ const htmlSpirit = template({ ...base, ...sp, isSpirit: true });
 assert.ok(htmlSpirit.includes('data-action="services"') && htmlSpirit.includes('data-action="banish"'));
 const htmlCar = template({ ...base, ...v, isVehicle: true });
 assert.ok(htmlCar.includes('data-action="vehicleTest"') && htmlCar.includes("22") && !htmlCar.includes('data-action="groupCreate"'));
+// Host (system 4.x): ASDF, IC table, personas inside.
+const hostActor = { type: "host", name: "Stuffer Shack HQ", system: { rating: 4, convergenceThreshold: 40, matrix: { attributes: { attack: 5, sleaze: 4, dataProcessing: 7, firewall: 6 } } },
+  flags: { "shadowrun-edge": { ic: ["patrol", "killer"] } } };
+const h = buildHostContext(hostActor, { L, IC, icStats, personas: [{ name: "Glitch", access: "admin", illegal: true, os: 34, osShown: true, accessLabel: "Admin" }] });
+assert.deepEqual(h.tiles.map((t) => t.value), [4, 5, 4, 7, 6, 40]);
+assert.equal(h.running, 2);
+assert.equal(h.ic.find((i) => i.id === "killer").on, true);
+assert.equal(h.ic.find((i) => i.id === "patrol").attacks, false);
+assert.equal(h.personas[0].cls, "a");
+const hostTemplate = H.compile(readFileSync(new URL("../templates/sheet/edge-host.hbs", import.meta.url), "utf8"));
+const htmlHost = hostTemplate({ ...h, name: "Stuffer Shack HQ", initial: "S", editable: true, themeSwitch: { icon: "fa-sun", label: "" } });
+assert.ok(htmlHost.includes('data-action="icAttack"') && htmlHost.includes("Glitch") && htmlHost.includes('name="system.rating"'));
 console.log("compact sheets OK");

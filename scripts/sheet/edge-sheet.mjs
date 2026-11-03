@@ -19,6 +19,7 @@ import * as ui2 from "../ui/edge-ui.mjs";
 import { actorStatuses, statusLabel, takeCover } from "../statuses.mjs";
 import { useSubstance } from "../substances.mjs";
 import { openAdvancement } from "../advancement.mjs";
+import * as mx from "../matrix.mjs";
 import { movement } from "../status-rules.mjs";
 import { resolveConflict } from "../ui/conflict.mjs";
 
@@ -52,6 +53,13 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       statusRemove: EdgeActorSheet.#onStatusRemove,
       takeCover: EdgeActorSheet.#onTakeCover,
       advance: EdgeActorSheet.#onAdvance,
+      osDelta: EdgeActorSheet.#onOsDelta,
+      reboot: EdgeActorSheet.#onReboot,
+      accessCycle: EdgeActorSheet.#onAccessCycle,
+      accessIllegal: EdgeActorSheet.#onAccessIllegal,
+      accessRemove: EdgeActorSheet.#onAccessRemove,
+      linkLock: EdgeActorSheet.#onLinkLock,
+      dumpshock: EdgeActorSheet.#onDumpshock,
       useSubstance: EdgeActorSheet.#onUseSubstance,
       rollAttribute: EdgeActorSheet.#onAttribute,
       rollSkill: EdgeActorSheet.#onSkill,
@@ -117,7 +125,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       themeSwitch: { light, icon: light ? "fa-moon" : "fa-sun", label: L(light ? "SRE.Theme.ToDark" : "SRE.Theme.ToLight") },
       statuses: this.#statuses(),
       magic: tab === "magic" ? this.#magicContext(config) : null,
-      matrix: tab === "matrix" ? buildMatrixContext(this.document, { L, config, showAllActions: this.showAllMatrixActions }) : null,
+      matrix: tab === "matrix" ? this.#matrixContext(config) : null,
       gear: tab === "gear" ? buildGearContext(this.document, { L, config }) : null,
       social,
       sk: this.sheetTab === "skills"
@@ -166,6 +174,8 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     else next = pip === Number(value) ? pip - 1 : pip;
     next = Math.max(0, Math.min(7, next));
     if (next === Number(value)) return;
+    // Dumpshock: no Edge for (10 − Willpower) minutes (p. 176).
+    if (!(await mx.edgeAllowed(this.document))) return;
     // Above the character's Edge attribute (the hard cap of 7 stays): the user decides.
     if (next > (Number(max) || 0)) {
       const choice = await resolveConflict({
@@ -281,7 +291,50 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static async #onMatrix(event, target) {
-    return rolls.rollMatrixAction(this.document, target.dataset.matrixId);
+    return mx.openMatrixAction(this.document, target.dataset.matrixId);
+  }
+
+  /** Matrix tab: the system data plus Overwatch, access and Matrix states (scripts/matrix.mjs). */
+  #matrixContext(config) {
+    const panel = mx.matrixPanel(this.document);
+    const data = buildMatrixContext(this.document, { L, config, showAllActions: this.showAllMatrixActions });
+    if (!panel.visible) data.tiles = data.tiles.filter((t) => t.id !== "os");
+    for (const d of data.devices) {
+      const item = this.document.items.get(d.id);
+      d.bricked = !!item?.getFlag("shadowrun-edge", "bricked");
+      d.matrixDmg = Number(item?.getFlag("shadowrun-edge", "matrixDmg")) || 0;
+    }
+    return { ...data, edge: panel };
+  }
+
+  static async #onOsDelta(event, target) {
+    if (!game.user.isGM) return;
+    return mx.setOS(this.document, mx.getOS(this.document) + Number(target.dataset.delta));
+  }
+
+  static async #onReboot() {
+    const ok = await ui2.confirm({ kind: L("SRE.Matrix.Kind"), name: this.document.name, text: L("SRE.Matrix.RebootConfirm"), button: L("SRE.Matrix.Reboot"), icon: "fas fa-power-off" });
+    if (ok) return mx.reboot(this.document);
+  }
+
+  static #onAccessCycle(event, target) {
+    if (game.user.isGM) return mx.cycleAccess(this.document, target.closest("[data-key]").dataset.key);
+  }
+
+  static #onAccessIllegal(event, target) {
+    if (game.user.isGM) return mx.toggleIllegal(this.document, target.closest("[data-key]").dataset.key);
+  }
+
+  static #onAccessRemove(event, target) {
+    return mx.removeTarget(this.document, target.closest("[data-key]").dataset.key);
+  }
+
+  static #onLinkLock() {
+    if (game.user.isGM) return mx.toggleLinkLock(this.document);
+  }
+
+  static #onDumpshock() {
+    if (game.user.isGM) return mx.dumpshockFor(this.document);
   }
 
   static #onToggleAllActions() {

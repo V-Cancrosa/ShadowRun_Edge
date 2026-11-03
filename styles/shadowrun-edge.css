@@ -177,3 +177,12 @@
 .sre-blast-list li { margin: 3px 0; }
 .sre-blast-buttons { display: flex; gap: 4px; margin-top: 2px; }
 .sre-blast-buttons button, .sre-blast-card .sre-drain { flex: 1; font-size: 0.9em; }
+
+/* Matrix: access pills (Edge sheet, Matrix window, host sheet) and the chat task inputs. */
+.sre-acc { display: inline-block; padding: 0 7px; font-size: 11px; line-height: 17px; border: 1px solid var(--sre-line, #777); border-radius: 99px; color: var(--sre-text-dim, inherit); white-space: nowrap; }
+.sre-acc[data-action] { cursor: pointer; }
+.sre-acc.u { color: var(--sre-warn, #f0b24a); border-color: var(--sre-warn, #f0b24a); }
+.sre-acc.a { color: var(--sre-bad, #ff5470); border-color: var(--sre-bad, #ff5470); }
+.sre-acc.l { color: var(--sre-ok, #4fd68a); border-color: var(--sre-ok, #4fd68a); }
+.sre-task .sre-mx-def input, .sre-task input[data-os-n] { width: 3.2em; height: 22px; text-align: center; }
+.sre-task .sre-task-dim { opacity: 0.75; font-style: italic; }

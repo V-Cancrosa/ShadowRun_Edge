@@ -459,9 +459,44 @@
     <div class="sre-es-tiles6">
       {{#each matrix.tiles}}<div class="sre-es-ktile"><span>{{label}}</span><strong class="{{#if warn}}warn{{/if}}">{{value}}</strong></div>{{/each}}
     </div>
-    <div class="sre-es-panel">
-      <h3>{{localize "SRE.Sheet.Overwatch"}} <span>{{matrix.overwatch.value}} / 40</span></h3>
-      <div class="sre-es-meter os"><i style="width: {{matrix.overwatch.pct}}%"></i></div>
+    {{#if matrix.edge.visible}}
+    <div class="sre-es-panel sre-mx-os">
+      <h3>{{localize "SRE.Sheet.Overwatch"}} <span>{{matrix.edge.os}} / {{matrix.edge.threshold}}{{#if matrix.edge.gm}} · {{localize "SRE.Matrix.GMOnly"}}{{/if}}</span></h3>
+      <div class="sre-mx-osrow">
+        <div class="sre-es-meter os"><i style="width: {{matrix.edge.pct}}%"></i></div>
+        {{#if matrix.edge.gm}}<button type="button" class="sre-es-mini" data-action="osDelta" data-delta="-1">−1</button><button type="button" class="sre-es-mini" data-action="osDelta" data-delta="1">+1</button>{{/if}}
+        {{#if editable}}<button type="button" class="sre-es-mini" data-action="reboot"><i class="fas fa-power-off"></i> {{localize "SRE.Matrix.Reboot"}}</button>{{/if}}
+      </div>
+      <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Matrix.PerRound"}}</span><strong>+{{matrix.edge.perRound}}</strong></div>
+      {{#if matrix.edge.lastDevice}}<div class="sre-es-row sre-es-dim">{{localize "SRE.Matrix.LastDevice" device=matrix.edge.lastDevice}}</div>{{/if}}
+    </div>
+    {{else}}
+    <div class="sre-es-panel sre-mx-os"><h3>{{localize "SRE.Sheet.Overwatch"}} <span>{{localize "SRE.Matrix.Hidden"}}</span></h3>
+      {{#if editable}}<div class="sre-mx-osrow"><span class="sre-es-grow sre-es-dim">{{localize "SRE.Matrix.HiddenHint"}}</span><button type="button" class="sre-es-mini" data-action="reboot"><i class="fas fa-power-off"></i> {{localize "SRE.Matrix.Reboot"}}</button></div>{{/if}}
+    </div>
+    {{/if}}
+    <div class="sre-es-two">
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Matrix.AccessTitle"}} {{#if matrix.edge.gm}}<span>{{localize "SRE.Matrix.GMCanChange"}}</span>{{/if}}</h3>
+        <table class="sre-es-table">
+          <tr><th>{{localize "SRE.Matrix.Target"}}</th><th>{{localize "SRE.Matrix.AccessTitle"}}</th><th class="c">{{localize "SRE.Matrix.OSRound"}}</th><th>{{localize "SRE.Matrix.Backdoor"}}</th><th></th></tr>
+          {{#each matrix.edge.targets}}
+          <tr data-key="{{key}}"><td>{{kindLabel}}: {{name}}{{#if rating}} ({{rating}}){{/if}}</td>
+            <td><span class="sre-acc {{cls}}" {{#if ../matrix.edge.gm}}data-action="accessCycle" data-tooltip="{{localize "SRE.Matrix.CycleHint"}}"{{/if}}>{{accessLabel}}</span>
+              {{#if ../matrix.edge.gm}}<button type="button" class="sre-es-mini" data-action="accessIllegal" data-tooltip="{{localize "SRE.Matrix.IllegalHint"}}">±</button>{{/if}}</td>
+            <td class="c">{{#if perRound}}+{{perRound}}{{else}}—{{/if}}</td><td>{{#if backdoor}}{{backdoor}}{{else}}—{{/if}}</td>
+            <td>{{#if ../editable}}<button type="button" class="sre-es-mini" data-action="accessRemove">✕</button>{{/if}}</td></tr>
+          {{else}}<tr><td colspan="5" class="sre-es-empty">{{localize "SRE.Matrix.NoTargets"}}</td></tr>{{/each}}
+        </table>
+      </div>
+      <div class="sre-es-panel">
+        <h3>{{localize "SRE.Matrix.States"}}</h3>
+        <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Matrix.Mode"}}</span><strong>{{matrix.edge.mode}}</strong></div>
+        <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Matrix.LinkLockTitle"}}</span>
+          {{#if matrix.edge.gm}}<button type="button" class="sre-es-toggle {{#if matrix.edge.linkLock}}on{{/if}}" data-action="linkLock"></button>{{else}}<strong>{{#if matrix.edge.linkLock}}{{localize "SRE.Matrix.Yes"}}{{else}}{{localize "SRE.Matrix.No"}}{{/if}}</strong>{{/if}}</div>
+        <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Matrix.NoEdge"}}</span><strong>{{#if matrix.edge.noEdge}}{{localize "SRE.Matrix.Minutes" n=matrix.edge.noEdge}}{{else}}—{{/if}}</strong></div>
+        {{#if matrix.edge.gm}}<div class="sre-es-row"><span class="sre-es-grow sre-es-dim">{{localize "SRE.Matrix.DumpshockHint"}}</span><button type="button" class="sre-es-mini" data-action="dumpshock">{{localize "SRE.Matrix.DumpshockButton"}}</button></div>{{/if}}
+      </div>
     </div>
     <div class="sre-es-panel sre-es-gap">
       <h3>{{localize "SRE.Sheet.Devices"}} <span>{{localize "SRE.Sheet.DevicesHint"}}</span></h3>
@@ -469,7 +504,7 @@
         <tr><th>{{localize "SRE.Sheet.Name"}}</th><th>{{localize "SRE.Sheet.Type"}}</th><th class="c">{{localize "SRE.Sheet.Rating"}}</th><th>A / S / D / F</th><th class="c">{{localize "SRE.Sheet.Slots"}}</th><th class="c">{{localize "SRE.Sheet.Active"}}</th></tr>
         {{#each matrix.devices}}
         <tr data-item-id="{{id}}">
-          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a></td><td>{{type}}</td><td class="c">{{rating}}</td>
+          <td><a class="sre-es-itemname" data-action="openItem">{{name}}</a>{{#if bricked}} <span class="sre-acc a">{{localize "SRE.Matrix.BrickedTag"}}</span>{{else}}{{#if matrixDmg}} <small class="sre-es-dim">{{localize "SRE.Matrix.DmgTag" n=matrixDmg}}</small>{{/if}}{{/if}}</td><td>{{type}}</td><td class="c">{{rating}}</td>
           <td><span class="sre-es-asdf">{{#each asdf}}<i><b>{{k}}</b>{{#if v includeZero=true}}{{v}}{{else}}—{{/if}}</i>{{/each}}</span></td>
           <td class="c">{{#if slots}}{{slots}}{{else}}—{{/if}}</td>
           <td class="c"><button type="button" class="sre-es-toggle {{#if active}}on{{/if}}" data-action="toggleDevice" {{#unless ../editable}}disabled{{/unless}}></button></td>

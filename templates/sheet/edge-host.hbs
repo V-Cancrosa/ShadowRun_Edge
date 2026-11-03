@@ -1,0 +1,36 @@
+<div class="sre-es sre-cp sre-host">
+  <header class="sre-es-head">
+    <button type="button" class="sre-es-theme" data-action="toggleTheme" data-tooltip="{{themeSwitch.label}}" aria-label="{{themeSwitch.label}}">
+      <i class="fas {{themeSwitch.icon}}"></i>
+    </button>
+    <div class="sre-es-portrait">{{#if img}}<img src="{{img}}" alt="{{name}}">{{else}}<span>{{initial}}</span>{{/if}}</div>
+    <div class="sre-es-identity">
+      <input class="sre-es-name" type="text" name="name" value="{{name}}" {{#unless editable}}disabled{{/unless}}>
+      <div class="sre-es-tags"><span class="sre-es-tag">{{localize "SRE.Matrix.Kinds.host"}}</span><span class="sre-es-tag sre-es-tag-cyan">{{localize "SRE.Compact.Rating"}} {{rating}}</span></div>
+    </div>
+  </header>
+  <section class="sre-compact-body">
+    <div class="sre-es-tiles6">
+      {{#each tiles}}<div class="sre-es-ktile"><span>{{label}}</span>{{#if name}}<input type="number" class="sre-host-rating" name="{{name}}" value="{{value}}" min="1" max="12" {{#unless ../editable}}disabled{{/unless}}>{{else}}<strong>{{value}}</strong>{{/if}}</div>{{/each}}
+    </div>
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Matrix.IC.Title"}} <span>{{icInfo}} · {{localize "SRE.Matrix.IC.Running" n=running}}</span></h3>
+      <table class="sre-es-table">
+        <tr><th>{{localize "SRE.Matrix.IC.Title"}}</th><th>{{localize "SRE.Matrix.IC.Defense"}}</th><th>{{localize "SRE.Matrix.IC.EffectTitle"}}</th><th class="c">{{localize "SRE.Matrix.IC.Active"}}</th><th></th></tr>
+        {{#each ic}}
+        <tr data-ic="{{id}}"><td>{{label}}</td><td>{{defense}}</td><td class="sre-es-small">{{effect}}</td>
+          <td class="c"><button type="button" class="sre-es-toggle {{#if on}}on{{/if}}" data-action="icToggle" {{#unless ../editable}}disabled{{/unless}}></button></td>
+          <td>{{#if on}}{{#if attacks}}<button type="button" class="sre-es-btn solid" data-action="icAttack">{{localize "SRE.Matrix.IC.Attack"}}</button>{{/if}}{{/if}}</td></tr>
+        {{/each}}
+      </table>
+      <p class="sre-es-dim sre-es-small">{{localize "SRE.Matrix.IC.TargetHint"}}</p>
+    </div>
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Matrix.Inside"}}</h3>
+      <table class="sre-es-table"><tr><th>{{localize "SRE.Matrix.Persona"}}</th><th>{{localize "SRE.Matrix.AccessTitle"}}</th><th class="c">OS</th></tr>
+        {{#each personas}}<tr><td>{{name}}</td><td><span class="sre-acc {{cls}}">{{accessLabel}}</span></td><td class="c">{{#if osShown}}{{os}}{{else}}—{{/if}}</td></tr>
+        {{else}}<tr><td colspan="3" class="sre-es-empty">—</td></tr>{{/each}}
+      </table>
+    </div>
+  </section>
+</div>

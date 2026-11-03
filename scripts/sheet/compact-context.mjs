@@ -147,3 +147,37 @@ export function gruntGroup(groupId, tokens) {
     diceMod: Math.max(0, Math.floor((n - 1) / 2)),
   };
 }
+
+/**
+ * Hosts (system 4.x "host" actors, pp. 185–187): rating, ASDF, Convergence threshold, IC with the target's
+ * defense and effect, and the personas inside (from their module access records).
+ * @param {object[]} personas  [{ name, access, illegal, os }]
+ */
+export function buildHostContext(actor, { L = (k) => k, IC = {}, icStats = () => ({}), personas = [] } = {}) {
+  const s = actor.system ?? {};
+  const a = s.matrix?.attributes ?? {};
+  const rating = num(s.rating, 1);
+  const stats = icStats(rating, num(a.dataProcessing));
+  const running = new Set(actor.flags?.["shadowrun-edge"]?.ic ?? []);
+  const asdf = (id) => (["a", "s", "d", "f"].includes(id) ? L(`SRE.Sheet.Asdf.${id}`) : L(`attrib.${id}`));
+  return {
+    kind: "Host",
+    rating,
+    tiles: [
+      { label: L("SRE.Compact.Rating"), value: rating, name: "system.rating" },
+      { label: L("SRE.Sheet.Asdf.a"), value: num(a.attack) },
+      { label: L("SRE.Sheet.Asdf.s"), value: num(a.sleaze) },
+      { label: L("SRE.Sheet.Asdf.d"), value: num(a.dataProcessing) },
+      { label: L("SRE.Sheet.Asdf.f"), value: num(a.firewall) },
+      { label: L("SRE.Matrix.Convergence"), value: num(s.convergenceThreshold, 40) },
+    ],
+    icInfo: L("SRE.Matrix.IC.Info", { pool: num(stats.pool), monitor: num(stats.monitor), ini: `${num(stats.initiative?.base)}+${num(stats.initiative?.dice)}`, max: num(stats.maxRunning) }),
+    running: running.size,
+    ic: Object.entries(IC).map(([id, ic]) => ({
+      id, label: L(`SRE.Matrix.IC.${id}`), defense: ic.defense.map(asdf).join(" + ") || "—",
+      effect: L(`SRE.Matrix.IC.Desc.${id}`), on: running.has(id), attacks: ic.effect !== "perception",
+    })),
+    personas: personas.map((p) => ({ ...p, cls: p.access === "admin" ? (p.illegal ? "a" : "l") : p.access === "user" ? (p.illegal ? "u" : "l") : "" })),
+    notes: s.description ?? s.notes ?? "",
+  };
+}
