@@ -13,6 +13,7 @@ import * as rolls from "./sheet/system-rolls.mjs";
 import { matrixActionPool } from "./sheet/context.mjs";
 import { resolveConflict } from "./ui/conflict.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
+import * as fx from "./fx.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
@@ -98,6 +99,7 @@ export async function convergence(actor, os = getOS(actor)) {
     rejectClose: false,
   }));
   if (choice !== "do") return;
+  fx.convergence(actor);
   if (device) await device.update({ "system.usedForPool": false, [`flags.${MODULE_ID}.bricked`]: true });
   await setState(actor, { converged: true, targets: [], linkLock: false });
   await ChatMessage.create({

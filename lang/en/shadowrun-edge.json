@@ -1713,6 +1713,13 @@
         "Turn": "Turn",
         "Initiative": "initiative",
         "Round": "round"
+      },
+      "SceneFx": {
+        "Name": "Effects on the scene",
+        "Hint": "Blasts, gas clouds and Convergence. “Automatic” uses the Sequencer and JB2A modules when the world has them.",
+        "auto": "Automatic",
+        "module": "The module's own",
+        "off": "Off"
       }
     }
   }

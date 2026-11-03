@@ -12,6 +12,7 @@ import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
 import { gasKind, DEFAULT_GAS_RANGE } from "./gas-rules.mjs";
 import { SUBSTANCES } from "./substances-data.mjs";
+import * as fx from "./fx.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
@@ -226,7 +227,8 @@ async function explode(message, task) {
     const source = task.actor ? await fromUuid(task.actor) : null;
     return createCloud({ point, gas: task.gas, item: task.item, source, scatter: { roll: distanceRoll, meters, dir: directionRoll } });
   }
-  // Template for everyone to see, then who is in which zone.
+  // The shockwave for everyone looking at the scene (scripts/fx.mjs), then the template and who is in which zone.
+  fx.blast({ x: point.x, y: point.y, radius: blast.radius });
   try {
     await canvas.scene.createEmbeddedDocuments("MeasuredTemplate", [{ t: "circle", x: point.x, y: point.y, distance: blast.radius, fillColor: "#e0409a", flags: { [MODULE_ID]: { blast: true } } }]);
   } catch (err) {

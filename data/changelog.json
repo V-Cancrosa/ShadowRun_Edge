@@ -1,5 +1,17 @@
 [
   {
+    "version": "0.35.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Edge Motion, krok 5: efekty na scenie — fala uderzeniowa wybuchu w trzech strefach z odłamkami, falujące obłoki gazu i dymu według tabeli gazu, Konwergencja z czerwoną winietą i zakłóceniem karty hakera.",
+      "Ustawienie gracza „Efekty na scenie”; z modułami Sequencer i JB2A wybuch używa ich animacji."
+    ],
+    "changes_en": [
+      "Edge Motion, step 5: scene effects — a blast shockwave over the three zones with debris, drifting gas and smoke clouds that follow the gas table, Convergence with a red vignette and a glitch on the hacker's sheet.",
+      "Player setting “Effects on the scene”; with Sequencer and JB2A the blast uses their animation."
+    ]
+  },
+  {
     "version": "0.34.0",
     "date": "2026-11-03",
     "changes": [

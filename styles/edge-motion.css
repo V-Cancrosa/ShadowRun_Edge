@@ -157,5 +157,13 @@ body.sre-theme:not(.sre-motion-off) .combat-tracker .combatant.active {
 body.sre-theme.sre-motion-full :is(#combat, .combat-tracker) .combatant.active { animation: sre-active 1.8s ease-in-out infinite alternate; }
 @keyframes sre-active { from { box-shadow: inset 3px 0 0 #e0409a, 0 0 6px rgba(224, 64, 154, 0.2); } to { box-shadow: inset 3px 0 0 #e0409a, 0 0 16px rgba(224, 64, 154, 0.45); } }
 
+/* ───── 11F: Convergence ───── */
+.sre-convergence { position: fixed; inset: 0; z-index: 9998; pointer-events: none; box-shadow: inset 0 0 160px 50px rgba(255, 84, 112, 0.85); animation: sre-vignette 1600ms ease-out forwards; }
+body.sre-motion-reduced .sre-convergence { animation: sre-banner-fade 1400ms linear forwards; }
+@keyframes sre-vignette { 0% { opacity: 1; } 20% { opacity: 0.55; } 35% { opacity: 1; } 100% { opacity: 0; } }
+body.sre-motion-full .application.sre-sheet.sre-fx-converge > .window-content { animation: sre-glitch 280ms steps(2) 4; }
+body.sre-motion-full .application.sre-sheet.sre-fx-converge .sre-es-meter.os i { animation: sre-os-flicker 1200ms steps(6); }
+@keyframes sre-os-flicker { 0%, 40%, 80% { opacity: 1; } 20%, 60% { opacity: 0.2; } 100% { opacity: 1; } }
+
 /* Off: nothing moves, not even the module's existing transitions. */
 body.sre-motion-off :is(.sre-sheet, .sre-dialog) *, body.sre-motion-off :is(.sre-sheet, .sre-dialog) { transition: none !important; animation: none !important; }

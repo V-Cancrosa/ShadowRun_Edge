@@ -1713,6 +1713,13 @@
         "Turn": "Tura",
         "Initiative": "inicjatywa",
         "Round": "runda"
+      },
+      "SceneFx": {
+        "Name": "Efekty na scenie",
+        "Hint": "Wybuchy, obłoki gazu i Konwergencja. „Automatycznie” używa modułów Sequencer i JB2A, jeśli są w świecie.",
+        "auto": "Automatycznie",
+        "module": "Własne modułu",
+        "off": "Wyłączone"
       }
     }
   }

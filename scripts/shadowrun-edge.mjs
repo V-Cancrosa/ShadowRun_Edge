@@ -28,6 +28,7 @@ import "./matrix.mjs";
 import "./vehicles.mjs";
 import "./gas.mjs";
 import "./motion.mjs";
+import "./fx.mjs";
 import "./quench.mjs";
 import "./sheet/edge-host-sheet.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";

@@ -527,3 +527,18 @@ console.log("blast & summoning OK");
   assert.equal(bannerFor({ isGM: true, owned: true, name: "X", initiative: null, round: 1 }).sub, "X · SRE.Motion.Banner.Round 1");
   console.log("motion banner OK");
 }
+
+// ── Edge Motion: scene effects ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { blastRadii, easeOut, puffAlpha } = await import("../scripts/fx.mjs");
+  assert.deepEqual(blastRadii(20, 100), { gz: 100, close: 300, near: 2000 }, "1 m, 3 m, the blast radius");
+  assert.equal(blastRadii(2, 100).near, 300, "never inside Close");
+  assert.equal(easeOut(0), 0);
+  assert.equal(easeOut(1), 1);
+  assert.ok(easeOut(0.5) > 0.5, "fast out");
+  assert.equal(puffAlpha(0, 1, "open"), 0.16, "full effect");
+  assert.equal(puffAlpha(1, 1, "open"), 0.08, "half");
+  assert.equal(puffAlpha(3, 6, "open"), 0, "gone from the outer zone");
+  console.log("motion fx OK");
+}

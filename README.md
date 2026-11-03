@@ -497,6 +497,12 @@ kupione sukcesy) obraca ponownie tylko te kości, które się zmieniły.
 inicjatywą i rundą; MG widzi mniejszy baner z nazwą aktywnej postaci. Baner nie blokuje kliknięć. W trackerze walki
 aktywny uczestnik pulsuje magentą.
 
+**Efekty na scenie** (ustawienie gracza: *Automatycznie*, *Własne modułu*, *Wyłączone*): wybuch granatu lub ładunku
+to fala uderzeniowa w trzech strefach (zero, bliska, daleka) z odłamkami, widoczna dla wszystkich na scenie; obłoki gazu
+i dymu falują, a ich gęstość w każdej strefie idzie za tabelą gazu w bieżącej rundzie; Konwergencja daje czerwoną
+winietę, zakłócenie i migający pasek Overwatch na karcie hakera (dla jego właścicieli i MG). Przy *Automatycznie*
+wybuch korzysta z modułów **Sequencer** i **JB2A**, jeśli są włączone w świecie.
+
 ### Okno rzutu
 
 Okno rzutu systemu ma układ Karty Edge: nagłówek z nazwą testu i wyborem atrybutu, kafelki **Pula kości**
