@@ -7,6 +7,7 @@ import { GRADES, gradeUpdates, baseValues, applyGrade } from "../grades.mjs";
 import { SKILLS } from "../chargen/rules.mjs";
 import { giveItem, deleteItem } from "../give.mjs";
 import * as rolls from "./system-rolls.mjs";
+import * as garage from "../garage.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key) => game.i18n.localize(key);
@@ -38,6 +39,10 @@ export class EdgeItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       giveItem: EdgeItemSheet.#onGive,
       deleteItem: EdgeItemSheet.#onDelete,
       systemItemSheet: EdgeItemSheet.#onSystemSheet,
+      garageTakeOut: EdgeItemSheet.#onGarageTakeOut,
+      garageOpen: EdgeItemSheet.#onGarageOpen,
+      garageSync: EdgeItemSheet.#onGarageSync,
+      garageDrive: EdgeItemSheet.#onGarageDrive,
     },
   };
 
@@ -57,8 +62,18 @@ export class EdgeItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
           : L(`SRE.ItemSheet.Tab.${id}`),
     }));
     const descriptionHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(data.description, { relativeTo: this.document, secrets: this.document.isOwner });
+    // The Garage (13D): the Vehicle actor made from this item, with its state.
+    let garageCtx = null;
+    if (data.kind === "vehicle") {
+      const v = garage.linkedVehicle(this.document);
+      const modes = CONFIG.SR6?.VEHICLE_MODE ?? {};
+      garageCtx = { vehicle: v ? {
+        name: v.name, img: v.img, mode: modes[v.system?.vehicle?.opMode] ? L(modes[v.system.vehicle.opMode]) : v.system?.vehicle?.opMode ?? "",
+        speed: Number(v.system?.vehicle?.speed) || 0, top: Number(v.system?.tspd) || 0, dmg: Number(v.system?.physical?.dmg) || 0, max: Number(v.system?.physical?.max) || 0,
+      } : null, canDrive: !!v?.isOwner };
+    }
     return {
-      ...context, ...data, tabs, descriptionHTML,
+      ...context, ...data, tabs, descriptionHTML, garage: garageCtx,
       editable: this.isEditable,
       active: Object.fromEntries(ITEM_TABS.map((id) => [id, id === this.itemTab])),
     };
@@ -98,6 +113,28 @@ export class EdgeItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       permissions: { drop: () => this.isEditable },
       callbacks: { drop: this._onDrop.bind(this) },
     }).bind(this.element);
+  }
+
+  static async #onGarageTakeOut() {
+    await garage.takeOut(this.document);
+    this.render();
+  }
+
+  static async #onGarageOpen() {
+    garage.linkedVehicle(this.document)?.sheet.render(true);
+  }
+
+  static async #onGarageSync() {
+    await garage.sync(this.document);
+    this.render();
+  }
+
+  static async #onGarageDrive(event, target) {
+    const v = garage.linkedVehicle(this.document);
+    if (!v?.isOwner) return;
+    const veh = await import("../vehicles.mjs");
+    const run = { handling: veh.openHandling, drivers: veh.driversTest, ram: veh.openRam }[target.dataset.maneuver];
+    return run?.(v);
   }
 
   /** Dropping a mod on the sheet installs it (the module's mount rules check the slot and Capacity). */

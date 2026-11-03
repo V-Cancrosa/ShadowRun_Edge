@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.39.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Garaż (etap 13D): pojazd lub dron z ekwipunku (np. Dodge Scoot) ma na karcie przedmiotu osiągi do edycji i panel Garażu. „Wyprowadź pojazd” tworzy aktora Pojazdu ze statystykami z przedmiotu, z postacią jako właścicielem i kierowcą oraz tymi samymi graczami jako właścicielami (drony od razu w trybie RCC); gdy gracz nie może tworzyć aktorów, robi to MG automatycznie.",
+      "Z karty przedmiotu: otwórz pojazd, test prowadzenia, pojedynek kierowców i taranowanie, synchronizacja statystyk. Zmiana osiągów przedmiotu sama aktualizuje pojazd, a stan pojazdu (prędkość, uszkodzenia) widać na przedmiocie.",
+      "Karta pojazdu: osiągi do edycji wprost na karcie (prowadzenie i przyspieszenie na drodze i w terenie, interwały, prędkość maks., Budowa, Pancerz, Pilot, Sensor, miejsca), lista wyposażenia i informacja, z czyjego ekwipunku pochodzi. Pojazdy trafiają do folderu „Garaż”."
+    ],
+    "changes_en": [
+      "The Garage (stage 13D): a vehicle or drone in a character's gear (e.g. a Dodge Scoot) gets editable stats and a Garage panel on its item sheet. \"Take out the vehicle\" creates a Vehicle actor with the item's stats, the character as owner and driver and the same players as owners (drones start in RCC mode); when a player may not create actors, the GM's client does it automatically.",
+      "From the item sheet: open the vehicle, Handling test, drivers' opposed test and ramming, sync the stats. Changing the item's stats updates the vehicle by itself, and the vehicle's state (speed, damage) shows on the item.",
+      "The vehicle sheet: stats editable right on the sheet (on- and off-road Handling and Acceleration, intervals, top speed, Body, Armor, Pilot, Sensor, seats), an equipment list and which character's gear it came from. Vehicles go into a \"Garage\" folder."
+    ]
+  },
+  {
     "version": "0.38.0",
     "date": "2026-11-03",
     "changes": [

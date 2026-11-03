@@ -1958,6 +1958,32 @@
       "SoakLabel": "Resisting {dv} damage",
       "Knockout": "{name}: Knockout Blow — unconscious",
       "Prone": "{name}: Tumble — Prone"
+    },
+    "Garage": {
+      "Title": "Garage",
+      "Hint": "a vehicle from the gear as a Vehicle actor",
+      "Stats": "Vehicle stats",
+      "Folder": "Garage",
+      "NeedsOwner": "The vehicle must be in a character's gear.",
+      "NoGM": "No active GM — only the GM can create the vehicle for a player.",
+      "Asked": "The GM was asked to take out the vehicle.",
+      "InSync": "The vehicle's stats are up to date.",
+      "Synced": "Stats updated: {name}.",
+      "Open": "Open the vehicle",
+      "Sync": "Sync",
+      "TakeOut": "Take out the vehicle",
+      "None": "This vehicle has no Vehicle sheet yet — take it out to drive, ram and place a token.",
+      "OnActorOnly": "The Garage works for a vehicle in a character's gear.",
+      "FromItem": "From the gear: {name} ({owner})",
+      "Equipment": "Equipment",
+      "Stat": {
+        "handlOn": "Handling (on-road)",
+        "handlOff": "Handling (off-road)",
+        "accOn": "Accel (on-road)",
+        "accOff": "Accel (off-road)",
+        "spdiOn": "Interval (on-road)",
+        "spdiOff": "Interval (off-road)"
+      }
     }
   }
 }

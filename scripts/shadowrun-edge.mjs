@@ -5,6 +5,7 @@
 import { openItemWizard } from "./wizard/item-wizard.mjs";
 import "./acquire.mjs";
 import "./mounts.mjs";
+import "./garage.mjs";
 import "./theme.mjs";
 import "./sheet/edge-sheet.mjs";
 import "./sheet/edge-compact-sheets.mjs";

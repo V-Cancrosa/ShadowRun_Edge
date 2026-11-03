@@ -131,6 +131,14 @@ export function buildVehicleContext(actor, { L = (k) => k, config = {} } = {}) {
     soak: bod * 2, // Body × 2 as in the explosion examples (p. 114); ramming uses Body alone (p. 201)
     weapons: [...combat.ranged, ...combat.melee],
     autosofts,
+    // 13D: the stats as fields (edited on the sheet) and the rest of what the vehicle carries.
+    fields: [
+      ["handlOn", "SRE.Garage.Stat.handlOn"], ["handlOff", "SRE.Garage.Stat.handlOff"], ["accOn", "SRE.Garage.Stat.accOn"], ["accOff", "SRE.Garage.Stat.accOff"],
+      ["spdiOn", "SRE.Garage.Stat.spdiOn"], ["spdiOff", "SRE.Garage.Stat.spdiOff"], ["tspd", "SRE.Compact.TopSpeed"], ["bod", "SRE.Compact.Body"],
+      ["arm", "SRE.Compact.Armor"], ["pil", "SRE.Compact.Pilot"], ["sen", "SRE.Compact.Sensor"], ["sea", "SRE.Compact.Seats"],
+    ].map(([id, key]) => ({ name: `system.${id}`, label: L(key), value: num(s[id]) })),
+    equipment: items.filter((i) => i.type === "gear" && !String(i.system?.type ?? "").startsWith("WEAPON") && i.system?.type !== "AUTOSOFT")
+      .map((i) => ({ id: i.id, name: i.name, img: i.img, rating: num(i.system?.rating) })),
     notes: s.notes ?? "",
   };
 }

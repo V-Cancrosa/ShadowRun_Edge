@@ -919,3 +919,8 @@ body.sre-edge-light :is(.sre-es-portrait, .sre-it-icon) { background: linear-gra
 .sre-mx-osrow .sre-es-meter { flex: 1; margin: 0; }
 .sre-es-ktile input.sre-host-rating { width: 3em; font-size: 22px; font-weight: bold; text-align: center; background: transparent; border: none; color: inherit; }
 .sre-es-ktile small.sre-vh-hint { display: block; font-size: 10px; color: var(--sre-text-dim); }
+
+/* 13D: the Garage on the item sheet, editable vehicle stats on the compact sheet. */
+.sre-garage .sre-garage-img { width: 40px; height: 40px; object-fit: cover; border: 1px solid var(--sre-accent-line); clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%); margin-right: 8px; }
+.sre-garage .sre-es-row small { display: block; opacity: 0.75; }
+.sre-sheet .sre-cp-vt input { width: 100%; min-width: 0; text-align: center; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--sre-accent-line); color: inherit; }

@@ -84,6 +84,35 @@
     </div>
     {{/if}}
 
+    {{#if vehicleStats}}
+    <div class="sre-es-panel sre-es-gap">
+      <h3>{{localize "SRE.Garage.Stats"}}</h3>
+      <div class="sre-it-grid">
+        {{#each vehicleStats}}<label class="sre-it-f">{{label}}<input type="number" name="{{name}}" value="{{value}}" {{#unless ../editable}}disabled{{/unless}}></label>{{/each}}
+      </div>
+    </div>
+    <div class="sre-es-panel sre-es-gap sre-garage">
+      <h3>{{localize "SRE.Garage.Title"}} <span>{{localize "SRE.Garage.Hint"}}</span></h3>
+      {{#if garage.vehicle}}
+      <div class="sre-es-row"><img class="sre-garage-img" src="{{garage.vehicle.img}}" alt=""><span class="sre-es-grow"><b>{{garage.vehicle.name}}</b>
+        <small>{{garage.vehicle.mode}} · {{localize "SRE.Vehicle.Speed"}} {{garage.vehicle.speed}}/{{garage.vehicle.top}} · {{localize "SRE.Vehicle.Monitor"}} {{garage.vehicle.dmg}}/{{garage.vehicle.max}}</small></span></div>
+      <div class="sre-es-quick">
+        <button type="button" class="sre-es-qb" data-action="garageOpen"><i class="fas fa-car-side"></i> {{localize "SRE.Garage.Open"}}</button>
+        {{#if garage.canDrive}}
+        <button type="button" class="sre-es-qb" data-action="garageDrive" data-maneuver="handling">{{localize "SRE.Vehicle.Handling"}}</button>
+        <button type="button" class="sre-es-qb" data-action="garageDrive" data-maneuver="drivers">{{localize "SRE.Vehicle.Drivers"}}</button>
+        <button type="button" class="sre-es-qb illegal" data-action="garageDrive" data-maneuver="ram">{{localize "SRE.Vehicle.Ram"}}</button>
+        {{/if}}
+        {{#if editable}}<button type="button" class="sre-es-qb" data-action="garageSync"><i class="fas fa-rotate"></i> {{localize "SRE.Garage.Sync"}}</button>{{/if}}
+      </div>
+      {{else if onActor}}
+      <div class="sre-es-row sre-es-dim">{{localize "SRE.Garage.None"}}</div>
+      {{#if editable}}<div class="sre-es-quick"><button type="button" class="sre-es-qb" data-action="garageTakeOut"><i class="fas fa-warehouse"></i> {{localize "SRE.Garage.TakeOut"}}</button></div>{{/if}}
+      {{else}}
+      <div class="sre-es-row sre-es-dim">{{localize "SRE.Garage.OnActorOnly"}}</div>
+      {{/if}}
+    </div>
+    {{/if}}
     {{#if (eq kind "armor")}}
     <div class="sre-es-panel sre-es-gap">
       <h3>{{localize "SRE.Sheet.Armor"}}</h3>

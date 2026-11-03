@@ -4,6 +4,7 @@
     "pl": "Moduł jako system — własny silnik i karty",
     "en": "The module as a system — own engine and sheets",
     "versions": [
+      "0.39.0",
       "0.38.0",
       "0.37.0"
     ]

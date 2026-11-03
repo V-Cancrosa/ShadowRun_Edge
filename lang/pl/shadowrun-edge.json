@@ -1958,6 +1958,32 @@
       "SoakLabel": "Odporność na {dv} obrażeń",
       "Knockout": "{name}: Nokaut — nieprzytomny",
       "Prone": "{name}: Powalenie — Leżący"
+    },
+    "Garage": {
+      "Title": "Garaż",
+      "Hint": "pojazd z ekwipunku jako aktor Pojazdu",
+      "Stats": "Osiągi pojazdu",
+      "Folder": "Garaż",
+      "NeedsOwner": "Pojazd musi być w ekwipunku postaci.",
+      "NoGM": "Brak aktywnego MG — tylko MG może utworzyć pojazd za gracza.",
+      "Asked": "Poproszono MG o wyprowadzenie pojazdu.",
+      "InSync": "Statystyki pojazdu są aktualne.",
+      "Synced": "Zaktualizowano statystyki: {name}.",
+      "Open": "Otwórz pojazd",
+      "Sync": "Synchronizuj",
+      "TakeOut": "Wyprowadź pojazd",
+      "None": "Ten pojazd nie ma jeszcze karty Pojazdu — wyprowadź go, żeby jeździć, taranować i wystawić żeton.",
+      "OnActorOnly": "Garaż działa dla pojazdu w ekwipunku postaci.",
+      "FromItem": "Z ekwipunku: {name} ({owner})",
+      "Equipment": "Wyposażenie",
+      "Stat": {
+        "handlOn": "Prowadzenie (droga)",
+        "handlOff": "Prowadzenie (teren)",
+        "accOn": "Przysp. (droga)",
+        "accOff": "Przysp. (teren)",
+        "spdiOn": "Interwał (droga)",
+        "spdiOff": "Interwał (teren)"
+      }
     }
   }
 }

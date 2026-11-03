@@ -32,9 +32,20 @@
         <div class="sre-es-panel">
           <h3>{{localize "SRE.Compact.Performance"}}</h3>
           <div class="sre-cp-vtiles">
+            {{#if editable}}
+            {{#each fields}}<label class="sre-cp-vt"><i>{{label}}</i><input type="number" name="{{name}}" value="{{value}}"></label>{{/each}}
+            {{else}}
             {{#each stats}}<div class="sre-cp-vt"><i>{{label}}</i><b>{{value}}</b>{{#if hint}}<small>{{hint}}</small>{{/if}}</div>{{/each}}
+            {{/if}}
           </div>
+          {{#if garage}}<div class="sre-es-row sre-es-dim"><i class="fas fa-warehouse"></i>&nbsp;<span class="sre-es-grow">{{localize "SRE.Garage.FromItem" name=garage.item owner=garage.owner}}</span></div>{{/if}}
         </div>
+        {{#if equipment.length}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Garage.Equipment"}}</h3>
+          {{#each equipment}}<div class="sre-es-row" data-item-id="{{id}}"><span class="sre-es-grow"><a class="sre-es-itemname" data-action="openItem">{{name}}</a>{{#if rating}} <small>{{rating}}</small>{{/if}}</span></div>{{/each}}
+        </div>
+        {{/if}}
         {{else}}
         <div class="sre-es-panel">
           <h3>{{#if isSpirit}}{{localize "SRE.Compact.AttributesForce"}}{{else}}{{localize "SRE.Compact.Attributes"}}{{/if}}</h3>

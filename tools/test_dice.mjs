@@ -171,3 +171,22 @@ assert.equal(I.initiativeScore(9, [3, 4], { mod: -2, boosts: 1 }), 17);
 assert.equal(R.initiativeDice(7), 5, "never more than 5D6");
 
 console.log("combat chain OK");
+
+// ───── 13D: the Garage ─────
+globalThis.foundry.utils.deepClone = (o) => JSON.parse(JSON.stringify(o));
+const G = await import("../scripts/garage.mjs");
+const scoot = { type: "gear", name: "Dodge Scoot", img: "s.webp", uuid: "Actor.a.Item.s", system: { type: "VEHICLES", subtype: "BIKES", handlOn: 3, handlOff: 5, accOn: 10, accOff: 10, spdiOn: 15, spdiOff: 10, tspd: 50, bod: 4, arm: 4, pil: 1, sen: 1, sea: 1 } };
+assert.equal(G.isVehicleItem(scoot), true);
+assert.equal(G.isVehicleItem({ type: "gear", system: { type: "WEAPON_FIREARMS" } }), false);
+const vd = G.vehicleData(scoot, { id: "a", ownership: { default: 0, u1: 3 } });
+assert.equal(vd.type, "Vehicle");
+assert.equal(vd.system.handlOff, 5);
+assert.equal(vd.system.vehicle.belongs, "a", "the character is the owner and driver");
+assert.equal(vd.system.vehicle.opMode, "manual");
+assert.equal(vd.system.vtype, "ground_craft");
+assert.deepEqual(vd.ownership, { default: 0, u1: 3 }, "the same players own it");
+assert.equal(vd.flags["shadowrun-edge"].fromItem, "Actor.a.Item.s");
+assert.equal(G.vehicleData({ ...scoot, system: { ...scoot.system, type: "DRONES" } }, null).system.vehicle.opMode, "rcc");
+assert.deepEqual(G.syncChanges(scoot, { name: "Dodge Scoot", system: { ...vd.system } }), {});
+assert.deepEqual(G.syncChanges({ ...scoot, system: { ...scoot.system, arm: 6 } }, { name: "Dodge Scoot", system: { ...vd.system } }), { "system.arm": 6 });
+console.log("garage OK");

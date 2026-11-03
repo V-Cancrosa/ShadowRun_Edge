@@ -267,8 +267,17 @@ export class EdgeVehicleSheet extends EdgeCompactSheet {
     const owners = game.actors?.filter?.((a) => ["Player", "NPC"].includes(a.type) && (a.isOwner || game.user.isGM)) ?? [];
     const group = veh.rccGroup(this.document);
     const rcc = veh.rccOf(this.document);
+    const fromItem = this.document.getFlag(MODULE_ID, "fromItem");
+    let garage = null;
+    try {
+      const item = fromItem ? fromUuidSync(fromItem) : null;
+      if (item) garage = { item: item.name, owner: item.actor?.name ?? "" };
+    } catch {
+      garage = null;
+    }
     return {
       ...data,
+      garage,
       drive: {
         ...st,
         modes: Object.entries(modes).map(([id, key]) => ({ id, label: key ? L(key) : id, selected: id === st.mode })),

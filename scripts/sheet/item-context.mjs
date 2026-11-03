@@ -28,6 +28,7 @@ export function itemKind(item) {
   if (type === "ARMOR" || type === "ARMOR_ADDITION") return "armor";
   if (AUGMENTS.has(type)) return "augment";
   if (DEVICES.has(item.system?.subtype)) return "device";
+  if (type === "VEHICLES" || type === "DRONES") return "vehicle";
   return "gear";
 }
 
@@ -62,6 +63,12 @@ export function buildItemContext(item, { L = (k) => k, config = {}, moduleId = "
 
   const ctx = {
     id: item.id, name: item.name, img: item.img, kind, onActor: !!actor, chips,
+    // Vehicles and drones (stage 13D): the stats the Vehicle actor gets in the Garage.
+    vehicleStats: kind === "vehicle" ? [
+      ["handlOn", "SRE.Garage.Stat.handlOn"], ["handlOff", "SRE.Garage.Stat.handlOff"], ["accOn", "SRE.Garage.Stat.accOn"], ["accOff", "SRE.Garage.Stat.accOff"],
+      ["spdiOn", "SRE.Garage.Stat.spdiOn"], ["spdiOff", "SRE.Garage.Stat.spdiOff"], ["tspd", "SRE.Compact.TopSpeed"], ["bod", "SRE.Compact.Body"],
+      ["arm", "SRE.Compact.Armor"], ["pil", "SRE.Compact.Pilot"], ["sen", "SRE.Compact.Sensor"], ["sea", "SRE.Compact.Seats"],
+    ].map(([id, key]) => ({ name: `system.${id}`, label: L(key), value: num(src[id]) })) : null,
     isGear: gear,
     gearTypes: gear ? options(config.GEAR_TYPES, src.type, L) : [],
     gearSubtypes: gear ? options(config.GEAR_SUBTYPES?.[src.type], src.subtype, L, { blank: "—" }) : [],
