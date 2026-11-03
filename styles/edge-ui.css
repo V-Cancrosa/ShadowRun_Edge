@@ -99,62 +99,6 @@ body.sre-ui-3 :is(.application, .app.window-app) > .window-header .window-title 
   font-family: var(--sre-font-display, inherit); letter-spacing: 0.08em; text-transform: uppercase;
 }
 
-/* Sidebar: tabs, search, directories (folder colors set by the GM stay as the left bar). */
-body.sre-ui-3 #sidebar { background: var(--sre-bg); }
-body.sre-ui-3 :is(#sidebar-tabs, #sidebar nav.tabs) :is(button, a, .item) { border-radius: 0; color: var(--sre-text-dim); border-bottom: 2px solid transparent; }
-body.sre-ui-3 :is(#sidebar-tabs, #sidebar nav.tabs) :is(button, a, .item):is(.active, [aria-pressed="true"]) {
-  color: var(--sre-text); border-bottom-color: var(--sre-accent); background: linear-gradient(180deg, transparent, var(--sre-accent-soft));
-}
-body.sre-ui-3 #sidebar :is(.directory-list, .directory) .folder > :is(header, .folder-header) {
-  font-family: var(--sre-font-display, inherit); letter-spacing: 0.08em; text-transform: uppercase;
-  border-left: 3px solid var(--sre-accent); background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent);
-}
-body.sre-ui-3 #sidebar :is(.directory-list, .directory) :is(.directory-item.document, .directory-item.entry, .document.entry) { border-bottom: 1px solid var(--sre-line); }
-body.sre-ui-3 #sidebar :is(.directory-list, .directory) :is(.directory-item.document, .directory-item.entry, .document.entry):hover {
-  background: var(--sre-accent-soft); box-shadow: inset 3px 0 0 var(--sre-accent);
-}
-body.sre-ui-3 #sidebar :is(.header-search, .directory-header) input { border-bottom: 2px solid var(--sre-accent); }
-/* Compendium entries: the banner keeps its picture, the title gets the display face. */
-body.sre-ui-3 #sidebar .compendium-name, body.sre-ui-3 #sidebar .directory-item.compendium .entry-name { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; }
-
-/* Scene controls, players, hotbar, scene navigation. */
-body.sre-ui-3 #scene-controls :is(button.control, .control, .ui-control) {
-  border-radius: 0; clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
-}
-body.sre-ui-3 #scene-controls :is(button.control, .control, .ui-control):is(.active, [aria-pressed="true"]) {
-  border-color: var(--sre-accent); color: var(--sre-accent); box-shadow: inset 0 0 0 1px var(--sre-accent), 0 0 10px var(--sre-accent-soft);
-}
-body.sre-ui-3 #players { border-left: 3px solid var(--sre-cyan); border-radius: 0; font-family: var(--sre-font-display, inherit); letter-spacing: 0.04em; }
-body.sre-ui-3 #hotbar :is(.slot, .macro) { border-radius: 0; border-color: var(--sre-line); }
-body.sre-ui-3 #hotbar :is(.slot, .macro):hover { border-color: var(--sre-accent); box-shadow: 0 0 10px var(--sre-accent-soft); }
-body.sre-ui-3 :is(#navigation, #scene-navigation) :is(.scene, .scene-navigation-menu li, li) { border-radius: 0; }
-body.sre-ui-3 :is(#navigation, #scene-navigation) :is(.scene, li).active { border-color: var(--sre-accent); box-shadow: inset 0 -2px 0 var(--sre-accent); }
-
-/* Pause: the caption with split colors and a rare glitch. */
-body.sre-ui-3 #pause :is(figcaption, .caption, label) {
-  font-family: var(--sre-font-display, inherit); letter-spacing: 0.3em; text-transform: uppercase;
-  text-shadow: 2px 0 var(--sre-accent), -2px 0 var(--sre-cyan);
-}
-body.sre-ui-3.sre-motion-full #pause :is(figcaption, .caption, label) { animation: sre-pause-glitch 2.6s steps(1) infinite; }
-@keyframes sre-pause-glitch { 0%, 92%, 100% { transform: none; clip-path: none; } 93% { transform: translateX(-3px); clip-path: inset(10% 0 50% 0); } 95% { transform: translateX(3px); clip-path: inset(50% 0 10% 0); } }
-
-/* Notifications, tooltips, context menus. */
-body.sre-ui-3 #notifications .notification {
-  border-radius: 0; border: 1px solid var(--sre-line); border-left: 3px solid var(--sre-cyan);
-  background: var(--sre-panel); color: var(--sre-text); font-family: var(--sre-font-display, inherit); letter-spacing: 0.03em;
-}
-body.sre-ui-3 #notifications .notification.warning { border-left-color: var(--sre-warn); }
-body.sre-ui-3 #notifications .notification.error { border-left-color: var(--sre-bad); }
-body.sre-ui-3.sre-motion-full #notifications .notification { animation: sre-msg-in 260ms ease-out both; }
-body.sre-ui-3 #tooltip { border-radius: 0; border: 1px solid var(--sre-accent-line); background: var(--sre-bg); color: var(--sre-text); }
-body.sre-ui-3 #context-menu { border-radius: 0; border: 1px solid var(--sre-accent-line); background: var(--sre-bg); }
-body.sre-ui-3 #context-menu :is(li, .context-item):hover { background: var(--sre-accent-soft); box-shadow: inset 3px 0 0 var(--sre-accent); }
-
-/* Combat tracker (core). */
-body.sre-ui-3 #combat .combatant { border-bottom: 1px solid var(--sre-line); }
-body.sre-ui-3 #combat .combatant :is(.token-name, .name) { font-family: var(--sre-font-display, inherit); letter-spacing: 0.05em; }
-body.sre-ui-3 #combat .combatant .token-initiative { font-family: var(--sre-font-display, inherit); font-weight: 700; color: var(--sre-accent); }
-
 /* ───── Level 3: modules (only matched when the module draws them) ───── */
 
 /* Carousel Combat Tracker (combat-tracker-dock): its own variables first, then the portraits. */
@@ -198,14 +142,246 @@ body.sre-ui-3 :is(.remaining-timer, .break-start span) { font-family: var(--sre-
 
 /* Tokenizer and Levels: their windows follow the window frame above; their buttons follow level 2. */
 
-/* ───── Light look ("Papier"): Foundry's controls are drawn for a dark background — give them contrast ───── */
-body.sre-ui-3.sre-theme-light :is(#sidebar-tabs, #sidebar nav.tabs, #scene-controls, #hotbar, #players, #navigation, #scene-navigation) :is(button, a, .ui-control, .control, .item, .slot, .scene) {
-  background-color: #f5f3ee !important; color: #2b2925 !important; border-color: rgba(60, 50, 40, 0.28) !important;
+/* ═════════════════ Foundry 14 interface, exact markup (from /edge-ui) ═════════════════ */
+
+/* Control colors per look: every ui-control (scene controls, sidebar tabs, chat modes, hotbar, dock buttons). */
+body.sre-ui-2.sre-theme-dark {
+  --sre-ctl-bg: rgba(16, 17, 23, 0.92); --sre-ctl-border: rgba(224, 64, 154, 0.3); --sre-ctl-icon: #b9b7c6;
+  --sre-ctl-hover: #3fd4e8; --sre-ctl-on-bg: rgba(224, 64, 154, 0.2); --sre-ctl-on-icon: #ff7ac0; --sre-ctl-on-border: #e0409a;
+  --sre-sidebar-bg: #0d0e14; --sre-chat-bg: #101117;
 }
-body.sre-ui-3.sre-theme-light :is(#sidebar-tabs, #sidebar nav.tabs, #scene-controls) :is(button, a, .ui-control, .control, .item):is(.active, [aria-pressed="true"]) {
-  background-color: rgba(163, 59, 110, 0.14) !important; color: #a33b6e !important; border-color: #a33b6e !important;
+body.sre-ui-2.sre-theme-light {
+  --sre-ctl-bg: #f7f5f0; --sre-ctl-border: rgba(60, 50, 40, 0.3); --sre-ctl-icon: #2b2925;
+  --sre-ctl-hover: #2c7480; --sre-ctl-on-bg: rgba(163, 59, 110, 0.14); --sre-ctl-on-icon: #a33b6e; --sre-ctl-on-border: #a33b6e;
+  --sre-sidebar-bg: #eceae4; --sre-chat-bg: #eceae4;
 }
-body.sre-ui-3.sre-theme-light :is(#sidebar-tabs, #sidebar nav.tabs, #scene-controls, #hotbar) :is(button, a, .ui-control, .control, .item, .slot) :is(i, .fas, .fa-solid, img) { color: inherit !important; opacity: 1 !important; filter: none; }
-body.sre-ui-3.sre-theme-light #hotbar :is(.slot, .macro) img { filter: none; }
-body.sre-ui-2.sre-theme-light .chat-message .message-header .message-metadata { color: #6e6a62; }
-body.sre-ui-2.sre-theme-light :is(#chat-message, .chat-form textarea, .chat-form prose-mirror, .chat-form .editor-content) { color: #2b2925; }
+body.sre-ui-3 :is(#scene-controls, #sidebar-tabs, #hotbar, #scene-navigation, #players) .ui-control,
+body.sre-ui-2 #chat-controls .ui-control,
+body.sre-ui-3 .combat-dock .buttons-container .ui-control {
+  background: var(--sre-ctl-bg); color: var(--sre-ctl-icon); border: 1px solid var(--sre-ctl-border); border-radius: 0;
+  transition: color 120ms, background-color 120ms, box-shadow 160ms, border-color 120ms;
+}
+body.sre-ui-3 :is(#scene-controls, #sidebar-tabs, #hotbar, #scene-navigation, #players) .ui-control:hover,
+body.sre-ui-2 #chat-controls .ui-control:hover,
+body.sre-ui-3 .combat-dock .buttons-container .ui-control:hover {
+  color: var(--sre-ctl-hover); border-color: var(--sre-ctl-hover); box-shadow: 0 0 10px color-mix(in srgb, var(--sre-ctl-hover) 40%, transparent);
+}
+body.sre-ui-3 :is(#scene-controls, #sidebar-tabs) .ui-control[aria-pressed="true"],
+body.sre-ui-2 #chat-controls .ui-control[aria-pressed="true"],
+body.sre-ui-3 #scene-navigation .ui-control.scene.view {
+  background: var(--sre-ctl-on-bg); color: var(--sre-ctl-on-icon); border-color: var(--sre-ctl-on-border);
+  box-shadow: inset 0 0 0 1px var(--sre-ctl-on-border), 0 0 12px color-mix(in srgb, var(--sre-ctl-on-border) 35%, transparent);
+}
+
+/* Scene controls: cut corners, layers and tools. */
+body.sre-ui-3 #scene-controls button.control.ui-control { clip-path: polygon(0 0, 100% 0, 100% 74%, 74% 100%, 0 100%); }
+body.sre-ui-3 #scene-controls-tools button.control.ui-control.tool { border-style: dashed; }
+body.sre-ui-3 #scene-controls-tools button.control.ui-control.tool[aria-pressed="true"] { border-style: solid; }
+
+/* Sidebar: dark column, tabs, directories. */
+body.sre-ui-3 #sidebar-content { background: var(--sre-sidebar-bg); }
+body.sre-ui-3 #sidebar-tabs button.ui-control.plain { clip-path: polygon(0 0, 100% 0, 100% 74%, 74% 100%, 0 100%); }
+body.sre-ui-3 #sidebar-tabs .notification-pip { background: var(--sre-accent); box-shadow: 0 0 6px var(--sre-accent); }
+body.sre-ui-3 .directory-header search input,
+body.sre-ui-3 #placeables search input {
+  background: rgba(0, 0, 0, 0.25); border: 1px solid var(--sre-line); border-bottom: 2px solid var(--sre-accent); border-radius: 0; color: var(--sre-text);
+}
+body.sre-ui-3.sre-theme-light :is(.directory-header, #placeables) search input { background: #faf9f6; }
+body.sre-ui-3 .directory-header .header-actions button,
+body.sre-ui-3 .directory-footer button,
+body.sre-ui-3 #settings section button[data-action],
+body.sre-ui-3 #settings section a.button {
+  border: 1px solid var(--sre-accent-line); border-radius: 0; background: transparent; color: var(--sre-text);
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 94% 100%, 0 100%);
+}
+body.sre-ui-3 .directory-header .header-actions button:hover,
+body.sre-ui-3 #settings section button[data-action]:hover { background: var(--sre-accent-soft); box-shadow: 0 0 12px var(--sre-accent-soft); }
+body.sre-ui-3 #settings h4.divider { font-family: var(--sre-font-display, inherit); letter-spacing: 0.16em; color: var(--sre-accent); text-transform: uppercase; }
+body.sre-ui-3 #settings .info h1.title { font-family: var(--sre-font-display, inherit); letter-spacing: 0.1em; }
+body.sre-ui-3 .directory-list li.directory-item.entry.document { border-bottom: 1px solid var(--sre-line); }
+body.sre-ui-3 .directory-list li.directory-item.entry.document:hover { background: var(--sre-accent-soft); box-shadow: inset 3px 0 0 var(--sre-accent); }
+body.sre-ui-3 .directory-list li.directory-item.entry.document img.thumbnail {
+  border: 1px solid var(--sre-accent-line); border-radius: 0; clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%);
+}
+body.sre-ui-3 .directory-list li.directory-item.entry.document a.entry-name { letter-spacing: 0.02em; }
+body.sre-ui-3 .directory-list li.directory-item.folder > header.folder-header {
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.1em; text-transform: uppercase;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.05) 70%); border-left: 3px solid rgba(255, 255, 255, 0.55);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+body.sre-ui-3 .directory-list li.directory-item.folder.expanded > header.folder-header { border-left-color: var(--sre-cyan); }
+body.sre-ui-3 .directory-list ol.subdirectory { border-left: 1px solid var(--sre-line); margin-left: 6px; }
+body.sre-ui-3 #placeables nav.tabs .inline-control.active { color: var(--sre-accent); box-shadow: inset 0 -2px 0 var(--sre-accent); }
+
+/* Chat: the log, the message modes and the editor (its menu bar and the writing area). */
+body.sre-ui-2 #chat .chat-scroll { background: var(--sre-chat-bg); }
+body.sre-ui-2 #chat .chat-log.theme-light .chat-message { color: var(--sre-text); }
+body.sre-ui-2 #chat-controls #message-modes { gap: 2px; }
+body.sre-ui-2 #chat-controls .ui-control { clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%); }
+body.sre-ui-2 prose-mirror#chat-message.chat-input {
+  border: 1px solid var(--sre-line); border-bottom: 2px solid var(--sre-accent); border-radius: 0; background: rgba(0, 0, 0, 0.3);
+}
+body.sre-ui-2.sre-theme-light prose-mirror#chat-message.chat-input { background: #faf9f6; }
+body.sre-ui-2 prose-mirror#chat-message .editor-menu { background: var(--sre-ctl-bg); border-bottom: 1px solid var(--sre-line); border-radius: 0; }
+body.sre-ui-2 prose-mirror#chat-message .editor-menu button { color: var(--sre-ctl-icon); background: transparent; border-radius: 0; }
+body.sre-ui-2 prose-mirror#chat-message .editor-menu button:hover { color: var(--sre-ctl-hover); }
+body.sre-ui-2 prose-mirror#chat-message .editor-content { color: var(--sre-text); }
+body.sre-ui-2 prose-mirror#chat-message.active { box-shadow: 0 0 0 1px var(--sre-accent-line), 0 0 14px var(--sre-accent-soft); }
+body.sre-ui-2 #chat .jump-to-bottom { background: var(--sre-accent); color: #fff; border-radius: 0; }
+/* Chat Portrait: the name it repeats in the message body stays, in the display face. */
+body.sre-ui-2 .chat-message .chat-portrait-text-content-name-generic { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; color: var(--sre-accent); }
+body.sre-ui-2 .chat-message .message-header .whisper-to { font-family: var(--sre-font-display, inherit); font-size: 10px; letter-spacing: 0.08em; color: var(--sre-cyan); }
+
+/* Dice Tray (dice-calculator): dark tiles in both looks (its dice icons are white). */
+body.sre-ui-2 .dice-tray .dice-tray__button, body.sre-ui-2 .dice-tray .dice-tray__roll {
+  background: #1b1c26; border: 1px solid rgba(224, 64, 154, 0.35); border-radius: 0; color: #3fd4e8;
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+}
+body.sre-ui-2 .dice-tray .dice-tray__button:hover, body.sre-ui-2 .dice-tray .dice-tray__roll:hover { border-color: #3fd4e8; box-shadow: 0 0 10px rgba(63, 212, 232, 0.4); }
+body.sre-ui-2 .dice-tray .dice-tray__roll { background: #e0409a; color: #fff; }
+body.sre-ui-2 .dice-tray .dice-tray__input { border-radius: 0; border: 1px solid var(--sre-line); font-family: var(--sre-font-display, inherit); text-align: center; }
+body.sre-ui-2 .dice-tray .dice-tray__flag { background: #e0409a; color: #fff; border-radius: 0; font-family: var(--sre-font-display, inherit); }
+
+/* Hotbar: cut slots, key numbers, full slots in the accent. */
+body.sre-ui-3 #action-bar li.slot {
+  background: var(--sre-ctl-bg); border: 1px solid var(--sre-ctl-border); border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 78% 100%, 0 100%);
+}
+body.sre-ui-3 #action-bar li.slot.full { border-color: var(--sre-ctl-on-border); }
+body.sre-ui-3 #action-bar li.slot:hover { border-color: var(--sre-ctl-hover); box-shadow: inset 0 0 10px color-mix(in srgb, var(--sre-ctl-hover) 35%, transparent); }
+body.sre-ui-3 #action-bar li.slot span.key { font-family: var(--sre-font-display, inherit); color: var(--sre-cyan); text-shadow: 0 0 4px rgba(0, 0, 0, 0.8); }
+body.sre-ui-3 #hotbar-page-controls .hotbar-page-number { font-family: var(--sre-font-display, inherit); color: var(--sre-accent); }
+
+/* Players and scene navigation. */
+body.sre-ui-3 aside#players { background: var(--sre-ctl-bg); border: 1px solid var(--sre-ctl-border); border-left: 3px solid var(--sre-cyan); border-radius: 0; }
+body.sre-ui-3 #players li.player .player-name { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; }
+body.sre-ui-3 #players li.player.self .player-name { color: var(--sre-accent); }
+body.sre-ui-3 #players #performance-stats { font-family: var(--sre-font-display, inherit); letter-spacing: 0.04em; border-top: 1px solid var(--sre-line); }
+body.sre-ui-3 #players .breaktime-button { border: 1px solid var(--sre-accent-line); font-family: var(--sre-font-display, inherit); letter-spacing: 0.08em; text-transform: uppercase; }
+body.sre-ui-3 #scene-navigation li.ui-control.scene { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; clip-path: polygon(0 0, 100% 0, 100% 70%, 94% 100%, 0 100%); }
+
+/* Pause (the caption already has Foundry's own "glitch" class): the module's split colors. */
+body.sre-ui-3 figure#pause figcaption.glitch { font-family: var(--sre-font-display, inherit); letter-spacing: 0.3em; text-shadow: 2px 0 var(--sre-accent), -2px 0 var(--sre-cyan); }
+
+/* Combat tracker in the sidebar. */
+body.sre-ui-3 #combat .combat-tracker-header { border-bottom: 1px solid var(--sre-accent-line); }
+body.sre-ui-3 #combat .encounter-title { font-family: var(--sre-font-display, inherit); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sre-accent); }
+body.sre-ui-3 #combat .combat-tracker li.combatant { border-bottom: 1px solid var(--sre-line); border-left: 3px solid transparent; }
+body.sre-ui-3 #combat .combat-tracker li.combatant.active { border-left-color: var(--sre-accent); background: var(--sre-accent-soft); box-shadow: inset 0 0 14px var(--sre-accent-soft); }
+body.sre-ui-3 #combat .combat-tracker li.combatant img.token-image { border: 1px solid var(--sre-accent-line); border-radius: 0; clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%); }
+body.sre-ui-3 #combat .combat-tracker li.combatant strong.name { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; }
+body.sre-ui-3 #combat .combat-tracker li.combatant .token-initiative input.initiative-input { font-family: var(--sre-font-display, inherit); font-weight: 700; color: var(--sre-accent); background: transparent; border: none; text-align: center; }
+body.sre-ui-3 #combat nav.combat-controls button.combat-control { border: 1px solid var(--sre-accent); background: var(--sre-accent-soft); color: var(--sre-text); border-radius: 0; font-family: var(--sre-font-display, inherit); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* Dice So Nice sidebar tab. */
+body.sre-ui-3 #dice-so-nice .dsn-sidebar-title { font-family: var(--sre-font-display, inherit); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sre-accent); }
+body.sre-ui-3 #dice-so-nice .dsn-toolbox-clear-btn { border: 1px solid var(--sre-accent-line); border-radius: 0; background: transparent; color: var(--sre-text); }
+
+/* Break Time window buttons. */
+body.sre-ui-3 #breaktime-app footer.sheet-footer button { border: 1px solid var(--sre-accent-line); border-radius: 0; font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; }
+body.sre-ui-3 #breaktime-app #back-btn:not(:disabled) { border-color: var(--sre-ok); color: var(--sre-ok); }
+
+/* Thin accent scrollbars in the interface. */
+body.sre-ui-3 :is(#sidebar, #chat, .application) { scrollbar-color: var(--sre-accent-line) transparent; scrollbar-width: thin; }
+
+/* ═════════════════ Readability fixes: the chat log and Break Time ═════════════════ */
+
+/* Foundry draws the chat log in its own light theme even when the interface is dark: in the dark Edge look the
+   messages get dark cards and light text, whatever theme class the log carries. */
+body.sre-ui-2.sre-theme-dark :is(#chat-log, .chat-log, #chat-popout .chat-log, .chat-popout) {
+  --color-text-primary: #e8e8ee; --color-text-secondary: #9aa0ad; --color-text-emphatic: #ffffff;
+  --color-border: #2a2b38; --color-border-light-primary: #2a2b38;
+  color: #e8e8ee;
+}
+body.sre-ui-2.sre-theme-dark :is(#chat-log, .chat-log) .chat-message,
+body.sre-ui-2.sre-theme-dark .chat-popout .chat-message {
+  background: linear-gradient(180deg, rgba(224, 64, 154, 0.06), transparent 40%), #16171f !important;
+  border: 1px solid #2a2b38; border-radius: 0; color: #e8e8ee; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+body.sre-ui-2.sre-theme-dark :is(#chat-log, .chat-log) .chat-message.whisper { background: linear-gradient(90deg, rgba(63, 212, 232, 0.1), transparent 60%), #16171f !important; }
+body.sre-ui-2.sre-theme-dark :is(#chat-log, .chat-log) .chat-message.blind { background: linear-gradient(90deg, rgba(240, 178, 74, 0.1), transparent 60%), #16171f !important; }
+body.sre-ui-2.sre-theme-dark :is(#chat-log, .chat-log) .chat-message :is(.message-header, .message-sender, .message-content, .flavor-text, h4) { color: #e8e8ee; }
+body.sre-ui-2.sre-theme-dark :is(#chat-log, .chat-log) .chat-message .message-metadata,
+body.sre-ui-2.sre-theme-dark :is(#chat-log, .chat-log) .chat-message .message-metadata :is(a, time) { color: #9aa0ad; }
+body.sre-ui-2.sre-theme-dark :is(#chat-log, .chat-log) .chat-message a.content-link { background: #1b1c26; border-color: rgba(224, 64, 154, 0.45); color: #e8e8ee; }
+body.sre-ui-2.sre-theme-light :is(#chat-log, .chat-log) .chat-message {
+  background: #f5f3ee !important; border: 1px solid rgba(60, 50, 40, 0.18); border-radius: 0; color: #2b2925;
+}
+
+/* Break Time: explicit tile and text colors (its window may carry Foundry's light theme inside the dark look). */
+body.sre-ui-3.sre-theme-dark :is(#breaktime-app, .breaktime-app) .window-content { background: #14151d; color: #e8e8ee; }
+body.sre-ui-3.sre-theme-dark .breaktime-container .breaktime-player { background: #1b1c26 !important; border-color: #2a2b38; color: #e8e8ee; }
+body.sre-ui-3.sre-theme-dark .breaktime-container .breaktime-player .breaktime-name { color: #e8e8ee !important; }
+body.sre-ui-3.sre-theme-dark .breaktime-container .breaktime-player .breaktime-character { color: #9aa0ad !important; }
+body.sre-ui-3.sre-theme-dark .breaktime-container .breaktime-avatar { background: #0d0e14; }
+body.sre-ui-3.sre-theme-light .breaktime-container .breaktime-player { background: #f5f3ee !important; border-color: rgba(60, 50, 40, 0.18); color: #2b2925; }
+body.sre-ui-3.sre-theme-light .breaktime-container .breaktime-player .breaktime-name { color: #2b2925 !important; }
+body.sre-ui-3.sre-theme-light .breaktime-container .breaktime-player .breaktime-character { color: #6e6a62 !important; }
+
+/* ═════════════════ Older Foundry markup (v12 / v13): the same look where the elements differ ═════════════════ */
+
+/* Scene controls (v12: li.scene-control / li.control-tool, .active). */
+body.sre-ui-3 #controls :is(.scene-control, .control-tool) {
+  background: var(--sre-ctl-bg); color: var(--sre-ctl-icon); border: 1px solid var(--sre-ctl-border); border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 74%, 74% 100%, 0 100%);
+}
+body.sre-ui-3 #controls :is(.scene-control, .control-tool):hover { color: var(--sre-ctl-hover); border-color: var(--sre-ctl-hover); }
+body.sre-ui-3 #controls :is(.scene-control, .control-tool).active,
+body.sre-ui-3 #scene-controls .ui-control.active {
+  background: var(--sre-ctl-on-bg); color: var(--sre-ctl-on-icon); border-color: var(--sre-ctl-on-border); box-shadow: inset 0 0 0 1px var(--sre-ctl-on-border);
+}
+
+/* Sidebar tabs (v12: a.item.active). */
+body.sre-ui-3 #sidebar-tabs > a.item { color: var(--sre-ctl-icon); border-radius: 0; }
+body.sre-ui-3 #sidebar-tabs > a.item:hover { color: var(--sre-ctl-hover); text-shadow: 0 0 8px var(--sre-ctl-hover); }
+body.sre-ui-3 #sidebar-tabs > a.item.active { color: var(--sre-ctl-on-icon); border-color: var(--sre-ctl-on-border); box-shadow: inset 0 -2px 0 var(--sre-ctl-on-border); }
+body.sre-ui-3 #sidebar { background: var(--sre-sidebar-bg); }
+
+/* Directories (v12: .directory-item.document without .entry, .header-search). */
+body.sre-ui-3 .directory-list .directory-item.document { border-bottom: 1px solid var(--sre-line); }
+body.sre-ui-3 .directory-list .directory-item.document:hover { background: var(--sre-accent-soft); box-shadow: inset 3px 0 0 var(--sre-accent); }
+body.sre-ui-3 .directory-list .directory-item.document img.thumbnail { border: 1px solid var(--sre-accent-line); border-radius: 0; }
+body.sre-ui-3 .directory-header .header-search input { border: 1px solid var(--sre-line); border-bottom: 2px solid var(--sre-accent); border-radius: 0; }
+body.sre-ui-3 .directory-header .action-buttons button { border: 1px solid var(--sre-accent-line); border-radius: 0; font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Chat (v12/v13: textarea#chat-message, a.chat-control-icon, select.roll-type-select). */
+body.sre-ui-2 #chat-controls :is(a.chat-control-icon, .control-buttons a, .control-buttons button) { color: var(--sre-ctl-icon); }
+body.sre-ui-2 #chat-controls :is(a.chat-control-icon, .control-buttons a, .control-buttons button):hover { color: var(--sre-ctl-hover); text-shadow: 0 0 8px var(--sre-ctl-hover); }
+body.sre-ui-2 #chat-controls select.roll-type-select { border: 1px solid var(--sre-accent-line); border-radius: 0; font-family: var(--sre-font-display, inherit); }
+body.sre-ui-2 #chat-form textarea#chat-message { border: 1px solid var(--sre-line); border-bottom: 2px solid var(--sre-accent); border-radius: 0; color: var(--sre-text); }
+body.sre-ui-2.sre-theme-dark #chat-form textarea#chat-message { background: #101117; }
+
+/* Hotbar (v12: #macro-list li.macro, .macro-key). */
+body.sre-ui-3 #macro-list li.macro {
+  background: var(--sre-ctl-bg); border: 1px solid var(--sre-ctl-border); border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 78% 100%, 0 100%);
+}
+body.sre-ui-3 #macro-list li.macro:not(.inactive) { border-color: var(--sre-ctl-on-border); }
+body.sre-ui-3 #macro-list li.macro:hover { border-color: var(--sre-ctl-hover); }
+body.sre-ui-3 #macro-list li.macro .macro-key { font-family: var(--sre-font-display, inherit); color: var(--sre-cyan); }
+body.sre-ui-3 #hotbar .page-number { font-family: var(--sre-font-display, inherit); color: var(--sre-accent); }
+
+/* Players (v12 markup too). */
+body.sre-ui-3 #players:not(aside) { background: var(--sre-ctl-bg); border: 1px solid var(--sre-ctl-border); border-left: 3px solid var(--sre-cyan); border-radius: 0; }
+body.sre-ui-3 #players li.player:not(:has(.player-name)) { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; }
+
+/* Scene navigation (v12: #navigation #scene-list li.scene, .view). */
+body.sre-ui-3 #navigation #scene-list li.scene {
+  background: var(--sre-ctl-bg); color: var(--sre-ctl-icon); border: 1px solid var(--sre-ctl-border); border-radius: 0;
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em;
+}
+body.sre-ui-3 #navigation #scene-list li.scene.view { background: var(--sre-ctl-on-bg); color: var(--sre-ctl-on-icon); border-color: var(--sre-ctl-on-border); }
+body.sre-ui-3 #navigation #nav-toggle { background: var(--sre-ctl-bg); border: 1px solid var(--sre-ctl-border); border-radius: 0; color: var(--sre-ctl-icon); }
+
+/* Pause (v12: #pause h3). */
+body.sre-ui-3 #pause > h3 { font-family: var(--sre-font-display, inherit); letter-spacing: 0.3em; text-shadow: 2px 0 var(--sre-accent), -2px 0 var(--sre-cyan); }
+
+/* Combat tracker (v12: #combat-tracker li.combatant, .token-name h4, #combat-round). */
+body.sre-ui-3 #combat-tracker li.combatant { border-bottom: 1px solid var(--sre-line); border-left: 3px solid transparent; }
+body.sre-ui-3 #combat-tracker li.combatant.active { border-left-color: var(--sre-accent); background: var(--sre-accent-soft); }
+body.sre-ui-3 #combat-tracker li.combatant .token-name h4 { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; }
+body.sre-ui-3 #combat-tracker li.combatant .token-initiative .initiative { font-family: var(--sre-font-display, inherit); font-weight: 700; color: var(--sre-accent); }
+body.sre-ui-3 #combat-round .encounter-title { font-family: var(--sre-font-display, inherit); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sre-accent); }
+body.sre-ui-3 #combat-round .combat-control { color: var(--sre-ctl-icon); }
+body.sre-ui-3 #combat-round .combat-control:hover { color: var(--sre-ctl-hover); }

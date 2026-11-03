@@ -1,5 +1,21 @@
 [
   {
+    "version": "0.36.3",
+    "date": "2026-11-03",
+    "changes": [
+      "Wygląd Edge dopasowany do dokładnej budowy interfejsu Foundry 14 (z /edge-ui): narzędzia sceny, zakładki, katalogi, czat i jego edytor, pasek makr, gracze, nawigacja, pauza, tropiciel walki, Dice So Nice.",
+      "Te same elementy dostają wygląd Edge także w starszych wersjach Foundry (v12/v13), gdzie mają inną budowę — wygląd działa u MG z inną wersją.",
+      "Czat w ciemnym wyglądzie: ciemne karty wiadomości z jasnym tekstem, nawet gdy Foundry rysuje dziennik czatu w jasnym motywie.",
+      "Break Time: czytelne kafle graczy (wyraźne tło i kolor imienia w obu motywach)."
+    ],
+    "changes_en": [
+      "The Edge look matches Foundry 14 interface markup exactly (from /edge-ui): scene controls, tabs, directories, the chat and its editor, hotbar, players, navigation, pause, combat tracker, Dice So Nice.",
+      "The same elements also get the Edge look in older Foundry versions (v12/v13), where their markup differs — the look works for a GM on another version.",
+      "Chat in the dark look: dark message cards with light text, even when Foundry draws the chat log in its light theme.",
+      "Break Time: readable player tiles (clear background and name color in both looks)."
+    ]
+  },
+  {
     "version": "0.36.2",
     "date": "2026-11-03",
     "changes": [
