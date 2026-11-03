@@ -55,6 +55,9 @@ const { collectFormulas } = await import("../scripts/wizard/formulas.mjs");
 const { buildItemData } = await import("../scripts/wizard/item-wizard.mjs");
 const { SECTIONS, AUGMENT_EFFECTS, TRAITS } = await import("../catalog/core.mjs");
 const { SUBSTANCES } = await import("../scripts/substances-data.mjs");
+const { SPELLS, ADEPT_POWERS, METAMAGIC, COMPLEX_FORMS, ECHOES } = await import("../catalog/magic.mjs");
+const { QUALITIES } = await import("../scripts/chargen/qualities.mjs");
+const { qualityItem } = await import("../scripts/chargen/build.mjs");
 
 const L = (key) => game.i18n.localize(key);
 
@@ -217,7 +220,8 @@ for (const section of SECTIONS) {
 
 // Qualities and adept powers the system lacks (scripts/traits.mjs applies their effects).
 for (const trait of TRAITS) {
-  const path = [L("SRE.Traits.Folder"), L(`TYPES.Item.${trait.type}`)];
+  // In the same folders as the rest of the qualities and adept powers.
+  const path = trait.type === "adeptpower" ? [L("SRE.Catalog.MagicFolder"), L("SRE.Catalog.AdeptPowers")] : [L("SRE.Catalog.Qualities"), L("SRE.Catalog.Positive")];
   const folder = folderId(path);
   const _id = stableId(`item:${path.join("/")}:${trait.name}`);
   const img = trait.type === "adeptpower"
@@ -263,6 +267,80 @@ for (const sub of SUBSTANCES) {
     },
     effects: [],
     flags: { [MODULE_ID]: { substance: sub.id } },
+  });
+}
+
+// Magic and Resonance (catalog/magic.mjs): spells, adept powers, metamagic, complex forms, echoes — stats only.
+const SPELL_ICONS = { combat: "fire.svg", detection: "eye.svg", health: "heal.svg", illusion: "invisible.svg", manipulation: "mage-shield.svg" };
+const ELEMENT_ICONS = [[/acid|toxic/i, "acid.svg"], [/ice/i, "ice-aura.svg"], [/lightning/i, "lightning.svg"], [/fire|flame/i, "fire.svg"]];
+const errataNote = (e) => (e.errata ? `<p><em>Errata ${escapeHTML(e.errata)}.</em></p>` : "");
+function pushMagic(path, entry, type, system, img) {
+  const folder = folderId(path);
+  const _id = stableId(`item:${path.join("/")}:${entry.name}`);
+  if (items.some((i) => i._id === _id)) throw new Error(`Duplicate item in catalog: ${path.join(" / ")} / ${entry.name}`);
+  const notes = entry.notes ? `<p><em>${escapeHTML(entry.notes)}</em></p>` : "";
+  items.push({
+    _id, folder, sort: items.length * 10, _key: `!items!${_id}`, name: entry.name, type, img: `${ICON_ROOT}/${img}`,
+    system: { ...system, description: `${notes}${errataNote(entry)}`, product: "core", page: entry.page },
+    effects: [], flags: { [MODULE_ID]: { catalog: "magic" } },
+  });
+}
+const MAGIC = L("SRE.Catalog.MagicFolder");
+const VALID = {
+  cat: ["combat", "detection", "health", "illusion", "manipulation"],
+  range: ["line_of_sight", "line_of_sight_area", "touch", "self", "self_area"],
+  type: ["physical", "mana"], duration: ["instantaneous", "sustained", "permanent", "limited"],
+  damage: ["physical", "stun", "physical_special", "stun_special"], activation: ["passive", "minor_action", "major_action"],
+};
+const check = (entry, key, value) => {
+  if (!VALID[key].includes(value)) throw new Error(`catalog/magic.mjs: ${entry.name}: bad ${key} "${value}"`);
+};
+for (const sp of SPELLS) {
+  for (const key of ["cat", "range", "type", "duration"]) check(sp, key, sp[key]);
+  const combat = sp.cat === "combat";
+  if (combat) check(sp, "damage", sp.damage);
+  if (!(sp.drain > 0) || !sp.page) throw new Error(`catalog/magic.mjs: ${sp.name}: drain/page`);
+  const system = {
+    category: sp.cat, range: sp.range, type: sp.type, duration: sp.duration, drain: sp.drain,
+    isOpposed: combat, multiSense: !!sp.multiSense, alchemic: false, withEssence: false, wildDie: false, isSustained: false,
+    ...(combat ? { damage: sp.damage, combatSpellType: sp.direct ? "spells_direct" : "spells_indirect" } : {}),
+  };
+  const icon = (combat && ELEMENT_ICONS.find(([re]) => re.test(sp.name))?.[1]) || SPELL_ICONS[sp.cat];
+  pushMagic([MAGIC, L("SRE.Catalog.Spells"), L(`shadowrun6.spell.category_${sp.cat}`)], sp, "spell", system, `default/${icon}`);
+}
+for (const pw of ADEPT_POWERS) {
+  check(pw, "activation", pw.activation);
+  pushMagic([MAGIC, L("SRE.Catalog.AdeptPowers")], pw, "adeptpower",
+    { cost: pw.cost, hasLevel: !!pw.perLevel, level: pw.perLevel ? 1 : 0, activation: pw.activation, choice: "" }, "default/mage-shield.svg");
+}
+for (const mm of METAMAGIC) {
+  pushMagic([MAGIC, L("SRE.Catalog.Metamagic")], mm, "metamagic", { level: false, adepts: !!mm.adepts, mages: !mm.adepts }, "default/daze.svg");
+}
+for (const cf of COMPLEX_FORMS) {
+  check(cf, "duration", cf.duration);
+  pushMagic([MAGIC, L("SRE.Catalog.ComplexForms")], cf, "complexform",
+    { fading: cf.fading ?? 0, duration: cf.duration, skill: cf.skill, skillSpec: "", attrib: "res", threshold: 0, oppAttr1: "", oppAttr2: "" },
+    "default/net.svg");
+}
+for (const ec of ECHOES) pushMagic([MAGIC, L("SRE.Catalog.Echoes")], ec, "echo", {}, "default/upgrade.svg");
+
+// Qualities (pp. 70–79): the character creator's data, with its effects; Focused Concentration stays in TRAITS.
+const traitNames = new Set(TRAITS.map((t) => t.name));
+for (const def of Object.values(QUALITIES)) {
+  if (traitNames.has(def.name)) continue;
+  const level = def.levels ? def.levels[0] : null;
+  const data = qualityItem({ def, level, detail: "" }, def.karma * (level ?? 1), { racial: "" });
+  const path = [L("SRE.Catalog.Qualities"), L(def.positive ? "SRE.Catalog.Positive" : "SRE.Catalog.Negative")];
+  const folder = folderId(path);
+  const _id = stableId(`item:${path.join("/")}:${def.name}`);
+  items.push({
+    ...data, _id, folder, sort: items.length * 10, _key: `!items!${_id}`, img: `${ICON_ROOT}/default/Default_Skill.svg`,
+    name: def.name,
+    system: { ...data.system, description: def.levels ? `<p><em>Poziomy ${def.levels[0]}–${def.levels[1]}; ${def.karma} Karmy za poziom.</em></p>` : "" },
+    effects: (data.effects ?? []).map((effect, index) => {
+      const effectId = stableId(`effect:${_id}:${index}`);
+      return { ...effect, _id: effectId, origin: null, _key: `!items.effects!${_id}.${effectId}` };
+    }),
   });
 }
 

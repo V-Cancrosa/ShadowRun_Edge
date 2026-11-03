@@ -403,3 +403,29 @@ console.log("blast & summoning OK");
   assert.equal(V.weaponMounts(11), 3);
   console.log("vehicles OK");
 }
+
+// ── Magic and Resonance catalog (pp. 133–195, errata) ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { SPELLS, ADEPT_POWERS, METAMAGIC, COMPLEX_FORMS, ECHOES } = await import("../catalog/magic.mjs");
+  const by = (list, name) => list.find((x) => x.name === name);
+  const count = (cat) => SPELLS.filter((s) => s.cat === cat).length;
+  assert.deepEqual(["combat", "detection", "health", "illusion", "manipulation"].map(count), [16, 11, 10, 12, 24]);
+  assert.deepEqual([ADEPT_POWERS.length, METAMAGIC.length, COMPLEX_FORMS.length, ECHOES.length], [21, 9, 15, 7]);
+  assert.deepEqual(by(SPELLS, "Fireball"), { name: "Fireball", cat: "combat", range: "line_of_sight_area", type: "physical", duration: "instantaneous", drain: 6, damage: "physical_special", direct: false, page: 133 });
+  assert.equal(by(SPELLS, "Manabolt").direct, true);
+  assert.equal(by(SPELLS, "Manabolt").drain, 4);
+  assert.equal(by(SPELLS, "Stunball").damage, "stun");
+  assert.equal(by(SPELLS, "Mystic Armor").type, "mana", "errata Aug 2019: P → M");
+  assert.equal(by(SPELLS, "Vehicle Armor").type, "physical", "errata: M → P");
+  assert.equal(by(SPELLS, "Phantasm").multiSense, true);
+  assert.equal(by(SPELLS, "Animate Metal").duration, "limited");
+  assert.deepEqual([by(ADEPT_POWERS, "Improved Reflexes").cost, by(ADEPT_POWERS, "Improved Reflexes").perLevel], [1, true]);
+  assert.deepEqual([by(ADEPT_POWERS, "Spell Resistance").cost, by(ADEPT_POWERS, "Spell Resistance").perLevel], [0.5, false], "errata Aug 2019");
+  assert.equal(by(ADEPT_POWERS, "Pain Resistance"), undefined, "kept in the traits folder with its effect");
+  assert.deepEqual([by(COMPLEX_FORMS, "Cleaner").fading, by(COMPLEX_FORMS, "Cleaner").duration], [2, "permanent"]);
+  assert.equal(by(COMPLEX_FORMS, "Resonance Spike").skill, "cracking");
+  assert.equal(by(COMPLEX_FORMS, "Transcend Grid"), undefined, "removed by the August 2019 errata");
+  assert.equal(by(METAMAGIC, "Power Point").adepts, true);
+  console.log("magic catalog OK");
+}

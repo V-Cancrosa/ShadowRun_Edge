@@ -1,5 +1,14 @@
 [
   {
+    "version": "0.28.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Katalog: Magia i Rezonans — 73 zaklęcia (w kategoriach, z polami do rzutu), 22 moce adepta, 9 metamagii, 15 form złożonych i 7 ech; tylko statystyki, z erratami.",
+      "Katalog: 64 cechy (pozytywne i negatywne) z kosztami, poziomami i premiami jak w kreatorze; Focused Concentration i Pain Resistance przeniesione do tych folderów.",
+      "Rozwój za Karmę: wybór zaklęcia lub formy złożonej z katalogu."
+    ]
+  },
+  {
     "version": "0.27.0",
     "date": "2026-11-03",
     "changes": [

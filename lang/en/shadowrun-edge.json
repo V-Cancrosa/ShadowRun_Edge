@@ -140,7 +140,16 @@
       "GMOnly": "Only the GM can add items to the catalog.",
       "Locked": "The compendium \"{name}\" is locked; unlock it to add items.",
       "BuiltInMods": "Built-in mods",
-      "BuiltInModsHint": "They are installed when you drag this item onto a character."
+      "BuiltInModsHint": "They are installed when you drag this item onto a character.",
+      "MagicFolder": "Magic and Resonance",
+      "Spells": "Spells",
+      "AdeptPowers": "Adept powers",
+      "Metamagic": "Metamagic",
+      "ComplexForms": "Complex forms",
+      "Echoes": "Echoes",
+      "Qualities": "Qualities",
+      "Positive": "Positive",
+      "Negative": "Negative"
     },
     "Grade": {
       "Title": "Implant grade: {name}",
@@ -1280,7 +1289,9 @@
       "Setting": {
         "Name": "Advancement needs GM approval",
         "Hint": "A player's Karma purchase goes to chat as a request the GM approves or rejects."
-      }
+      },
+      "FromCatalog": "From the catalog",
+      "Add": "Add"
     },
     "Matrix": {
       "Kind": "Matrix action",

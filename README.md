@@ -8,7 +8,7 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
 
 - **Pełne polskie tłumaczenie systemu:** wszystkie 2125 tekstów z `shadowrun6-eden` 4.0.11.
   Zastępuje automatyczne tłumaczenie z systemu, które pokrywa tylko ok. 34% tekstów.
-- **Katalog sprzętu z podręcznika podstawowego** (kompendium *Katalog Shadowrun Edge*, ok. 500 pozycji):
+- **Katalog sprzętu z podręcznika podstawowego** (kompendium *Katalog Shadowrun Edge*, ok. 710 pozycji):
   broń, akcesoria, amunicja, materiały wybuchowe, pancerze i ich modyfikacje, elektronika, oprogramowanie,
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
@@ -33,6 +33,15 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
 W zakładce *Kompendia* jest folder **Shadowrun Edge** z kompendium **Katalog Shadowrun Edge**. Przedmioty
 są ułożone w folderach jak w rozdziale *Gear* (s. 245–301): np. *Broń palna / Ciężki pistolet*,
 *Cyberware / Cyberware ciała*, *Pojazdy i drony / Pojazdy / Motocykl*.
+
+**Magia i Rezonans** (tylko statystyki, bez opisów z podręcznika, z naniesionymi erratami):
+- *Zaklęcia* (73) w podfolderach kategorii: zasięg, typ (M/F), czas trwania, drenaż, a zaklęcia walki także obrażenia
+  i bezpośrednie/pośrednie — rzucają się od razu z Karty Edge przez okno rzutu systemu;
+- *Moce adepta* (22): koszt PP (stały lub za poziom) i aktywacja, liczone do PP na zakładce Magia;
+- *Metamagie* (9), *Formy złożone* (15; zanikanie, czas, umiejętność; bez *Transcend Grid* usuniętej erratą) i *Echa* (7).
+
+**Cechy** (64, *Pozytywne* / *Negatywne*): koszt lub premia Karmy, poziomy i premie systemu, jak w kreatorze postaci.
+Okno *Rozwoju za Karmę* ma listę zaklęć (lub form złożonych technomanty) z katalogu obok pola do przeciągania.
 
 - **Przeciągnij na kartę postaci** — przedmiot trafia do ekwipunku z kompletem statystyk: DV, tryby ognia,
   WA na pięciu zasięgach, magazynek, umiejętność i specjalizacja do rzutu, WO pancerza, Esencja, atrybuty
@@ -309,7 +318,7 @@ System nie ma ani danych, ani zasad dla tych dwóch rzeczy, więc moduł je doda
   złożona nie daje kary −2 kości (nie liczą się czary z Drenażem 7+). Pole `system.focusedConcentration`.
 - **Pain Resistance** (moc adepta, s. 158, 0,25 PP za poziom) — za każdy poziom modyfikatory z ran przesuwają się
   o kratkę dalej na monitorze fizycznym i ogłuszenia (wartość ujemna: wcześniej). Pole `system.painResistance`.
-- Oba są w katalogu (folder *Cechy i moce*) z gotowymi efektami zależnymi od poziomu przedmiotu, a kreator postaci
+- Oba są w katalogu (*Cechy / Pozytywne* i *Magia i Rezonans / Moce adepta*) z gotowymi efektami zależnymi od poziomu przedmiotu, a kreator postaci
   dodaje efekt do cechy Focused Concentration. Działa w rzutach systemu, w okienku rzutu, na Karcie Edge (kary
   i etykiety kratek) i na karcie systemu.
 - Zgodność z modułami zychu

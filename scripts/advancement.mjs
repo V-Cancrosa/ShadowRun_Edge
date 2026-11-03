@@ -129,6 +129,12 @@ export async function openAdvancement(actor) {
   const negatives = actor.items.filter((i) => i.type === "quality" && i.system?.category === "DISADVANTAGE");
   const attr = specialAttr(actor);
   const grade = attr ? Number(s.attributes?.[attr]?.initiation) || 0 : 0;
+  // Spells or complex forms from the module's catalog (drag and drop still works for any compendium).
+  const pack = game.packs?.get(`${MODULE_ID}.katalog`);
+  const pickType = s.mortype === "technomancer" ? "complexform" : "spell";
+  const owned = new Set(actor.items.filter((i) => i.type === pickType).map((i) => i.name));
+  const picks = pack ? [...(await pack.getIndex({ fields: ["type"] }))].filter((e) => e.type === pickType && !owned.has(e.name)).sort((a, b) => a.name.localeCompare(b.name)) : [];
+  const pickRow = picks.length ? ui2.row(L("SRE.Advance.FromCatalog"), `<select name="catalogPick"><option value="">—</option>${picks.map((e) => `<option value="${esc(pack.getUuid(e._id))}">${esc(e.name)}</option>`).join("")}</select> <button type="button" data-pick>${esc(L("SRE.Advance.Add"))}</button>`) : "";
 
   const content = `<div class="sre-ed sre-advance">
     ${ui2.head({ kind: L("SRE.Advance.Kind"), name: actor.name, sub: L("SRE.Advance.Sub", { karma: Number(s.karma) || 0 }) })}
@@ -153,7 +159,7 @@ export async function openAdvancement(actor) {
         ui2.row(L("SRE.Advance.Level"), ui2.stepper("qualityLevel", 1, { min: 1 })),
         negatives.length ? ui2.chips(negatives.map((q) => ui2.chip(`remove.${q.id}`, `${L("SRE.Advance.QualityRemove")}: ${q.name}`))) : "",
       ]), { hint: L("SRE.Advance.QualityHint") })}
-      ${ui2.panel(L("SRE.Advance.SpellsTitle"), `<div class="sre-advance-drop" data-drop>${esc(L("SRE.Advance.DropHint"))}</div><input type="hidden" name="drops" value="[]">`, { hint: L("SRE.Advance.SpellHint") })}
+      ${ui2.panel(L("SRE.Advance.SpellsTitle"), `${pickRow ? ui2.rows([pickRow]) : ""}<div class="sre-advance-drop" data-drop>${esc(L("SRE.Advance.DropHint"))}</div><input type="hidden" name="drops" value="[]">`, { hint: L("SRE.Advance.SpellHint") })}
       ${attr ? ui2.panel(L(attr === "res" ? "SRE.Advance.submersion" : "SRE.Advance.initiation"), ui2.rows([
         ui2.chips([ui2.chip("initiation", L("SRE.Advance.Grade", { from: grade, to: grade + 1 }))]),
       ]), { hint: L("SRE.Advance.InitiationHint") }) : ""}
@@ -176,18 +182,25 @@ export async function openAdvancement(actor) {
       });
       // Spells and complex forms dragged from a compendium or the Items tab.
       const zone = form?.querySelector("[data-drop]");
-      zone?.addEventListener("dragover", (e) => e.preventDefault());
-      zone?.addEventListener("drop", async (e) => {
-        e.preventDefault();
-        const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(e);
-        const item = data?.type === "Item" ? await fromUuid(data.uuid) : null;
+      const addItem = (item) => {
         if (!item || !["spell", "complexform"].includes(item.type)) return ui.notifications.warn(L("SRE.Advance.DropOnly"));
         const input = form.elements.drops;
         const list = JSON.parse(input.value || "[]");
+        if (list.some((d) => d.uuid === item.uuid)) return;
         list.push({ uuid: item.uuid, name: item.name, type: item.type });
         input.value = JSON.stringify(list);
         zone.textContent = list.map((d) => d.name).join(", ");
         input.dispatchEvent(new Event("change", { bubbles: true }));
+      };
+      zone?.addEventListener("dragover", (e) => e.preventDefault());
+      zone?.addEventListener("drop", async (e) => {
+        e.preventDefault();
+        const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(e);
+        addItem(data?.type === "Item" ? await fromUuid(data.uuid) : null);
+      });
+      form?.querySelector("[data-pick]")?.addEventListener("click", async () => {
+        const uuid = form.elements.catalogPick?.value;
+        if (uuid) addItem(await fromUuid(uuid));
       });
     },
     buttons: ui2.buttons(L("SRE.Advance.BuyShort"), (event, button) => readCart(button.form, actor), { icon: "fas fa-arrow-trend-up" }),

@@ -1,0 +1,156 @@
+/**
+ * Magic and Resonance catalog (stats only, no rulebook text): spells pp. 133–142, adept powers pp. 156–158,
+ * metamagic pp. 167–168, complex forms pp. 189–190, echoes p. 195, with the errata applied (`errata` marks
+ * the entries they changed). Pages are the rulebook's. tools/build_catalog.mjs turns them into items.
+ *
+ * Spells: cat (system spell_category), range (spell_range), type (spell_type), duration (spell_duration), drain (DV);
+ *   combat spells add damage (spell_damage) and direct; illusions add multiSense.
+ * Adept powers: cost (PP, per level when perLevel), activation (adeptpower_activation). Pain Resistance stays in
+ *   the traits folder (catalog/core.mjs TRAITS), which carries its effect.
+ * Complex forms: fading (null: none listed), duration, skill. Transcend Grid is removed by the August 2019 errata.
+ */
+
+/** Spells (pp. 133–142). */
+export const SPELLS = [
+  {"name": "Acid Stream", "cat": "combat", "range": "line_of_sight", "type": "physical", "duration": "instantaneous", "drain": 5, "damage": "physical_special", "direct": false, "page": 132},
+  {"name": "Toxic Wave", "cat": "combat", "range": "line_of_sight_area", "type": "physical", "duration": "instantaneous", "drain": 6, "damage": "physical_special", "direct": false, "page": 132},
+  {"name": "Clout", "cat": "combat", "range": "line_of_sight", "type": "physical", "duration": "instantaneous", "drain": 3, "damage": "stun", "direct": false, "page": 133},
+  {"name": "Blast", "cat": "combat", "range": "line_of_sight_area", "type": "physical", "duration": "instantaneous", "drain": 4, "damage": "stun", "direct": false, "page": 133},
+  {"name": "Flamestrike", "cat": "combat", "range": "line_of_sight", "type": "physical", "duration": "instantaneous", "drain": 5, "damage": "physical_special", "direct": false, "page": 133},
+  {"name": "Fireball", "cat": "combat", "range": "line_of_sight_area", "type": "physical", "duration": "instantaneous", "drain": 6, "damage": "physical_special", "direct": false, "page": 133},
+  {"name": "Ice Spear", "cat": "combat", "range": "line_of_sight", "type": "physical", "duration": "instantaneous", "drain": 5, "damage": "physical_special", "direct": false, "page": 133},
+  {"name": "Ice Storm", "cat": "combat", "range": "line_of_sight_area", "type": "physical", "duration": "instantaneous", "drain": 6, "damage": "physical_special", "direct": false, "page": 133},
+  {"name": "Lightning Bolt", "cat": "combat", "range": "line_of_sight", "type": "physical", "duration": "instantaneous", "drain": 5, "damage": "physical_special", "direct": false, "page": 133},
+  {"name": "Lightning Ball", "cat": "combat", "range": "line_of_sight_area", "type": "physical", "duration": "instantaneous", "drain": 6, "damage": "physical_special", "direct": false, "page": 133},
+  {"name": "Manabolt", "cat": "combat", "range": "line_of_sight", "type": "mana", "duration": "instantaneous", "drain": 4, "damage": "physical", "direct": true, "page": 133},
+  {"name": "Manaball", "cat": "combat", "range": "line_of_sight_area", "type": "mana", "duration": "instantaneous", "drain": 5, "damage": "physical", "direct": true, "page": 133},
+  {"name": "Powerbolt", "cat": "combat", "range": "line_of_sight", "type": "physical", "duration": "instantaneous", "drain": 4, "damage": "physical", "direct": true, "page": 133},
+  {"name": "Powerball", "cat": "combat", "range": "line_of_sight_area", "type": "physical", "duration": "instantaneous", "drain": 5, "damage": "physical", "direct": true, "page": 133},
+  {"name": "Stunbolt", "cat": "combat", "range": "line_of_sight", "type": "mana", "duration": "instantaneous", "drain": 3, "damage": "stun", "direct": true, "page": 134},
+  {"name": "Stunball", "cat": "combat", "range": "line_of_sight_area", "type": "mana", "duration": "instantaneous", "drain": 4, "damage": "stun", "direct": true, "page": 134},
+  {"name": "Analyze Device", "cat": "detection", "range": "touch", "type": "physical", "duration": "sustained", "drain": 2, "page": 134},
+  {"name": "Analyze Magic", "cat": "detection", "range": "touch", "type": "physical", "duration": "sustained", "drain": 3, "page": 134},
+  {"name": "Analyze Truth", "cat": "detection", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "page": 134},
+  {"name": "Clairaudience", "cat": "detection", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "page": 134},
+  {"name": "Clairvoyance", "cat": "detection", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "page": 134},
+  {"name": "Combat Sense", "cat": "detection", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "page": 135},
+  {"name": "Detect Enemies", "cat": "detection", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "page": 135},
+  {"name": "Detect Life", "cat": "detection", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "page": 135},
+  {"name": "Detect Magic", "cat": "detection", "range": "touch", "type": "mana", "duration": "sustained", "drain": 4, "page": 135},
+  {"name": "Mindlink", "cat": "detection", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "page": 135},
+  {"name": "Mind Probe", "cat": "detection", "range": "touch", "type": "physical", "duration": "sustained", "drain": 5, "page": 135},
+  {"name": "Antidote", "cat": "health", "range": "touch", "type": "physical", "duration": "permanent", "drain": 5, "page": 135},
+  {"name": "Cleansing Heal", "cat": "health", "range": "touch", "type": "physical", "duration": "permanent", "drain": 5, "page": 136},
+  {"name": "Cooling Heal", "cat": "health", "range": "touch", "type": "physical", "duration": "permanent", "drain": 5, "page": 136},
+  {"name": "Decrease Attribute", "cat": "health", "range": "touch", "type": "physical", "duration": "sustained", "drain": 3, "page": 136},
+  {"name": "Heal", "cat": "health", "range": "touch", "type": "physical", "duration": "permanent", "drain": 3, "page": 136},
+  {"name": "Increase Attribute", "cat": "health", "range": "touch", "type": "physical", "duration": "sustained", "drain": 3, "page": 137},
+  {"name": "Increase Reflexes", "cat": "health", "range": "touch", "type": "physical", "duration": "sustained", "drain": 5, "page": 137},
+  {"name": "Resist Pain", "cat": "health", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "page": 137},
+  {"name": "Stabilize", "cat": "health", "range": "touch", "type": "mana", "duration": "permanent", "drain": 3, "page": 137},
+  {"name": "Warming Heal", "cat": "health", "range": "touch", "type": "physical", "duration": "permanent", "drain": 5, "page": 137},
+  {"name": "Agony", "cat": "illusion", "range": "line_of_sight", "type": "mana", "duration": "sustained", "drain": 3, "multiSense": false, "page": 137},
+  {"name": "Confusion", "cat": "illusion", "range": "line_of_sight", "type": "mana", "duration": "sustained", "drain": 3, "multiSense": true, "page": 137},
+  {"name": "Chaos", "cat": "illusion", "range": "line_of_sight", "type": "physical", "duration": "sustained", "drain": 4, "multiSense": true, "page": 137},
+  {"name": "Hush", "cat": "illusion", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "multiSense": false, "page": 138},
+  {"name": "Silence", "cat": "illusion", "range": "touch", "type": "physical", "duration": "sustained", "drain": 4, "multiSense": false, "page": 138},
+  {"name": "Invisibility", "cat": "illusion", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "multiSense": false, "page": 138},
+  {"name": "Improved Invisibility", "cat": "illusion", "range": "touch", "type": "physical", "duration": "sustained", "drain": 4, "multiSense": false, "page": 138},
+  {"name": "Mask", "cat": "illusion", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "multiSense": true, "page": 138},
+  {"name": "Physical Mask", "cat": "illusion", "range": "touch", "type": "physical", "duration": "sustained", "drain": 4, "multiSense": true, "page": 138},
+  {"name": "Phantasm", "cat": "illusion", "range": "line_of_sight_area", "type": "mana", "duration": "sustained", "drain": 3, "multiSense": true, "page": 138},
+  {"name": "Trid Phantasm", "cat": "illusion", "range": "line_of_sight_area", "type": "physical", "duration": "sustained", "drain": 4, "multiSense": true, "page": 138},
+  {"name": "Sensor Sneak", "cat": "illusion", "range": "touch", "type": "physical", "duration": "sustained", "drain": 2, "multiSense": true, "page": 138},
+  {"name": "Animate Metal", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "limited", "drain": 6, "page": 139},
+  {"name": "Animate Plastic", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "limited", "drain": 3, "page": 139},
+  {"name": "Animate Stone", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "limited", "drain": 5, "page": 139},
+  {"name": "Animate Wood", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "limited", "drain": 4, "page": 139},
+  {"name": "Armor", "cat": "manipulation", "range": "touch", "type": "physical", "duration": "sustained", "drain": 4, "page": 140},
+  {"name": "Control Actions", "cat": "manipulation", "range": "line_of_sight", "type": "mana", "duration": "limited", "drain": 4, "page": 140},
+  {"name": "Control Thoughts", "cat": "manipulation", "range": "line_of_sight", "type": "mana", "duration": "limited", "drain": 4, "page": 140},
+  {"name": "Darkness", "cat": "manipulation", "range": "line_of_sight_area", "type": "physical", "duration": "sustained", "drain": 3, "page": 140},
+  {"name": "Light", "cat": "manipulation", "range": "line_of_sight_area", "type": "physical", "duration": "sustained", "drain": 3, "page": 140},
+  {"name": "Elemental Armor", "cat": "manipulation", "range": "touch", "type": "mana", "duration": "sustained", "drain": 5, "page": 140},
+  {"name": "Fling", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "instantaneous", "drain": 5, "page": 140},
+  {"name": "Focus Burst", "cat": "manipulation", "range": "touch", "type": "mana", "duration": "limited", "drain": 7, "page": 141},
+  {"name": "Levitate", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "sustained", "drain": 6, "page": 141},
+  {"name": "Mana Barrier", "cat": "manipulation", "range": "line_of_sight_area", "type": "mana", "duration": "sustained", "drain": 5, "page": 141},
+  {"name": "Mystic Armor", "cat": "manipulation", "range": "touch", "type": "mana", "duration": "sustained", "drain": 3, "errata": "08/2019: typ M", "page": 141},
+  {"name": "Overclock", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "sustained", "drain": 4, "page": 141},
+  {"name": "Physical Barrier", "cat": "manipulation", "range": "line_of_sight_area", "type": "physical", "duration": "sustained", "drain": 6, "page": 141},
+  {"name": "Shape Metal", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "sustained", "drain": 5, "page": 141},
+  {"name": "Shape Plastic", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "sustained", "drain": 2, "page": 141},
+  {"name": "Shape Stone", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "sustained", "drain": 4, "page": 141},
+  {"name": "Shape Wood", "cat": "manipulation", "range": "line_of_sight", "type": "physical", "duration": "sustained", "drain": 3, "page": 141},
+  {"name": "Strengthen Wall", "cat": "manipulation", "range": "line_of_sight_area", "type": "physical", "duration": "sustained", "drain": 4, "page": 142},
+  {"name": "Thunder", "cat": "manipulation", "range": "line_of_sight_area", "type": "physical", "duration": "sustained", "drain": 3, "page": 142},
+  {"name": "Vehicle Armor", "cat": "manipulation", "range": "touch", "type": "physical", "duration": "sustained", "drain": 6, "errata": "08/2019, 02/2020: typ F", "page": 142},
+];
+
+/** Adept powers (pp. 156–158). */
+export const ADEPT_POWERS = [
+  {"name": "Adrenaline Boost", "cost": 0.25, "perLevel": true, "activation": "minor_action", "page": 156},
+  {"name": "Astral Perception", "cost": 1, "perLevel": false, "activation": "minor_action", "page": 156},
+  {"name": "Attribute Boost (Attribute)", "cost": 0.25, "perLevel": true, "activation": "major_action", "page": 156},
+  {"name": "Combat Sense", "cost": 0.5, "perLevel": true, "activation": "passive", "page": 156},
+  {"name": "Critical Strike", "cost": 1, "perLevel": true, "activation": "passive", "page": 156},
+  {"name": "Danger Sense", "cost": 0.5, "perLevel": false, "activation": "passive", "page": 156},
+  {"name": "Direction Sense", "cost": 0.25, "perLevel": false, "activation": "passive", "page": 156},
+  {"name": "Enhanced Perception", "cost": 0.5, "perLevel": false, "activation": "passive", "page": 157},
+  {"name": "Enhanced Accuracy", "cost": 0.5, "perLevel": false, "activation": "passive", "page": 157},
+  {"name": "Improved Ability (Skill)", "cost": 0.5, "perLevel": true, "activation": "passive", "page": 157, "notes": "Umiejętność walki: 1,0 PP za poziom; inne: 0,5 PP za poziom."},
+  {"name": "Improved Physical Attribute", "cost": 1, "perLevel": true, "activation": "passive", "page": 157},
+  {"name": "Improved Reflexes", "cost": 1, "perLevel": true, "activation": "passive", "page": 157},
+  {"name": "Improved Sense", "cost": 0.25, "perLevel": false, "activation": "passive", "page": 157},
+  {"name": "Killing Hands", "cost": 0.5, "perLevel": false, "activation": "minor_action", "page": 157},
+  {"name": "Kinesics", "cost": 0.25, "perLevel": false, "activation": "passive", "page": 157},
+  {"name": "Mystic Armor", "cost": 0.25, "perLevel": true, "activation": "passive", "page": 157},
+  {"name": "Rapid Healing", "cost": 0.5, "perLevel": true, "activation": "passive", "page": 158},
+  {"name": "Spell Resistance", "cost": 0.5, "perLevel": false, "activation": "passive", "page": 158, "errata": "08/2019: 0,5 PP bez poziomów"},
+  {"name": "Traceless Walk", "cost": 0.5, "perLevel": false, "activation": "passive", "page": 158},
+  {"name": "Vocal Control", "cost": 0.5, "perLevel": false, "activation": "passive", "page": 158},
+  {"name": "Wall Running", "cost": 0.5, "perLevel": false, "activation": "minor_action", "page": 158},
+];
+
+/** Metamagic (pp. 167–168). */
+export const METAMAGIC = [
+  {"name": "Adept Centering", "adepts": true, "page": 167},
+  {"name": "Centering", "adepts": false, "page": 167},
+  {"name": "Fixation", "adepts": false, "page": 167},
+  {"name": "Flexible Signature", "adepts": false, "page": 167},
+  {"name": "Masking", "adepts": false, "page": 168},
+  {"name": "Power Point", "adepts": true, "page": 168},
+  {"name": "Quickening", "adepts": false, "page": 168},
+  {"name": "Spell Shaping", "adepts": false, "page": 168},
+  {"name": "Shielding", "adepts": false, "page": 168},
+];
+
+/** Complex forms (pp. 189–190). */
+export const COMPLEX_FORMS = [
+  {"name": "Cleaner", "fading": 2, "duration": "permanent", "skill": "electronics", "page": 190},
+  {"name": "Diffusion (Matrix Attribute)", "fading": 4, "duration": "sustained", "skill": "electronics", "page": 190},
+  {"name": "Editor", "fading": 3, "duration": "permanent", "skill": "electronics", "page": 190},
+  {"name": "Emulate (Program)", "fading": null, "duration": "sustained", "skill": "electronics", "page": 190},
+  {"name": "Infusion (Matrix Attribute)", "fading": 4, "duration": "sustained", "skill": "electronics", "page": 190},
+  {"name": "Mirrored Persona", "fading": 3, "duration": "instantaneous", "skill": "electronics", "page": 190},
+  {"name": "Pulse Storm", "fading": 3, "duration": "instantaneous", "skill": "electronics", "page": 190},
+  {"name": "Puppeteer", "fading": 5, "duration": "sustained", "skill": "electronics", "page": 190},
+  {"name": "Resonance Channel", "fading": 2, "duration": "sustained", "skill": "electronics", "page": 190},
+  {"name": "Resonance Spike", "fading": 4, "duration": "instantaneous", "skill": "cracking", "page": 190},
+  {"name": "Resonance Veil", "fading": 4, "duration": "sustained", "skill": "electronics", "page": 190},
+  {"name": "Static Bomb", "fading": 6, "duration": "instantaneous", "skill": "electronics", "page": 190},
+  {"name": "Static Veil", "fading": 3, "duration": "sustained", "skill": "electronics", "page": 191},
+  {"name": "Stitches", "fading": 4, "duration": "permanent", "skill": "electronics", "page": 191},
+  {"name": "Tattletale", "fading": 3, "duration": "permanent", "skill": "electronics", "page": 191},
+];
+
+/** Echoes (p. 195). */
+export const ECHOES = [
+  {"name": "Living Network", "page": 195},
+  {"name": "Machine Mind", "page": 195},
+  {"name": "Matrix Attribute Upgrade", "page": 195},
+  {"name": "NeuroFilter", "page": 195},
+  {"name": "Overclocking", "page": 195},
+  {"name": "Resonance Link", "page": 195},
+  {"name": "Skinlink", "page": 195},
+];

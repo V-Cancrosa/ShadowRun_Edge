@@ -140,7 +140,16 @@
       "GMOnly": "Tylko MG może dodawać przedmioty do katalogu.",
       "Locked": "Kompendium „{name}” jest zablokowane — odblokuj je, aby dodawać przedmioty.",
       "BuiltInMods": "Wbudowane dodatki",
-      "BuiltInModsHint": "Zostaną zamontowane, gdy przeciągniesz ten przedmiot na postać."
+      "BuiltInModsHint": "Zostaną zamontowane, gdy przeciągniesz ten przedmiot na postać.",
+      "MagicFolder": "Magia i Rezonans",
+      "Spells": "Zaklęcia",
+      "AdeptPowers": "Moce adepta",
+      "Metamagic": "Metamagie",
+      "ComplexForms": "Formy złożone",
+      "Echoes": "Echa",
+      "Qualities": "Cechy",
+      "Positive": "Pozytywne",
+      "Negative": "Negatywne"
     },
     "Grade": {
       "Title": "Klasa wszczepu: {name}",
@@ -1280,7 +1289,9 @@
       "Setting": {
         "Name": "Rozwój wymaga zgody MG",
         "Hint": "Zakup za Karmę od gracza trafia na czat jako prośba, którą MG zatwierdza lub odrzuca."
-      }
+      },
+      "FromCatalog": "Z katalogu",
+      "Add": "Dodaj"
     },
     "Matrix": {
       "Kind": "Akcja Matrixa",
