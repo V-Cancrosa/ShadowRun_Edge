@@ -128,7 +128,7 @@ export function buildVehicleContext(actor, { L = (k) => k, config = {} } = {}) {
       { id: "stealth", label: L("SRE.Compact.Test.stealth"), pool: sk("stealth") },
       { id: "cracking", label: L("SRE.Compact.Test.cracking"), pool: sk("cracking") },
     ].filter((t) => t.pool > 0),
-    soak: bod * 2,
+    soak: bod * 2, // Body × 2 as in the explosion examples (p. 114); ramming uses Body alone (p. 201)
     weapons: [...combat.ranged, ...combat.melee],
     autosofts,
     notes: s.notes ?? "",

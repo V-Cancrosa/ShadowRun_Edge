@@ -368,3 +368,38 @@ console.log("blast & summoning OK");
   assert.equal(R.icHit("killer", 4, 0), null, "a miss does nothing");
   console.log("matrix OK");
 }
+
+// ── Vehicles and drones (pp. 197–202, errata) ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const V = await import("../scripts/vehicle-rules.mjs");
+  assert.equal(V.speedIntervals(28, 20), 1, "Turbo Bunny: one step over the first interval");
+  assert.equal(V.speedIntervals(40, 20), 2);
+  assert.equal(V.speedIntervals(16, 20), 0);
+  assert.equal(V.handlingThreshold({ handlOn: 4, handlOff: 5, offRoad: false, dmg: 7 }), 6, "+1 per three boxes");
+  assert.equal(V.handlingThreshold({ handlOn: 4, handlOff: 5, offRoad: true, dmg: 0 }), 5);
+  assert.equal(V.changeSpeed(16, { accel: 9, top: 160, dir: 1 }), 25);
+  assert.equal(V.changeSpeed(5, { accel: 9, top: 160, dir: -1 }), 0);
+  assert.equal(V.changeSpeed(155, { accel: 9, top: 160, dir: 1 }), 160);
+  assert.equal(V.distance(30, 40), 35, "30 + ½(10)");
+  assert.equal(V.distance(30, 20), 25);
+  assert.equal(V.kmh(40), 48);
+  assert.equal(V.crashDamage(28), 2);
+  assert.equal(V.crashDamage(28, 1), 1);
+  assert.equal(V.ramDamage(11, 1), 7, "11 / 2 rounded up + 1");
+  assert.equal(V.softTargetDamage(5), 2);
+  assert.equal(V.ignoresStun(6, 11), true);
+  assert.equal(V.ignoresStun(6, 11, true), false, "electricity");
+  assert.equal(V.handlingPool({ mode: "manual", systemPool: 7, damagePenalty: 1 }), 8, "damage moves from the pool to the threshold");
+  assert.equal(V.handlingPool({ mode: "autonomous", pilot: 3, maneuver: 2, speedPenalty: 1 }), 4);
+  const t = V.droneTests({ pil: 3, sen: 3 }, { CLEARSIGHT: 3, TARGETING: 3 });
+  assert.equal(t.find((x) => x.id === "CLEARSIGHT").pool, 6);
+  assert.equal(t.find((x) => x.id === "TARGETING").pool, 6, "HK-227 Targeting 3 + Sensor 3");
+  assert.equal(V.droneTests({ pil: 3, sen: 3 }, {}).find((x) => x.id === "TARGETING").pool, 2, "no Targeting: Sensor − 1");
+  assert.equal(V.droneTests({ pil: 3, sen: 3 }, {}).find((x) => x.id === "STEALTH").missing, true);
+  assert.deepEqual(V.droneInitiative(3), { base: 6, dice: 4 });
+  assert.equal(V.autosoftSlots(3), 2);
+  assert.equal(V.rccSlaves(4), 12);
+  assert.equal(V.weaponMounts(11), 3);
+  console.log("vehicles OK");
+}

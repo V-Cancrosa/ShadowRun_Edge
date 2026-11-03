@@ -918,3 +918,4 @@ body.sre-edge-light :is(.sre-es-portrait, .sre-it-icon) { background: linear-gra
 .sre-mx-osrow { display: flex; align-items: center; gap: 6px; padding: 0 10px 8px; }
 .sre-mx-osrow .sre-es-meter { flex: 1; margin: 0; }
 .sre-es-ktile input.sre-host-rating { width: 3em; font-size: 22px; font-weight: bold; text-align: center; background: transparent; border: none; color: inherit; }
+.sre-es-ktile small.sre-vh-hint { display: block; font-size: 10px; color: var(--sre-text-dim); }

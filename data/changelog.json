@@ -1,5 +1,14 @@
 [
   {
+    "version": "0.27.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Pojazdy: sterowanie na karcie Edge (tryb, kierowca, teren), prędkość z przyspieszaniem i hamowaniem, dystans w rundzie, kara za interwał i próg Handlingu z obrażeniami.",
+      "Test Handlingu z testem wypadku i obrażeniami dla osób w środku, test kierowców, taranowanie z obrażeniami w obie strony (odporność Ciałem, s. 201).",
+      "Drony: testy z autosoftów, inicjatywa Pilot × 2 + 4K6, sloty i rozkaz dla grupy dronów RCC."
+    ]
+  },
+  {
     "version": "0.26.0",
     "date": "2026-11-03",
     "changes": [

@@ -10,6 +10,8 @@ import { openHealing } from "../healing.mjs";
 import { openBanish, setServices } from "../summoning.mjs";
 import { isLightTheme, toggleTheme } from "../theme.mjs";
 import * as ui2 from "../ui/edge-ui.mjs";
+import * as veh from "../vehicles.mjs";
+import { droneTests, droneInitiative, autosoftSlots } from "../vehicle-rules.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -44,6 +46,13 @@ class EdgeCompactSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       banish: EdgeCompactSheet.#onBanish,
       dismiss: EdgeCompactSheet.#onDismiss,
       vehicleTest: EdgeCompactSheet.#onVehicleTest,
+      speed: EdgeCompactSheet.#onSpeed,
+      handling: EdgeCompactSheet.#onHandling,
+      drivers: EdgeCompactSheet.#onDrivers,
+      ram: EdgeCompactSheet.#onRam,
+      droneTest: EdgeCompactSheet.#onDroneTest,
+      droneInitiative: EdgeCompactSheet.#onDroneInitiative,
+      groupCommand: EdgeCompactSheet.#onGroupCommand,
     },
   };
 
@@ -207,6 +216,34 @@ class EdgeCompactSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (ok) return this.document.delete();
   }
 
+  static #onSpeed(event, target) {
+    return veh.setSpeed(this.document, Number(target.dataset.dir));
+  }
+
+  static #onHandling() {
+    return veh.openHandling(this.document);
+  }
+
+  static #onDrivers() {
+    return veh.driversTest(this.document);
+  }
+
+  static #onRam() {
+    return veh.openRam(this.document);
+  }
+
+  static #onDroneTest(event, target) {
+    return veh.droneTest(this.document, target.dataset.soft);
+  }
+
+  static #onDroneInitiative() {
+    return veh.droneInitiative(this.document);
+  }
+
+  static #onGroupCommand() {
+    return veh.groupCommand(this.document);
+  }
+
   static #onVehicleTest(event, target) {
     const { pool, label } = target.dataset;
     if (target.dataset.soak) return rolls.rollPool(this.document, { pool: Number(pool), label, kind: "soak" });
@@ -224,7 +261,34 @@ export class EdgeSpiritSheet extends EdgeCompactSheet {
 
 export class EdgeVehicleSheet extends EdgeCompactSheet {
   _compactContext() {
-    return buildVehicleContext(this.document, { L, config: CONFIG.SR6 ?? {} });
+    const data = buildVehicleContext(this.document, { L, config: CONFIG.SR6 ?? {} });
+    const st = veh.vehicleState(this.document);
+    const modes = CONFIG.SR6?.VEHICLE_MODE ?? { manual: "", riggedAR: "", riggedVR: "", rcc: "", autonomous: "" };
+    const owners = game.actors?.filter?.((a) => ["Player", "NPC"].includes(a.type) && (a.isOwner || game.user.isGM)) ?? [];
+    const group = veh.rccGroup(this.document);
+    const rcc = veh.rccOf(this.document);
+    return {
+      ...data,
+      drive: {
+        ...st,
+        modes: Object.entries(modes).map(([id, key]) => ({ id, label: key ? L(key) : id, selected: id === st.mode })),
+        owners: owners.map((a) => ({ id: a.id, name: a.name, selected: a.id === this.document.system?.vehicle?.belongs })),
+        speedPct: st.top ? Math.min(100, Math.round((st.speed / st.top) * 100)) : 0,
+        distance: Math.round(st.distance),
+        tiles: [
+          { label: L("SRE.Vehicle.Distance"), value: `${Math.round(st.distance)} m`, hint: L("SRE.Vehicle.DistanceHint", { from: st.from, half: (st.speed - st.from) / 2 }) },
+          { label: L("SRE.Vehicle.Kmh"), value: st.kmh },
+          { label: L("SRE.Vehicle.Penalty"), value: st.intervals ? `−${st.intervals}` : "0", hint: L("SRE.Vehicle.IntervalHint", { n: st.interval }) },
+          { label: L("SRE.Vehicle.Handling"), value: st.threshold, hint: st.damagePenalty ? L("SRE.Vehicle.DamageHint", { n: st.damagePenalty }) : "" },
+          { label: L("SRE.Vehicle.Soak"), value: st.body * 2, hint: L("SRE.Vehicle.SoakHint") },
+          { label: L("SRE.Vehicle.Monitor"), value: `${st.monitor.dmg}/${st.monitor.max}`, hint: L("SRE.Vehicle.BreaksAt", { n: st.monitor.max }) },
+        ],
+        droneTests: droneTests({ pil: st.pilot, sen: st.sensor }, st.softs).map((t) => ({ ...t, label: L(`SRE.Vehicle.Soft.${t.id}`), attrLabel: L(t.attr === "pil" ? "SRE.Compact.Pilot" : "SRE.Compact.Sensor") })),
+        droneIni: droneInitiative(st.pilot),
+        slots: { used: Object.keys(st.softs).length, max: autosoftSlots(st.pilot) },
+        group: group.map((d) => d.name).join(", "), groupCount: group.length, rcc: rcc?.name ?? "", rccMax: rcc ? Number(rcc.system?.devRating) * 3 : null,
+      },
+    };
   }
 }
 

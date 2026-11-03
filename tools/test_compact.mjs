@@ -52,7 +52,7 @@ const car = {
 };
 const v = buildVehicleContext(car, { L });
 assert.equal(v.stats[0].value, "4/5");
-assert.equal(v.soak, 22);
+assert.equal(v.soak, 22, "Body × 2 (p. 114 examples)");
 assert.deepEqual(v.tests.map((t) => t.id), ["piloting", "perception"], "Perception falls back to Sensor; Evasion 0 left out");
 assert.equal(v.monitors.length, 2);
 assert.deepEqual(v.autosofts, [{ id: "a1", name: "Clearsight", rating: 3 }]);
@@ -84,6 +84,16 @@ const htmlSpirit = template({ ...base, ...sp, isSpirit: true });
 assert.ok(htmlSpirit.includes('data-action="services"') && htmlSpirit.includes('data-action="banish"'));
 const htmlCar = template({ ...base, ...v, isVehicle: true });
 assert.ok(htmlCar.includes('data-action="vehicleTest"') && htmlCar.includes("22") && !htmlCar.includes('data-action="groupCreate"'));
+// Vehicle with the driving panels.
+const drive = { speed: 28, top: 160, accel: 9, speedPct: 18, pool: 8, pilot: 3, sensor: 3, drone: true, offRoad: false,
+  modes: [{ id: "manual", label: "Ręcznie", selected: true }], owners: [{ id: "a1", name: "Turbo Bunny", selected: true }],
+  tiles: [{ label: "Dystans", value: "32 m", hint: "28 + 4.5" }], droneIni: { base: 6, dice: 4 },
+  droneTests: [{ id: "CLEARSIGHT", label: "Clearsight", rating: 3, attrLabel: "Sensor", pool: 6 }, { id: "STEALTH", label: "Stealth", pool: 0, missing: true }],
+  slots: { used: 1, max: 2 }, groupCount: 2, group: "A, B", rcc: "Maersk Spider", rccMax: 12 };
+const htmlDrive = template({ ...base, ...v, isVehicle: true, drive });
+for (const a of ["speed", "handling", "drivers", "ram", "droneTest", "droneInitiative", "groupCommand"]) assert.ok(htmlDrive.includes(`data-action="${a}"`), a);
+assert.ok(htmlDrive.includes('name="system.vehicle.opMode"') && htmlDrive.includes("Turbo Bunny"));
+
 // Host (system 4.x): ASDF, IC table, personas inside.
 const hostActor = { type: "host", name: "Stuffer Shack HQ", system: { rating: 4, convergenceThreshold: 40, matrix: { attributes: { attack: 5, sleaze: 4, dataProcessing: 7, firewall: 6 } } },
   flags: { "shadowrun-edge": { ic: ["patrol", "killer"] } } };

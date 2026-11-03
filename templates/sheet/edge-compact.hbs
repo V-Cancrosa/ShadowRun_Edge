@@ -63,6 +63,50 @@
         </div>
 
         {{#if isVehicle}}
+        {{#if drive}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Vehicle.Control"}}</h3>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Vehicle.Mode"}}</span>
+            <select name="system.vehicle.opMode" {{#unless editable}}disabled{{/unless}}>{{#each drive.modes}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Vehicle.Driver"}}</span>
+            <select name="system.vehicle.belongs" {{#unless editable}}disabled{{/unless}}><option value="">—</option>{{#each drive.owners}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Vehicle.OffRoadLabel"}}</span>
+            <input type="checkbox" name="system.vehicle.offRoad" {{#if drive.offRoad}}checked{{/if}} {{#unless editable}}disabled{{/unless}}></div>
+        </div>
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Vehicle.Speed"}} <span>{{drive.speed}} / {{drive.top}} {{localize "SRE.Vehicle.PerRound"}}</span></h3>
+          <div class="sre-mx-osrow"><div class="sre-es-meter"><i style="width: {{drive.speedPct}}%"></i></div>
+            {{#if editable}}<button type="button" class="sre-es-mini" data-action="speed" data-dir="-1">{{localize "SRE.Vehicle.Brake"}} −{{drive.accel}}</button>
+            <button type="button" class="sre-es-mini" data-action="speed" data-dir="1">{{localize "SRE.Vehicle.Accelerate"}} +{{drive.accel}}</button>
+            <button type="button" class="sre-es-mini" data-action="speed" data-dir="0">{{localize "SRE.Vehicle.Hold"}}</button>{{/if}}</div>
+          <div class="sre-es-tiles6">{{#each drive.tiles}}<div class="sre-es-ktile"><span>{{label}}</span><strong>{{value}}</strong>{{#if hint}}<small class="sre-vh-hint">{{hint}}</small>{{/if}}</div>{{/each}}</div>
+        </div>
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Vehicle.Maneuvers"}} <span>{{localize "SRE.Vehicle.ManeuversHint"}}</span></h3>
+          <div class="sre-es-quick">
+            <button type="button" class="sre-es-qb" data-action="handling">{{localize "SRE.Vehicle.Handling"}} <span class="sre-es-pool">{{drive.pool}}</span></button>
+            <button type="button" class="sre-es-qb" data-action="drivers">{{localize "SRE.Vehicle.Drivers"}} <span class="sre-es-pool">{{drive.pool}}</span></button>
+            <button type="button" class="sre-es-qb illegal" data-action="ram">{{localize "SRE.Vehicle.Ram"}} <span class="sre-es-pool">{{drive.pool}}</span></button>
+          </div>
+        </div>
+        {{#if drive.drone}}
+        <div class="sre-es-panel">
+          <h3>{{localize "SRE.Vehicle.Autonomous"}} <span>{{localize "SRE.Compact.Pilot"}} {{drive.pilot}} · {{localize "SRE.Compact.Sensor"}} {{drive.sensor}}</span></h3>
+          <div class="sre-es-quick">
+            <button type="button" class="sre-es-qb" data-action="droneInitiative">{{localize "SRE.Sheet.InitiativeTitle"}} <span class="sre-es-pool">{{drive.droneIni.base}}+{{drive.droneIni.dice}}K6</span></button>
+            {{#each drive.droneTests}}
+            {{#if pool}}<button type="button" class="sre-es-qb {{#if missing}}illegal{{/if}}" data-action="droneTest" data-soft="{{id}}">{{label}}{{#if rating}} {{rating}}{{/if}} + {{attrLabel}}{{#if missing}} −1{{/if}} <span class="sre-es-pool">{{pool}}</span></button>
+            {{else}}<span class="sre-es-qb illegal">{{label}} — {{localize "SRE.Vehicle.NoSoft"}}</span>{{/if}}
+            {{/each}}
+          </div>
+          <div class="sre-es-row sre-es-dim">{{localize "SRE.Vehicle.Slots" used=drive.slots.used max=drive.slots.max}}</div>
+          {{#if drive.groupCount}}
+          <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Vehicle.Group"}}{{#if drive.rcc}} ({{drive.rcc}}{{#if drive.rccMax}}: {{drive.groupCount}} / {{drive.rccMax}}{{/if}}){{/if}}: {{drive.group}}</span>
+            <button type="button" class="sre-es-mini" data-action="groupCommand">{{localize "SRE.Vehicle.Order"}}…</button></div>
+          {{/if}}
+        </div>
+        {{/if}}
+        {{/if}}
         <div class="sre-es-panel">
           <h3>{{localize "SRE.Compact.Tests"}} <span>{{localize "SRE.Sheet.ClickToRoll"}}</span></h3>
           <div class="sre-es-quick">

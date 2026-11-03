@@ -13,6 +13,7 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
 - **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (siedem zakładek, od walki po kontakty).
+- **Pojazdy i drony**: prędkość i dystans, test Handlingu z wypadkiem, test kierowców, taranowanie, autosofty i grupy dronów.
 - **Matrix**: Overwatch Score, Konwergencja, dumpshock, poziomy dostępu i backdoory, IC i karta hosta.
 - **Rozwój postaci za Karmę** z kosztami i czasem treningu według podręcznika, z dziennikiem rozwoju.
 - **Karta Edge przedmiotu** i **przekazywanie przedmiotów** innym postaciom (z dodatkami), usuwanie przedmiotów.
@@ -176,6 +177,33 @@ Po zakupie Karma spada, zmiany trafiają na kartę, karta zakupu na czat, a wpis
 
 Ustawienie świata **Rozwój wymaga zgody MG**: zakup gracza trafia na czat jako prośba, którą MG
 zatwierdza (wtedy zostaje zastosowana) lub odrzuca.
+
+## Pojazdy i drony (s. 197–202)
+
+Karta Edge pojazdu ma panele:
+- **Sterowanie**: tryb (ręcznie, zdalnie AR/VR, RCC, autonomicznie), kierowca lub rigger, jazda w terenie (pola systemu);
+- **Prędkość**: Przyspiesz / Hamuj o wartość Accel, Utrzymaj; kafle: dystans w rundzie (prędkość z początku rundy ± ½ zmiany),
+  km/h, kara −1 za każdy przekroczony interwał prędkości, próg Handlingu (+1 za każde 3 pola obrażeń), odporność
+  i monitor;
+- **Manewry**: test Handlingu, test kierowców i taranowanie z pulą kierowcy.
+
+**Test Handlingu**: Pilotowanie + Reakcja (wskoczony w VR: Intuicja, plus control rig) z progiem Handling, MG może
+zmienić próg i trudność. Porażka daje zadanie *Test wypadku* (ten sam próg); kolejna porażka to **wypadek**: każdy
+w środku odpiera prędkość / 10 (w dół) obrażeń Ciałem, a zabezpieczenia (poduszki, pasy) zmniejszają DV.
+System odejmuje obrażenia pojazdu od puli; moduł, jak podręcznik, przenosi je na próg.
+
+**Test kierowców** zastępuje pościgi (podręcznik podstawowy nie ma zasad pościgów): Pilotowanie + Reakcja przeciw
+Pilotowaniu + Reakcji, sukcesy przeciwnika wpisuje MG.
+
+**Taranowanie** (errata 02/2020): obrażenia (Ciało / 2 w górę) + 1 za interwał prędkości, fizyczne; cel-pojazd oddaje
+tak samo według swojego Ciała i prędkości, pieszy oddaje (jego Ciało / 4 w górę). Przy taranowaniu wszyscy odpierają
+**Ciałem** (s. 201), także pojazdy; ogólna odporność pojazdu na karcie i przy wybuchach to Ciało × 2, jak w przykładach
+z s. 114. Pojazdy są odporne na ogłuszenie o DV ≤ Ciało (oprócz elektryczności).
+
+**Drony** w trybie autonomicznym lub RCC: inicjatywa Pilot × 2 + 4K6, testy z autosoftów (Clearsight, Electronic
+Warfare i Targeting z Sensorem; Evasion, Maneuvering i Stealth z Pilotem; bez Targetingu Sensor − 1), sloty
+Pilot / 2 w górę. **Grupa dronów**: drony właściciela w trybie RCC dostają jeden rozkaz (akcja Minor), każdy rzuca
+osobno; RCC obsługuje najwyżej ocena × 3 dronów (więcej pyta).
 
 ## Matrix (s. 175–187)
 

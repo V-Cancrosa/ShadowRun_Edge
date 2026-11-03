@@ -191,4 +191,18 @@ assert.match(renderTask({ kind: "icAttack", ic: "sparky", rating: 4, target: "Ac
 assert.match(renderTask({ kind: "icAttack", ic: "tarbaby", rating: 4, target: "Actor.g", defensePool: 9, defenderHits: 0 }, 2), /data-lock/);
 game.user.isGM = false;
 
+// Vehicles: Handling failure → crash test; crash → DV from speed; ramming damage both ways.
+await import("../scripts/vehicles.mjs");
+const handling = { kind: "handling", vehicle: "Actor.v", threshold: 4, mod: 0, crash: false, speed: 28 };
+assert.match(renderTask(handling, 4), new RegExp(lookup("SRE.Vehicle.Success").slice(0, 8)));
+assert.match(renderTask(handling, 2), /data-crash/);
+game.user.isGM = true;
+assert.match(renderTask({ ...handling, crash: true, safety: 1 }, 2), /<b data-dv>1<\/b>/, "28 / 10 = 2, − 1 safety");
+const ram = { kind: "ram", vehicle: "Actor.v", name: "Americar", target: "Actor.t", targetName: "Bulldog", damage: 7, back: 8, otherHits: 1 };
+assert.match(renderTask(ram, 3), /data-hit="7"/);
+assert.match(renderTask(ram, 3), /data-back="8"/);
+assert.doesNotMatch(renderTask({ ...ram, otherHits: 3 }, 3), /data-hit/, "a tie misses");
+assert.match(renderTask({ ...ram, otherHits: null }, 3), /data-other/);
+game.user.isGM = false;
+
 console.log("tasks OK");
