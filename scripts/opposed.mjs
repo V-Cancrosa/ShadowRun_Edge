@@ -8,6 +8,7 @@
  *   (Sixth World FAQ: the default resistance for spells without a stated test).
  */
 import * as rolls from "./sheet/system-rolls.mjs";
+import { engineData } from "./dice/edge-roll.mjs";
 import { errata } from "./errata.mjs";
 
 const MODULE_ID = "shadowrun-edge";
@@ -53,16 +54,18 @@ function defender() {
 }
 
 Hooks.on("renderChatMessageHTML", (message, html) => {
+  const own = engineData(message);
   const roll = message.rolls?.[0];
-  const itemId = roll?.options?.itemId;
-  if (!itemId) return;
   const caster = ChatMessage.getSpeakerActor(message.speaker);
-  const item = caster?.items.get(itemId);
+  let item;
+  if (own) item = own.extra?.itemUuid ? fromUuidSync(own.extra.itemUuid) : null;
+  else if (roll?.options?.itemId) item = caster?.items.get(roll.options.itemId);
+  if (!item) return;
   const attrs = defenseAttributes(item);
   if (!attrs) return;
   const root = html instanceof HTMLElement ? html : html?.[0];
   if (!root || root.querySelector(".sre-defend")) return;
-  const hits = Number(roll.total) || 0;
+  const hits = own ? Number(own.result?.hits) || 0 : Number(roll?.total) || 0;
   const names = attrs.map(attrLabel).join(" + ");
   const box = document.createElement("div");
   box.className = "sre-defend";

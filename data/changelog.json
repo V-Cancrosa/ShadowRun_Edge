@@ -1,5 +1,23 @@
 [
   {
+    "version": "0.37.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Własny silnik rzutów (etap 13B): każdy rzut modułu — umiejętności, atrybuty, broń, czary, rytuały, formy złożone, pojazdy, odporność, legwork i testy powiązane — ma jedno okno Edge, rzut kośćmi Foundry (Dice So Nice działa) i jedną kartę czatu. Liczby (pule, WA, obrażenia, kary za rany i podtrzymywanie) nadal liczy system.",
+      "Edge według podręcznika (s. 44–48 z erratą): przed rzutem Dodaj Edge (szóstki wybuchają), Odbierz Edge wrogowi, Dwójki jako komplikacje celu, akcje Edge dopasowane do testu i Spalenie Edge (Miażdżący cios); po rzucie na karcie: przerzut wybranych kości, +1 do kości, automatyczne trafienie, przerzut nieudanych. Jeden wydatek na akcję.",
+      "Atak bronią: tryby ognia (pojedynczy, półautomat, seria wąska i szeroka, automat z obszarem), zasięg z WA, obrażenia, zużycie amunicji i Edge z przewagi WA/WO (limit na rundę i 7 łącznie). Czary: Wzmocnienie i Większy obszar z drenażem; odporność na drenaż i zanik prosto z karty.",
+      "Kość dzika, kupowanie trafień, próg i trafienia netto, ponowna próba (−2), Wielka przemowa jako dwa rzuty. Karta odporności pokazuje obrażenia po rzucie i ma przycisk Zastosuj.",
+      "Ustawienie świata „Silnik rzutów”: Shadowrun Edge (domyślnie) albo system — powrót do okna i kart systemu jednym przełącznikiem."
+    ],
+    "changes_en": [
+      "Own roll engine (stage 13B): every roll of the module — skills, attributes, weapons, spells, rituals, complex forms, vehicles, resistance, legwork and linked tests — gets one Edge window, a roll with Foundry dice (Dice So Nice works) and one chat card. Numbers (pools, AR, damage, wound and sustaining modifiers) still come from the system.",
+      "Edge by the book (pp. 44–48 with errata): before the roll Add Edge (6s explode), Negate a foe's Edge, Count 2s as glitches for the target, Edge Actions that fit the test and Burning Edge (Smackdown); after the roll on the card: reroll picked dice, +1 to a die, automatic hit, reroll failed dice. One expenditure per action.",
+      "Weapon attacks: fire modes (single, semi-auto, narrow and wide burst, full auto with area), range with AR, damage, ammo use and Edge from the AR/DR advantage (per-round limit, 7 in total). Spells: Amp Up and Increase Area with their drain; drain and fading resistance straight from the card.",
+      "Wild die, buying hits, threshold and net hits, trying again (−2), Big Speech as two rolls. The resistance card shows the damage left and has an Apply button.",
+      "World setting \"Roll engine\": Shadowrun Edge (default) or the system — back to the system dialog and cards with one switch."
+    ]
+  },
+  {
     "version": "0.36.3",
     "date": "2026-11-03",
     "changes": [

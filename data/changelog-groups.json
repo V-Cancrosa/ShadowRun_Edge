@@ -1,5 +1,13 @@
 [
   {
+    "id": "system13",
+    "pl": "Moduł jako system — własny silnik i karty",
+    "en": "The module as a system — own engine and sheets",
+    "versions": [
+      "0.37.0"
+    ]
+  },
+  {
     "id": "ui",
     "pl": "Edge w całym interfejsie",
     "en": "Edge across the interface",

@@ -6,6 +6,7 @@
  * With hits typed in by hand there is no system roll: the module posts its own message with the same task.
  */
 import * as rolls from "./sheet/system-rolls.mjs";
+import { engineOn, engineHits } from "./dice/edge-roll.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
@@ -22,6 +23,8 @@ export function registerTask(kind, handler) {
 export function hitsOf(message) {
   const task = message?.getFlag?.(MODULE_ID, FLAG);
   if (task && task.manualHits !== null && task.manualHits !== undefined) return Number(task.manualHits) || 0;
+  const own = engineHits(message);
+  if (own !== null) return own;
   return Number(message?.rolls?.[0]?.total) || 0;
 }
 
@@ -52,6 +55,8 @@ function captureNextRoll(actor, timeout = 120000) {
  * @returns {Promise<ChatMessage|null>} null when the dialog was cancelled
  */
 export async function systemTest(actor, { pool, label, threshold, useWoundModifier, wildDie, task }) {
+  // The Edge engine puts the task on its own message.
+  if (engineOn()) return (await rolls.rollPool(actor, { pool, label, kind: "test", threshold, useWoundModifier, wildDie, task })) ?? null;
   const capture = captureNextRoll(actor);
   let result;
   try {

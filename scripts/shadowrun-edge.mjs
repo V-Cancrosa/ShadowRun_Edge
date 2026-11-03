@@ -21,6 +21,7 @@ import "./statuses.mjs";
 import "./substances.mjs";
 import "./welcome.mjs";
 import "./roll-dialog.mjs";
+import "./dice/edge-roll.mjs";
 import "./ui/conflict.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
 import "./advancement.mjs";

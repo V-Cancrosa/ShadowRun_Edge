@@ -1,0 +1,47 @@
+/*
+ * Stage 13B: the Edge engine's roll card (scripts/dice/edge-roll.mjs) and its window. The dice strip, dice and the
+ * verdict stamp share the Edge Motion styles (styles/edge-motion.css); this file lays out the rest of the card.
+ */
+.chat-message .sre-rc { display: grid; gap: 6px; font-family: var(--sre-font-body, inherit); }
+.chat-message .sre-rc-head { display: flex; gap: 8px; align-items: center; }
+.chat-message .sre-rc-head img {
+  width: 38px; height: 38px; object-fit: cover; border: 1px solid var(--sre-accent, #e0409a); border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%); background: rgba(0, 0, 0, 0.3);
+}
+.chat-message .sre-rc-kind { font: 700 9px/1.2 var(--sre-font-display, sans-serif); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sre-accent, #e0409a); }
+.chat-message .sre-rc-title { font: 700 14px/1.2 var(--sre-font-display, sans-serif); letter-spacing: 0.04em; text-transform: uppercase; }
+.chat-message .sre-rc-sub { font-size: 11px; font-style: italic; opacity: 0.8; }
+.chat-message .sre-rc-stats { display: flex; flex-wrap: wrap; gap: 4px; }
+.chat-message .sre-rc-stats span {
+  display: grid; min-width: 46px; padding: 2px 6px; border: 1px solid var(--sre-line, rgba(127, 127, 127, 0.35)); text-align: center;
+}
+.chat-message .sre-rc-stats small { font: 700 8px/1.3 var(--sre-font-display, sans-serif); letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; }
+.chat-message .sre-rc-stats b { font: 700 14px/1.2 var(--sre-font-display, sans-serif); }
+.chat-message .sre-rc .sre-dice-strip { padding-left: 0; padding-right: 0; }
+.chat-message .sre-rc-result { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.chat-message .sre-rc-hits { font: 600 12px var(--sre-font-display, sans-serif); letter-spacing: 0.06em; text-transform: uppercase; }
+.chat-message .sre-rc-hits b { font-size: 22px; color: var(--sre-accent, #e0409a); margin-right: 2px; }
+.chat-message .sre-rc-net { font: 700 11px var(--sre-font-display, sans-serif); color: var(--sre-ok, #4fd68a); letter-spacing: 0.06em; }
+.chat-message .sre-rc-pool { margin-left: auto; font-size: 11px; opacity: 0.75; }
+.chat-message .sre-rc-edge, .chat-message .sre-rc-note { font-size: 11px; padding: 3px 6px; border-left: 2px solid var(--sre-cyan, #3fd4e8); background: rgba(63, 212, 232, 0.07); }
+.chat-message .sre-rc-soak { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.chat-message .sre-rc-soak b { font: 700 18px var(--sre-font-display, sans-serif); }
+.chat-message .sre-rc-soak b.physical { color: var(--sre-bad, #ff5470); }
+.chat-message .sre-rc-soak b.stun { color: var(--sre-warn, #f0b24a); }
+.chat-message .sre-rc-soak em, .chat-message .sre-rc-resist em { font-size: 11px; opacity: 0.8; }
+.chat-message .sre-rc button {
+  border: 1px solid var(--sre-accent-line, rgba(224, 64, 154, 0.45)); border-radius: 0; background: transparent; color: inherit;
+  font: 600 11px var(--sre-font-display, sans-serif); letter-spacing: 0.06em; text-transform: uppercase; line-height: 24px; padding: 0 8px;
+}
+.chat-message .sre-rc button:hover:not(:disabled) { background: var(--sre-accent-soft, rgba(224, 64, 154, 0.16)); border-color: var(--sre-accent, #e0409a); }
+.chat-message .sre-rc button:disabled { opacity: 0.4; }
+.chat-message .sre-rc-soak button { margin-left: auto; width: auto; }
+.chat-message .sre-rc-post > button[data-sre-roll="open"] { width: 100%; border-color: var(--sre-cyan, #3fd4e8); color: var(--sre-cyan, #3fd4e8); }
+.chat-message .sre-rc-post-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
+.chat-message .sre-rc-post-menu p { grid-column: 1 / -1; margin: 0; font-size: 11px; opacity: 0.8; }
+.chat-message .sre-rc-post-menu small { opacity: 0.7; }
+.chat-message .sre-rc.sre-picking .sre-die { cursor: pointer; }
+.chat-message .sre-rc .sre-die.picked { outline: 2px solid var(--sre-cyan, #3fd4e8); outline-offset: 2px; transform: translateY(-2px); }
+.chat-message .sre-rc .sre-die.exploded { border-style: dashed; }
+.chat-message .sre-rc-post-menu[hidden] { display: none; }
+.chat-message .sre-rc-stats span { min-width: 40px; flex: 1 1 0; }

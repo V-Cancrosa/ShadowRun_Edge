@@ -57,7 +57,8 @@ globalThis.game = {
   user: { id: "u1", isGM: false },
   users: { activeGM: null, get: () => null },
   i18n: { localize: lookup, format: (key, data) => lookup(key).replace(/\{(\w+)\}/g, (_, k) => data?.[k] ?? "") },
-  settings: { get: (module, key) => key !== "playersBreakRules" },
+  // The system's dialog path (rollEngine "system"); the Edge engine has its own block below.
+  settings: { get: (module, key) => (key === "rollEngine" ? "system" : key === "rollMode" ? "publicroll" : key !== "playersBreakRules") },
   socket: { on() {}, emit() {} },
   actors: { get: () => null, filter: () => [] },
 };
@@ -216,5 +217,41 @@ assert.match(renderTask(demo, 4), /DV 17 \/ 13 \/ 8/);
 const structure = renderTask({ ...demo, target: "structure" }, 4);
 assert.match(structure, /14/, "Close 12 + 2 hits above the threshold");
 assert.doesNotMatch(structure, /data-detonate/, "structure damage is the GM's");
+
+// ── The Edge engine (rollEngine "edge"): the task rides on the engine's own message; hits follow Edge after the roll ──
+{
+  const getSetting = game.settings.get;
+  game.settings.get = (module, key) => (key === "rollEngine" ? "edge" : getSetting(module, key));
+  globalThis.CONFIG = { sounds: { dice: "dice.wav" }, Dice: { rollModes: {} } };
+  ChatMessage.applyRollMode = () => {};
+  let faces = [6, 5, 1, 3];
+  globalThis.Roll = class {
+    constructor(formula) { this.formula = formula; }
+    async evaluate() {
+      const n = Number(this.formula.match(/(\d+)d6/)[1]);
+      this.dice = [{ results: faces.splice(0, n).map((result) => ({ result })) }];
+      return this;
+    }
+  };
+  const E = await import("../scripts/dice/edge-roll.mjs");
+  const roller = { id: "a2", uuid: "Actor.a2", img: "", isOwner: true, system: { edge: { value: 2, max: 3 } }, getFlag: () => null, getWoundModifier: () => 0, async update(u) { Object.assign(this.system.edge, { value: u["system.edge.value"] }); } };
+  const msg = await E.edgeTest(roller, { kind: "test", label: "Test", pool: 4, task: { kind: "echo" } },
+    { pool: 4, mod: 0, wound: 0, sustain: 0, retry: 0, threshold: 2, wild: false, buy: false, edge: "", rollMode: "publicroll", fm: null, ar: null });
+  assert.equal(msg.getFlag("shadowrun-edge", "task").kind, "echo", "the task is on the engine's message");
+  assert.equal(hitsOf(msg), 2, "6 and 5");
+  assert.equal(E.engineData(msg).result.success, true, "threshold 2 met");
+  assert.equal(msg.rolls.length, 1, "Foundry dice for Dice So Nice");
+  // Buying hits: no dice, no Edge.
+  const bought = await E.edgeTest(roller, { kind: "skill", label: "x", pool: 9 }, { pool: 9, threshold: 0, buy: true, edge: "", rollMode: "publicroll" });
+  assert.equal(hitsOf(bought), 2);
+  assert.equal(bought.rolls.length, 0);
+  // A pre-roll boost spends Edge.
+  faces = [6, 6, 2, 2, 2, 2];
+  roller.system.edge.value = 5;
+  const boosted = await E.edgeTest(roller, { kind: "skill", label: "x", pool: 3 }, { pool: 3, threshold: 0, buy: false, edge: "add_edge", rollMode: "publicroll" });
+  assert.equal(roller.system.edge.value, 1, "4 Edge spent");
+  assert.equal(E.engineData(boosted).pool, 6, "+ Edge rank 3 dice");
+  game.settings.get = getSetting;
+}
 
 console.log("tasks OK");

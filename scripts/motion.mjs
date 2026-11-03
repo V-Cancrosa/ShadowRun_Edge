@@ -25,7 +25,7 @@ function applyLevel() {
 }
 
 /** Adds a class for one play of its animation, then removes it (also when the animation never runs). */
-function playOnce(element, cls, ms = 900) {
+export function playOnce(element, cls, ms = 900) {
   if (!element || document.body.classList.contains("sre-motion-off")) return;
   element.classList.remove(cls);
   void element.offsetWidth;
@@ -95,7 +95,7 @@ function snapshot(el) {
 const level = () => (document.body.classList.contains("sre-motion-full") ? "full" : document.body.classList.contains("sre-motion-reduced") ? "reduced" : "off");
 
 /** Counts a number from its old value to the new one (only the leading text, the rest of the element stays). */
-function countUp(node, from, to, ms = 420) {
+export function countUp(node, from, to, ms = 420) {
   const text = node.firstChild?.nodeType === Node.TEXT_NODE ? node.firstChild : null;
   if (!text) return;
   const original = text.textContent;
@@ -357,4 +357,39 @@ Hooks.on("updateCombat", (combat, changed) => {
   const L = (k) => game.i18n.localize(k);
   const banner = bannerFor({ isGM: game.user.isGM, owned: !!c.actor?.isOwner || !!c.isOwner, name: c.name, initiative: c.initiative, round: combat.round, L });
   if (banner) showBanner(banner);
+});
+
+// ───── 13B: the Edge engine's own roll card gets the same motion ─────
+const seenEngine = new Map(); // message id → dice faces seen last
+
+Hooks.on("sre.renderRollCard", (message, card, data) => {
+  const faces = (data.dice ?? []).map((d) => d.v).join(",") + `|${data.autoHits ?? 0}`;
+  const before = seenEngine.get(message.id);
+  seenEngine.set(message.id, faces);
+  if (seenEngine.size > 200) seenEngine.delete(seenEngine.keys().next().value);
+  const lvl = level();
+  if (lvl === "off") return;
+  const strip = card.querySelector(".sre-dice-strip");
+  const stamp = card.querySelector(".sre-stamp");
+  const fresh = !before && Date.now() - (message.timestamp ?? 0) < FRESH_MS;
+  if (fresh) {
+    strip?.classList.add("sre-fx-roll");
+    stamp?.classList.add("sre-fx-stamp");
+    const total = card.querySelector(".sre-rc-hits b");
+    const to = Number(total?.textContent);
+    const n = data.dice?.length ?? 0;
+    if (total && lvl === "full" && to > 0) {
+      total.textContent = "0";
+      setTimeout(() => countUp(total, 0, to, 500), Math.min(900, n * 45));
+      setTimeout(() => { total.textContent = String(to); }, Math.min(900, n * 45) + 650);
+    }
+    if (data.result?.glitch) playOnce(card.closest(".chat-message") ?? card, "sre-fx-glitch", 2200);
+  } else if (before && before !== faces) {
+    const old = before.split("|")[0].split(",");
+    card.querySelectorAll(".sre-dice-strip .sre-die").forEach((el) => {
+      const i = Number(el.dataset.i);
+      if (String(data.dice?.[i]?.v) !== old[i]) el.classList.add("sre-fx-reroll");
+    });
+    stamp?.classList.add("sre-fx-stamp");
+  }
 });
