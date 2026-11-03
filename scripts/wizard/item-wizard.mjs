@@ -300,7 +300,7 @@ export class ItemWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       hasRating: !!category.rating,
       countable: !!category.countable,
       isCyberdeck: this.wizardState.subtype === "CYBERDECK",
-      example: category.example,
+      example: game.i18n.localize(category.example),
       categories: Object.entries(CATEGORIES).map(([value, c]) => ({
         value, label: game.i18n.localize(c.label), icon: CATEGORY_ICONS[value] ?? "fas fa-box", checked: value === this.wizardState.category,
       })),

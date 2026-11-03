@@ -1,5 +1,7 @@
 # Shadowrun Edge
 
+*English summary: [README.en.md](README.en.md).*
+
 Moduł do [Foundry VTT](https://foundryvtt.com/) (v13–v14) współpracujący z systemem
 **Shadowrun 6th Edition** ([`shadowrun6-eden`](https://github.com/yjeroen/foundry-shadowrun6-eden)).
 Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualizacje systemu go nie psują.
@@ -605,14 +607,22 @@ npm run build   # buduje kompendium w packs/katalog
 Przy wydaniu (tag `v*`) GitHub Actions buduje kompendium samo. Przy pracy na podlinkowanym folderze
 uruchom `npm run build` raz, żeby kompendium pojawiło się w Foundry.
 
+## Testy
+
+- `npm test` — testy w Node: zasady (statusy, leczenie, Matrix, pojazdy, rozwój…), szablony kart, zadania czatu,
+  komplet tłumaczeń PL/EN, angielska historia zmian i build katalogu.
+- **Quench** (moduł [Quench](https://github.com/Ethaks/FVTT-Quench)): po jego włączeniu w świecie testowym przycisk
+  Quench w kontrolkach sceny pokazuje trzy zestawy modułu: *setup* (ustawienia, rejestracja kart, kompendia,
+  tłumaczenia), *rules* (zasady w przeglądarce) i *integration* (tylko MG: tymczasowa postać z Kartą Edge na wszystkich
+  zakładkach i przedmiotami z katalogu, usuwana po teście).
+
 ## Wydanie nowej wersji
 
-Podnieś `version` w `module.json`, zrób commit i wypchnij tag z tym numerem:
+1. Podnieś `version` w `module.json`.
+2. Dodaj na początku `data/changelog.json` wpis z tą wersją: `changes` (PL) i `changes_en` (EN) — test pilnuje,
+   że pierwszy wpis to bieżąca wersja i że angielska lista ma tyle samo pozycji.
+3. `npm test`, commit i push na `main` (lub gałąź roboczą z workflow).
 
-```bash
-git tag v0.1.1
-git push origin v0.1.1
-```
-
-Workflow `.github/workflows/release.yml` sam utworzy wydanie na GitHubie i dołączy do niego
-`shadowrun-edge.zip` oraz `module.json`. Foundry zobaczy aktualizację przez adres manifestu.
+Workflow `.github/workflows/release.yml` sam zbuduje katalog i przewodnik, utworzy wydanie z tagiem `v<wersja>`
+i dołączy `shadowrun-edge.zip` oraz `module.json` — Foundry zobaczy aktualizację przez adres manifestu. Wypchnięcie
+tagu `v…` ręcznie też uruchamia wydanie.

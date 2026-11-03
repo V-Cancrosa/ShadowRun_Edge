@@ -133,7 +133,21 @@
       "Attack": "Atak",
       "Sleaze": "Podstęp",
       "Data": "Przetwarzanie danych",
-      "Firewall": "Firewall"
+      "Firewall": "Firewall",
+      "Example": {
+        "firearm": "Pistolet 3P SA/BF 10/10/8/—/— 15(c) 2(L) 750¥",
+        "melee": "Miecz 4P 9 3(L) 300¥",
+        "projectile": "Łuk 2P 4/8/6/—/— 1(c) 2 R*100¥",
+        "special": "Granatnik 4P SS 4/10/6/2/— 6(c) 4(I) 2000¥",
+        "armor": "Kurtka 3 6 2 800¥",
+        "cyberware": "Wszczep 0.1 — 2 1000¥",
+        "bioware": "Wzmocnione mięśnie R*0.2 R+2(L) R*7000¥",
+        "electronics": "Komlink 2 1/1 2 2 500¥",
+        "software": "Autosoft R R*2(L) R*500¥",
+        "ammo": "Amunicja 3(L) 100¥",
+        "mod": "Celownik 2 300¥",
+        "gear": "Medkit R R(L) R*250¥"
+      }
     },
     "Catalog": {
       "Label": "Katalog własny (świat)",
@@ -815,7 +829,8 @@
       "HintShort": "Nadmiar leczy się najpierw. Pierwsza pomoc, apteczka i magia działają raz na zestaw ran; drenażu nie leczą.",
       "RollButton": "Lecz · rzuć {n} kośćmi",
       "ApplyButton": "Lecz z wpisanych sukcesów",
-      "HealAnyway": "Lecz mimo to"
+      "HealAnyway": "Lecz mimo to",
+      "Pages": "s. 119–121"
     },
     "Blast": {
       "Explosives": "Materiały wybuchowe",

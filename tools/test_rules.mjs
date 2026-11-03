@@ -298,6 +298,10 @@ console.log("blast & summoning OK");
   assert.deepEqual(changesSince(log, log[2].version).map((v) => v.version), [log[0].version, log[1].version], "newest first, only after the one seen");
   assert.equal(changesSince(log, "").length, 3, "first time: the latest three");
   assert.equal(changesSince(log, version).length, 0);
+  const { changesOf } = await import("../scripts/welcome.mjs");
+  for (const v of log) assert.equal(v.changes_en?.length, v.changes.length, `English changelog for ${v.version}`);
+  assert.equal(changesOf(log[0], "en"), log[0].changes_en);
+  assert.equal(changesOf(log[0], "pl"), log[0].changes);
   console.log("welcome OK");
 }
 

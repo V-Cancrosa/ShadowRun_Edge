@@ -10,7 +10,7 @@ export const CATEGORIES = {
     weapon: true,
     fields: ["dv", "modes", "ar", "ammo"],
     columns: ["avail", "price"],
-    example: "Pistolet 3P SA/BF 10/10/8/—/— 15(c) 2(L) 750¥",
+    example: "SRE.Wizard.Example.firearm",
   },
   melee: {
     label: "SRE.Wizard.Category.melee",
@@ -18,7 +18,7 @@ export const CATEGORIES = {
     weapon: true,
     fields: ["dv", "ar", "strWeapon"],
     columns: ["ar0", "avail", "price"],
-    example: "Miecz 4P 9 3(L) 300¥",
+    example: "SRE.Wizard.Example.melee",
   },
   projectile: {
     label: "SRE.Wizard.Category.projectile",
@@ -26,7 +26,7 @@ export const CATEGORIES = {
     weapon: true,
     fields: ["dv", "ar", "ammo"],
     columns: ["avail", "price"],
-    example: "Łuk 2P 4/8/6/—/— 1(c) 2 R*100¥",
+    example: "SRE.Wizard.Example.projectile",
   },
   special: {
     label: "SRE.Wizard.Category.special",
@@ -34,14 +34,14 @@ export const CATEGORIES = {
     weapon: true,
     fields: ["dv", "modes", "ar", "ammo"],
     columns: ["avail", "price"],
-    example: "Granatnik 4P SS 4/10/6/2/— 6(c) 4(I) 2000¥",
+    example: "SRE.Wizard.Example.special",
   },
   armor: {
     label: "SRE.Wizard.Category.armor",
     types: ["ARMOR"],
     fields: ["defense"],
     columns: ["defense", "capacity", "avail", "price"],
-    example: "Kurtka 3 6 2 800¥",
+    example: "SRE.Wizard.Example.armor",
   },
   cyberware: {
     label: "SRE.Wizard.Category.cyberware",
@@ -50,7 +50,7 @@ export const CATEGORIES = {
     rating: true,
     fields: ["essence", "capacity"],
     columns: ["essence", "capacity", "avail", "price"],
-    example: "Wszczep 0.1 — 2 1000¥",
+    example: "SRE.Wizard.Example.cyberware",
   },
   bioware: {
     label: "SRE.Wizard.Category.bioware",
@@ -59,7 +59,7 @@ export const CATEGORIES = {
     rating: true,
     fields: ["essence"],
     columns: ["essence", "avail", "price"],
-    example: "Wzmocnione mięśnie R*0.2 R+2(L) R*7000¥",
+    example: "SRE.Wizard.Example.bioware",
   },
   electronics: {
     label: "SRE.Wizard.Category.electronics",
@@ -67,7 +67,7 @@ export const CATEGORIES = {
     rating: true,
     fields: ["matrix"],
     columns: ["rating", "progSlots", "avail", "price"],
-    example: "Komlink 2 1/1 2 2 500¥",
+    example: "SRE.Wizard.Example.electronics",
   },
   software: {
     label: "SRE.Wizard.Category.software",
@@ -75,7 +75,7 @@ export const CATEGORIES = {
     rating: true,
     fields: [],
     columns: ["rating", "avail", "price"],
-    example: "Autosoft R R*2(L) R*500¥",
+    example: "SRE.Wizard.Example.software",
   },
   ammo: {
     label: "SRE.Wizard.Category.ammo",
@@ -83,7 +83,7 @@ export const CATEGORIES = {
     countable: true,
     fields: ["count"],
     columns: ["avail", "price"],
-    example: "Amunicja 3(L) 100¥",
+    example: "SRE.Wizard.Example.ammo",
   },
   mod: {
     label: "SRE.Wizard.Category.mod",
@@ -92,7 +92,7 @@ export const CATEGORIES = {
     rating: true,
     fields: ["effects"],
     columns: ["rating", "avail", "price"],
-    example: "Celownik 2 300¥",
+    example: "SRE.Wizard.Example.mod",
   },
   gear: {
     label: "SRE.Wizard.Category.gear",
@@ -101,7 +101,7 @@ export const CATEGORIES = {
     countable: true,
     fields: ["count"],
     columns: ["rating", "avail", "price"],
-    example: "Medkit R R(L) R*250¥",
+    example: "SRE.Wizard.Example.gear",
   },
 };
 

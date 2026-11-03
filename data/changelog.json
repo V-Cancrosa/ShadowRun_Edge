@@ -1,11 +1,30 @@
 [
   {
+    "version": "0.29.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Angielska historia zmian: okno „Co nowego” pokazuje ją graczom z Foundry w innym języku niż polski.",
+      "Testy w Foundry dla modułu Quench: ustawienia, karty, kompendia, tłumaczenia, zasady i test integracyjny z tymczasową postacią.",
+      "Porządki: przykłady w kreatorze przedmiotów i podpowiedzi okien przetłumaczone na angielski, aktualny opis modułu, angielskie README i instrukcja wydania."
+    ],
+    "changes_en": [
+      "English changelog: the “What's new” window shows it to players whose Foundry language is not Polish.",
+      "In-Foundry tests for the Quench module: settings, sheets, compendiums, translations, rules and an integration test with a temporary character.",
+      "Housekeeping: item creator examples and window hints translated into English, an up-to-date module description, an English README and release instructions."
+    ]
+  },
+  {
     "version": "0.28.0",
     "date": "2026-11-03",
     "changes": [
       "Katalog: Magia i Rezonans — 73 zaklęcia (w kategoriach, z polami do rzutu), 22 moce adepta, 9 metamagii, 15 form złożonych i 7 ech; tylko statystyki, z erratami.",
       "Katalog: 64 cechy (pozytywne i negatywne) z kosztami, poziomami i premiami jak w kreatorze; Focused Concentration i Pain Resistance przeniesione do tych folderów.",
       "Rozwój za Karmę: wybór zaklęcia lub formy złożonej z katalogu."
+    ],
+    "changes_en": [
+      "Catalog: Magic and Resonance — 73 spells (by category, with the fields the roll needs), 22 adept powers, 9 metamagics, 15 complex forms and 7 echoes; stats only, errata applied.",
+      "Catalog: 64 qualities (positive and negative) with costs, levels and bonuses as in the creator; Focused Concentration and Pain Resistance moved into these folders.",
+      "Karma advancement: pick a spell or complex form from the catalog."
     ]
   },
   {
@@ -15,6 +34,11 @@
       "Pojazdy: sterowanie na karcie Edge (tryb, kierowca, teren), prędkość z przyspieszaniem i hamowaniem, dystans w rundzie, kara za interwał i próg Handlingu z obrażeniami.",
       "Test Handlingu z testem wypadku i obrażeniami dla osób w środku, test kierowców, taranowanie z obrażeniami w obie strony (odporność Ciałem, s. 201).",
       "Drony: testy z autosoftów, inicjatywa Pilot × 2 + 4K6, sloty i rozkaz dla grupy dronów RCC."
+    ],
+    "changes_en": [
+      "Vehicles: control on the Edge sheet (mode, driver, off-road), speed with accelerate and brake, distance this round, speed-interval penalty and the Handling threshold raised by damage.",
+      "Handling test with the crash test and damage for those inside, drivers' opposed test, ramming with damage both ways (resisted with Body, p. 201).",
+      "Drones: autosoft tests, Pilot × 2 + 4D6 initiative, autosoft slots and a command for an RCC drone group."
     ]
   },
   {
@@ -24,6 +48,11 @@
       "Matrix: okno akcji w układzie Edge (cel, dostęp do zdobycia, program hakerski, Under the Radar, hałas) i zadania na czacie: sukcesy obrońcy, Overwatch dla MG, zapis dostępu i backdoorów, obrażenia Data Spike.",
       "Overwatch Score ukryty przed graczami (ustawienie świata), +OS co rundę za nielegalny dostęp do hostów, Konwergencja przy 40 z decyzją MG, dumpshock z blokadą Edge, restart urządzenia.",
       "Karta Edge hosta (system 4.x): ASDF, IC z obroną i efektami, ataki IC na wskazaną personę, kto jest w hoście."
+    ],
+    "changes_en": [
+      "Matrix: an Edge action window (target, access wanted, hacking program, Under the Radar, noise) and chat tasks: defender hits, Overwatch for the GM, access and backdoor records, Data Spike damage.",
+      "Overwatch Score hidden from players (world setting), +OS per round for illegal host access, Convergence at 40 decided by the GM, dumpshock with the Edge lock, device reboot.",
+      "Edge host sheet (system 4.x): ASDF, IC with defense and effects, IC attacks on the targeted persona, who is inside."
     ]
   },
   {
@@ -33,6 +62,11 @@
       "Rozwój postaci za Karmę: kliknij Karmę w nagłówku Karty Edge (lub „Rozwój” w zakładce Kontakty i notatki) — koszyk atrybutów, umiejętności, specjalizacji i ekspertyz, wiedzy i języków, cech, zaklęć i form, inicjacji/zanurzenia, z kosztami i czasem treningu wg podręcznika.",
       "Złamanie zasad (za mało Karmy, maksimum metatypu, ekspertyza bez specjalizacji…) pyta zamiast blokować; dziennik rozwoju na postaci i karta na czacie.",
       "Ustawienie świata „Rozwój wymaga zgody MG”: zakup gracza trafia na czat jako prośba do zatwierdzenia."
+    ],
+    "changes_en": [
+      "Karma advancement: click Karma in the Edge sheet header (or “Advance” in the Contacts and notes tab) — a cart of attributes, skills, specializations and expertise, knowledge and languages, qualities, spells and forms, initiation/submersion, with rulebook costs and training time.",
+      "Breaking a rule (not enough Karma, metatype maximum, expertise without a specialization…) asks instead of blocking; an advancement log on the character and a chat card.",
+      "World setting “Advancement needs GM approval”: a player's purchase goes to chat as a request to approve."
     ]
   },
   {
@@ -40,6 +74,9 @@
     "date": "2026-11-02",
     "changes": [
       "Karty Edge dla NPC i stworzeń (z grupami płotek), duchów (usługi, wypędzanie) i pojazdów (osiągi, testy, broń zamontowana, autosofty) — domyślne dla tych typów."
+    ],
+    "changes_en": [
+      "Edge sheets for NPCs and critters (with grunt groups), spirits (services, banishing) and vehicles (performance, tests, mounted weapons, autosofts) — default for those types."
     ]
   },
   {
@@ -48,6 +85,10 @@
     "changes": [
       "Przewodnik po module w Kompendiach i w Dzienniku (folder „Shadowrun Edge”), odświeżany przy nowej wersji.",
       "Okno „Co nowego” po wejściu do świata z historią zmian od ostatnio widzianej wersji; przycisk „Co nowego” w zakładce Dziennik."
+    ],
+    "changes_en": [
+      "Module guide in the Compendiums and the Journal (folder “Shadowrun Edge”), refreshed on a new version.",
+      "“What's new” window on entering the world with the changes since the last version seen; a “What's new” button in the Journal tab."
     ]
   },
   {
@@ -55,6 +96,9 @@
     "date": "2026-11-02",
     "changes": [
       "Toksyny i narkotyki (s. 121–125): katalog z cenami z erraty, podawanie i przyjmowanie z Karty Edge, test odporności przez okno rzutu, skutki i stany na czas działania, zjazd po narkotykach, antidotum i czar Antidotum."
+    ],
+    "changes_en": [
+      "Toxins and drugs (pp. 121–125): catalog with errata prices, giving and taking them from the Edge sheet, resistance through the roll dialog, effects and statuses for their duration, drug crash, antidote and the Antidote spell."
     ]
   },
   {
@@ -63,6 +107,10 @@
     "changes": [
       "Stany (s. 51–53) działają: modyfikatory w oknie rzutu, Inicjatywa i WO na efektach, obrażenia trwające na koniec rundy, znoszenie się stanów.",
       "Lista stanów na Karcie Edge, przycisk „Schowaj się” (Osłona I–IV), bariery ze Strukturą przy odporności."
+    ],
+    "changes_en": [
+      "Statuses (pp. 51–53) work: modifiers in the roll dialog, Initiative and DR on effects, ongoing damage at the end of the round, statuses cancelling each other.",
+      "Status list on the Edge sheet, a “Take Cover” button (Cover I–IV), barriers with Structure when resisting."
     ]
   },
   {
@@ -71,6 +119,10 @@
     "changes": [
       "MG zawsze decyduje: konflikty z zasadami (montaż, kreator, zakup, leczenie, przywoływanie, Edge…) otwierają okno z opcjami zamiast blokady.",
       "Ustawienie świata „Gracze mogą łamać zasady” (domyślnie wyłączone)."
+    ],
+    "changes_en": [
+      "The GM always decides: rule conflicts (mounting, creator, purchase, healing, summoning, Edge…) open a window with options instead of blocking.",
+      "World setting “Players may break rules” (off by default)."
     ]
   },
   {
@@ -78,6 +130,9 @@
     "date": "2026-10-30",
     "changes": [
       "Karta Edge domyślną kartą postaci gracza; czytelne nazwy na karcie głosowania Karmy."
+    ],
+    "changes_en": [
+      "The Edge sheet is the default player character sheet; readable names on the Karma vote card."
     ]
   },
   {
@@ -85,6 +140,9 @@
     "date": "2026-10-30",
     "changes": [
       "Granaty: Uniknięcie nadlatującego, Edge za przewagę ataku obszarowego, powalony przy odporności."
+    ],
+    "changes_en": [
+      "Grenades: Avoid Incoming, Edge for the area attack advantage, Prone when resisting."
     ]
   },
   {
@@ -92,6 +150,9 @@
     "date": "2026-10-30",
     "changes": [
       "Leczenie, granaty, przywoływanie i wypędzanie rzucają przez okno rzutu systemu (Edge, modyfikatory); wynik przelicza się po Edge, skutki po kliknięciu."
+    ],
+    "changes_en": [
+      "Healing, grenades, summoning and banishing roll through the system's roll dialog (Edge, modifiers); the result follows Edge spent afterwards, effects happen on a click."
     ]
   },
   {
@@ -99,6 +160,9 @@
     "date": "2026-10-30",
     "changes": [
       "Stonowany jasny motyw „Papier” we wszystkich oknach."
+    ],
+    "changes_en": [
+      "Toned-down light theme “Paper” in every window."
     ]
   },
   {
@@ -106,6 +170,9 @@
     "date": "2026-10-30",
     "changes": [
       "Kreator przedmiotów w układzie Karty Edge: kroki, kafelki kategorii, podgląd na żywo."
+    ],
+    "changes_en": [
+      "Item creator in the Edge sheet layout: steps, category tiles, live preview."
     ]
   },
   {
@@ -113,6 +180,9 @@
     "date": "2026-10-29",
     "changes": [
       "Okna modułu (leczenie, granaty, duchy, przekazanie, głosowanie, zakup…) w układzie Karty Edge."
+    ],
+    "changes_en": [
+      "Module windows (healing, grenades, spirits, giving, vote, purchase…) in the Edge sheet layout."
     ]
   },
   {
@@ -120,6 +190,9 @@
     "date": "2026-10-29",
     "changes": [
       "Okno rzutu systemu w układzie Karty Edge: kafelki puli i Edge, panele, chipy."
+    ],
+    "changes_en": [
+      "The system's roll dialog in the Edge sheet layout: pool and Edge tiles, panels, chips."
     ]
   },
   {
@@ -127,6 +200,9 @@
     "date": "2026-10-29",
     "changes": [
       "Czytelny pasek okna i kafelki obrony w jasnym motywie."
+    ],
+    "changes_en": [
+      "Readable window bar and defense tiles in the light theme."
     ]
   },
   {
@@ -134,6 +210,9 @@
     "date": "2026-10-29",
     "changes": [
       "Przełącznik jasny/ciemny na karcie postaci zamiast ustawień."
+    ],
+    "changes_en": [
+      "Light/dark switch on the character sheet instead of settings."
     ]
   },
   {
@@ -141,6 +220,9 @@
     "date": "2026-10-29",
     "changes": [
       "Focused Concentration i Pain Resistance (zgodne z modułami zychu), w katalogu i kreatorze."
+    ],
+    "changes_en": [
+      "Focused Concentration and Pain Resistance (compatible with zychu's modules), in the catalog and the creator."
     ]
   },
   {
@@ -148,6 +230,9 @@
     "date": "2026-10-29",
     "changes": [
       "Wygląd Edge dla okien modułu, kreatora przedmiotów i kart czatu."
+    ],
+    "changes_en": [
+      "Edge look for the module windows, the item creator and chat cards."
     ]
   },
   {
@@ -155,6 +240,9 @@
     "date": "2026-10-29",
     "changes": [
       "Granaty z rozrzutem i strefami wybuchu; przywoływanie i wypędzanie duchów."
+    ],
+    "changes_en": [
+      "Grenades with scatter and blast zones; summoning and banishing spirits."
     ]
   },
   {
@@ -162,6 +250,9 @@
     "date": "2026-10-29",
     "changes": [
       "Leczenie wg podręcznika (s. 119–121): pierwsza pomoc, apteczka, magia, odpoczynek."
+    ],
+    "changes_en": [
+      "Healing by the rulebook (pp. 119–121): first aid, medkit, magic, rest."
     ]
   },
   {
@@ -169,6 +260,9 @@
     "date": "2026-10-29",
     "changes": [
       "Erraty SR6 (sierpień 2019, luty 2020) jako przełączniki świata."
+    ],
+    "changes_en": [
+      "SR6 errata (August 2019, February 2020) as world toggles."
     ]
   },
   {
@@ -176,6 +270,9 @@
     "date": "2026-10-29",
     "changes": [
       "Licznik akcji głównych i mniejszych; obrona przed czarami niebojowymi i formami złożonymi."
+    ],
+    "changes_en": [
+      "Major and Minor action counter; defense against non-combat spells and complex forms."
     ]
   },
   {
@@ -183,6 +280,9 @@
     "date": "2026-10-29",
     "changes": [
       "Karta Edge przedmiotu; przekazywanie i usuwanie przedmiotów."
+    ],
+    "changes_en": [
+      "Edge item sheet; giving and deleting items."
     ]
   },
   {
@@ -190,6 +290,9 @@
     "date": "2026-10-29",
     "changes": [
       "Karta Edge: zakładki Magia, Matryca, Wszczepy i ekwipunek, Kontakty i notatki."
+    ],
+    "changes_en": [
+      "Edge sheet: Magic, Matrix, Augmentations and gear, Contacts and notes tabs."
     ]
   },
   {
@@ -197,6 +300,9 @@
     "date": "2026-10-29",
     "changes": [
       "Karta Edge: zakładki Atrybuty i umiejętności oraz Walka."
+    ],
+    "changes_en": [
+      "Edge sheet: Attributes and skills, and Combat tabs."
     ]
   },
   {
@@ -204,6 +310,9 @@
     "date": "2026-10-29",
     "changes": [
       "Karta Edge postaci (zakładka Główna)."
+    ],
+    "changes_en": [
+      "Edge character sheet (Main tab)."
     ]
   },
   {
@@ -211,6 +320,9 @@
     "date": "2026-10-28",
     "changes": [
       "Poprawka rzutów 0k6 dla postaci z kreatora."
+    ],
+    "changes_en": [
+      "Fix for 0d6 rolls of characters from the creator."
     ]
   },
   {
@@ -218,6 +330,9 @@
     "date": "2026-10-28",
     "changes": [
       "Opcjonalny wygląd „Edge” dla systemu."
+    ],
+    "changes_en": [
+      "Optional “Edge” look for the system."
     ]
   },
   {
@@ -225,6 +340,9 @@
     "date": "2026-10-28",
     "changes": [
       "Kreator postaci według systemu priorytetów SR6 (0.4.1–0.4.2: poprawki i nowy wygląd)."
+    ],
+    "changes_en": [
+      "Character creator by the SR6 priority system (0.4.1–0.4.2: fixes and a new look)."
     ]
   },
   {
@@ -232,6 +350,9 @@
     "date": "2026-10-28",
     "changes": [
       "Głosowanie Karmy; zakup przy upuszczeniu; mocowania i pojemność; premie wszczepów i ich stopnie."
+    ],
+    "changes_en": [
+      "Karma vote; purchase on drop; mounts and capacity; augmentation bonuses and grades."
     ]
   },
   {
@@ -239,6 +360,9 @@
     "date": "2026-10-28",
     "changes": [
       "Gotowy katalog sprzętu z podręcznika podstawowego; zgodność z systemem 3.3.9 i 4.x."
+    ],
+    "changes_en": [
+      "Ready gear catalog from the core rulebook; compatible with system 3.3.9 and 4.x."
     ]
   },
   {
@@ -246,6 +370,9 @@
     "date": "2026-10-15",
     "changes": [
       "Moduł towarzyszący dla shadowrun6-eden: polskie tłumaczenie i kreator przedmiotów z wierszy tabel podręcznika."
+    ],
+    "changes_en": [
+      "Companion module for shadowrun6-eden: Polish translation and an item creator from rulebook table rows."
     ]
   }
 ]

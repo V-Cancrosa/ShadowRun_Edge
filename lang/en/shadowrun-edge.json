@@ -133,7 +133,21 @@
       "Attack": "Attack",
       "Sleaze": "Sleaze",
       "Data": "Data processing",
-      "Firewall": "Firewall"
+      "Firewall": "Firewall",
+      "Example": {
+        "firearm": "Pistol 3P SA/BF 10/10/8/—/— 15(c) 2(L) 750¥",
+        "melee": "Sword 4P 9 3(L) 300¥",
+        "projectile": "Bow 2P 4/8/6/—/— 1(c) 2 R*100¥",
+        "special": "Grenade launcher 4P SS 4/10/6/2/— 6(c) 4(I) 2000¥",
+        "armor": "Jacket 3 6 2 800¥",
+        "cyberware": "Implant 0.1 — 2 1000¥",
+        "bioware": "Muscle toner R*0.2 R+2(L) R*7000¥",
+        "electronics": "Commlink 2 1/1 2 2 500¥",
+        "software": "Autosoft R R*2(L) R*500¥",
+        "ammo": "Ammo 3(L) 100¥",
+        "mod": "Scope 2 300¥",
+        "gear": "Medkit R R(L) R*250¥"
+      }
     },
     "Catalog": {
       "Label": "Custom catalog (world)",
@@ -815,7 +829,8 @@
       "HintShort": "Overflow heals first. First aid, medkit and magic work once per set of injuries; they don't heal drain.",
       "RollButton": "Heal · roll {n} dice",
       "ApplyButton": "Heal with the typed hits",
-      "HealAnyway": "Heal anyway"
+      "HealAnyway": "Heal anyway",
+      "Pages": "pp. 119–121"
     },
     "Blast": {
       "Explosives": "Explosives",

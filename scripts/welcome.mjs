@@ -15,6 +15,11 @@ const version = () => game.modules.get(MODULE_ID)?.version ?? "0.0.0";
 const newer = (a, b) => foundry.utils.isNewerVersion(a, b);
 
 /** Versions after `seen` (all of them up to `limit` when nothing was seen yet), newest first. */
+/** The entries of a version in the client's language: Polish, else English (falls back to Polish). */
+export function changesOf(version, lang = globalThis.game?.i18n?.lang) {
+  return lang === "pl" ? version.changes : (version.changes_en ?? version.changes);
+}
+
 export function changesSince(changelog, seen, limit = 3) {
   const list = [...changelog].sort((a, b) => (newer(a.version, b.version) ? -1 : newer(b.version, a.version) ? 1 : 0));
   if (!seen) return list.slice(0, limit);
@@ -59,7 +64,7 @@ export async function showWelcome({ all = false } = {}) {
   const changelog = await loadChangelog();
   const seen = game.settings.get(MODULE_ID, "welcomeSeen");
   const list = all ? changesSince(changelog, null, changelog.length) : changesSince(changelog, seen);
-  const panels = list.map((v) => ui2.panel(`${v.version}`, `<ul class="sre-welcome-list">${v.changes.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`, { hint: v.date })).join("");
+  const panels = list.map((v) => ui2.panel(`${v.version}`, `<ul class="sre-welcome-list">${changesOf(v).map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`, { hint: v.date })).join("");
   const choice = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog", "sre-welcome"],
     window: { title: L("SRE.Welcome.Title", { version: version() }), icon: "fas fa-bolt" },

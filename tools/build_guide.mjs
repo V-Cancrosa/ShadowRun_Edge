@@ -14,7 +14,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE_DIR = join(ROOT, "packs/_source/przewodnik");
 const PACK_DIR = join(ROOT, "packs/przewodnik");
 const MODULE_ID = "shadowrun-edge";
-const SKIP = ["Aktualizacja tłumaczenia", "Budowanie katalogu", "Wydanie nowej wersji"];
+const SKIP = ["Aktualizacja tłumaczenia", "Budowanie katalogu", "Testy", "Wydanie nowej wersji"];
 
 function stableId(key) {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

@@ -66,7 +66,7 @@ export async function openHealing(target) {
         { id: "pool", big: "–", label: L("SRE.Roll.Pool"), accent: true },
         { id: "threshold", big: threshold, label: L("SRE.Roll.Threshold"), calc: autoHit ? L("SRE.Heal.AutoHit") : `5 − ${essence.toFixed(1)}` },
       ])}
-      ${ui2.panel(L("SRE.Heal.MethodLabel"), ui2.options("method", methodTiles), { hint: "s. 119–121" })}
+      ${ui2.panel(L("SRE.Heal.MethodLabel"), ui2.options("method", methodTiles), { hint: L("SRE.Heal.Pages") })}
       ${ui2.panel(L("SRE.Heal.Monitors"), `${monitors}${ui2.note("", "ok", { id: "forecast" })}${ui2.note("", "warn", { id: "used" })}`, { hint: L("SRE.Heal.ForecastHint") })}
       ${ui2.panel(L("SRE.Heal.Options"), ui2.rows([
         ui2.row(L("SRE.Heal.Healer"), `<select name="healer">${list.map((a) => `<option value="${a.id}">${esc(a.name)}</option>`).join("")}</select>`, { attrs: ` data-for="${treatment}"` }),
