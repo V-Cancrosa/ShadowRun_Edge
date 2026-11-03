@@ -82,7 +82,8 @@ body.sre-ui-2.sre-motion-full .chat-message.sre-fx-msg { animation: sre-msg-in 3
 
 /* Dice Tray (under the chat). */
 body.sre-ui-2 :is(.dice-tray, #dice-tray) :is(button, .dice-tray__button) {
-  font-family: var(--sre-font-display, inherit); color: var(--sre-cyan); border: 1px solid var(--sre-line); border-radius: 2px; background: transparent;
+  font-family: var(--sre-font-display, inherit); color: #3fd4e8; border: 1px solid rgba(224, 64, 154, 0.35); border-radius: 2px;
+  background-color: #1b1c26; /* the tray's dice icons are white: a dark tile in the light look too */
 }
 body.sre-ui-2 :is(.dice-tray, #dice-tray) :is(button, .dice-tray__button):hover { border-color: var(--sre-accent); color: var(--sre-accent); }
 
@@ -196,3 +197,15 @@ body.sre-ui-3 .breaktime-container .breaktime-player.away .breaktime-marker { co
 body.sre-ui-3 :is(.remaining-timer, .break-start span) { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; }
 
 /* Tokenizer and Levels: their windows follow the window frame above; their buttons follow level 2. */
+
+/* ───── Light look ("Papier"): Foundry's controls are drawn for a dark background — give them contrast ───── */
+body.sre-ui-3.sre-theme-light :is(#sidebar-tabs, #sidebar nav.tabs, #scene-controls, #hotbar, #players, #navigation, #scene-navigation) :is(button, a, .ui-control, .control, .item, .slot, .scene) {
+  background-color: #f5f3ee !important; color: #2b2925 !important; border-color: rgba(60, 50, 40, 0.28) !important;
+}
+body.sre-ui-3.sre-theme-light :is(#sidebar-tabs, #sidebar nav.tabs, #scene-controls) :is(button, a, .ui-control, .control, .item):is(.active, [aria-pressed="true"]) {
+  background-color: rgba(163, 59, 110, 0.14) !important; color: #a33b6e !important; border-color: #a33b6e !important;
+}
+body.sre-ui-3.sre-theme-light :is(#sidebar-tabs, #sidebar nav.tabs, #scene-controls, #hotbar) :is(button, a, .ui-control, .control, .item, .slot) :is(i, .fas, .fa-solid, img) { color: inherit !important; opacity: 1 !important; filter: none; }
+body.sre-ui-3.sre-theme-light #hotbar :is(.slot, .macro) img { filter: none; }
+body.sre-ui-2.sre-theme-light .chat-message .message-header .message-metadata { color: #6e6a62; }
+body.sre-ui-2.sre-theme-light :is(#chat-message, .chat-form textarea, .chat-form prose-mirror, .chat-form .editor-content) { color: #2b2925; }

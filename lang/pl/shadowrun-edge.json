@@ -1746,8 +1746,10 @@
       },
       "Whisper": "SZEPT",
       "Blind": "UKRYTY",
-      "DumpCopied": "Skopiowano szkielet interfejsu do schowka — wklej go w rozmowie.",
-      "DumpConsole": "Nie udało się skopiować — szkielet interfejsu jest w konsoli (F12)."
+      "DumpCopied": "Skopiowano szkielet interfejsu — wklej go w rozmowie.",
+      "DumpTitle": "Diagnostyka wyglądu (Shadowrun Edge)",
+      "DumpHint": "Szkielet interfejsu: same klasy i identyfikatory, bez treści czatu i nazw. Kliknij „Kopiuj” albo zaznacz całość (Ctrl+A, Ctrl+C) i wklej w rozmowie.",
+      "DumpCopy": "Kopiuj"
     }
   }
 }

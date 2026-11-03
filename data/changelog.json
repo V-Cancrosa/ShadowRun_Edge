@@ -1,5 +1,17 @@
 [
   {
+    "version": "0.36.2",
+    "date": "2026-11-03",
+    "changes": [
+      "Diagnostyka wyglądu: wpisz w czacie /edge-ui — otwiera się okno z szkieletem interfejsu do skopiowania (nic nie trafia na czat).",
+      "Jasny motyw czytelniejszy: zakładki paska bocznego, narzędzia sceny, pasek makr, gracze i nawigacja z ciemnymi ikonami na jasnym tle; przyciski Dice Tray na ciemnych kaflach (ich ikony są białe)."
+    ],
+    "changes_en": [
+      "Look diagnostics: type /edge-ui in the chat — a window with the interface skeleton to copy opens (nothing is posted).",
+      "A more readable light look: sidebar tabs, scene controls, hotbar, players and navigation get dark icons on a light background; Dice Tray buttons sit on dark tiles (their icons are white)."
+    ]
+  },
+  {
     "version": "0.36.1",
     "date": "2026-11-03",
     "changes": [

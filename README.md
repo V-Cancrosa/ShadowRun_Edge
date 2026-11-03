@@ -515,7 +515,7 @@ inaczej niż świat):
    jako paskiem, wiersze podświetlane), narzędzia sceny, lista graczy, pasek makr, nawigacja scen, pauza z zakłóceniem,
    powiadomienia, podpowiedzi, menu kontekstowe, tracker walki, karty Carousel Combat Tracker i lista Break Time.
 
-Okna PopOut! dostają ten sam wygląd. Własne reguły z Custom CSS mają pierwszeństwo. **Dice So Nice** ma dwa zestawy
+Okna PopOut! dostają ten sam wygląd. Własne reguły z Custom CSS mają pierwszeństwo. Gdy coś w interfejsie nie łapie wyglądu, wpisz w czacie **`/edge-ui`**: otworzy się okno ze szkieletem interfejsu (same klasy, bez treści) do skopiowania i przesłania. **Dice So Nice** ma dwa zestawy
 kości w kategorii *Shadowrun Edge*: „Edge” (magenta) i „Edge cyan”. Kompendia modułu mają własne banery.
 
 ### Okno rzutu

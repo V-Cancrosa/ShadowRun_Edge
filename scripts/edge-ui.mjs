@@ -117,8 +117,8 @@ export function skeleton(el, depth = 0, maxDepth = 6, out = []) {
   return out;
 }
 
-/** The skeleton of the interface (and of every open window) copied to the clipboard, to paste into a bug report. */
-export async function uiDump() {
+/** The skeleton of the interface and of every open window, as text (classes and ids only). */
+export function uiDumpText() {
   const roots = ["#interface", "#sidebar", "#chat", "#hotbar", "#players", "#scene-controls", "#navigation", "#scene-navigation",
     "#combat", "#combat-dock", "#pause", "#notifications", "#context-menu", "#tooltip", "#chat-form", "#chat-message"];
   const parts = [`Foundry ${game.version} · ${game.system.id} ${game.system.version} · Shadowrun Edge ${game.modules.get(MODULE_ID)?.version}`,
@@ -131,13 +131,45 @@ export async function uiDump() {
   for (const app of document.querySelectorAll(".application, .app.window-app")) {
     parts.push(`\n=== window ${describe(app)}\n${skeleton(app, 0, 4).join("\n")}`);
   }
-  const text = parts.join("\n");
-  try {
-    await navigator.clipboard.writeText(text);
-    ui.notifications.info(game.i18n.localize("SRE.UI.DumpCopied"));
-  } catch {
-    console.log(text);
-    ui.notifications.warn(game.i18n.localize("SRE.UI.DumpConsole"));
-  }
+  return parts.join("\n");
+}
+
+/** A window with the skeleton in a text box: select and copy by hand, or with the Copy button. */
+export async function uiDump() {
+  const text = uiDumpText();
+  const esc = (v) => foundry.utils.escapeHTML(String(v));
+  await foundry.applications.api.DialogV2.wait({
+    classes: ["sre-dialog"],
+    window: { title: game.i18n.localize("SRE.UI.DumpTitle"), icon: "fas fa-stethoscope" },
+    position: { width: 640, height: 560 },
+    content: `<p>${esc(game.i18n.localize("SRE.UI.DumpHint"))}</p>
+      <textarea class="sre-ui-dump" readonly style="width:100%;height:400px;font:11px/1.3 monospace;white-space:pre">${esc(text)}</textarea>`,
+    render: (event, dialog) => {
+      const area = dialog.element.querySelector(".sre-ui-dump");
+      area?.focus();
+      area?.select();
+    },
+    buttons: [
+      { action: "copy", label: game.i18n.localize("SRE.UI.DumpCopy"), icon: "fas fa-copy", default: true, callback: async (event, button) => {
+        const area = button.form?.querySelector(".sre-ui-dump") ?? button.closest(".application")?.querySelector(".sre-ui-dump");
+        area?.select();
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          document.execCommand?.("copy");
+        }
+        ui.notifications.info(game.i18n.localize("SRE.UI.DumpCopied"));
+      } },
+      { action: "close", label: game.i18n.localize("Close") },
+    ],
+    rejectClose: false,
+  });
   return text;
 }
+
+/** Typing /edge-ui in the chat opens it (nothing is posted). */
+Hooks.on("chatMessage", (chatLog, message) => {
+  if (String(message).trim().toLowerCase() !== "/edge-ui") return;
+  uiDump();
+  return false;
+});

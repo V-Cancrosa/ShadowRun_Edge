@@ -1746,8 +1746,10 @@
       },
       "Whisper": "WHISPER",
       "Blind": "BLIND",
-      "DumpCopied": "The interface skeleton is in the clipboard — paste it into the conversation.",
-      "DumpConsole": "Copying failed — the interface skeleton is in the console (F12)."
+      "DumpCopied": "The interface skeleton is copied — paste it into the conversation.",
+      "DumpTitle": "Look diagnostics (Shadowrun Edge)",
+      "DumpHint": "The interface skeleton: classes and ids only, no chat content or names. Click “Copy” or select all (Ctrl+A, Ctrl+C) and paste it into the conversation.",
+      "DumpCopy": "Copy"
     }
   }
 }
