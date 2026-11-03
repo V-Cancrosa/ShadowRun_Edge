@@ -1,0 +1,88 @@
+/*
+ * Edge Motion (stage 11A): the display face for headings and labels, and motion for the Edge windows.
+ * Motion runs only with body.sre-motion-full; body.sre-motion-reduced keeps short fades (state changes without
+ * travel); body.sre-motion-off has none. scripts/motion.mjs sets the class from the player's setting and adds
+ * sre-fx-open / sre-fx-tab / sre-fx-pop to a window for one play.
+ * Chakra Petch: SIL Open Font License 1.1 (fonts/OFL.txt).
+ */
+@font-face { font-family: "Chakra Petch"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/ChakraPetch-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Chakra Petch"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/ChakraPetch-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Chakra Petch"; font-style: normal; font-weight: 600; font-display: swap; src: url("../fonts/ChakraPetch-600-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Chakra Petch"; font-style: normal; font-weight: 600; font-display: swap; src: url("../fonts/ChakraPetch-600-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Chakra Petch"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/ChakraPetch-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Chakra Petch"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/ChakraPetch-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+:root {
+  --sre-font-display: "Chakra Petch", var(--font-primary, "Signika"), sans-serif;
+  --sre-fast: 160ms;
+  --sre-mid: 320ms;
+  --sre-slow: 700ms;
+  --sre-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ───── Display face: names, headings, labels and tabs of the Edge windows (running text stays Signika) ───── */
+:is(.sre-sheet, .sre-dialog, .sre-rd, .sre-character-creator) :is(
+  .sre-es-name, .sre-es-panel > h3, .sre-es-tabbtn, .sre-es-chip > span, .sre-es-ktile > span, .sre-es-tag,
+  .sre-ed-kind, .sre-ed-name, .sre-ed-tile-label, .sre-ed-panel > h3, .sre-ed-big,
+  .sre-rd-panel > h3, .sre-rd-tile-label, .sre-cc-title
+),
+.application.sre-dialog > .window-header .window-title,
+.application.sre-sheet > .window-header .window-title,
+.chat-message .sre-blast-card > h3 {
+  font-family: var(--sre-font-display);
+  letter-spacing: 0.06em;
+}
+.sre-es .sre-es-ktile > strong, .sre-es .sre-es-chip > strong, .sre-ed-big { font-family: var(--sre-font-display); font-weight: 700; }
+
+/* ───── Hover: tiles, chips and quick buttons light up ───── */
+.sre-es :is(.sre-es-ktile, .sre-es-chip, .sre-es-qb), .sre-ed-tile, .sre-ed-opt {
+  transition: border-color var(--sre-fast), box-shadow var(--sre-fast), transform var(--sre-fast);
+}
+body:not(.sre-motion-off) .sre-es :is(.sre-es-ktile, .sre-es-chip, .sre-es-qb):hover,
+body:not(.sre-motion-off) .sre-dialog .sre-ed-tile:hover {
+  border-color: var(--sre-accent);
+  box-shadow: 0 0 0 1px var(--sre-accent), 0 0 16px var(--sre-accent-soft);
+}
+body.sre-motion-full .sre-es :is(.sre-es-ktile, .sre-es-chip, .sre-es-qb):hover { transform: translateY(-1px); }
+/* The light "Papier" look: same motion, no glow. */
+body.sre-edge-light:not(.sre-motion-off) .sre-es :is(.sre-es-ktile, .sre-es-chip, .sre-es-qb):hover,
+body.sre-edge-light:not(.sre-motion-off) .sre-dialog .sre-ed-tile:hover { box-shadow: 0 0 0 1px var(--sre-accent); }
+
+/* Active tab: the underline grows in. */
+body.sre-motion-full .sre-es .sre-es-tabbtn.active { animation: sre-tab-ink var(--sre-mid) var(--sre-ease); }
+@keyframes sre-tab-ink { from { border-bottom-color: transparent; } to { border-bottom-color: var(--sre-accent); } }
+
+/* ───── Opening an Edge sheet: a cut from the top, a scanner line over the header, tiles in a cascade ───── */
+body.sre-motion-full .application.sre-sheet.sre-fx-open > .window-content { animation: sre-open var(--sre-slow) var(--sre-ease) both; }
+body.sre-motion-full .application.sre-sheet.sre-fx-open .sre-es-head { position: relative; overflow: hidden; }
+body.sre-motion-full .application.sre-sheet.sre-fx-open .sre-es-head::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(63, 212, 232, 0.14) 0 1px, transparent 1px 3px);
+  animation: sre-scan var(--sre-slow) ease-out both;
+}
+body.sre-motion-full .application.sre-sheet.sre-fx-open :is(.sre-es-ktile, .sre-es-chip, .sre-es-panel) { animation: sre-rise var(--sre-mid) var(--sre-ease) both; }
+body.sre-motion-full .application.sre-sheet.sre-fx-open :is(.sre-es-ktile, .sre-es-chip, .sre-es-panel):nth-child(2) { animation-delay: 60ms; }
+body.sre-motion-full .application.sre-sheet.sre-fx-open :is(.sre-es-ktile, .sre-es-chip, .sre-es-panel):nth-child(3) { animation-delay: 120ms; }
+body.sre-motion-full .application.sre-sheet.sre-fx-open :is(.sre-es-ktile, .sre-es-chip, .sre-es-panel):nth-child(4) { animation-delay: 180ms; }
+body.sre-motion-full .application.sre-sheet.sre-fx-open :is(.sre-es-ktile, .sre-es-chip, .sre-es-panel):nth-child(5) { animation-delay: 240ms; }
+body.sre-motion-full .application.sre-sheet.sre-fx-open :is(.sre-es-ktile, .sre-es-chip, .sre-es-panel):nth-child(n + 6) { animation-delay: 300ms; }
+
+/* Switching tabs: the new tab's content slides in from the side. */
+body.sre-motion-full .application.sre-sheet.sre-fx-tab :is(.sre-sheet-body, .sre-compact-body) { animation: sre-slide var(--sre-mid) var(--sre-ease) both; }
+
+/* Module dialogs pop in. */
+body.sre-motion-full .application.sre-dialog.sre-fx-pop { animation: sre-pop var(--sre-mid) var(--sre-ease) both; }
+
+/* Reduced: a short fade instead of travel. */
+body.sre-motion-reduced .application:is(.sre-sheet, .sre-dialog):is(.sre-fx-open, .sre-fx-pop) > .window-content,
+body.sre-motion-reduced .application.sre-sheet.sre-fx-tab :is(.sre-sheet-body, .sre-compact-body) { animation: sre-fade var(--sre-fast) linear both; }
+
+@keyframes sre-open { 0% { clip-path: inset(0 0 100% 0); filter: brightness(1.8) saturate(0.4); } 60% { filter: brightness(1.2); } 100% { clip-path: inset(0 0 0 0); filter: none; } }
+@keyframes sre-scan { from { transform: translateY(-100%); opacity: 1; } to { transform: translateY(100%); opacity: 0; } }
+@keyframes sre-rise { from { opacity: 0.2; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes sre-slide { from { opacity: 0.3; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+@keyframes sre-pop { from { opacity: 0; transform: scale(0.97) translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes sre-fade { from { opacity: 0.4; } to { opacity: 1; } }
+
+/* Off: nothing moves, not even the module's existing transitions. */
+body.sre-motion-off :is(.sre-sheet, .sre-dialog) *, body.sre-motion-off :is(.sre-sheet, .sre-dialog) { transition: none !important; animation: none !important; }

@@ -1684,6 +1684,18 @@
       "Detonation": "Detonacja: {name}",
       "Planted": "Podłożony ładunek — bez testu ataku i bez rozrzutu.",
       "NoScatter": "Bez rozrzutu: wybuch w miejscu ładunku."
+    },
+    "Motion": {
+      "Setting": {
+        "Name": "Animacje (Edge)",
+        "Hint": "Ruch kart, okien i kafli modułu. „Automatycznie” wybiera ograniczone, gdy system ma włączone ograniczenie ruchu."
+      },
+      "Level": {
+        "auto": "Automatycznie",
+        "full": "Pełne",
+        "reduced": "Ograniczone (bez ruchu, krótkie przejścia)",
+        "off": "Wyłączone"
+      }
     }
   }
 }

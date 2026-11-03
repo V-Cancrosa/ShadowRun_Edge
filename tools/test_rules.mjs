@@ -467,3 +467,21 @@ console.log("blast & summoning OK");
   assert.deepEqual(G.spreadBonus(frag, 3, {}), { ...frag, gz: 19 }, "unassigned points go to Ground Zero");
   console.log("gas & spray OK");
 }
+
+// ── Edge Motion: the player's level ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  globalThis.Hooks ??= { on() {}, once() {} };
+  const { motionLevel } = await import("../scripts/motion.mjs");
+  assert.equal(motionLevel("auto", false), "full");
+  assert.equal(motionLevel("auto", true), "reduced", "follows the system's reduced-motion preference");
+  assert.equal(motionLevel("off", false), "off");
+  assert.equal(motionLevel("full", true), "full", "an explicit choice wins");
+  const { readFileSync, existsSync } = await import("node:fs");
+  const css = readFileSync(new URL("../styles/edge-motion.css", import.meta.url), "utf8");
+  for (const [, file] of css.matchAll(/url\("\.\.\/(fonts\/[^"]+)"\)/g)) assert.ok(existsSync(new URL(`../${file}`, import.meta.url)), file);
+  assert.ok(existsSync(new URL("../fonts/OFL.txt", import.meta.url)), "the font's licence ships with it");
+  const manifest = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8"));
+  assert.ok(manifest.styles.includes("styles/edge-motion.css"));
+  console.log("motion OK");
+}

@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.31.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Edge Motion, krok 1: ustawienie gracza „Animacje (Edge)” (automatycznie / pełne / ograniczone / wyłączone, zgodne z systemowym ograniczeniem ruchu).",
+      "Karty Edge otwierają się cięciem z linią skanera i kaskadą kafli, zakładki wsuwają treść, okna modułu pojawiają się płynnie, kafle podświetlają się po najechaniu.",
+      "Nowy krój nagłówków, nazw, zakładek i etykiet: Chakra Petch (OFL), dołączony do modułu."
+    ],
+    "changes_en": [
+      "Edge Motion, step 1: a player setting “Animations (Edge)” (automatic / full / reduced / off, following the system's reduced-motion preference).",
+      "Edge sheets open with a cut and a scanner line and a cascade of tiles, tabs slide their content in, module windows appear smoothly, tiles light up on hover.",
+      "A new face for headings, names, tabs and labels: Chakra Petch (OFL), shipped with the module."
+    ]
+  },
+  {
     "version": "0.30.0",
     "date": "2026-11-03",
     "changes": [

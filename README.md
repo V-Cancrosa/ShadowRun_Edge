@@ -475,6 +475,14 @@ Okna modułu (Karta Edge, karta przedmiotu, kreator postaci, Kreator przedmiotó
 przekazania i usuwania, głosowania Karmy, stopnia wszczepu i zakupu) i jego karty na czacie mają styl Edge, tak
 samo okno rzutu systemu, systemowe okna potwierdzeń i okno efektów. Okna samego Foundry (ustawienia, katalogi, kompendia) zostają bez zmian.
 
+### Animacje (Edge Motion)
+
+Ustawienie gracza **Animacje (Edge)**: *Automatycznie* (ograniczone, gdy system ma włączone ograniczenie ruchu),
+*Pełne*, *Ograniczone* (krótkie przejścia bez ruchu) albo *Wyłączone*. Przy pełnych karta Edge otwiera się cięciem z linią
+skanera po nagłówku i kaskadą kafli, zakładki wsuwają treść, okna modułu pojawiają się płynnie, a kafle i przyciski
+podświetlają się po najechaniu (w jasnym motywie „Papier” bez poświaty). Nagłówki, nazwy, zakładki i etykiety używają
+kroju **Chakra Petch** (licencja SIL OFL, plik `fonts/OFL.txt`), dołączonego do modułu.
+
 ### Okno rzutu
 
 Okno rzutu systemu ma układ Karty Edge: nagłówek z nazwą testu i wyborem atrybutu, kafelki **Pula kości**

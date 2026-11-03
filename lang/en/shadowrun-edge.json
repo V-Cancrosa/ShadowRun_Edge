@@ -1684,6 +1684,18 @@
       "Detonation": "Detonation: {name}",
       "Planted": "Planted charge — no attack test and no scatter.",
       "NoScatter": "No scatter: it goes off where the charge is."
+    },
+    "Motion": {
+      "Setting": {
+        "Name": "Animations (Edge)",
+        "Hint": "Motion of the module's sheets, windows and tiles. “Automatic” picks reduced when the operating system asks for reduced motion."
+      },
+      "Level": {
+        "auto": "Automatic",
+        "full": "Full",
+        "reduced": "Reduced (no travel, short fades)",
+        "off": "Off"
+      }
     }
   }
 }
