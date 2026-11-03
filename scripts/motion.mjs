@@ -283,3 +283,53 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
     card.querySelector(".sre-stamp")?.classList.add("sre-fx-stamp");
   }
 });
+
+// ───── 11E: turn banner ─────
+
+Hooks.once("init", () => {
+  game.settings.register(MODULE_ID, "turnBanner", {
+    name: "SRE.Motion.Banner.Name", hint: "SRE.Motion.Banner.Hint", scope: "client", config: true, type: Boolean, default: true,
+  });
+});
+
+/**
+ * What the banner says for this user: "Your turn" for a combatant they own (players), the combatant's name for the
+ * GM (a smaller banner), nothing for other players.
+ */
+export function bannerFor({ isGM, owned, name, initiative, round, L = (k) => k }) {
+  const sub = [name, initiative !== null && initiative !== undefined ? `${L("SRE.Motion.Banner.Initiative")} ${initiative}` : null, `${L("SRE.Motion.Banner.Round")} ${round}`].filter(Boolean).join(" · ");
+  if (owned && !isGM) return { kind: "mine", title: L("SRE.Motion.Banner.Yours"), sub };
+  if (isGM) return { kind: "gm", title: `${L("SRE.Motion.Banner.Turn")}: ${name}`, sub };
+  return null;
+}
+
+let bannerTimer = null;
+function showBanner({ kind, title, sub }) {
+  document.querySelector(".sre-turn-banner")?.remove();
+  clearTimeout(bannerTimer);
+  const el = document.createElement("div");
+  el.className = `sre-turn-banner sre-turn-${kind}`;
+  el.setAttribute("role", "status");
+  el.innerHTML = `<b></b><small></small>`;
+  el.querySelector("b").textContent = title;
+  el.querySelector("small").textContent = sub;
+  document.body.append(el);
+  bannerTimer = setTimeout(() => el.remove(), level() === "full" ? 1800 : 1400);
+}
+
+Hooks.on("updateCombat", (combat, changed) => {
+  if (!("turn" in changed) && !("round" in changed)) return;
+  if (!combat.started || level() === "off") return;
+  let on = true;
+  try {
+    on = game.settings.get(MODULE_ID, "turnBanner");
+  } catch {
+    /* not registered */
+  }
+  if (!on) return;
+  const c = combat.combatant;
+  if (!c) return;
+  const L = (k) => game.i18n.localize(k);
+  const banner = bannerFor({ isGM: game.user.isGM, owned: !!c.actor?.isOwner || !!c.isOwner, name: c.name, initiative: c.initiative, round: combat.round, L });
+  if (banner) showBanner(banner);
+});

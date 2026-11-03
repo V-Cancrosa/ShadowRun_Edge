@@ -516,3 +516,14 @@ console.log("blast & summoning OK");
   assert.equal(verdictOf({ ...words, header: "2d6", result: "Razem: 7" }), null, "initiative and other rolls get no stamp");
   console.log("motion chat OK");
 }
+
+// ── Edge Motion: turn banner ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { bannerFor } = await import("../scripts/motion.mjs");
+  assert.deepEqual(bannerFor({ isGM: false, owned: true, name: "Glitch", initiative: 21, round: 2 }), { kind: "mine", title: "SRE.Motion.Banner.Yours", sub: "Glitch · SRE.Motion.Banner.Initiative 21 · SRE.Motion.Banner.Round 2" });
+  assert.equal(bannerFor({ isGM: false, owned: false, name: "Pająk", initiative: 24, round: 2 }), null, "other players' turns: nothing");
+  assert.equal(bannerFor({ isGM: true, owned: true, name: "Pająk", initiative: 24, round: 2 }).kind, "gm");
+  assert.equal(bannerFor({ isGM: true, owned: true, name: "X", initiative: null, round: 1 }).sub, "X · SRE.Motion.Banner.Round 1");
+  console.log("motion banner OK");
+}

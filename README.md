@@ -493,6 +493,10 @@ dzika kość w ramce. Przy świeżym rzucie kości spadają kaskadą, wynik odli
 *Porażka*, *Komplikacja* albo *Krytyczna komplikacja* (z zakłóceniem obrazu karty). Edge wydany po rzucie (przerzut,
 kupione sukcesy) obraca ponownie tylko te kości, które się zmieniły.
 
+**Baner tury** (ustawienie gracza): na początku tury Twojej postaci przez ekran przechodzi „TWOJA TURA” z nazwą,
+inicjatywą i rundą; MG widzi mniejszy baner z nazwą aktywnej postaci. Baner nie blokuje kliknięć. W trackerze walki
+aktywny uczestnik pulsuje magentą.
+
 ### Okno rzutu
 
 Okno rzutu systemu ma układ Karty Edge: nagłówek z nazwą testu i wyborem atrybutu, kafelki **Pula kości**

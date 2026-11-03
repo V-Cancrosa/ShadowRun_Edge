@@ -1705,6 +1705,14 @@
         "failure": "Porażka",
         "glitch": "Komplikacja",
         "critical": "Krytyczna komplikacja"
+      },
+      "Banner": {
+        "Name": "Baner tury",
+        "Hint": "Na początku tury Twojej postaci przez ekran przechodzi baner „Twoja tura”; MG widzi mniejszy baner z nazwą aktywnej postaci.",
+        "Yours": "Twoja tura",
+        "Turn": "Tura",
+        "Initiative": "inicjatywa",
+        "Round": "runda"
       }
     }
   }

@@ -1705,6 +1705,14 @@
         "failure": "Failure",
         "glitch": "Glitch",
         "critical": "Critical glitch"
+      },
+      "Banner": {
+        "Name": "Turn banner",
+        "Hint": "At the start of your character's turn a “Your turn” banner crosses the screen; the GM sees a smaller banner with the active combatant's name.",
+        "Yours": "Your turn",
+        "Turn": "Turn",
+        "Initiative": "initiative",
+        "Round": "round"
       }
     }
   }

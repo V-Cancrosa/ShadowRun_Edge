@@ -134,5 +134,28 @@ body.sre-motion-full .chat-message.sre-fx-glitch, body.sre-motion-full .chat-mes
 @keyframes sre-stamp { from { opacity: 0; transform: rotate(-7deg) scale(2.2); } to { opacity: 1; transform: rotate(-7deg) scale(1); } }
 @keyframes sre-glitch { 0% { clip-path: inset(10% 0 55% 0); transform: translateX(-3px); } 50% { clip-path: inset(45% 0 20% 0); transform: translateX(3px); } 100% { clip-path: none; transform: none; } }
 
+/* ───── 11E: turn banner and the active combatant ───── */
+.sre-turn-banner {
+  --sre-accent: #e0409a;
+  position: fixed; left: 0; right: 0; top: 38%; z-index: 9999; pointer-events: none; text-align: center; padding: 16px 12px;
+  background: linear-gradient(90deg, transparent, rgba(224, 64, 154, 0.88) 20%, rgba(224, 64, 154, 0.88) 80%, transparent);
+  color: #fff; display: grid; gap: 4px;
+}
+.sre-turn-banner b { font: 700 40px/1 var(--sre-font-display); letter-spacing: 0.22em; text-transform: uppercase; text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5); }
+.sre-turn-banner small { font: 600 13px/1.2 var(--sre-font-display); letter-spacing: 0.18em; text-transform: uppercase; color: #ffe4f2; }
+.sre-turn-banner.sre-turn-gm { top: 12%; left: 25%; right: 25%; padding: 8px 12px; background: linear-gradient(90deg, transparent, rgba(16, 17, 23, 0.9) 15%, rgba(16, 17, 23, 0.9) 85%, transparent); border-block: 1px solid #e0409a; }
+.sre-turn-banner.sre-turn-gm b { font-size: 20px; letter-spacing: 0.16em; }
+body.sre-motion-full .sre-turn-banner { animation: sre-banner 1800ms var(--sre-ease) forwards; }
+body.sre-motion-reduced .sre-turn-banner { animation: sre-banner-fade 1400ms linear forwards; }
+@keyframes sre-banner { 0% { opacity: 0; clip-path: inset(0 50% 0 50%); } 18% { opacity: 1; clip-path: inset(0 0 0 0); } 78% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateX(40px); } }
+@keyframes sre-banner-fade { 0% { opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+/* The combat tracker's active combatant glows in the Edge look. */
+body.sre-theme:not(.sre-motion-off) #combat .combatant.active,
+body.sre-theme:not(.sre-motion-off) .combat-tracker .combatant.active {
+  box-shadow: inset 3px 0 0 #e0409a, 0 0 14px rgba(224, 64, 154, 0.35);
+}
+body.sre-theme.sre-motion-full :is(#combat, .combat-tracker) .combatant.active { animation: sre-active 1.8s ease-in-out infinite alternate; }
+@keyframes sre-active { from { box-shadow: inset 3px 0 0 #e0409a, 0 0 6px rgba(224, 64, 154, 0.2); } to { box-shadow: inset 3px 0 0 #e0409a, 0 0 16px rgba(224, 64, 154, 0.45); } }
+
 /* Off: nothing moves, not even the module's existing transitions. */
 body.sre-motion-off :is(.sre-sheet, .sre-dialog) *, body.sre-motion-off :is(.sre-sheet, .sre-dialog) { transition: none !important; animation: none !important; }

@@ -1,5 +1,15 @@
 [
   {
+    "version": "0.34.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Edge Motion, krok 4: baner „Twoja tura” na początku tury Twojej postaci (MG widzi mniejszy baner z nazwą), aktywny uczestnik w trackerze walki pulsuje (ustawienie gracza)."
+    ],
+    "changes_en": [
+      "Edge Motion, step 4: a “Your turn” banner at the start of your character's turn (the GM sees a smaller banner with the name), the active combatant in the combat tracker pulses (player setting)."
+    ]
+  },
+  {
     "version": "0.33.0",
     "date": "2026-11-03",
     "changes": [
