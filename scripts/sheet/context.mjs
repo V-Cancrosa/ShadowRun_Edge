@@ -160,7 +160,7 @@ export function buildSheetContext(actor, { L = (k) => k, config = {}, errata = {
       { text: L(config.MOR_TYPES?.[mortype] ?? mortype), kind: "cyan" },
     ].filter(Boolean),
     chips: [
-      { id: "karma", label: L("SRE.Sheet.Karma"), value: num(s.karma), extra: `/ ${num(s.karma_total)}` },
+      { id: "karma", label: L("SRE.Sheet.Karma"), value: num(s.karma), extra: `/ ${num(s.karma_total)}`, advance: true, title: L("SRE.Advance.Open") },
       { id: "nuyen", label: L("SRE.Sheet.Nuyen"), value: `${num(s.nuyen).toLocaleString()}¥` },
       { id: "reputation", label: L("SRE.Sheet.Reputation"), value: num(s.reputation) },
       { id: "heat", label: L("SRE.Sheet.Heat"), value: num(s.heat) },
@@ -514,6 +514,8 @@ export function buildSocialContext(actor, { L = (k) => k, config = {} } = {}) {
       id: i.id, name: i.name, type: label(L, config.LIFESTYLE_TYPE, i.system?.type), cost: num(i.system?.cost).toLocaleString(), paid: num(i.system?.paid),
     })),
     karma: num(src.karma), karmaTotal: num(src.karma_total), reputation: num(src.reputation), heat: num(src.heat), nuyen: num(src.nuyen),
+    advancement: [...(actor.flags?.["shadowrun-edge"]?.advancement ?? [])].reverse()
+      .map((a) => ({ date: a.date, total: num(a.total), text: (a.lines ?? []).map((l) => l.text).join(", ") })),
     hasDescription: src.description !== undefined,
     notes: src.notes ?? "", description: src.description ?? "",
   };

@@ -27,7 +27,7 @@
     </div>
     <div class="sre-es-chips">
       {{#each chips}}
-      <div class="sre-es-chip {{#if kind}}sre-es-chip-{{kind}}{{/if}}" data-chip="{{id}}">
+      <div class="sre-es-chip {{#if kind}}sre-es-chip-{{kind}}{{/if}} {{#if advance}}sre-es-chip-action{{/if}}" data-chip="{{id}}" {{#if advance}}data-action="advance" title="{{title}}" role="button"{{/if}}>
         <span>{{label}}</span><strong>{{value}}</strong>{{#if extra}} <small>{{extra}}</small>{{/if}}
       </div>
       {{/each}}
@@ -610,6 +610,13 @@
         <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.Reputation"}}</span><input type="number" name="system.reputation" value="{{social.reputation}}" {{#unless editable}}disabled{{/unless}}></div>
         <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.Heat"}}</span><input type="number" name="system.heat" value="{{social.heat}}" {{#unless editable}}disabled{{/unless}}></div>
         <div class="sre-es-row"><span class="sre-es-grow">{{localize "SRE.Sheet.Nuyen"}}</span><input type="number" class="wide" name="system.nuyen" value="{{social.nuyen}}" {{#unless editable}}disabled{{/unless}}></div>
+      </div>
+      <div class="sre-es-panel sre-es-advance">
+        <h3>{{localize "SRE.Advance.History"}}
+          {{#if editable}}<button type="button" class="sre-es-mini" data-action="advance"><i class="fas fa-arrow-trend-up"></i> {{localize "SRE.Advance.Open"}}</button>{{/if}}</h3>
+        <table class="sre-es-table"><tr><th>{{localize "SRE.Advance.Date"}}</th><th>{{localize "SRE.Advance.What"}}</th><th class="c">{{localize "SRE.Sheet.Karma"}}</th></tr>
+          {{#each social.advancement}}<tr><td>{{date}}</td><td>{{text}}</td><td class="c">{{total}}</td></tr>
+          {{else}}<tr><td colspan="3" class="sre-es-empty">—</td></tr>{{/each}}</table>
       </div>
       {{#if social.hasDescription}}
       <div class="sre-es-panel sre-es-editor">

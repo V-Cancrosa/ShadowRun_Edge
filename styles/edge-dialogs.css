@@ -549,3 +549,15 @@ body.sre-edge-light .chat-message :is(.sre-blast-result, .sre-give-msg) { border
 .sre-welcome .sre-welcome-list li { margin: 3px 0; font-size: 12px; }
 .sre-welcome .window-content { overflow-y: auto; }
 .directory .header-actions .sre-welcome-button { flex: 0 0 100%; }
+
+/* Advancement: spells / complex forms drop zone. */
+.sre-advance-drop {
+  padding: 14px 10px;
+  text-align: center;
+  border: 1px dashed var(--sre-line, #555);
+  border-radius: 6px;
+  color: var(--sre-text-dim, inherit);
+  font-size: 12px;
+}
+
+.sre-advance [data-tile="left"].bad .sre-ed-big { color: var(--sre-red, #e0524a); }

@@ -1,5 +1,14 @@
 [
   {
+    "version": "0.25.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Rozwój postaci za Karmę: kliknij Karmę w nagłówku Karty Edge (lub „Rozwój” w zakładce Kontakty i notatki) — koszyk atrybutów, umiejętności, specjalizacji i ekspertyz, wiedzy i języków, cech, zaklęć i form, inicjacji/zanurzenia, z kosztami i czasem treningu wg podręcznika.",
+      "Złamanie zasad (za mało Karmy, maksimum metatypu, ekspertyza bez specjalizacji…) pyta zamiast blokować; dziennik rozwoju na postaci i karta na czacie.",
+      "Ustawienie świata „Rozwój wymaga zgody MG”: zakup gracza trafia na czat jako prośba do zatwierdzenia."
+    ]
+  },
+  {
     "version": "0.24.0",
     "date": "2026-11-02",
     "changes": [

@@ -295,8 +295,36 @@ console.log("blast & summoning OK");
   const log = JSON.parse(readFileSync(new URL("../data/changelog.json", import.meta.url), "utf8"));
   const version = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8")).version;
   assert.equal(log[0].version, version, "the changelog starts with the current version");
-  assert.deepEqual(changesSince(log, "0.21.0").map((v) => v.version), ["0.23.0", "0.22.0"], "newest first, only after the one seen");
+  assert.deepEqual(changesSince(log, log[2].version).map((v) => v.version), [log[0].version, log[1].version], "newest first, only after the one seen");
   assert.equal(changesSince(log, "").length, 3, "first time: the latest three");
   assert.equal(changesSince(log, version).length, 0);
   console.log("welcome OK");
+}
+
+// ── Karma advancement (pp. 68–70) ──
+{
+  const assert = (await import("node:assert/strict")).default;
+  const { entryCost, entryTime, cartTotal, cartProblems } = await import("../scripts/advancement-rules.mjs");
+  assert.equal(entryCost({ kind: "attribute", from: 4, to: 6 }), 55, "5 × 5 + 5 × 6");
+  assert.equal(entryCost({ kind: "skill", from: 0, to: 1 }), 5);
+  assert.equal(entryCost({ kind: "knowledge" }), 3);
+  assert.equal(entryCost({ kind: "quality", karma: 4, level: 2 }), 16, "2 × cost per level");
+  assert.equal(entryCost({ kind: "removeQuality", karma: -8 }), 16, "2 × bonus");
+  assert.equal(entryCost({ kind: "initiation", from: 0 }), 11, "10 + new grade");
+  assert.equal(entryCost({ kind: "submersion", from: 2 }), 13);
+  assert.deepEqual(entryTime({ kind: "attribute", from: 4, to: 6 }), { months: 22, weeks: 0 }, "(5 + 6) × 2 months");
+  assert.deepEqual(entryTime({ kind: "skill", from: 2, to: 3 }), { months: 3, weeks: 0 });
+  assert.deepEqual(entryTime({ kind: "initiation", from: 0 }), { months: 2, weeks: 0 });
+  assert.deepEqual(entryTime({ kind: "submersion", from: 0 }), { months: 0, weeks: 2 });
+  assert.deepEqual(entryTime({ kind: "spell" }), { months: 0, weeks: 1 });
+  const cart = [{ kind: "attribute", id: "agi", from: 4, to: 6 }, { kind: "skill", id: "firearms", from: 4, to: 5 }, { kind: "expertise", id: "firearms", spec: "pistols" }];
+  assert.equal(cartTotal(cart).total, 55 + 25 + 5);
+  const keys = (c, ctx) => cartProblems(c, ctx).map((p) => p.key);
+  assert.deepEqual(keys(cart, { karma: 100, attrMax: { agi: 6 }, skills: { firearms: { points: 4, specialization: "pistols" } } }), [], "rank 5 bought in the same cart");
+  assert.deepEqual(keys(cart, { karma: 50, attrMax: { agi: 5 }, skills: { firearms: { points: 4 } } }), ["karma", "attrMax", "expertiseNoSpec"]);
+  assert.deepEqual(keys([{ kind: "expertise", id: "firearms" }], { karma: 9, skills: { firearms: { points: 3, specialization: "x" } } }), ["expertiseRank"]);
+  assert.deepEqual(keys([{ kind: "specialization", id: "firearms", spec: "y" }], { karma: 9, skills: { firearms: { points: 3, specialization: "x" } } }), ["secondSpec"]);
+  assert.deepEqual(keys([{ kind: "skill", id: "firearms", from: 9, to: 10 }], { karma: 99, skillMax: { firearms: 10 } }), [], "Aptitude");
+  assert.deepEqual(keys([{ kind: "skill", id: "firearms", from: 9, to: 10 }], { karma: 99 }), ["skillMax"]);
+  console.log("advancement OK");
 }

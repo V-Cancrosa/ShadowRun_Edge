@@ -908,3 +908,8 @@ body.sre-edge-light :is(.sre-es-portrait, .sre-it-icon) { background: linear-gra
 .sre-cp-note { margin: 8px 10px; color: var(--sre-text-dim); font-size: 12px; }
 .sre-cp .sre-es-row small { display: block; font-size: 11px; }
 @media (max-width: 760px) { .sre-cp-cols { grid-template-columns: 1fr; } }
+
+/* Karma chip opens the advancement window. */
+.sre-es-chip-action { cursor: pointer; }
+.sre-es-chip-action:hover { border-color: var(--sre-accent, var(--sre-cyan)); }
+.sre-es-advance h3 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }

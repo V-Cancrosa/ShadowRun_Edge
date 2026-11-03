@@ -18,6 +18,7 @@ import { isLightTheme, toggleTheme } from "../theme.mjs";
 import * as ui2 from "../ui/edge-ui.mjs";
 import { actorStatuses, statusLabel, takeCover } from "../statuses.mjs";
 import { useSubstance } from "../substances.mjs";
+import { openAdvancement } from "../advancement.mjs";
 import { movement } from "../status-rules.mjs";
 import { resolveConflict } from "../ui/conflict.mjs";
 
@@ -50,6 +51,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       statusLevel: EdgeActorSheet.#onStatusLevel,
       statusRemove: EdgeActorSheet.#onStatusRemove,
       takeCover: EdgeActorSheet.#onTakeCover,
+      advance: EdgeActorSheet.#onAdvance,
       useSubstance: EdgeActorSheet.#onUseSubstance,
       rollAttribute: EdgeActorSheet.#onAttribute,
       rollSkill: EdgeActorSheet.#onSkill,
@@ -376,6 +378,11 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** Take Cover (Minor Action, p. 111). */
   static async #onTakeCover() {
     return takeCover(this.document);
+  }
+
+  /** Karma advancement window (pp. 68–70). */
+  static async #onAdvance() {
+    return openAdvancement(this.document);
   }
 
   static async #onUseSubstance(event, target) {

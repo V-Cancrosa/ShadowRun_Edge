@@ -38,7 +38,7 @@ export function repairUpdate(system) {
   return update;
 }
 
-function qualityItem(q, karma, label) {
+export function qualityItem(q, karma, label) {
   const def = q.def;
   const level = def.levels ? q.level : null;
   const name = [def.name, q.detail ? `(${q.detail})` : null, level ? level : null].filter(Boolean).join(" ");

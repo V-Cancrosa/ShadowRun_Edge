@@ -23,6 +23,7 @@ import "./welcome.mjs";
 import "./roll-dialog.mjs";
 import "./ui/conflict.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
+import "./advancement.mjs";
 import { openCharacterCreator } from "./chargen/creator.mjs";
 
 const MODULE_ID = "shadowrun-edge";

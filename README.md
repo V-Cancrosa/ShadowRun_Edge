@@ -13,6 +13,7 @@ Nie zmienia kodu systemu, tylko dokłada swoje rzeczy na wierzch, więc aktualiz
   cyberware, bioware, sprzęt, magia, pojazdy i drony. Przeciągasz przedmiot na kartę postaci i gotowe.
 - **Kreator przedmiotów** do tworzenia sprzętu tak, jak jest opisany w tabelach podręcznika.
 - **Karta Edge**: nowa karta postaci gracza według karty z podręcznika (siedem zakładek, od walki po kontakty).
+- **Rozwój postaci za Karmę** z kosztami i czasem treningu według podręcznika, z dziennikiem rozwoju.
 - **Karta Edge przedmiotu** i **przekazywanie przedmiotów** innym postaciom (z dodatkami), usuwanie przedmiotów.
 - **Wygląd „Edge”** kart postaci, czatu i okna rzutu (ciemny lub jasny, do wyłączenia).
 
@@ -148,6 +149,32 @@ SIN-y, style życia, Karma/Reputacja/Heat/nuyeny do edycji, opis (system 4.x) i 
 
 Pule pokazują już karę za rany (i za podtrzymywane czary); rzut i tak przechodzi przez okno rzutu systemu,
 które odejmuje je samo.
+
+## Rozwój postaci za Karmę (s. 68–70)
+
+Kliknij **Karmę** w nagłówku Karty Edge albo przycisk **Rozwój** w zakładce *Kontakty i notatki*.
+Otwiera się koszyk: wybierasz, co postać rozwija, a okno na bieżąco liczy koszt, pozostałą Karmę
+i sugerowany czas treningu.
+
+| Co | Koszt Karmy | Trening |
+|---|---|---|
+| Atrybut | 5 × nowa ranga za każdy poziom (4 → 6 = 55) | nowa ranga × 2 miesiące |
+| Umiejętność | 5 × nowa ranga za każdy poziom | nowa ranga w miesiącach |
+| Specjalizacja | 5 | 1 miesiąc |
+| Ekspertyza (wymaga specjalizacji i rangi 5+, zastępuje specjalizację) | 5 | 2 miesiące |
+| Umiejętność wiedzy lub język | 3 | 1 miesiąc |
+| Cecha pozytywna | 2 × koszt (× poziom) | 1 tydzień |
+| Usunięcie cechy negatywnej | 2 × jej premia | 1 tydzień |
+| Zaklęcie lub forma złożona (przeciągnij do okna) | 5 | 1 tydzień |
+| Inicjacja / zanurzenie | 10 + nowy stopień | (nowy stopień + 1) miesięcy / tygodni |
+
+Złamanie zasad (za mało Karmy, ponad maksimum metatypu lub umiejętności, ekspertyza bez specjalizacji,
+druga specjalizacja) otwiera okno konfliktu: MG decyduje zawsze, gracz tylko gdy świat na to pozwala.
+Po zakupie Karma spada, zmiany trafiają na kartę, karta zakupu na czat, a wpis do **dziennika rozwoju**
+(data, co, koszt) w zakładce *Kontakty i notatki*.
+
+Ustawienie świata **Rozwój wymaga zgody MG**: zakup gracza trafia na czat jako prośba, którą MG
+zatwierdza (wtedy zostaje zastosowana) lub odrzuca.
 
 ## Karty Edge NPC, ducha i pojazdu
 
