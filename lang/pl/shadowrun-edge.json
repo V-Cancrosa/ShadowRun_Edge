@@ -1011,7 +1011,8 @@
         "ritual": "Rytuał",
         "complexform": "Forma złożona",
         "vehicle": "Test pojazdu",
-        "legwork": "Legwork"
+        "legwork": "Legwork",
+        "initiative": "Inicjatywa"
       },
       "Modifier": "Modyfikator",
       "Retry": "Ponowna próba",
@@ -1037,7 +1038,8 @@
       "Edge": {
         "none": "Bez Edge",
         "have": "masz {n}",
-        "addEdgeHint": "+{n} kości, szóstki wybuchają"
+        "addEdgeHint": "+{n} kości, szóstki wybuchają",
+        "locked": "Edge zablokowany (np. po zrzucie z matrycy)"
       },
       "Boost": {
         "reroll_one": "Przerzuć kość",
@@ -1150,7 +1152,34 @@
         "fading": "zanik rzucony"
       },
       "BigSpeechFirst": "Pierwszy rzut: {hits} traf. → +{extra} kości",
-      "LegworkLabel": "Legwork: Kontakty {n} × 2"
+      "LegworkLabel": "Legwork: Kontakty {n} × 2",
+      "Statuses": "Statusy i substancje",
+      "Extended": "Test rozszerzony",
+      "ExtendedNext": "Rzut {n}: dotychczas {total} z {t} trafień.",
+      "ExtendedSum": "Suma {total} / {t} · rzut {n}",
+      "ExtendedDone": "Udany po {n} rzutach",
+      "ExtendedButton": "Kolejny rzut ({n} kości)",
+      "ExtendedFailed": "Brak kości — porażka",
+      "InitScore": "inicjatywy",
+      "InitRank": "Ranga",
+      "InitDice": "Kości",
+      "InitBoost": "+3 do inicjatywy (1 Edge)",
+      "InitTracked": "Wpisano do trackera walki.",
+      "LegworkNote": "{name} · Lojalność {loyalty}",
+      "Anytime": {
+        "Kind": "Edge poza rzutem",
+        "Boost": "Wzmocnienie",
+        "Multi": "można wielokrotnie",
+        "Times": "Ile razy",
+        "Ally": "Komu",
+        "Spend": "Wydaj Edge",
+        "Done": {
+          "give_ally": "{name} daje {ally} {n} Edge",
+          "heal_stun": "{name} leczy {n} pole(a) ogłuszenia",
+          "heal_physical": "{name} leczy {n} pole(a) fizyczne",
+          "special_effect": "{name}: efekt specjalny — MG mówi, co się dzieje"
+        }
+      }
     },
     "Conflict": {
       "Kind": "Konflikt z zasadami",
@@ -1910,6 +1939,25 @@
       "DumpTitle": "Diagnostyka wyglądu (Shadowrun Edge)",
       "DumpHint": "Szkielet interfejsu: same klasy i identyfikatory, bez treści czatu i nazw. Kliknij „Kopiuj” albo zaznacz całość (Ctrl+A, Ctrl+C) i wklej w rozmowie.",
       "DumpCopy": "Kopiuj"
+    },
+    "Chain": {
+      "Targets": "Cele",
+      "NoTarget": "bez celu — broni się zaznaczony żeton",
+      "Defense": {
+        "physical": "Obrona (Reakcja + Intuicja)",
+        "spells_direct": "Obrona (Siła Woli + Intuicja)",
+        "spells_indirect": "Obrona (Reakcja + Siła Woli)"
+      },
+      "Versus": "{name}: atak {a} vs obrona {d}",
+      "Hit": "Trafiony: {dv}{m} ({net} netto)",
+      "Miss": "Chybienie",
+      "Disarmed": "Rozbrojony — bez obrażeń",
+      "Soak": "Odporność na {dv}{m}",
+      "ApplyDirect": "Zastosuj {dv} (bez odporności)",
+      "Soaked": "odporność rzucona",
+      "SoakLabel": "Odporność na {dv} obrażeń",
+      "Knockout": "{name}: Nokaut — nieprzytomny",
+      "Prone": "{name}: Powalenie — Leżący"
     }
   }
 }

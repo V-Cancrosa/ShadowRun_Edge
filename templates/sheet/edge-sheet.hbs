@@ -23,6 +23,7 @@
         <strong>{{edge.value}}/{{edge.max}}</strong>
         <button type="button" class="sre-es-mini" data-action="edge" data-delta="1" {{#unless edge.canGain}}disabled{{/unless}}>+1</button>
         <button type="button" class="sre-es-mini" data-action="edge" data-delta="-1" {{#unless edge.canSpend}}disabled{{/unless}}>−1</button>
+        <button type="button" class="sre-es-mini" data-action="edgeBoost" data-tooltip="{{localize "SRE.Roll.Anytime.Kind"}}"><i class="fas fa-bolt"></i></button>
       </div>
     </div>
     <div class="sre-es-chips">

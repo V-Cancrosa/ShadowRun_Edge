@@ -1011,7 +1011,8 @@
         "ritual": "Ritual",
         "complexform": "Complex form",
         "vehicle": "Vehicle test",
-        "legwork": "Legwork"
+        "legwork": "Legwork",
+        "initiative": "Initiative"
       },
       "Modifier": "Modifier",
       "Retry": "Trying again",
@@ -1037,7 +1038,8 @@
       "Edge": {
         "none": "No Edge",
         "have": "you have {n}",
-        "addEdgeHint": "+{n} dice, 6s explode"
+        "addEdgeHint": "+{n} dice, 6s explode",
+        "locked": "Edge locked (e.g. after dumpshock)"
       },
       "Boost": {
         "reroll_one": "Reroll a die",
@@ -1150,7 +1152,34 @@
         "fading": "fading rolled"
       },
       "BigSpeechFirst": "First roll: {hits} hits → +{extra} dice",
-      "LegworkLabel": "Legwork: Connection {n} × 2"
+      "LegworkLabel": "Legwork: Connection {n} × 2",
+      "Statuses": "Statuses and substances",
+      "Extended": "Extended test",
+      "ExtendedNext": "Roll {n}: {total} of {t} hits so far.",
+      "ExtendedSum": "Total {total} / {t} · roll {n}",
+      "ExtendedDone": "Succeeded after {n} rolls",
+      "ExtendedButton": "Next roll ({n} dice)",
+      "ExtendedFailed": "Out of dice — failed",
+      "InitScore": "initiative",
+      "InitRank": "Rank",
+      "InitDice": "Dice",
+      "InitBoost": "+3 Initiative (1 Edge)",
+      "InitTracked": "Set in the combat tracker.",
+      "LegworkNote": "{name} · Loyalty {loyalty}",
+      "Anytime": {
+        "Kind": "Edge outside a roll",
+        "Boost": "Boost",
+        "Multi": "can be multiplied",
+        "Times": "How many times",
+        "Ally": "To whom",
+        "Spend": "Spend Edge",
+        "Done": {
+          "give_ally": "{name} gives {ally} {n} Edge",
+          "heal_stun": "{name} heals {n} Stun box(es)",
+          "heal_physical": "{name} heals {n} Physical box(es)",
+          "special_effect": "{name}: special effect — the GM says what happens"
+        }
+      }
     },
     "Conflict": {
       "Kind": "Rule conflict",
@@ -1910,6 +1939,25 @@
       "DumpTitle": "Look diagnostics (Shadowrun Edge)",
       "DumpHint": "The interface skeleton: classes and ids only, no chat content or names. Click “Copy” or select all (Ctrl+A, Ctrl+C) and paste it into the conversation.",
       "DumpCopy": "Copy"
+    },
+    "Chain": {
+      "Targets": "Targets",
+      "NoTarget": "no target — the selected token defends",
+      "Defense": {
+        "physical": "Defense (Reaction + Intuition)",
+        "spells_direct": "Defense (Willpower + Intuition)",
+        "spells_indirect": "Defense (Reaction + Willpower)"
+      },
+      "Versus": "{name}: attack {a} vs defense {d}",
+      "Hit": "Hit: {dv}{m} ({net} net)",
+      "Miss": "Miss",
+      "Disarmed": "Disarmed — no damage",
+      "Soak": "Resist {dv}{m}",
+      "ApplyDirect": "Apply {dv} (not resisted)",
+      "Soaked": "resistance rolled",
+      "SoakLabel": "Resisting {dv} damage",
+      "Knockout": "{name}: Knockout Blow — unconscious",
+      "Prone": "{name}: Tumble — Prone"
     }
   }
 }

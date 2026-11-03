@@ -45,3 +45,23 @@
 .chat-message .sre-rc .sre-die.exploded { border-style: dashed; }
 .chat-message .sre-rc-post-menu[hidden] { display: none; }
 .chat-message .sre-rc-stats span { min-width: 40px; flex: 1 1 0; }
+
+/* 13C: targets of an attack, a defense's outcome, extended tests, initiative. */
+.chat-message .sre-rc-chain { display: grid; gap: 3px; padding: 4px 6px; border: 1px dashed var(--sre-line, rgba(127, 127, 127, 0.35)); }
+.chat-message .sre-rc-chain-title { font: 700 9px/1.4 var(--sre-font-display, sans-serif); letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.75; }
+.chat-message .sre-rc-target { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.chat-message .sre-rc-target small { opacity: 0.7; }
+.chat-message .sre-rc-target button { margin-left: auto; width: auto; }
+.chat-message .sre-rc-outcome { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-left: 3px solid var(--sre-text-dim, #9aa0ad); }
+.chat-message .sre-rc-outcome > div { display: grid; }
+.chat-message .sre-rc-outcome small { font-size: 10px; opacity: 0.75; }
+.chat-message .sre-rc-outcome b { font: 700 13px var(--sre-font-display, sans-serif); letter-spacing: 0.06em; text-transform: uppercase; }
+.chat-message .sre-rc-outcome.hit { border-left-color: var(--sre-bad, #ff5470); }
+.chat-message .sre-rc-outcome.hit b { color: var(--sre-bad, #ff5470); }
+.chat-message .sre-rc-outcome.miss { border-left-color: var(--sre-ok, #4fd68a); }
+.chat-message .sre-rc-outcome.miss b { color: var(--sre-ok, #4fd68a); }
+.chat-message .sre-rc-outcome button, .chat-message .sre-rc-outcome em { margin-left: auto; width: auto; }
+.chat-message .sre-rc-extended { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 3px 6px; border-left: 2px solid var(--sre-accent, #e0409a); }
+.chat-message .sre-rc-extended.done { border-left-color: var(--sre-ok, #4fd68a); }
+.chat-message .sre-rc-extended button, .chat-message .sre-rc-extended b { margin-left: auto; width: auto; }
+.chat-message .sre-rc-resist button { width: 100%; }

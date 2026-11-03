@@ -1,5 +1,23 @@
 [
   {
+    "version": "0.38.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Łańcuch walki na kartach Edge (etap 13C): karta ataku ma przycisk obrony dla każdego celu; karta obrony liczy trafienie na żywo z trafień ataku (remis dla atakującego wg erraty s. 105), pokazuje obrażenia z trafieniami netto i prowadzi do odporności z przyciskiem Zastosuj. Gdy atakujący wyda Edge po rzucie, wynik obrony się aktualizuje.",
+      "Czary bojowe według s. 132: bezpośrednie (Siła Woli + Intuicja, obrażenia = netto + Wzmocnienie, bez odporności) i pośrednie (Reakcja + Siła Woli, Magia/2 + netto + Wzmocnienie, odporność Budową). WA czarującego = Magia + atrybut tradycji, z Edge za przewagę.",
+      "Obrońca dostaje 1 Edge, gdy jego WO przewyższa WA o 4 (s. 45). Akcje Edge działają dalej w łańcuchu: Rozbrojenie (bez obrażeń), Nokaut (obrażenia > Siła Woli → nieprzytomny), Powalenie (obrażenia > Budowa → Leżący).",
+      "Testy rozszerzone (s. 36): suma trafień, pula mniejsza o 1 z każdym rzutem, przycisk „Kolejny rzut” na karcie. Inicjatywa w silniku Edge: ranga + kości (max 5D6), +3 za 1 Edge w oknie lub później z karty; wynik trafia do trackera walki.",
+      "Edge poza rzutem (przycisk ⚡ przy Edge na karcie postaci): daj sojusznikowi Edge, wylecz pole ogłuszenia lub fizyczne, efekt specjalny. Okno rzutu pokazuje modyfikatory statusów i substancji oraz blokadę Edge po zrzucie z matrycy."
+    ],
+    "changes_en": [
+      "The combat chain on Edge cards (stage 13C): an attack card has a defense button for each target; the defense card works out the hit live from the attack's hits (ties to the attacker, errata p. 105), shows the damage with net hits and leads to resistance with an Apply button. When the attacker spends Edge after the roll, the defense result updates.",
+      "Combat spells as on p. 132: direct (Willpower + Intuition, damage = net hits + Amp Up, not resisted) and indirect (Reaction + Willpower, Magic/2 + net + Amp Up, resisted with Body). The caster's AR = Magic + tradition attribute, with Edge for the advantage.",
+      "The defender gains 1 Edge when their DR beats the AR by 4 (p. 45). Edge Actions carry through the chain: Disarm (no damage), Knockout Blow (damage > Willpower → unconscious), Tumble (damage > Body → Prone).",
+      "Extended tests (p. 36): hits add up, the pool drops by 1 each roll, a \"Next roll\" button on the card. Initiative on the Edge engine: rank + dice (max 5D6), +3 for 1 Edge in the window or later from the card; the score goes into the combat tracker.",
+      "Edge outside a roll (⚡ button next to Edge on the character sheet): give an ally Edge, heal a Stun or Physical box, special effect. The roll window shows status and substance modifiers and the Edge lock after dumpshock."
+    ]
+  },
+  {
     "version": "0.37.0",
     "date": "2026-11-03",
     "changes": [

@@ -41,6 +41,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     actions: {
       showSheetTab: EdgeActorSheet.#onTab,
       edge: EdgeActorSheet.#onEdge,
+      edgeBoost: EdgeActorSheet.#onEdgeBoost,
       monitor: EdgeActorSheet.#onMonitor,
       rollQuick: EdgeActorSheet.#onQuick,
       rollInitiative: EdgeActorSheet.#onInitiative,
@@ -190,6 +191,12 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (choice !== "set") return;
     }
     await this.document.update({ "system.edge.value": next });
+  }
+
+  /** Edge Boosts outside a roll (give an ally Edge, heal a box, special effect). */
+  static async #onEdgeBoost() {
+    const { edgeAnytime } = await import("../dice/initiative.mjs");
+    return edgeAnytime(this.document);
   }
 
   /** Clicking a box sets the damage to it; clicking the last damaged box clears it (like a toggle). */

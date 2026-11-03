@@ -10,6 +10,8 @@
 import * as R from "./dice-rules.mjs";
 import * as ui2 from "../ui/edge-ui.mjs";
 import { canBreakRules } from "../ui/conflict.mjs";
+import { poolChips, warnings as statusWarnings } from "../status-rules.mjs";
+import { errataFlags } from "../errata.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const SOCKET = `module.${MODULE_ID}`;
@@ -98,7 +100,7 @@ export async function gainEdge(actor, want) {
   return n;
 }
 
-async function spendEdge(actor, n) {
+export async function spendEdge(actor, n) {
   const { value } = edgeOf(actor);
   await actor.update({ "system.edge.value": Math.max(0, value - n) });
 }
@@ -188,9 +190,36 @@ export function modesOf(attack) {
 
 // ───── The window ─────
 
+/** Edge cannot be gained or spent (e.g. after Convergence): an effect with the module's noEdge flag. */
+export function edgeLocked(actor) {
+  return !!actor?.effects?.find?.((e) => !e.disabled && e.getFlag?.(MODULE_ID, "noEdge"));
+}
+
+/** Status and substance modifiers for this roll (scripts/status-rules.mjs), as chips. */
+function statusChips(actor, req, { actorStatuses, statusLabel }) {
+  const kind = req.attack ? "attack" : req.kind === "defense" ? "defense" : ["soak", "drain", "fading"].includes(req.kind) ? "soak" : "test";
+  const ctx = { kind, melee: !!req.context?.includes("melee"), bow: !!req.attack?.bow, firearm: !!req.attack?.ranged && !req.attack?.bow, errata: errataFlags() };
+  let statuses = [];
+  try {
+    statuses = actorStatuses(actor);
+  } catch {
+    statuses = [];
+  }
+  const chips = poolChips(statuses, ctx).map((c) => ({ ...c, label: statusLabel(c.id.replace(/_(far|near|ar)$/, "")) }));
+  for (const e of actor?.effects ?? []) {
+    if (e.disabled) continue;
+    const pool = num(e.getFlag?.(MODULE_ID, "pool"));
+    if (pool) chips.push({ id: "substance", label: e.name, value: pool, on: kind !== "soak" });
+    const physical = num(e.getFlag?.(MODULE_ID, "physicalPool"));
+    if (physical) chips.push({ id: "substance", label: e.name, value: physical, on: false, note: "physicalOnly" });
+  }
+  return { chips, warnings: statusWarnings(statuses, ctx) };
+}
+
 function edgeChoices(actor, req, tgts) {
   const { value, max } = edgeOf(actor);
   const list = [{ value: "", label: L("SRE.Roll.Edge.none"), small: L("SRE.Roll.Edge.have", { n: value }) }];
+  if (edgeLocked(actor) && !canBreakRules()) return [{ ...list[0], small: L("SRE.Roll.Edge.locked") }];
   const can = (cost) => cost <= value || canBreakRules();
   const add = (id, cost, extra = {}) => list.push({ value: id, label: L(`SRE.Roll.Boost.${id}`), small: `${cost} Edge${extra.small ? ` · ${extra.small}` : ""}`, disabled: !can(cost), cost });
   if (req.allowEdge !== false) {
@@ -211,6 +240,11 @@ function rangeLabels() {
   return ["close", "near", "medium", "far", "extreme"].map((r) => L(`SRE.Roll.Range.${r}`));
 }
 
+/** Extended tests (p. 36) are for skill, attribute and plain tests. */
+function canExtend(req) {
+  return ["skill", "attribute", "test", "common", "vehicle"].includes(req.kind);
+}
+
 /** Opens the roll window; resolves to the chosen options, or null when cancelled. */
 async function rollWindow(actor, req) {
   const wound = req.useWound === false ? 0 : woundOf(actor);
@@ -218,6 +252,8 @@ async function rollWindow(actor, req) {
   const tgts = targets();
   const modes = modesOf(req.attack);
   const ranges = rangeLabels();
+  // statuses.mjs is loaded here, not at the top: it registers linked tasks, which import this file.
+  const st0 = statusChips(actor, req, await import("../statuses.mjs"));
   const st = {};
   const tiles = [
     { id: "pool", big: req.pool, label: L("SRE.Roll.Pool"), calc: "", accent: true },
@@ -255,7 +291,9 @@ async function rollWindow(actor, req) {
         sustain ? ui2.chip("sustain", L("SRE.Roll.Sustain"), { checked: true, value: `−${sustain}` }) : "",
         ui2.chip("wild", L("SRE.Roll.Wild"), { checked: !!req.wild }),
         req.allowBuy !== false ? ui2.chip("buy", L("SRE.Roll.Buy")) : "",
-      ]))}
+        canExtend(req) ? ui2.chip("extended", L("SRE.Roll.Extended"), { checked: !!req.extendedFrom }) : "",
+      ]) + (req.extendedFrom ? ui2.note(L("SRE.Roll.ExtendedNext", { n: req.extendedFrom.n + 1, total: req.extendedFrom.total, t: req.extendedFrom.threshold }), "info") : ""))}
+      ${st0.chips.length || st0.warnings.length ? ui2.panel(L("SRE.Roll.Statuses"), ui2.chips(st0.chips.map((c, i) => ui2.chip(`st${i}`, `${c.label}${c.note ? ` · ${L(`SRE.Status.Note.${c.note}`)}` : ""}`, { checked: c.on, value: [c.value ? `${c.value > 0 ? "+" : ""}${c.value}` : "", c.arMod ? `${L("SRE.Roll.AR")} ${c.arMod > 0 ? "+" : ""}${c.arMod}` : ""].filter(Boolean).join(" ") }))) + st0.warnings.map((w) => ui2.note(L(`SRE.Status.Warn.${w}`), "warn")).join("")) : ""}
       ${req.allowEdge !== false ? ui2.panel(L("SRE.Roll.EdgePanel"), ui2.options("edge", edgeChoices(actor, req, tgts).map((o, i) => ({ ...o, checked: i === 0 }))), { hint: L("SRE.Roll.EdgeOnce") }) : ""}
       ${ui2.panel(L("SRE.Roll.Visibility"), `<select name="rollMode">${Object.entries(CONFIG.Dice.rollModes).map(([k, v]) => `<option value="${k}"${k === game.settings.get("core", "rollMode") ? " selected" : ""}>${esc(L(v?.label ?? v))}</option>`).join("")}</select>`)}
       ${ui2.note("", "warn", { id: "warn" })}
@@ -274,10 +312,21 @@ async function rollWindow(actor, req) {
       wound: wound && f.has("wound") ? wound : 0, sustain: sustain && f.has("sustain") ? sustain : 0,
       wild: f.has("wild"), buy: f.has("buy"), edge, rollMode: get("rollMode"),
       mode, range, faArea: num(get("faArea"), 1), fm, ampUp: num(get("ampUp")), area: num(get("area")),
+      extended: f.has("extended") || !!req.extendedFrom,
     };
+    if (req.extendedFrom) o.threshold = req.extendedFrom.threshold;
     o.untrainedFix = edge === "action:sudden_insight" && req.untrained ? 1 : 0;
-    o.pool = Math.max(0, num(req.pool) + o.mod - o.wound - o.sustain + R.retryPenalty(o.retry) + o.untrainedFix);
-    o.ar = fm ? num(fm.ar[range]) : null;
+    o.status = 0;
+    o.statusAr = 0;
+    o.statusNames = [];
+    st0.chips.forEach((c, i) => {
+      if (!f.has(`st${i}`)) return;
+      o.status += num(c.value);
+      o.statusAr += num(c.arMod);
+      o.statusNames.push(c.label);
+    });
+    o.pool = Math.max(0, num(req.pool) + o.mod - o.wound - o.sustain + R.retryPenalty(o.retry) + o.untrainedFix + o.status);
+    o.ar = fm ? Math.max(0, num(fm.ar[range]) + (num(fm.ar[range]) > 0 ? o.statusAr : 0)) : null;
     o.dv = fm ? fm.dv + (edge === "action:vitals" ? 3 : 0) : null;
     o.drain = req.spell ? num(req.spell.drain) + o.ampUp * 2 + o.area : null;
     return o;
@@ -347,9 +396,10 @@ export async function edgeTest(actor, req, options = null) {
   // Edge from Attack Rating vs Defense Rating at the start of an attack (p. 45).
   let gained = 0;
   let theirGain = 0;
-  if (req.attack && tgts.length && o.ar !== null) {
+  const ratingAr = req.attack ? o.ar : req.spell?.combat ? num(req.spell.ar) : null;
+  if (tgts.length && ratingAr) {
     const dr = Math.max(0, ...tgts.map((t) => t.dr));
-    const g = R.edgeFromRatings(o.ar, dr);
+    const g = R.edgeFromRatings(ratingAr, dr);
     if (g.attacker) gained = await gainEdge(actor, 1);
     theirGain = g.defender;
   }
@@ -409,15 +459,21 @@ export async function edgeTest(actor, req, options = null) {
 
   const data = {
     v: 1, actorUuid: actor.uuid, kind: req.kind, title: req.title ?? "", label: req.label, img: req.img ?? actor.img,
-    pool, basePool: num(req.pool), mods: { mod: o.mod, wound: o.wound, sustain: o.sustain, retry: o.retry, untrained: o.untrainedFix },
+    pool, basePool: num(req.pool), mods: { mod: o.mod, wound: o.wound, sustain: o.sustain, retry: o.retry, untrained: o.untrainedFix, status: num(o.status), statusNames: o.statusNames ?? [] },
     threshold: num(o.threshold) || num(req.threshold), wild: !!o.wild, buy: !!o.buy, twos, explode,
     dice, first, edge, gained, notes,
     attack: req.attack ? { ar: o.ar, dv: o.dv, stun: !!req.attack.stun, mode: o.mode, rounds: o.fm?.rounds ?? 0, range: o.range, faArea: o.faArea, ranged: !!req.attack.ranged, theirGain, effects: edgeEffects(edge.action) } : null,
-    spell: req.spell ? { ...req.spell, drain: o.drain, ampUp: o.ampUp, area: o.area } : null,
+    spell: req.spell ? { ...req.spell, drain: o.drain, ampUp: o.ampUp, area: o.area, theirGain } : null,
     soak: req.soak ?? null,
     targets: tgts,
     extra: req.extra ?? {},
   };
+  if (o.extended && (num(data.threshold) || req.extendedFrom)) {
+    const from = req.extendedFrom;
+    data.extended = { threshold: from?.threshold ?? num(data.threshold), prev: num(from?.total), n: num(from?.n) + 1, base: from?.base ?? num(req.pool) };
+    data.threshold = 0;
+    data.req = { kind: req.kind, title: req.title, label: req.label, img: req.img, context: req.context, skillRank: req.skillRank, untrained: req.untrained, useSustain: req.useSustain, useWound: req.useWound, wild: req.wild };
+  }
   data.result = resultOf(data);
 
   // Ammunition (as the system: rounds of the fire mode).
@@ -481,7 +537,7 @@ export function cardHtml(d) {
   const v = verdict(r);
   const lines = [];
   const mods = d.mods ?? {};
-  const poolCalc = [`${d.basePool}`, mods.mod ? `${mods.mod > 0 ? "+" : ""}${mods.mod}` : "", mods.wound ? `−${mods.wound} ${L("SRE.Roll.WoundShort")}` : "", mods.sustain ? `−${mods.sustain} ${L("SRE.Roll.SustainShort")}` : "", mods.retry ? `${R.retryPenalty(mods.retry)} ${L("SRE.Roll.RetryShort")}` : "", mods.untrained ? `+1 ${L("SRE.Roll.Action.sudden_insight")}` : "", d.explode ? `+Edge` : ""].filter(Boolean).join(" ");
+  const poolCalc = [`${d.basePool}`, mods.mod ? `${mods.mod > 0 ? "+" : ""}${mods.mod}` : "", mods.wound ? `−${mods.wound} ${L("SRE.Roll.WoundShort")}` : "", mods.sustain ? `−${mods.sustain} ${L("SRE.Roll.SustainShort")}` : "", mods.retry ? `${R.retryPenalty(mods.retry)} ${L("SRE.Roll.RetryShort")}` : "", mods.untrained ? `+1 ${L("SRE.Roll.Action.sudden_insight")}` : "", mods.status ? `${mods.status > 0 ? "+" : ""}${mods.status} ${(mods.statusNames ?? []).join(", ")}` : "", d.explode ? `+Edge` : ""].filter(Boolean).join(" ");
   if (d.attack) {
     const a = d.attack;
     lines.push(`<div class="sre-rc-stats">
@@ -502,6 +558,14 @@ export function cardHtml(d) {
   if (resist && resist.dv > 0) {
     lines.push(`<div class="sre-rc-resist">${d.extra?.resisted ? `<em>${esc(L(`SRE.Roll.Resisted.${resist.kind}`))}</em>` : `<button type="button" data-sre-roll="resist" data-owner-only><i class="fas fa-brain"></i> ${esc(L(`SRE.Roll.Resist.${resist.kind}`, { dv: resist.dv }))}</button>`}</div>`);
   }
+  if (d.extended) {
+    const x = d.extended;
+    const total = x.prev + r.hits;
+    const done = total >= x.threshold;
+    const next = x.base - x.n;
+    lines.push(`<div class="sre-rc-extended${done ? " done" : ""}"><span>${esc(L("SRE.Roll.ExtendedSum", { total, t: x.threshold, n: x.n }))}</span>${done ? `<b>${esc(L("SRE.Roll.ExtendedDone", { n: x.n }))}</b>` : next > 0 ? `<button type="button" data-sre-roll="extend" data-owner-only>${esc(L("SRE.Roll.ExtendedButton", { n: next }))}</button>` : `<b>${esc(L("SRE.Roll.ExtendedFailed"))}</b>`}</div>`);
+  }
+  if (d.kind === "legwork" && d.extra?.contact) lines.push(`<div class="sre-rc-note">${esc(L("SRE.Roll.LegworkNote", { name: d.extra.contact, loyalty: num(d.extra.loyalty) }))}</div>`);
   if (d.first) lines.push(`<div class="sre-rc-note">${esc(L("SRE.Roll.BigSpeechFirst", { hits: d.first.hits, extra: d.first.extra }))}</div>`);
   const edgeNotes = [];
   if (d.gained) edgeNotes.push(L("SRE.Roll.Gained", { n: d.gained }));
@@ -595,6 +659,7 @@ async function applySoak(message) {
   if (actor.isOwner) await applyDamage(actor, monitor, left);
   else return ui.notifications.warn(L("SRE.Roll.NotYours"));
   data.soak.applied = true;
+  Hooks.callAll("sre.soakApplied", actor, data, left);
   return updateRoll(message, data);
 }
 
@@ -647,6 +712,13 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       copy.extra = { ...copy.extra, resisted: true };
       updateRoll(message, copy);
     }
+  });
+  card.querySelector("[data-sre-roll=extend]")?.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const actor = await fromUuid(data.actorUuid);
+    const x = data.extended;
+    if (!actor?.isOwner || !x) return;
+    edgeTest(actor, { ...data.req, pool: x.base - x.n, extendedFrom: { threshold: x.threshold, total: x.prev + num(data.result?.hits), n: x.n, base: x.base } });
   });
   card.querySelector("[data-sre-roll=apply]")?.addEventListener("click", (e) => {
     e.preventDefault();

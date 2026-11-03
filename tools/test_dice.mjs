@@ -143,3 +143,31 @@ assert.ok(spent.includes("sre-stamp-critical"));
 assert.ok(!spent.includes('data-sre-roll="open"'), "one expenditure per action: no Edge after a pre-roll boost");
 
 console.log("dice engine OK");
+
+// ───── 13C: the combat chain and Initiative ─────
+const C = await import("../scripts/dice/combat-chain.mjs");
+const weapon = { kind: "weapon", attack: { ar: 9, dv: 5, stun: false, effects: [] } };
+let ch = C.chainOf(weapon);
+assert.equal(ch.defense, "physical");
+assert.deepEqual(C.outcome(ch, 4, 2), { hit: true, net: 2, dv: 7, resist: true, monitor: "physical" }, "DV + net hits");
+assert.equal(C.outcome(ch, 3, 3).hit, true, "a tie goes to the attacker (errata p. 105)");
+assert.equal(C.outcome(ch, 3, 3, { tiesToAttacker: false }).hit, false);
+assert.equal(C.outcome(ch, 2, 4).hit, false);
+assert.equal(C.outcome(C.chainOf({ ...weapon, attack: { ...weapon.attack, effects: ["disarm"] } }), 4, 1).disarm, true);
+// Direct Combat spell: net hits + Amp Up, not resisted; indirect: Magic/2 up + net + Amp Up, resisted (p. 132).
+ch = C.chainOf({ kind: "spell", spell: { combat: true, indirect: false, ampUp: 1, magic: 6 } });
+assert.equal(ch.defense, "spells_direct");
+assert.deepEqual(C.outcome(ch, 5, 3), { hit: true, net: 2, dv: 3, resist: false, monitor: "physical" });
+ch = C.chainOf({ kind: "spell", spell: { combat: true, indirect: true, ampUp: 0, magic: 5, damage: "physical" } });
+assert.equal(C.outcome(ch, 5, 3).dv, 5, "Cass: Magic 6 → 3 + 2 net = 5 in the book; Magic 5 → 3 + 2");
+assert.equal(C.chainOf({ kind: "spell", spell: { combat: false } }), null);
+assert.deepEqual(C.afterDamage(["knockout_blow"], 5, { wil: 4 }), ["knockout"]);
+assert.deepEqual(C.afterDamage(["knockout_blow"], 4, { wil: 4 }), [], "greater than Willpower");
+assert.deepEqual(C.afterDamage(["tumble"], 4, { bod: 3 }), ["prone"]);
+
+const I = await import("../scripts/dice/initiative.mjs");
+assert.equal(I.initiativeScore(9, [3, 4]), 16);
+assert.equal(I.initiativeScore(9, [3, 4], { mod: -2, boosts: 1 }), 17);
+assert.equal(R.initiativeDice(7), 5, "never more than 5D6");
+
+console.log("combat chain OK");

@@ -22,6 +22,8 @@ import "./substances.mjs";
 import "./welcome.mjs";
 import "./roll-dialog.mjs";
 import "./dice/edge-roll.mjs";
+import "./dice/combat-chain.mjs";
+import { edgeAnytime } from "./dice/initiative.mjs";
 import "./ui/conflict.mjs";
 import { startKarmaVote } from "./karma-vote.mjs";
 import "./advancement.mjs";
@@ -68,7 +70,7 @@ Hooks.once("init", () => {
   });
 
 
-  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote, openCharacterCreator, uiDump };
+  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote, openCharacterCreator, uiDump, edgeAnytime };
 });
 
 Hooks.once("ready", () => {

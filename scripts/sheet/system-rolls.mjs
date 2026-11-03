@@ -214,6 +214,10 @@ export async function rollLegwork(actor, contact) {
  * astral and matrix scores are rolled to chat, since the tracker uses one type per combatant.
  */
 export async function rollInitiative(actor, { id, base, dice, label }) {
+  if (engineOn()) {
+    const { initiativeTest } = await import("../dice/initiative.mjs");
+    return initiativeTest(actor, { base, dice, label });
+  }
   if (id === "physical" && game.combat) return actor.rollInitiative({ createCombatants: true, rerollInitiative: true });
   const roll = await new Roll(`${Number(base) || 0} + ${Number(dice) || 0}d6`).evaluate();
   return roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: label });
@@ -263,9 +267,14 @@ export function spellRequest(actor, item, ritual) {
   let threshold = 0;
   if (!ritual && sys.category === "heal" && sys.withEssence) threshold = 5 - Math.ceil(n(actor.system?.attributes?.essence?.pool, 6));
   if (ritual) threshold = n(sys.threshold);
+  // A caster's Attack Rating: Magic + tradition attribute (p. 132).
+  const magic = n(actor.system?.attributes?.mag?.pool);
+  const trad = actor.system?.tradition?.attribute;
+  const ar = magic + (trad ? n(actor.system?.attributes?.[trad]?.pool) : 0);
   return {
     kind: ritual ? "ritual" : "spell", title: item.name, label: t.label, pool: t.pool, img: item.img, threshold, useSustain: true, skillRank: t.rank,
-    spell: { drain, combat, area, indirect: sys.combatSpellType === "indirect", magic: n(actor.system?.attributes?.mag?.pool) },
+    wild: !!sys.wildDie,
+    spell: { drain, combat, area, indirect: sys.combatSpellType === "spells_indirect", damage: sys.damage === "stun" ? "stun" : "physical", magic, ar },
     extra: { itemUuid: item.uuid },
   };
 }
