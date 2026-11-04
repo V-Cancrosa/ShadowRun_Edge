@@ -1,5 +1,15 @@
 [
   {
+    "version": "0.42.1",
+    "date": "2026-11-03",
+    "changes": [
+      "Długie okna modułu (rozwój za Karmę, okno rzutu, dodawanie statusu i inne) nigdy nie są wyższe niż ekran: treść się przewija, a przyciski na dole zostają zawsze widoczne."
+    ],
+    "changes_en": [
+      "Long module windows (Karma advancement, the roll window, adding a status and others) are never taller than the screen: the content scrolls and the footer buttons always stay in view."
+    ]
+  },
+  {
     "version": "0.42.0",
     "date": "2026-11-03",
     "changes": [

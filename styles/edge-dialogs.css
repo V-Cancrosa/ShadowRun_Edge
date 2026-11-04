@@ -561,3 +561,10 @@ body.sre-edge-light .chat-message :is(.sre-blast-result, .sre-give-msg) { border
 }
 
 .sre-advance [data-tile="left"].bad .sre-ed-big { color: var(--sre-red, #e0524a); }
+
+/* Long module windows (advancement, roll window, effects…): never taller than the screen, the content scrolls and
+   the footer buttons stay in view. DialogV2: form.window-content > .dialog-content + footer.form-footer. */
+.application.sre-dialog { max-height: calc(100vh - 16px); }
+.application.sre-dialog .window-content { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.application.sre-dialog .window-content > .dialog-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--sre-accent-line, rgba(224, 64, 154, 0.45)) transparent; }
+.application.sre-dialog .window-content > .form-footer { flex: 0 0 auto; position: relative; z-index: 1; background: var(--sre-bg); border-top: 1px solid var(--sre-line); }
