@@ -1,5 +1,15 @@
 [
   {
+    "version": "0.43.1",
+    "date": "2026-11-03",
+    "changes": [
+      "Okna modułu przewijają się w każdej wersji Foundry — także „Co nowego” i rozwój za Karmę: przewija się całe wnętrze okna, a stopka z przyciskami jest przyklejona do dołu (poprawka 0.42.1 zakładała budowę okna, której Foundry 14 nie ma)."
+    ],
+    "changes_en": [
+      "Module windows scroll in every Foundry version — including \"What's new\" and Karma advancement: the whole inside of the window scrolls and the footer buttons stick to the bottom (the 0.42.1 fix assumed a window structure Foundry 14 doesn't have)."
+    ]
+  },
+  {
     "version": "0.43.0",
     "date": "2026-11-03",
     "changes": [

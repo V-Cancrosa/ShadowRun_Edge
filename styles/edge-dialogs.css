@@ -562,9 +562,17 @@ body.sre-edge-light .chat-message :is(.sre-blast-result, .sre-give-msg) { border
 
 .sre-advance [data-tile="left"].bad .sre-ed-big { color: var(--sre-red, #e0524a); }
 
-/* Long module windows (advancement, roll window, effects…): never taller than the screen, the content scrolls and
-   the footer buttons stay in view. DialogV2: form.window-content > .dialog-content + footer.form-footer. */
+/* Long module windows (advancement, "What's new", roll window, effects…): never taller than the screen; the window's
+   inside scrolls (whatever wraps the content in this Foundry version) and the footer buttons stick to the bottom. */
 .application.sre-dialog { max-height: calc(100vh - 16px); }
-.application.sre-dialog .window-content { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
-.application.sre-dialog .window-content > .dialog-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--sre-accent-line, rgba(224, 64, 154, 0.45)) transparent; }
-.application.sre-dialog .window-content > .form-footer { flex: 0 0 auto; position: relative; z-index: 1; background: var(--sre-bg); border-top: 1px solid var(--sre-line); }
+.application.sre-dialog > .window-content,
+.application.sre-dialog form.window-content {
+  min-height: 0; flex: 1 1 auto; overflow-y: auto !important; overflow-x: hidden;
+  scrollbar-width: thin; scrollbar-color: var(--sre-accent-line, rgba(224, 64, 154, 0.45)) transparent;
+}
+.application.sre-dialog .window-content .dialog-content { overflow: visible; }
+.application.sre-dialog .window-content footer.form-footer,
+.application.sre-dialog .window-content > .form-footer {
+  position: sticky; bottom: 0; z-index: 2; margin-top: auto; background: var(--sre-bg, #101117); border-top: 1px solid var(--sre-line, #2a2b38);
+  padding-block: 8px;
+}
