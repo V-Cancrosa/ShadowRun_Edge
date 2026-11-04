@@ -215,3 +215,20 @@ const mac = M.macroFor({ actor: "Actor.a", kind: "skill", id: "firearms", spec: 
 assert.equal(mac.type, "script");
 assert.match(mac.command, /api\.roll\(\{"actor":"Actor\.a","kind":"skill","id":"firearms","spec":"pistols"\}\);$/);
 console.log("house rules and macros OK");
+
+// ───── Modules: Dice Tray pools, tracker initiative ─────
+const IN = await import("../scripts/integrations.mjs");
+assert.equal(IN.bareD6Pool("6d6"), 6);
+assert.equal(IN.bareD6Pool(" 12D6 "), 12);
+assert.equal(IN.bareD6Pool("2d6+1"), null, "a modifier: not a pool");
+assert.equal(IN.bareD6Pool("1d20"), null);
+assert.deepEqual(IN.commandPool("/r 8d6"), { pool: 8, mode: null });
+assert.deepEqual(IN.commandPool("/gmr 3d6"), { pool: 3, mode: "gmroll" });
+assert.equal(IN.commandPool("/r 2d6+3"), null);
+assert.equal(IN.commandPool("hello 3d6"), null);
+const IN2 = await import("../scripts/dice/initiative.mjs");
+const cmb = { name: "Vanguard", getFlag: () => "matrix", actor: { system: { initiative: { physical: { pool: 5, dicePool: 1 }, matrix: { pool: 9, dicePool: 3 } } } } };
+assert.deepEqual([IN2.initiativeOf(cmb).base, IN2.initiativeOf(cmb).dice], [9, 3], "the combatant's initiative type");
+const sprite = { getFlag: () => null, actor: { system: { initiative: { matrix: { rank: 8, dice: 4 } } } } };
+assert.deepEqual([IN2.initiativeOf(sprite).base, IN2.initiativeOf(sprite).dice], [8, 4], "data-model rank/dice");
+console.log("integrations OK");

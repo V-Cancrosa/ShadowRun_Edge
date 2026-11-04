@@ -1,5 +1,23 @@
 [
   {
+    "version": "0.43.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Tracker walki i Carousel Combat Tracker: „rzuć inicjatywę” (jedna postać, wszyscy, NPC) rzuca silnikiem Edge — ranga i kości z systemu (także typ inicjatywy astralnej i matrycowej), bez okna; karta czatu ma przycisk +3 za 1 Edge. NPC i ukryci uczestnicy rzucają szeptem do MG. Przez lib-wrapper, gdy jest włączony.",
+      "Dice Tray i /r Nd6: rzut samymi kośćmi d6 staje się testem Edge dla zaznaczonego żetonu (trafienia, komplikacje, Edge po rzucie); inne rzuty bez zmian. Ustawienie świata do wyłączenia.",
+      "Dice So Nice: kość dzika w kolorach „Edge cyan”. Chat Portrait: karta rzutu nie dubluje portretu postaci (zostaje obrazek broni lub czaru).",
+      "Sequencer + JB2A: strzał lub cios od atakującego do każdego celu, pocisk czaru bojowego (chybienie, gdy atak nie wyszedł) i trafienie po przegranej obronie, widoczne dla wszystkich na scenie; moduł wybiera animacje, które są w Twojej wersji JB2A. Ustawienie świata: ataki i trafienia / tylko wybuchy / wyłączone.",
+      "Focused Concentration i Pain Resistance (moduły zychu) działają z silnikiem Edge: okno rzutu bierze kary z tych samych metod systemu, które te moduły zmieniają."
+    ],
+    "changes_en": [
+      "Combat tracker and Carousel Combat Tracker: \"roll initiative\" (one combatant, all, NPCs) rolls with the Edge engine — rank and dice from the system (also astral and Matrix initiative types), no window; the chat card keeps the +3 for 1 Edge button. NPCs and hidden combatants roll whispered to the GM. Through lib-wrapper when it is active.",
+      "Dice Tray and /r Nd6: a roll of bare d6 becomes an Edge test for the selected token (hits, glitches, Edge after the roll); other rolls are unchanged. A world setting turns it off.",
+      "Dice So Nice: the wild die in the \"Edge cyan\" colours. Chat Portrait: the roll card no longer repeats the character's portrait (the weapon or spell picture stays).",
+      "Sequencer + JB2A: a shot or blow from the attacker to each target, a combat spell's bolt (a miss when the attack failed) and an impact after a lost defense, seen by everyone on the scene; the module picks animations that exist in your JB2A version. World setting: attacks and impacts / blasts only / off.",
+      "Focused Concentration and Pain Resistance (zychu's modules) work with the Edge engine: the roll window takes the penalties from the same system methods those modules change."
+    ]
+  },
+  {
     "version": "0.42.1",
     "date": "2026-11-03",
     "changes": [

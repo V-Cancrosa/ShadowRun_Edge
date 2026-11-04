@@ -2060,6 +2060,20 @@
       "Cancels": "{status} znosi: {list} (s. 51–53).",
       "CancelRemove": "Zdejmij zniesione statusy",
       "CancelKeep": "Zostaw oba statusy"
+    },
+    "Integrations": {
+      "Pools": {
+        "Name": "Dice Tray i /r Nd6 jako pula Edge",
+        "Hint": "Rzut samymi kośćmi d6 (przyciski Dice Tray albo /r 6d6 na czacie) staje się testem Edge dla zaznaczonego żetonu: trafienia, komplikacje, Edge po rzucie. Inne rzuty bez zmian.",
+        "Label": "Pula {n} kości"
+      },
+      "Fx": {
+        "Name": "Animacje ataków (Sequencer + JB2A)",
+        "Hint": "Strzał lub cios od atakującego do celów, pocisk czaru bojowego i trafienie po obronie — widoczne dla wszystkich na scenie. Wybuchy granatów mają osobne ustawienie efektów sceny.",
+        "all": "Ataki, czary i trafienia",
+        "blasts": "Tylko wybuchy",
+        "off": "Wyłączone"
+      }
     }
   }
 }

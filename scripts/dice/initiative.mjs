@@ -33,8 +33,8 @@ function combatantOf(actor, combat = game.combat) {
  * an actor not yet fighting joins with its tokens on the viewed scene first (creating the combat when there is none),
  * as Foundry's own "roll initiative" does.
  */
-async function toTracker(actor, total) {
-  let c = combatantOf(actor);
+async function toTracker(actor, total, combatant = null) {
+  let c = combatant ?? combatantOf(actor);
   if (!c) {
     const tokens = actor.isToken ? [actor.token] : (actor.getActiveTokens?.(true, true) ?? []);
     const docs = tokens.map((t) => t?.document ?? t).filter((t) => t && t.parent?.id === canvas?.scene?.id);
@@ -83,7 +83,7 @@ function cardHtml(d) {
  * @param {Actor} actor
  * @param {{ base: number, dice: number, label: string }} ini  from the system's prepared initiative
  */
-export async function initiativeTest(actor, { base, dice, label }) {
+export async function initiativeTest(actor, { base, dice, label, quick = false, combatant = null, rollMode = null }) {
   const n = R.initiativeDice(dice);
   const { value } = edgeOf(actor);
   const locked = edgeLocked(actor) && !canBreakRules();
@@ -91,7 +91,8 @@ export async function initiativeTest(actor, { base, dice, label }) {
     ${ui2.tiles([{ id: "base", big: num(base), label: L("SRE.Roll.InitRank"), accent: true }, { id: "dice", big: `${n}D6`, label: L("SRE.Roll.InitDice") }, { id: "edge", big: value, label: "Edge" }])}
     ${ui2.panel(L("SRE.Roll.Modifiers"), ui2.rows([ui2.row(L("SRE.Roll.Modifier"), ui2.stepper("mod", 0, { min: -20, max: 20 }))]) + (locked ? "" : ui2.chips([ui2.chip("boost", L("SRE.Roll.InitBoost"), { value: "1 Edge" })])))}
   </div></div>`;
-  const o = ui2.okOnly(await foundry.applications.api.DialogV2.wait({
+  // From the combat tracker or the Carousel: no window (the +3 boost stays on the card for later).
+  const o = quick ? { mod: 0, boost: false } : ui2.okOnly(await foundry.applications.api.DialogV2.wait({
     classes: ["sre-dialog"], window: { title: label, icon: "fas fa-bolt" }, position: { width: 420 }, content,
     buttons: ui2.buttons(L("SRE.Roll.RollButton", { n }), (event, button) => {
       const f = new FormData(button.form);
@@ -111,13 +112,15 @@ export async function initiativeTest(actor, { base, dice, label }) {
   }
   const roll = await new Roll(`${n}d6`).evaluate();
   const faces = roll.dice[0]?.results.map((r) => r.result) ?? [];
-  const d = { actorUuid: actor.uuid, label, img: actor.img, base: num(base), faces, mod: o.mod, boosts };
+  const d = { actorUuid: actor.uuid, combatantUuid: combatant?.uuid ?? null, label, img: actor.img, base: num(base), faces, mod: o.mod, boosts };
   d.total = initiativeScore(d.base, faces, d);
-  d.tracked = await toTracker(actor, d.total);
-  return ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }), content: cardHtml(d), rolls: [roll], sound: CONFIG.sounds.dice,
+  d.tracked = await toTracker(actor, d.total, combatant);
+  const msg = {
+    speaker: ChatMessage.getSpeaker({ actor, token: combatant?.token ?? undefined }), content: cardHtml(d), rolls: [roll], sound: CONFIG.sounds.dice,
     flags: { [MODULE_ID]: { [FLAG]: d } },
-  });
+  };
+  ChatMessage.applyRollMode(msg, rollMode ?? game.settings.get("core", "rollMode"));
+  return ChatMessage.create(msg);
 }
 
 async function boostLater(message) {
@@ -129,7 +132,7 @@ async function boostLater(message) {
   await spendEdge(actor, 1);
   d.boosts += 1;
   d.total = initiativeScore(d.base, d.faces, d);
-  d.tracked = await toTracker(actor, d.total);
+  d.tracked = await toTracker(actor, d.total, d.combatantUuid ? fromUuidSync(d.combatantUuid) : null);
   return message.update({ content: cardHtml(d), [`flags.${MODULE_ID}.${FLAG}`]: d });
 }
 
@@ -208,4 +211,15 @@ export async function edgeAnytime(actor) {
     }
   }
   return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="sre-rc"><div class="sre-rc-edge"><i class="fas fa-bolt"></i> ${esc(text)} (${cost} Edge)</div></div>` });
+}
+
+/** Initiative rank and dice of a combatant for its initiative type (the system's iniType flag). Pure-ish. */
+export function initiativeOf(combatant) {
+  const actor = combatant?.actor;
+  const type = combatant?.getFlag?.("shadowrun6-eden", "iniType") ?? "physical";
+  const ini = actor?.system?.initiative?.[type] ?? actor?.system?.initiative?.physical ?? actor?.system?.initiative?.matrix ?? {};
+  return {
+    base: num(ini.pool, num(ini.rank)), dice: num(ini.dicePool, num(ini.dice, 1)),
+    label: `${game.i18n?.localize?.(`SRE.Sheet.Initiative.${type}`) ?? type}: ${combatant?.name ?? actor?.name ?? ""}`,
+  };
 }

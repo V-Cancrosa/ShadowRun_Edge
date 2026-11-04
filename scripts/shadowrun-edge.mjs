@@ -25,6 +25,7 @@ import "./welcome.mjs";
 import "./roll-dialog.mjs";
 import "./dice/edge-roll.mjs";
 import "./dice/combat-chain.mjs";
+import "./integrations.mjs";
 import { edgeAnytime } from "./dice/initiative.mjs";
 import { rollFromMacro } from "./dice/macros.mjs";
 import "./ui/conflict.mjs";

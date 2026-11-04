@@ -2060,6 +2060,20 @@
       "Cancels": "{status} cancels: {list} (pp. 51–53).",
       "CancelRemove": "Remove the cancelled statuses",
       "CancelKeep": "Keep both statuses"
+    },
+    "Integrations": {
+      "Pools": {
+        "Name": "Dice Tray and /r Nd6 as an Edge pool",
+        "Hint": "A roll of bare d6 (Dice Tray buttons or /r 6d6 in the chat) becomes an Edge test for the selected token: hits, glitches, Edge after the roll. Other rolls are unchanged.",
+        "Label": "Pool of {n} dice"
+      },
+      "Fx": {
+        "Name": "Attack animations (Sequencer + JB2A)",
+        "Hint": "A shot or blow from the attacker to the targets, a combat spell's bolt and an impact after the defense — seen by everyone on the scene. Grenade blasts have their own scene effects setting.",
+        "all": "Attacks, spells and impacts",
+        "blasts": "Blasts only",
+        "off": "Off"
+      }
     }
   }
 }

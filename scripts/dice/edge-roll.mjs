@@ -395,6 +395,8 @@ async function throwDice(n, { wild = false, explode = false } = {}) {
   const x = explode ? "x6" : "";
   const formula = wild ? (n > 1 ? `1d6${x}[wild] + ${n - 1}d6${x}` : `1d6${x}[wild]`) : `${n}d6${x}`;
   const roll = await new Roll(formula).evaluate();
+  // Dice So Nice: the wild die in the module's "Edge cyan" colorset.
+  if (wild && roll.dice[0]) roll.dice[0].options.appearance = { ...(roll.dice[0].options.appearance ?? {}), colorset: "sre-edge-cyan" };
   const dice = [];
   roll.dice.forEach((term, t) => {
     const count = wild && t === 0 ? 1 : wild ? n - 1 : n;
@@ -478,7 +480,9 @@ export async function edgeTest(actor, req, options = null) {
   }
 
   const data = {
-    v: 1, actorUuid: actor.uuid, kind: req.kind, title: req.title ?? "", label: req.label, img: req.img ?? actor.img,
+    // Chat Portrait already shows the character's portrait: the card shows only an item's picture then.
+    v: 1, actorUuid: actor.uuid, kind: req.kind, title: req.title ?? "", label: req.label,
+    img: req.img ?? (game.modules?.get?.("chat-portrait")?.active ? "" : actor.img),
     pool, basePool: num(req.pool), mods: { mod: o.mod, wound: o.wound, sustain: o.sustain, retry: o.retry, untrained: o.untrainedFix, status: num(o.status), statusNames: o.statusNames ?? [] },
     threshold: num(o.threshold) || num(req.threshold), wild: !!o.wild, buy: !!o.buy, twos, explode,
     dice, first, edge, gained, notes,
