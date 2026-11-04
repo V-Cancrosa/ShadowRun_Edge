@@ -207,3 +207,16 @@ export async function takeCover(actor) {
   return effect?.update({ "system.level": level });
 }
 
+
+// ── Unconscious and dead from the condition monitors (p. 38; Overflow p. 121) ──
+// The system sets them when its own sheet, token bars or damage change a monitor (Actor#checkUnconscious); the
+// Edge sheets, healing and other module changes write the monitors directly, so the same check runs after any
+// change of physical, stun or overflow damage — once, on the client that made it.
+export function monitorChanged(changes) {
+  const s = changes?.system ?? {};
+  return ["physical", "stun", "overflow"].some((k) => s[k] && "dmg" in s[k]);
+}
+Hooks.on("updateActor", (actor, changes, options, userId) => {
+  if (userId !== game.user.id || !monitorChanged(changes) || typeof actor.checkUnconscious !== "function") return;
+  actor.checkUnconscious();
+});

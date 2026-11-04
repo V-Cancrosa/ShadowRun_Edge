@@ -1,5 +1,15 @@
 [
   {
+    "version": "0.41.4",
+    "date": "2026-11-03",
+    "changes": [
+      "Nieprzytomny i Martwy nakładają się po każdej zmianie monitorów, także z kart Edge, leczenia i obrażeń modułu: pełny monitor fizyczny lub ogłuszenia = Nieprzytomny (s. 38), pełny monitor nadmiarowych obrażeń = Martwy (s. 121) — tą samą kontrolą, której używa system przy swojej karcie i paskach żetonu."
+    ],
+    "changes_en": [
+      "Unconscious and Dead are set after any change of the condition monitors, also from the Edge sheets, healing and module damage: a full Physical or Stun monitor = Unconscious (p. 38), a full Overflow monitor = Dead (p. 121) — with the same check the system uses for its sheet and token bars."
+    ]
+  },
+  {
     "version": "0.41.3",
     "date": "2026-11-03",
     "changes": [

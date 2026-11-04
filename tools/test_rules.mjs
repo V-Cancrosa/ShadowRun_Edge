@@ -628,3 +628,10 @@ console.log("blast & summoning OK");
   assert.deepEqual(tree, ["ol#list", "  li.directory-item", "  li.directory-item", "  … 2 × li.directory-item"], "repeats collapse");
   console.log("ui skeleton OK");
 }
+{
+  const { monitorChanged } = await import("../scripts/statuses.mjs");
+  assert.equal(monitorChanged({ system: { physical: { dmg: 13 } } }), true);
+  assert.equal(monitorChanged({ system: { overflow: { dmg: 2 } } }), true);
+  assert.equal(monitorChanged({ system: { edge: { value: 2 } } }), false);
+  console.log("monitor statuses OK");
+}
