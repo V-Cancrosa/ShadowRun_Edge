@@ -1,5 +1,17 @@
 [
   {
+    "version": "0.41.3",
+    "date": "2026-11-03",
+    "changes": [
+      "Inicjatywa z karty Edge trafia do trackera walki i do karuzeli także wtedy, gdy postać nie była jeszcze w walce: jej żeton na scenie dołącza do walki (walka powstaje, jeśli jej nie ma), jak przy rzucie z trackera Foundry. Gdy gracz nie może zmienić uczestnika, wynik wpisuje MG automatycznie.",
+      "Ikony przycisków w trackerze walki i karuzeli (obok „End Combat”) znów są ikonami: moduł odczytuje czcionkę ikon, której używa Twój Foundry, i nie nadpisuje jej krojem Edge."
+    ],
+    "changes_en": [
+      "Initiative from the Edge card goes into the combat tracker and the Carousel even when the character was not fighting yet: its token on the scene joins the combat (a combat is created when there is none), as with Foundry's own roll from the tracker. When a player may not change the combatant, the GM's client sets the score automatically.",
+      "Icon buttons in the combat tracker and the Carousel (next to \"End Combat\") are icons again: the module reads the icon font your Foundry uses and no longer replaces it with the Edge face."
+    ]
+  },
+  {
     "version": "0.41.2",
     "date": "2026-11-03",
     "changes": [

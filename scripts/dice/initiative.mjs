@@ -22,17 +22,49 @@ export function initiativeScore(base, faces, { mod = 0, boosts = 0 } = {}) {
   return num(base) + faces.reduce((s, f) => s + num(f), 0) + num(mod) + 3 * num(boosts);
 }
 
-function combatantOf(actor) {
-  const combat = game.combat;
+function combatantOf(actor, combat = game.combat) {
   if (!combat || !actor) return null;
-  return combat.combatants.find((c) => c.actor?.id === actor.id) ?? null;
+  const base = actor.isToken ? actor.token?.baseActor ?? actor : actor;
+  return combat.combatants.find((c) => (actor.isToken ? c.tokenId === actor.token?.id : c.actor?.id === base.id)) ?? null;
 }
 
+/**
+ * Puts the score into the combat tracker (and so into the Carousel, which reads it): the actor's combatant gets it;
+ * an actor not yet fighting joins with its tokens on the viewed scene first (creating the combat when there is none),
+ * as Foundry's own "roll initiative" does.
+ */
 async function toTracker(actor, total) {
-  const c = combatantOf(actor);
-  if (c?.isOwner) await c.update({ initiative: total });
-  return !!c;
+  let c = combatantOf(actor);
+  if (!c) {
+    const tokens = actor.isToken ? [actor.token] : (actor.getActiveTokens?.(true, true) ?? []);
+    const docs = tokens.map((t) => t?.document ?? t).filter((t) => t && t.parent?.id === canvas?.scene?.id);
+    if (!docs.length) return false;
+    try {
+      const TD = foundry.documents?.TokenDocument ?? TokenDocument;
+      await (TD.implementation ?? TD).createCombatants(docs);
+    } catch (err) {
+      console.warn("shadowrun-edge | initiative: could not join combat", err);
+      return false;
+    }
+    c = combatantOf(actor);
+  }
+  if (!c) return false;
+  if (c.isOwner) await c.combat.setInitiative(c.id, total);
+  else if (game.users.activeGM) game.socket.emit("module.shadowrun-edge", { type: "sre-init", combatId: c.combat.id, combatantId: c.id, total });
+  return true;
 }
+
+Hooks.once("ready", () => {
+  game.socket.on("module.shadowrun-edge", async (data, senderId) => {
+    if (data?.type !== "sre-init" || !game.users.activeGM?.isSelf) return;
+    const combat = game.combats.get(data.combatId);
+    const c = combat?.combatants.get(data.combatantId);
+    const user = game.users.get(senderId);
+    // Only for a combatant whose actor the sender owns.
+    if (!c || !user || !c.actor?.testUserPermission(user, "OWNER")) return;
+    await combat.setInitiative(c.id, Number(data.total) || 0);
+  });
+});
 
 function cardHtml(d) {
   const faces = d.faces.map((f, i) => `<span style="--i:${i}" class="sre-die${f >= 5 ? " hit" : ""}">${f}</span>`).join("");

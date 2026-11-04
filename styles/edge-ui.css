@@ -272,7 +272,8 @@ body.sre-ui-3 #combat .combat-tracker li.combatant.active { border-left-color: v
 body.sre-ui-3 #combat .combat-tracker li.combatant img.token-image { border: 1px solid var(--sre-accent-line); border-radius: 0; clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%); }
 body.sre-ui-3 #combat .combat-tracker li.combatant strong.name { font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; }
 body.sre-ui-3 #combat .combat-tracker li.combatant .token-initiative input.initiative-input { font-family: var(--sre-font-display, inherit); font-weight: 700; color: var(--sre-accent); background: transparent; border: none; text-align: center; }
-body.sre-ui-3 #combat nav.combat-controls button.combat-control { border: 1px solid var(--sre-accent); background: var(--sre-accent-soft); color: var(--sre-text); border-radius: 0; font-family: var(--sre-font-display, inherit); letter-spacing: 0.1em; text-transform: uppercase; }
+body.sre-ui-3 #combat nav.combat-controls button.combat-control { border: 1px solid var(--sre-accent); background: var(--sre-accent-soft); color: var(--sre-text); border-radius: 0; }
+body.sre-ui-3 #combat nav.combat-controls button.combat-control:not(.icon) { font-family: var(--sre-font-display, inherit); letter-spacing: 0.1em; text-transform: uppercase; }
 
 /* Dice So Nice sidebar tab. */
 body.sre-ui-3 #dice-so-nice .dsn-sidebar-title { font-family: var(--sre-font-display, inherit); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sre-accent); }
@@ -468,10 +469,12 @@ body.sre-ui-3 #loading #loading-bar { border-radius: 0; border: 1px solid var(--
 
 /* Carousel Combat Tracker: its buttons are Font Awesome icons; the display face set through --carousel-font-family
    must not replace the icon font (the icons showed as empty boxes). */
-body.sre-ui-3 .combat-dock :is(.fas, .fa-solid, .fa) { font-family: var(--fa-style-family-classic, "Font Awesome 6 Pro"), "Font Awesome 6 Free"; font-weight: 900; }
-body.sre-ui-3 .combat-dock :is(.far, .fa-regular) { font-family: var(--fa-style-family-classic, "Font Awesome 6 Pro"), "Font Awesome 6 Free"; font-weight: 400; }
-body.sre-ui-3 .combat-dock :is(.fal, .fa-light) { font-family: var(--fa-style-family-classic, "Font Awesome 6 Pro"); font-weight: 300; }
-body.sre-ui-3 #interface :is(button, a, i).icon:is(.fas, .fa-solid) { font-family: var(--fa-style-family-classic, "Font Awesome 6 Pro"), "Font Awesome 6 Free"; font-weight: 900; }
+body.sre-ui-3 :is(#interface, #sidebar, .combat-dock) :is(.fas, .fa-solid, .fa, .far, .fa-regular, .fal, .fa-light):not(i) {
+  font-family: var(--sre-icon-font, "Font Awesome 6 Pro", "Font Awesome 7 Pro", "Font Awesome 6 Free") !important;
+}
+body.sre-ui-3 :is(#interface, #sidebar, .combat-dock) :is(.fas, .fa-solid, .fa):not(i) { font-weight: 900; }
+body.sre-ui-3 :is(#interface, #sidebar, .combat-dock) :is(.far, .fa-regular):not(i) { font-weight: 400; }
+body.sre-ui-3 :is(#interface, #sidebar, .combat-dock) :is(.fal, .fa-light):not(i) { font-weight: 300; }
 
 /* Break Time: a grid of player tiles — portrait, name, character, and the state in words (back green, away amber). */
 body.sre-ui-3 #breaktime-app .break-start { display: flex; align-items: center; gap: 6px; font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; color: var(--sre-text); }

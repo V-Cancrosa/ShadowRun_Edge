@@ -57,6 +57,16 @@ Hooks.once("ready", () => {
   document.body.style.setProperty("--sre-bt-back", q("SRE.UI.BreakBack"));
   document.body.style.setProperty("--sre-bt-away", q("SRE.UI.BreakAway"));
   document.body.style.setProperty("--sre-pause-sub", q("SRE.UI.PauseSub"));
+  // The icon font Foundry ships (Font Awesome 6 or 7, Pro or Free), read from one of its own icons: rules that put
+  // the Edge face on buttons give icon buttons this font back, whatever the version.
+  // A probe outside the interface, so no module rule touches it.
+  const icon = document.createElement("i");
+  icon.className = "fa-solid fa-dice";
+  icon.style.cssText = "position:absolute;visibility:hidden;pointer-events:none";
+  document.body.append(icon);
+  const family = getComputedStyle(icon).fontFamily;
+  icon.remove();
+  if (family && !/chakra|signika/i.test(family)) document.body.style.setProperty("--sre-icon-font", family);
 });
 
 /** New chat messages slide in (only fresh ones, with full animations). */
