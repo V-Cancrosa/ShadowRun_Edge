@@ -16,6 +16,7 @@
     "pl": "Edge w całym interfejsie",
     "en": "Edge across the interface",
     "versions": [
+      "0.41.1",
       "0.36.3",
       "0.36.2",
       "0.36.1",

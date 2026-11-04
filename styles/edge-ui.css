@@ -401,3 +401,65 @@ body.sre-ui-3.sre-theme-light #sidebar :is(.directory-header .header-actions but
   color: #2b2925; background: #f7f5f0; border-color: rgba(163, 59, 110, 0.35);
 }
 body.sre-ui-3.sre-theme-light #sidebar .directory-item.folder > header.folder-header { color: #fff; }
+
+/* ═════════════════ 0.41.1: Foundry 14 paints its panels on inner blocks and through its own variables ═════════════════ */
+
+/* Foundry's interface palette (the cool greys of its dark theme and its control variables), set to the Edge palette
+   inside the interface, so every panel Foundry draws with them — including ones the module has no rule for — follows. */
+body.sre-ui-3.sre-theme-dark #interface {
+  --color-cool-5: #101117; --color-cool-5-90: rgba(16, 17, 23, 0.94); --color-cool-5-75: rgba(16, 17, 23, 0.88); --color-cool-5-50: rgba(16, 17, 23, 0.6);
+  --color-cool-4: rgba(224, 64, 154, 0.32); --color-cool-3: #2a2b38;
+  --control-bg-color: var(--sre-ctl-bg); --control-border-color: var(--sre-ctl-border); --control-icon-color: var(--sre-ctl-icon);
+  --control-hover-bg-color: rgba(63, 212, 232, 0.12); --control-hover-border-color: var(--sre-ctl-hover); --control-hover-icon-color: var(--sre-ctl-hover);
+  --control-active-bg-color: var(--sre-ctl-on-bg); --control-active-border-color: var(--sre-ctl-on-border); --control-active-icon-color: var(--sre-ctl-on-icon);
+}
+body.sre-ui-3.sre-theme-light #interface {
+  --color-cool-5: #f7f5f0; --color-cool-5-90: rgba(247, 245, 240, 0.96); --color-cool-5-75: rgba(247, 245, 240, 0.92); --color-cool-5-50: rgba(247, 245, 240, 0.7);
+  --color-cool-4: rgba(163, 59, 110, 0.32); --color-cool-3: rgba(60, 50, 40, 0.2);
+  --color-text-primary: #2b2925; --color-text-secondary: #6e6a62; --color-text-emphatic: #1a1815; --color-text-subtle: #8a857b;
+  --control-bg-color: var(--sre-ctl-bg); --control-border-color: var(--sre-ctl-border); --control-icon-color: var(--sre-ctl-icon);
+  --control-hover-bg-color: rgba(44, 116, 128, 0.12); --control-hover-border-color: var(--sre-ctl-hover); --control-hover-icon-color: var(--sre-ctl-hover);
+  --control-active-bg-color: var(--sre-ctl-on-bg); --control-active-border-color: var(--sre-ctl-on-border); --control-active-icon-color: var(--sre-ctl-on-icon);
+}
+
+/* Players: the outer aside is only a column; the two lists inside are the panels. */
+body.sre-ui-3 aside#players { background: none; border: none; box-shadow: none; gap: 4px; }
+body.sre-ui-3 #players :is(#players-inactive, #players-active) {
+  background: var(--sre-ctl-bg); border: 1px solid var(--sre-ctl-border); border-left: 3px solid var(--sre-cyan); border-radius: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+}
+body.sre-ui-3 #players #players-inactive { border-left-color: var(--sre-line); }
+body.sre-ui-3 #players #players-inactive .player-name { color: var(--sre-text-dim); }
+body.sre-ui-3 #players #players-active .player-name { color: var(--sre-text); }
+body.sre-ui-3 #players li.player.self .player-name { color: var(--sre-accent); }
+body.sre-ui-3 #players .breaktime-button {
+  background: transparent; color: var(--sre-text); border-radius: 0; text-align: center; padding: 3px 6px; margin: 4px 0;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 94% 100%, 0 100%);
+}
+body.sre-ui-3 #players .breaktime-button:hover { background: var(--sre-accent-soft); border-color: var(--sre-accent); }
+body.sre-ui-3 #players #performance-stats { color: var(--sre-text-dim); }
+body.sre-ui-3 #players #performance-stats .good .average { color: var(--sre-ok); }
+body.sre-ui-3 #players #players-expand { color: var(--sre-ctl-icon); background: transparent; border: none; }
+
+/* Faded panels (Foundry's .faded-ui) stay legible: they dim less and come back fully on hover. */
+body.sre-ui-3 #interface .faded-ui { --ui-fade-opacity: 0.85; }
+body.sre-ui-3 #interface .faded-ui:hover { opacity: 1; }
+
+/* Hotbar bar and scene navigation menus (inner blocks with their own grounds). */
+body.sre-ui-3 #hotbar #action-bar { background: transparent; gap: 3px; }
+body.sre-ui-3 #hotbar .hotbar-controls .ui-control { clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%); }
+body.sre-ui-3 #scene-navigation li.ui-control.scene:not(.view) { background: var(--sre-ctl-bg); color: var(--sre-ctl-icon); }
+body.sre-ui-3 #scene-navigation #scene-navigation-expand { border-radius: 0; }
+body.sre-ui-3 #scene-navigation .scene-players .scene-player { border-radius: 0; box-shadow: 0 0 0 1px var(--sre-line); }
+
+/* Combat tracker controls in the sidebar (Foundry 14 inline controls). */
+body.sre-ui-3 #combat .encounter-controls .inline-control,
+body.sre-ui-3 #combat nav.encounters .inline-control { color: var(--sre-ctl-icon); border-radius: 0; }
+body.sre-ui-3 #combat :is(.encounter-controls, nav.encounters) .inline-control:hover { color: var(--sre-ctl-hover); text-shadow: 0 0 8px var(--sre-ctl-hover); }
+body.sre-ui-3 #combat nav.encounters .inline-control.active { color: var(--sre-ctl-on-icon); box-shadow: inset 0 -2px 0 var(--sre-ctl-on-border); }
+body.sre-ui-3 #combat .combatant .combatant-control { color: var(--sre-ctl-icon); }
+body.sre-ui-3 #combat .combatant .combatant-control:hover { color: var(--sre-ctl-hover); }
+
+/* Tooltip and loading bar. */
+body.sre-ui-3 #tooltip { background: var(--sre-ctl-bg); border: 1px solid var(--sre-accent-line); border-radius: 0; color: var(--sre-text); font-family: var(--sre-font-display, inherit); letter-spacing: 0.04em; }
+body.sre-ui-3 #loading #loading-bar { border-radius: 0; border: 1px solid var(--sre-accent-line); background: var(--sre-ctl-bg); }

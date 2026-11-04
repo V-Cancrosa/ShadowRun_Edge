@@ -1,5 +1,15 @@
 [
   {
+    "version": "0.41.1",
+    "date": "2026-11-03",
+    "changes": [
+      "Wygląd Edge dokładniej w Foundry 14: panel graczy malowany na jego wewnętrznych blokach (aktywni i nieaktywni gracze, przycisk przerwy, statystyki), przygaszone panele (.faded-ui) czytelniejsze i pełne po najechaniu, paleta interfejsu Foundry (jego szarości i zmienne przycisków) ustawiona na kolory Edge, więc panele bez osobnej reguły też przechodzą na wygląd Edge; dopracowane menu sceny, pasek makr, przyciski trackera walki, podpowiedzi i pasek ładowania."
+    ],
+    "changes_en": [
+      "The Edge look fits Foundry 14 more closely: the players panel is painted on its inner blocks (active and inactive players, the break button, stats), faded panels (.faded-ui) stay legible and come back fully on hover, Foundry's interface palette (its greys and control variables) is set to the Edge colours so panels without their own rule follow too; refined scene menu, hotbar, combat tracker controls, tooltips and the loading bar."
+    ]
+  },
+  {
     "version": "0.41.0",
     "date": "2026-11-03",
     "changes": [
