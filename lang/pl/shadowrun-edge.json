@@ -1941,7 +1941,10 @@
       "DumpCopied": "Skopiowano szkielet interfejsu — wklej go w rozmowie.",
       "DumpTitle": "Diagnostyka wyglądu (Shadowrun Edge)",
       "DumpHint": "Szkielet interfejsu: same klasy i identyfikatory, bez treści czatu i nazw. Kliknij „Kopiuj” albo zaznacz całość (Ctrl+A, Ctrl+C) i wklej w rozmowie.",
-      "DumpCopy": "Kopiuj"
+      "DumpCopy": "Kopiuj",
+      "BreakBack": "Wrócił",
+      "BreakAway": "Przerwa",
+      "PauseSub": "MG zatrzymał czas"
     },
     "Chain": {
       "Targets": "Cele",

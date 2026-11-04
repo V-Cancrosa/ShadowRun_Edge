@@ -1941,7 +1941,10 @@
       "DumpCopied": "The interface skeleton is copied — paste it into the conversation.",
       "DumpTitle": "Look diagnostics (Shadowrun Edge)",
       "DumpHint": "The interface skeleton: classes and ids only, no chat content or names. Click “Copy” or select all (Ctrl+A, Ctrl+C) and paste it into the conversation.",
-      "DumpCopy": "Copy"
+      "DumpCopy": "Copy",
+      "BreakBack": "Back",
+      "BreakAway": "Away",
+      "PauseSub": "The GM stopped time"
     },
     "Chain": {
       "Targets": "Targets",

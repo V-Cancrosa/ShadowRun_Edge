@@ -342,9 +342,14 @@ function showBanner({ kind, title, sub }) {
   bannerTimer = setTimeout(() => el.remove(), level() === "full" ? 1800 : 1400);
 }
 
-Hooks.on("updateCombat", (combat, changed) => {
-  if (!("turn" in changed) && !("round" in changed)) return;
-  if (!combat.started || level() === "off") return;
+/** Shows the banner once per combat turn (several hooks may report the same change; Foundry 14 and the
+ * Carousel Combat Tracker advance turns differently, so every way of noticing a new turn is listened to). */
+const bannerSeen = new Map(); // combat id → "round:turn" shown last
+export function bannerKey(combat) {
+  return `${combat?.round ?? 0}:${combat?.turn ?? 0}:${combat?.combatant?.id ?? ""}`;
+}
+function maybeBanner(combat) {
+  if (!combat?.started || level() === "off") return;
   let on = true;
   try {
     on = game.settings.get(MODULE_ID, "turnBanner");
@@ -352,11 +357,26 @@ Hooks.on("updateCombat", (combat, changed) => {
     /* not registered */
   }
   if (!on) return;
+  const key = bannerKey(combat);
+  if (bannerSeen.get(combat.id) === key) return;
+  bannerSeen.set(combat.id, key);
   const c = combat.combatant;
   if (!c) return;
   const L = (k) => game.i18n.localize(k);
   const banner = bannerFor({ isGM: game.user.isGM, owned: !!c.actor?.isOwner || !!c.isOwner, name: c.name, initiative: c.initiative, round: combat.round, L });
   if (banner) showBanner(banner);
+}
+Hooks.on("updateCombat", (combat, changed) => {
+  if (changed && !("turn" in changed) && !("round" in changed) && !("started" in changed) && !("active" in changed)) return;
+  // The combat's own data is updated after this hook in some versions: read it on the next frame.
+  requestAnimationFrame(() => maybeBanner(combat));
+});
+Hooks.on("combatTurnChange", (combat) => requestAnimationFrame(() => maybeBanner(combat)));
+Hooks.on("combatRound", (combat) => requestAnimationFrame(() => maybeBanner(combat)));
+Hooks.on("combatStart", (combat) => requestAnimationFrame(() => maybeBanner(combat)));
+// Once ready, the turn already running is not announced again.
+Hooks.once("ready", () => {
+  for (const c of game.combats ?? []) if (c.started) bannerSeen.set(c.id, bannerKey(c));
 });
 
 // ───── 13B: the Edge engine's own roll card gets the same motion ─────

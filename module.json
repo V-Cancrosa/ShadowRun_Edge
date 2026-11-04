@@ -2,7 +2,7 @@
   "id": "shadowrun-edge",
   "title": "Shadowrun Edge",
   "description": "Moduł do systemu Shadowrun 6th Edition (shadowrun6-eden): polskie tłumaczenie, Karty Edge (postać, NPC, duch, pojazd, host), katalog sprzętu, magii i cech, kreatory postaci i przedmiotów, stany, toksyny, leczenie, granaty, duchy, Matrix, pojazdy i rozwój za Karmę — bez zmian w kodzie systemu. / Companion module for Shadowrun 6th Edition: Edge sheets, a catalog of gear, magic and qualities, creators, statuses, toxins, healing, grenades, spirits, Matrix, vehicles and Karma advancement; Polish translation, English UI.",
-  "version": "0.41.1",
+  "version": "0.41.2",
   "compatibility": {
     "minimum": "13",
     "verified": "14"

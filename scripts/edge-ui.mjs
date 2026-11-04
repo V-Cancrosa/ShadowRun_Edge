@@ -54,6 +54,9 @@ Hooks.once("ready", () => {
   const q = (k) => JSON.stringify(game.i18n.localize(k));
   document.body.style.setProperty("--sre-whisper-label", q("SRE.UI.Whisper"));
   document.body.style.setProperty("--sre-blind-label", q("SRE.UI.Blind"));
+  document.body.style.setProperty("--sre-bt-back", q("SRE.UI.BreakBack"));
+  document.body.style.setProperty("--sre-bt-away", q("SRE.UI.BreakAway"));
+  document.body.style.setProperty("--sre-pause-sub", q("SRE.UI.PauseSub"));
 });
 
 /** New chat messages slide in (only fresh ones, with full animations). */

@@ -463,3 +463,55 @@ body.sre-ui-3 #combat .combatant .combatant-control:hover { color: var(--sre-ctl
 /* Tooltip and loading bar. */
 body.sre-ui-3 #tooltip { background: var(--sre-ctl-bg); border: 1px solid var(--sre-accent-line); border-radius: 0; color: var(--sre-text); font-family: var(--sre-font-display, inherit); letter-spacing: 0.04em; }
 body.sre-ui-3 #loading #loading-bar { border-radius: 0; border: 1px solid var(--sre-accent-line); background: var(--sre-ctl-bg); }
+
+/* ═════════════════ 0.41.2: as the stage-12 mockups ═════════════════ */
+
+/* Carousel Combat Tracker: its buttons are Font Awesome icons; the display face set through --carousel-font-family
+   must not replace the icon font (the icons showed as empty boxes). */
+body.sre-ui-3 .combat-dock :is(.fas, .fa-solid, .fa) { font-family: var(--fa-style-family-classic, "Font Awesome 6 Pro"), "Font Awesome 6 Free"; font-weight: 900; }
+body.sre-ui-3 .combat-dock :is(.far, .fa-regular) { font-family: var(--fa-style-family-classic, "Font Awesome 6 Pro"), "Font Awesome 6 Free"; font-weight: 400; }
+body.sre-ui-3 .combat-dock :is(.fal, .fa-light) { font-family: var(--fa-style-family-classic, "Font Awesome 6 Pro"); font-weight: 300; }
+body.sre-ui-3 #interface :is(button, a, i).icon:is(.fas, .fa-solid) { font-family: var(--fa-style-family-classic, "Font Awesome 6 Pro"), "Font Awesome 6 Free"; font-weight: 900; }
+
+/* Break Time: a grid of player tiles — portrait, name, character, and the state in words (back green, away amber). */
+body.sre-ui-3 #breaktime-app .break-start { display: flex; align-items: center; gap: 6px; font-family: var(--sre-font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase; color: var(--sre-text); }
+body.sre-ui-3 #breaktime-app .remaining-timer { font: 700 22px var(--sre-font-display, inherit); color: var(--sre-warn); background: transparent; border: none; letter-spacing: 0.1em; }
+body.sre-ui-3 #breaktime-app .breaktime-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+body.sre-ui-3 #breaktime-app .breaktime-container .breaktime-player {
+  position: relative; display: grid; grid-template-rows: auto auto auto; justify-items: center; gap: 2px; padding: 8px 6px 22px; text-align: center;
+  border: 1px solid var(--sre-line); border-left-width: 1px; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+body.sre-ui-3 #breaktime-app .breaktime-container .breaktime-player.back { border-color: var(--sre-ok); box-shadow: inset 0 0 14px rgba(79, 214, 138, 0.15); }
+body.sre-ui-3 #breaktime-app .breaktime-container .breaktime-player.away { border-color: var(--sre-warn); }
+body.sre-ui-3 #breaktime-app .breaktime-avatar { width: 64px; height: 64px; background: #0d0e14; }
+body.sre-ui-3 #breaktime-app .breaktime-avatar img { width: 64px; height: 64px; object-fit: cover; }
+body.sre-ui-3 #breaktime-app .breaktime-details { display: grid; justify-items: center; }
+body.sre-ui-3 #breaktime-app .breaktime-marker { display: none; }
+body.sre-ui-3 #breaktime-app .breaktime-player.back::after,
+body.sre-ui-3 #breaktime-app .breaktime-player.away::after {
+  position: absolute; bottom: 4px; left: 0; right: 0; font: 700 10px/1.2 var(--sre-font-display, sans-serif); letter-spacing: 0.14em; text-transform: uppercase;
+}
+body.sre-ui-3 #breaktime-app .breaktime-player.back::after { content: var(--sre-bt-back, "✓"); color: var(--sre-ok); }
+body.sre-ui-3 #breaktime-app .breaktime-player.away::after { content: var(--sre-bt-away, "…"); color: var(--sre-warn); }
+
+/* Pause: big split-colour caption with a line under it ("the GM stopped time"). */
+body.sre-ui-3 figure#pause figcaption.glitch { font-size: 2.6em; font-weight: 700; text-transform: uppercase; color: #fff; }
+body.sre-ui-3 figure#pause figcaption.glitch::after {
+  content: var(--sre-pause-sub, ""); display: block; margin-top: 6px; font-size: 0.32em; letter-spacing: 0.24em; color: var(--sre-accent); text-shadow: none;
+}
+
+/* Notifications: dark panel with a coloured edge per kind. */
+body.sre-ui-3 #notifications .notification {
+  background: var(--sre-ctl-bg); color: var(--sre-text); border: 1px solid var(--sre-line); border-left: 3px solid var(--sre-cyan); border-radius: 0;
+  font-family: var(--sre-font-display, inherit); letter-spacing: 0.03em; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+body.sre-ui-3 #notifications .notification.warning { border-left-color: var(--sre-warn); }
+body.sre-ui-3 #notifications .notification.error { border-left-color: var(--sre-bad); }
+body.sre-ui-3 #notifications .notification.success { border-left-color: var(--sre-ok); }
+body.sre-ui-3 #context-menu { background: var(--sre-ctl-bg); border: 1px solid var(--sre-accent-line); border-radius: 0; }
+body.sre-ui-3 #context-menu .context-item:hover { background: var(--sre-accent-soft); box-shadow: inset 3px 0 0 var(--sre-accent); }
+
+/* Players: as dark as the mockup even while Foundry fades the panel. */
+body.sre-ui-3 #players :is(#players-inactive, #players-active) { background: rgba(10, 11, 16, 0.94); }
+body.sre-ui-3.sre-theme-light #players :is(#players-inactive, #players-active) { background: rgba(247, 245, 240, 0.97); }
+body.sre-ui-3 #players .breaktime-button { border: 1px solid var(--sre-accent-line); font-family: var(--sre-font-display, inherit); letter-spacing: 0.08em; text-transform: uppercase; }

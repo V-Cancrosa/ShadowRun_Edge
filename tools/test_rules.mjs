@@ -520,7 +520,10 @@ console.log("blast & summoning OK");
 // ── Edge Motion: turn banner ──
 {
   const assert = (await import("node:assert/strict")).default;
-  const { bannerFor } = await import("../scripts/motion.mjs");
+  const { bannerFor, bannerKey } = await import("../scripts/motion.mjs");
+  // One banner per turn whichever hook reports it (updateCombat, combatTurnChange, combatRound, combatStart).
+  assert.equal(bannerKey({ round: 2, turn: 1, combatant: { id: "c1" } }), "2:1:c1");
+  assert.notEqual(bannerKey({ round: 2, turn: 1, combatant: { id: "c1" } }), bannerKey({ round: 3, turn: 1, combatant: { id: "c1" } }));
   assert.deepEqual(bannerFor({ isGM: false, owned: true, name: "Glitch", initiative: 21, round: 2 }), { kind: "mine", title: "SRE.Motion.Banner.Yours", sub: "Glitch · SRE.Motion.Banner.Initiative 21 · SRE.Motion.Banner.Round 2" });
   assert.equal(bannerFor({ isGM: false, owned: false, name: "Pająk", initiative: 24, round: 2 }), null, "other players' turns: nothing");
   assert.equal(bannerFor({ isGM: true, owned: true, name: "Pająk", initiative: 24, round: 2 }).kind, "gm");

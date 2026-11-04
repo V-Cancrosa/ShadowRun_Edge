@@ -1,5 +1,21 @@
 [
   {
+    "version": "0.41.2",
+    "date": "2026-11-03",
+    "changes": [
+      "Baner tury działa niezależnie od tego, jak tura się zmienia (tracker Foundry 14, Carousel Combat Tracker, start walki, nowa runda) — raz na turę.",
+      "Carousel Combat Tracker: przyciski znów pokazują ikony (krój Edge nie zastępuje już czcionki ikon).",
+      "Break Time jak na makiecie z etapu 12: kafle graczy z portretem, imieniem i postacią oraz stanem słownie (Wrócił na zielono, Przerwa na pomarańczowo), licznik przerwy w kroju Edge.",
+      "Pauza: duży napis z przesunięciem barw i podpis „MG zatrzymał czas”; powiadomienia i menu kontekstowe w ramkach Edge; panel graczy ciemny także wtedy, gdy Foundry go przygasza."
+    ],
+    "changes_en": [
+      "The turn banner works however the turn changes (Foundry 14 tracker, Carousel Combat Tracker, combat start, new round) — once per turn.",
+      "Carousel Combat Tracker: its buttons show their icons again (the Edge face no longer replaces the icon font).",
+      "Break Time as in the stage-12 mockup: player tiles with portrait, name and character and the state in words (Back in green, Away in amber), the break timer in the Edge face.",
+      "Pause: a big split-colour caption with \"The GM stopped time\" under it; notifications and context menus in Edge frames; the players panel stays dark while Foundry fades it."
+    ]
+  },
+  {
     "version": "0.41.1",
     "date": "2026-11-03",
     "changes": [
