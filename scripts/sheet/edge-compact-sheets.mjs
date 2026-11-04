@@ -4,6 +4,7 @@
  * statuses, Take Cover, healing, grunt groups (the system's GruntGroupId token flag) and spirit services.
  */
 import { buildNpcContext, buildSpiritContext, buildVehicleContext, gruntGroup } from "./compact-context.mjs";
+import { effectsContext, effectActions } from "./effects-panel.mjs";
 import * as rolls from "./system-rolls.mjs";
 import { actorStatuses, statusLabel, takeCover } from "../statuses.mjs";
 import { openHealing } from "../healing.mjs";
@@ -53,6 +54,7 @@ class EdgeCompactSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       droneTest: EdgeCompactSheet.#onDroneTest,
       droneInitiative: EdgeCompactSheet.#onDroneInitiative,
       groupCommand: EdgeCompactSheet.#onGroupCommand,
+      ...effectActions,
     },
   };
 
@@ -85,6 +87,7 @@ class EdgeCompactSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         hasLevels: !!CONFIG.statusEffects?.find((x) => x.id === st.id)?.hasLevels,
       })),
       group: this.#group(),
+      effects: effectsContext(this.document),
       themeSwitch: { light, icon: light ? "fa-moon" : "fa-sun", label: L(light ? "SRE.Theme.ToDark" : "SRE.Theme.ToLight") },
     };
   }

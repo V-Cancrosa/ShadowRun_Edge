@@ -349,6 +349,15 @@ Stany systemu (z paska żetonu) mają teraz działanie według podręcznika (z e
 - **Bariery (s. 111–113):** w oknie odporności wybór „Za barierą” ze Strukturą 1–20 z tabeli odejmuje połowę
   Struktury (w górę) od obrażeń.
 
+- **Statusy i efekty (0.42):** zakładka **Efekty** na karcie Edge i panel na kartach kompaktowych — wszystkie
+  statusy i efekty z poziomem, źródłem i pozostałym czasem; dodawanie statusu, włączanie, edycja, usuwanie.
+- Statusy modułu w okienku żetonu: **Dumpshock** (Edge zablokowany), **Zablokowane połączenie**, **Konwergencja**.
+- Toksyny, gazy i zjazdy po narkotykach podnoszą status systemu (jeden efekt na status, ze źródłami), więc
+  okienko żetonu zawsze go zdejmuje; czas mija sam (ustawienie: automatycznie / pytaj MG / wyłączone).
+- Okienko żetonu: podpowiedź z poziomem, źródłem i czasem przy każdym statusie i rząd efektów modułu
+  (klik: wł./wył., prawy klik: usuń). Znoszenie się statusów pyta MG, czy zdjąć, czy zostawić oba.
+- Nieprzytomny i Martwy z monitorów po każdej zmianie obrażeń (s. 38, Overflow s. 121).
+
 ## Toksyny i narkotyki (s. 121–125)
 
 - **Katalog** (folder *Toksyny i narkotyki*): 9 toksyn i 11 narkotyków z wektorem, szybkością, czasem, mocą

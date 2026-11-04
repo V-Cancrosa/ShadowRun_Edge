@@ -1,0 +1,24 @@
+<div class="sre-es-panel sre-es-gap sre-effects">
+  <h3>{{localize "SRE.Effects.Title"}} <span>
+    {{#if editable}}<button type="button" class="sre-es-mini" data-action="statusAdd"><i class="fas fa-plus"></i> {{localize "SRE.Effects.AddStatus"}}</button>
+    <button type="button" class="sre-es-mini" data-action="effectCreate"><i class="fas fa-wand-magic-sparkles"></i> {{localize "SRE.Effects.New"}}</button>{{/if}}</span></h3>
+  {{#each effects.groups}}
+  <div class="sre-effects-group"><div class="sre-effects-kind">{{label}}</div>
+    {{#each rows}}
+    <div class="sre-es-row sre-effect {{#if disabled}}off{{/if}}" data-effect-uuid="{{uuid}}">
+      <img src="{{img}}" alt="">
+      <span class="sre-es-grow"><b>{{name}}{{#if level}} {{level}}{{/if}}</b>
+        <small class="sre-es-dim">{{#if sources}}{{sources}}{{/if}}{{#if left}} · {{localize "SRE.Effects.Left" t=left}}{{/if}}{{#if fromItem}} · {{fromItem}}{{/if}}</small></span>
+      {{#if ../../editable}}
+      {{#if level}}<button type="button" class="sre-es-mini" data-action="effectLevel" data-step="-1">−</button><button type="button" class="sre-es-mini" data-action="effectLevel" data-step="1">+</button>{{/if}}
+      <button type="button" class="sre-es-toggle {{#unless disabled}}on{{/unless}}" data-action="effectToggle" data-tooltip="{{localize "SRE.Effects.Toggle"}}"></button>
+      <button type="button" class="sre-es-mini" data-action="effectEdit" data-tooltip="{{localize "SRE.Effects.Edit"}}"><i class="fas fa-pen"></i></button>
+      {{#if onActor}}<button type="button" class="sre-es-mini" data-action="effectDelete" data-tooltip="{{localize "SRE.Effects.Delete"}}"><i class="fas fa-trash"></i></button>{{/if}}
+      {{/if}}
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+  <p class="sre-es-dim sre-es-empty">{{localize "SRE.Effects.None"}}</p>
+  {{/each}}
+</div>

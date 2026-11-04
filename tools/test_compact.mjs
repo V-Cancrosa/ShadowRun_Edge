@@ -70,6 +70,7 @@ assert.equal(gruntGroup(undefined, tokens), null);
 
 // Template renders for all three kinds.
 const H = Handlebars.create();
+H.registerPartial("modules/shadowrun-edge/templates/sheet/edge-effects.hbs", readFileSync(new URL("../templates/sheet/edge-effects.hbs", import.meta.url), "utf8"));
 H.registerHelper("localize", (key, o) => {
   let t = L(key);
   for (const [k, val] of Object.entries(o?.hash ?? {})) t = t.replace(`{${k}}`, val);
@@ -128,4 +129,7 @@ assert.deepEqual(spr.powers.map((p) => p.name), ["Cookie"]);
 const spriteTemplate = H.compile(readFileSync(new URL("../templates/sheet/edge-sprite.hbs", import.meta.url), "utf8"));
 const htmlSprite = spriteTemplate({ ...spr, name: "Courier", initial: "C", editable: true, levels: [{ value: 4, selected: true }], types: [], themeSwitch: { icon: "fa-sun", label: "" } });
 assert.ok(htmlSprite.includes('data-action="rollSkill"') && htmlSprite.includes("Cookie") && htmlSprite.includes('name="system.tasksOwned"'));
+// The Effects panel renders its groups (effects context from the sheet).
+const fxHtml = template({ ...buildNpcContext({ system: {}, items: [] }, { L }), editable: true, themeSwitch: {}, statuses: [], effects: { groups: [{ kind: "status", label: "S", rows: [{ uuid: "Actor.a.ActiveEffect.p", name: "Leżący", img: "", level: null, onActor: true }] }], count: 1 } });
+assert.ok(fxHtml.includes('data-effect-uuid="Actor.a.ActiveEffect.p"') && fxHtml.includes('data-action="statusAdd"'));
 console.log("compact sheets OK");

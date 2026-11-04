@@ -672,6 +672,9 @@
       <prose-mirror name="system.notes" value="{{social.notes}}" toggled {{#unless editable}}disabled{{/unless}}>{{{social.notesHTML}}}</prose-mirror>
     </div>
 
+    {{else if active.effects}}
+    {{> "modules/shadowrun-edge/templates/sheet/edge-effects.hbs"}}
+
     {{else}}
     <div class="sre-es-soon">
       <p>{{localize "SRE.Sheet.Soon"}}</p>

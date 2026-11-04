@@ -7,6 +7,7 @@
  * lowers the Power by its hits.
  */
 import { substance } from "./substances-data.mjs";
+import { addStatus, removeSource } from "./effects.mjs";
 import { exposurePower, toxinOutcome, durationSeconds, speedRounds, effectChanges, crashOf } from "./substance-rules.mjs";
 import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 import { applyDamage } from "./sheet/system-rolls.mjs";
@@ -30,15 +31,12 @@ async function rollDuration(def, actor) {
 
 const statusImg = (id) => CONFIG.statusEffects?.find((s) => s.id === id)?.img ?? "icons/svg/aura.svg";
 
-/** Status effects (each its own effect, so the module's status rules see them) with a duration. */
-function statusEffects(statuses, seconds, source) {
-  return statuses.map((s) => {
+/** Statuses from a toxin, gas or crash: the system's status effect per status, with the source and its end. */
+async function addStatuses(actor, statuses, seconds, source) {
+  for (const s of statuses ?? []) {
     const { id, level } = typeof s === "string" ? { id: s, level: 1 } : s;
-    return {
-      name: `${statusLabel(id)} (${source})`, img: statusImg(id), statuses: [id], system: { level },
-      duration: { seconds, startTime: game.time.worldTime }, flags: { [MODULE_ID]: { substanceStatus: source } },
-    };
-  });
+    await addStatus(actor, id, { level, source, seconds });
+  }
 }
 
 /** A drug's effect on an actor, with its duration and what happens when it wears off. */
@@ -194,7 +192,9 @@ registerTask("toxin", {
       if (def.kind === "drug" && out.left > 0) await applyDrug(target, def);
       else if (out.left > 0) {
         const seconds = await rollDuration(def, target);
-        const docs = statusEffects(out.statuses, seconds, def.name);
+        // Statuses: the system's own status effect, raised, with this toxin as a source (one effect per status).
+        await addStatuses(target, out.statuses, seconds, def.name);
+        const docs = [];
         if (out.changes.length) {
           docs.push({
             name: def.name, img: "icons/svg/poison.svg", duration: { seconds, startTime: game.time.worldTime },
@@ -245,6 +245,7 @@ registerTask("antidote", {
       event.currentTarget.disabled = true;
       const ids = target.effects.filter((e) => e.getFlag(MODULE_ID, "substanceStatus") === def.name || e.getFlag(MODULE_ID, "substance")?.id === def.id).map((e) => e.id);
       if (ids.length) await target.deleteEmbeddedDocuments("ActiveEffect", ids);
+      await removeSource(target, def.name);
       await patchTask(message, { applied: true });
     });
   },
@@ -264,7 +265,8 @@ async function checkCrashes() {
       const crash = def && crashOf(def);
       if (!crash) continue;
       const seconds = Math.max(60, (Number(flag.seconds) || 0) * crash.factor);
-      const docs = statusEffects(crash.statuses, seconds, `${def.name}: ${L("SRE.Substance.Crash")}`);
+      await addStatuses(actor, crash.statuses, seconds, `${def.name}: ${L("SRE.Substance.Crash")}`);
+      const docs = [];
       if (crash.changes.length || crash.pool) {
         docs.push({
           name: `${def.name}: ${L("SRE.Substance.Crash")}`, img: "icons/svg/downgrade.svg", changes: crash.changes,

@@ -477,7 +477,8 @@
         "magic": "Magic",
         "matrix": "Matrix",
         "gear": "Augmentations & gear",
-        "social": "Contacts & notes"
+        "social": "Contacts & notes",
+        "effects": "Effects"
       },
       "Monitor": {
         "physical": "Physical",
@@ -2013,6 +2014,52 @@
     "Macro": {
       "NoActor": "Select a token or assign a character.",
       "NoItem": "This character lacks the macro's item."
+    },
+    "Effects": {
+      "Title": "Statuses and effects",
+      "AddStatus": "Add status",
+      "New": "New effect",
+      "None": "No statuses or effects.",
+      "Toggle": "On / off",
+      "Edit": "Edit",
+      "Delete": "Delete",
+      "Level": "Level",
+      "Left": "{t} left",
+      "MarkerOnly": "marker only (no module rules)",
+      "Kind": {
+        "status": "Statuses with rules",
+        "module": "Module effects",
+        "marker": "Markers",
+        "item": "From items",
+        "other": "Other effects"
+      },
+      "Status": {
+        "dumpshock": "Dumpshock (Edge locked)",
+        "linkLock": "Link-locked",
+        "convergence": "Convergence"
+      },
+      "Unit": {
+        "d": "days",
+        "h": "h",
+        "min": "min",
+        "s": "s"
+      },
+      "Expiry": {
+        "Name": "Ending statuses and effects",
+        "Hint": "What to do when a module status or effect runs out (toxins, gas, dumpshock, drugs): remove it automatically (with a note to the GM), ask the GM with a chat card, or do nothing.",
+        "auto": "Automatically",
+        "ask": "Ask the GM",
+        "off": "Off"
+      },
+      "Ended": "{name}: ended — {list}",
+      "AskEnded": "{name}: time is up — {list}",
+      "Remove": "Remove",
+      "Keep": "Keep (no end)",
+      "HudOthers": "Module effects",
+      "HudHint": "click: on/off · right-click: remove",
+      "Cancels": "{status} cancels: {list} (pp. 51–53).",
+      "CancelRemove": "Remove the cancelled statuses",
+      "CancelKeep": "Keep both statuses"
     }
   }
 }

@@ -635,3 +635,23 @@ console.log("blast & summoning OK");
   assert.equal(monitorChanged({ system: { edge: { value: 2 } } }), false);
   console.log("monitor statuses OK");
 }
+{
+  // Statuses and effects: the system's static ids, sources with end times, what the tab groups.
+  const FX = await import("../scripts/effects.mjs");
+  assert.equal(FX.staticId("prone"), "prone00000000000");
+  assert.equal(FX.staticId("sreDumpshock"), "sreDumpshock0000");
+  assert.equal(FX.staticId("invisibleImproved"), "invisibleImprove");
+  const src = [{ name: "CS gas", until: 1000 }, { name: "Narcoject", until: 400 }];
+  assert.deepEqual(FX.liveSources(src, 500).map((s) => s.name), ["CS gas"]);
+  assert.equal(FX.timeLeft(src, null, 500), 500, "the latest source ends it");
+  assert.equal(FX.timeLeft([{ name: "x", until: null }], null, 0), null, "a source without an end");
+  assert.equal(FX.timeLeft([], { seconds: 600, startTime: 100 }, 400), 300, "the effect's own duration");
+  assert.equal(FX.formatLeft(125), "3 SRE.Effects.Unit.min");
+  assert.equal(FX.effectKind({ statuses: new Set(["prone"]), flags: {} }), "status");
+  assert.equal(FX.effectKind({ statuses: new Set(["sreDumpshock"]), flags: {} }), "status");
+  assert.equal(FX.effectKind({ statuses: new Set(["cybervirus"]), flags: {} }), "marker");
+  assert.equal(FX.effectKind({ statuses: new Set(), flags: { "shadowrun-edge": { substance: { id: "x" } } } }), "module");
+  const actor = {};
+  assert.equal(FX.effectKind({ statuses: new Set(), flags: {}, parent: { name: "Armor" } }, actor), "item");
+  console.log("effects OK");
+}

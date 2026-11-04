@@ -477,7 +477,8 @@
         "magic": "Magia",
         "matrix": "Matryca",
         "gear": "Wszczepy i ekwipunek",
-        "social": "Kontakty i notatki"
+        "social": "Kontakty i notatki",
+        "effects": "Efekty"
       },
       "Monitor": {
         "physical": "Fizyczny",
@@ -2013,6 +2014,52 @@
     "Macro": {
       "NoActor": "Zaznacz żeton albo przypisz postać.",
       "NoItem": "Tej postaci brakuje przedmiotu z makra."
+    },
+    "Effects": {
+      "Title": "Statusy i efekty",
+      "AddStatus": "Dodaj status",
+      "New": "Nowy efekt",
+      "None": "Brak statusów i efektów.",
+      "Toggle": "Włącz / wyłącz",
+      "Edit": "Edytuj",
+      "Delete": "Usuń",
+      "Level": "Poziom",
+      "Left": "zostało {t}",
+      "MarkerOnly": "tylko znacznik (bez zasad modułu)",
+      "Kind": {
+        "status": "Statusy z zasadami",
+        "module": "Efekty modułu",
+        "marker": "Znaczniki",
+        "item": "Z przedmiotów",
+        "other": "Inne efekty"
+      },
+      "Status": {
+        "dumpshock": "Dumpshock (Edge zablokowany)",
+        "linkLock": "Zablokowane połączenie",
+        "convergence": "Konwergencja"
+      },
+      "Unit": {
+        "d": "dni",
+        "h": "godz.",
+        "min": "min",
+        "s": "s"
+      },
+      "Expiry": {
+        "Name": "Wygasanie statusów i efektów",
+        "Hint": "Co robić, gdy minie czas statusu lub efektu z modułu (toksyny, gazy, dumpshock, narkotyki): zdejmować automatycznie (z notką dla MG), pytać MG kartą na czacie, albo nic nie robić.",
+        "auto": "Automatycznie",
+        "ask": "Pytaj MG",
+        "off": "Wyłączone"
+      },
+      "Ended": "{name}: wygasło — {list}",
+      "AskEnded": "{name}: minął czas — {list}",
+      "Remove": "Zdejmij",
+      "Keep": "Zostaw (bez końca)",
+      "HudOthers": "Efekty modułu",
+      "HudHint": "klik: wł./wył. · prawy klik: usuń",
+      "Cancels": "{status} znosi: {list} (s. 51–53).",
+      "CancelRemove": "Zdejmij zniesione statusy",
+      "CancelKeep": "Zostaw oba statusy"
     }
   }
 }

@@ -208,7 +208,7 @@ export function modesOf(attack) {
 
 /** Edge cannot be gained or spent (e.g. after Convergence): an effect with the module's noEdge flag. */
 export function edgeLocked(actor) {
-  return !!actor?.effects?.find?.((e) => !e.disabled && e.getFlag?.(MODULE_ID, "noEdge"));
+  return !!actor?.effects?.find?.((e) => !e.disabled && (e.getFlag?.(MODULE_ID, "noEdge") || e.statuses?.has?.("sreDumpshock")));
 }
 
 /** Status and substance modifiers for this roll (scripts/status-rules.mjs), as chips. */

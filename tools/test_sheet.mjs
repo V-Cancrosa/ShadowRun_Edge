@@ -70,6 +70,7 @@ assert.ok(!JSON.stringify(empty).includes("NaN"));
 
 // Render the template with the context.
 Handlebars.registerHelper("localize", (k) => L(k));
+Handlebars.registerPartial("modules/shadowrun-edge/templates/sheet/edge-effects.hbs", readFileSync(new URL("../templates/sheet/edge-effects.hbs", import.meta.url), "utf8"));
 const source = readFileSync(new URL("../templates/sheet/edge-sheet.hbs", import.meta.url), "utf8");
 const tabs = ["main", "skills"].map((id, i) => ({ id, label: id, active: i === 0 }));
 const html = Handlebars.compile(source)({ ...ctx, editable: true, tabs, active: { main: true } });

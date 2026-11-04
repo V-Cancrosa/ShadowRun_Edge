@@ -3,6 +3,7 @@
  * character sheet. Data stays in the system's format, so users can switch between this sheet and the
  * system's at any time (Sheet configuration in the window header).
  */
+import { effectsContext, effectActions } from "./effects-panel.mjs";
 import {
   buildSheetContext, buildSkillsContext, buildCombatContext, buildMagicContext, buildMatrixContext, buildGearContext, buildSocialContext,
 } from "./context.mjs";
@@ -30,7 +31,7 @@ const L = (key) => game.i18n.localize(key);
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
 
-export const TABS = ["main", "skills", "combat", "magic", "matrix", "gear", "social"];
+export const TABS = ["main", "skills", "combat", "magic", "matrix", "gear", "social", "effects"];
 
 export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
@@ -43,6 +44,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       edge: EdgeActorSheet.#onEdge,
       edgeBoost: EdgeActorSheet.#onEdgeBoost,
       runningSilent: EdgeActorSheet.#onRunningSilent,
+      ...effectActions,
       monitor: EdgeActorSheet.#onMonitor,
       rollQuick: EdgeActorSheet.#onQuick,
       rollInitiative: EdgeActorSheet.#onInitiative,
@@ -131,6 +133,7 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       ...data,
       themeSwitch: { light, icon: light ? "fa-moon" : "fa-sun", label: L(light ? "SRE.Theme.ToDark" : "SRE.Theme.ToLight") },
       statuses: this.#statuses(),
+      effects: tab === "effects" ? effectsContext(this.document) : null,
       magic: tab === "magic" ? this.#magicContext(config) : null,
       matrix: tab === "matrix" ? this.#matrixContext(config) : null,
       gear: tab === "gear" ? buildGearContext(this.document, { L, config }) : null,

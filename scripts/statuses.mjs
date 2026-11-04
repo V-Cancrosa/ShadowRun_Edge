@@ -12,7 +12,7 @@ import * as rolls from "./sheet/system-rolls.mjs";
 import { registerTask, runTest, hitsOf, patchTask } from "./linked-roll.mjs";
 import { spendAction, actionsLeft } from "./actions.mjs";
 import * as ui2 from "./ui/edge-ui.mjs";
-import { resolveConflict } from "./ui/conflict.mjs";
+import { resolveConflict, canBreakRules } from "./ui/conflict.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
@@ -61,8 +61,21 @@ Hooks.on("createActiveEffect", async (effect, options, userId) => {
   const actor = effect.parent;
   if (!id || !(actor instanceof Actor)) return;
   const gone = cancels(id);
-  const remove = actor.effects.filter((e) => e.id !== effect.id && [...(e.statuses ?? [])].some((s) => gone.includes(s))).map((e) => e.id);
-  if (remove.length) await actor.deleteEmbeddedDocuments("ActiveEffect", remove);
+  const remove = actor.effects.filter((e) => e.id !== effect.id && [...(e.statuses ?? [])].some((s) => gone.includes(s)));
+  if (!remove.length) return;
+  // The rule removes the cancelled statuses; the GM (and players when the world allows it) may keep them instead.
+  if (canBreakRules()) {
+    const choice = await resolveConflict({
+      title: actor.name, name: actor.name,
+      problems: [L("SRE.Effects.Cancels", { status: statusLabel(id), list: remove.map((e) => e.name).join(", ") })],
+      options: [
+        { id: "remove", label: L("SRE.Effects.CancelRemove") },
+        { id: "keep", label: L("SRE.Effects.CancelKeep"), breaksRules: true },
+      ],
+    });
+    if (choice !== "remove") return;
+  }
+  await actor.deleteEmbeddedDocuments("ActiveEffect", remove.map((e) => e.id));
 });
 
 // ── New combat round: ongoing damage and nausea ──

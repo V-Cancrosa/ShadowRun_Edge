@@ -924,3 +924,16 @@ body.sre-edge-light :is(.sre-es-portrait, .sre-it-icon) { background: linear-gra
 .sre-garage .sre-garage-img { width: 40px; height: 40px; object-fit: cover; border: 1px solid var(--sre-accent-line); clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%); margin-right: 8px; }
 .sre-garage .sre-es-row small { display: block; opacity: 0.75; }
 .sre-sheet .sre-cp-vt input { width: 100%; min-width: 0; text-align: center; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--sre-accent-line); color: inherit; }
+
+/* Effects tab and panel. */
+.sre-effects .sre-effects-group + .sre-effects-group { margin-top: 6px; }
+.sre-effects .sre-effects-kind { font: 700 9px/1.6 var(--sre-font-display, sans-serif); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sre-accent); }
+.sre-effects .sre-effect { gap: 6px; align-items: center; }
+.sre-effects .sre-effect img { width: 26px; height: 26px; border: 1px solid var(--sre-accent-line); background: rgba(0, 0, 0, 0.3); clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%); }
+.sre-effects .sre-effect.off { opacity: 0.5; }
+.sre-effects .sre-effect small { display: block; }
+/* Token HUD: the module's other effects under the status palette. */
+.sre-hud-effects { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px; padding-top: 4px; border-top: 1px solid rgba(224, 64, 154, 0.45); }
+.sre-hud-effects .sre-hud-title { flex-basis: 100%; font: 700 9px/1.4 var(--sre-font-display, sans-serif); letter-spacing: 0.14em; text-transform: uppercase; color: #e0409a; }
+.sre-hud-effects img { width: 24px; height: 24px; cursor: pointer; border: 1px solid rgba(63, 212, 232, 0.6); }
+.sre-hud-effects img.off { opacity: 0.4; }

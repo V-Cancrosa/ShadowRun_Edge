@@ -8,6 +8,7 @@
  * Nothing blocks the GM: access the persona lacks, missing Edge and the like ask (ui/conflict.mjs).
  */
 import * as R from "./matrix-rules.mjs";
+import { addStatus } from "./effects.mjs";
 import { systemTest, registerTask, patchTask } from "./linked-roll.mjs";
 import * as rolls from "./sheet/system-rolls.mjs";
 import { matrixActionPool } from "./sheet/context.mjs";
@@ -46,7 +47,7 @@ export function activeDevice(actor) {
   return devices.find((i) => i.system?.subtype === "CYBERDECK") ?? devices[0] ?? null;
 }
 
-const noEdgeEffect = (actor) => actor.effects.find((e) => e.getFlag(MODULE_ID, "noEdge"));
+const noEdgeEffect = (actor) => actor.effects.find((e) => e.getFlag(MODULE_ID, "noEdge") || e.statuses?.has?.("sreDumpshock"));
 
 /** Edge use under the dumpshock lock: asks (the GM may always go on). */
 export async function edgeAllowed(actor) {
@@ -121,12 +122,8 @@ export async function dumpshockFor(actor) {
   const shock = R.dumpshock(actor.system?.matrixIni, willpower(actor));
   if (!shock) return ui.notifications.info(L("SRE.Matrix.NoDumpshockAR"));
   if (shock.minutes > 0) {
-    await noEdgeEffect(actor)?.delete();
-    await actor.createEmbeddedDocuments("ActiveEffect", [{
-      name: L("SRE.Matrix.NoEdge"), img: "icons/svg/daze.svg",
-      duration: { seconds: shock.minutes * 60, startTime: game.time.worldTime },
-      flags: { [MODULE_ID]: { noEdge: true } },
-    }]);
+    // The module's Dumpshock status (token HUD), ending after (10 − Willpower) minutes.
+    await addStatus(actor, "sreDumpshock", { source: L("SRE.Effects.Status.dumpshock"), seconds: shock.minutes * 60, flags: { noEdge: true } });
   }
   return rolls.rollSoakTest(actor, {
     soakType: shock.monitor === "physical" ? "damage_phys" : "damage_stun", damage: shock.damage, monitor: shock.monitor,

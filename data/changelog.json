@@ -1,5 +1,23 @@
 [
   {
+    "version": "0.42.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Zakładka Efekty na karcie Edge i panel Statusy i efekty na kartach NPC, ducha i pojazdu: wszystkie statusy i efekty postaci (także z przedmiotów) w grupach — statusy z zasadami, efekty modułu, znaczniki, z przedmiotów — z poziomem, źródłem i pozostałym czasem; dodawanie statusu, włączanie i wyłączanie, poziom −/+, edycja, usuwanie.",
+      "Statusy modułu w okienku żetonu: Dumpshock (Edge zablokowany, sam mija po czasie), Zablokowane połączenie i Konwergencja (zsynchronizowane z matrycą w obie strony).",
+      "Toksyny, gazy i zjazdy po narkotykach nie tworzą już osobnych kopii statusów: podnoszą status systemu i zapisują na nim źródło i czas, więc kliknięcie w okienku żetonu zawsze go zdejmuje (koniec duplikatów). Antidotum zdejmuje tylko swoje źródło.",
+      "Wygasanie: statusy i efekty modułu, którym minął czas, zdejmuje MG automatycznie z notką na czacie; ustawienie świata pozwala zamiast tego pytać MG (karta Zdejmij / Zostaw) albo wyłączyć wygasanie.",
+      "Okienko żetonu: przy każdym statusie podpowiedź z poziomem, źródłami, czasem i informacją, czy status ma zasady modułu; rząd efektów modułu (klik wł./wył., prawy klik usuń). Gdy status znosi inny (np. Płonący i Mokry), MG wybiera: zdjąć zgodnie z zasadami albo zostawić oba."
+    ],
+    "changes_en": [
+      "An Effects tab on the Edge sheet and a Statuses and effects panel on the NPC, spirit and vehicle sheets: every status and effect on the character (including from items) in groups — statuses with rules, module effects, markers, from items — with level, source and time left; add a status, switch on and off, level −/+, edit, delete.",
+      "The module's statuses in the token HUD: Dumpshock (Edge locked, ends by itself), Link-locked and Convergence (kept in step with the Matrix both ways).",
+      "Toxins, gas and drug crashes no longer make separate copies of statuses: they raise the system's status and record their source and time on it, so clicking it in the token HUD always removes it (no more duplicates). An antidote removes only its own source.",
+      "Ending: statuses and module effects whose time is up are removed by the GM's client with a chat note; a world setting can ask the GM instead (Remove / Keep card) or turn ending off.",
+      "Token HUD: each status gets a tooltip with level, sources, time left and whether the module has rules for it; a row of module effects (click on/off, right-click remove). When a status cancels another (e.g. Burning and Wet), the GM chooses: remove as the rules say, or keep both."
+    ]
+  },
+  {
     "version": "0.41.4",
     "date": "2026-11-03",
     "changes": [
