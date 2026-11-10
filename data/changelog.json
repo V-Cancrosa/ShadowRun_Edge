@@ -1,5 +1,15 @@
 [
   {
+    "version": "0.44.1",
+    "date": "2026-11-03",
+    "changes": [
+      "Terminal Matrycy w Foundry 14: przyciski sterowania pokazują nazwę i wymagany dostęp jeden pod drugim (nic nie nachodzi), a długie nazwy węzłów na mapie sieci kończą się wielokropkiem zamiast być ucięte z obu stron."
+    ],
+    "changes_en": [
+      "Matrix terminal on Foundry 14: control buttons show their name and the access they need one under the other (nothing overlaps), and long node names on the network map end in an ellipsis instead of being cut on both sides."
+    ]
+  },
+  {
     "version": "0.44.0",
     "date": "2026-11-03",
     "changes": [

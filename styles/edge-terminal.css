@@ -157,3 +157,10 @@ body.sre-motion-reduced .sre-term-glitching > .sre-layer { animation: none; }
 .sre-ed-panel .row select { flex: 0 1 auto; width: auto; }
 .sre-ed-panel .row .wide, .sre-ed-panel .row textarea { flex: 1 1 100%; }
 .sre-ed-panel .foot { margin-top: auto; padding-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* 0.44.1: Foundry 14 buttons are centred flex rows — the terminal's buttons stack their label and note, and map
+   labels start at the left so a long name ends in "…" instead of being cut on both sides. */
+.sre-layer .grid button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; white-space: normal; min-height: 38px; }
+.sre-layer .grid button small { display: block; line-height: 1.2; }
+.sre-term-map button { display: block; text-align: left; justify-content: flex-start; line-height: 1.3; height: auto; min-height: 0; }
+.sre-term-quick button, .sre-term-hack button, .sre-term-head button { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
