@@ -416,6 +416,27 @@ Ustawienie świata **Silnik rzutów** pozwala wrócić do okna i kart systemu.
   Pojazdu z jego statystykami, a z przedmiotu można jeździć, taranować i synchronizować osiągi.
 - Sukcesy można dalej wpisać ręcznie (np. rzut fizycznymi kośćmi) w oknach modułu.
 
+## Terminal Matrycy i sieci węzłów (etap 14)
+
+Hakowanie można grać w oknie terminala. Nie ma tu nowych zasad: testy to akcje Matrixa modułu (dostęp, Overwatch,
+IC) rzucane silnikiem Edge; terminal jest sposobem ich rozgrywania.
+- **Sieci buduje MG** w **Edytorze sieci** (zakładka Matrix karty Edge albo `/edge-net`): host lub PAN jako graf węzłów,
+  które się przeciąga i łączy liniami (linia lub węzeł mogą być ukryte do odkrycia). Jest gotowy szablon małego biura.
+- **Węzeł ma dwie warstwy.** *Powierzchnia* to zwykły ekran urządzenia z szablonu (panel windy, klawiatura zamka, kiosk,
+  kamera, komputer z logowaniem, własny obrazek) — przyciski bez wymaganego dostępu działają od razu. *Warstwa Matrycy*
+  otwiera się po zdobyciu dostępu: ekran glitchuje i pęka, a pod spodem są zabezpieczenia (Outsider → User → Admin),
+  sterowanie, pliki i połączenia.
+- **Dostęp jest na sieć**: żeby dostać się do urządzenia za hostem lub PAN-em, zdobywa się dostęp do tej sieci
+  (Brute Force, Probe + Backdoor Entry). Węzeł oznaczony „własne zabezpieczenia” broni się sam swoją oceną.
+- **Sterowanie** (MG ustawia wymagany dostęp i czy potrzebny jest test Control Device): drzwi na scenie (otwórz,
+  zamknij, zablokuj…), status na żetonie, wiadomość na czacie albo notatka dla MG. Skutki na scenie wykonuje MG.
+- **Mapa sieci** pokazuje tylko to, co postać odkryła: `scan` odsłania widoczne sąsiednie węzły, `search` to test
+  Percepcji matrycowej na ukryte ikony. Pasek namierzania to Overwatch (jeśli MG go pokazuje).
+- **Komendy lub przyciski** (ustawienie gracza): `scan · search · connect · ls · cat · control · brute · probe ·
+  backdoor · spike · perception · os · disconnect`. Dziennik pokazuje rzuty, dostęp i wykonane sterowanie.
+- **Wejście:** przycisk *Połącz* w zakładce Matrix (punkty wejścia oznaczone przez MG), `/edge-term`, albo dwuklik na
+  żetonie przypiętym do węzła w edytorze („Przypnij do żetonu”). Gorący VR zmienia terminal na czerwony.
+
 ## Erraty SR6
 
 Moduł trzyma się wyłącznie 6. edycji. Oficjalne erraty Catalyst do podręcznika podstawowego są przełącznikami

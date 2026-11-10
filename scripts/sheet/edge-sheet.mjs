@@ -44,6 +44,8 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       edge: EdgeActorSheet.#onEdge,
       edgeBoost: EdgeActorSheet.#onEdgeBoost,
       runningSilent: EdgeActorSheet.#onRunningSilent,
+      matrixTerminal: EdgeActorSheet.#onTerminal,
+      netEditor: EdgeActorSheet.#onNetEditor,
       ...effectActions,
       monitor: EdgeActorSheet.#onMonitor,
       rollQuick: EdgeActorSheet.#onQuick,
@@ -197,6 +199,17 @@ export class EdgeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (choice !== "set") return;
     }
     await this.document.update({ "system.edge.value": next });
+  }
+
+  /** The Matrix terminal: connect to a network entry point; the GM's network editor. */
+  static async #onTerminal() {
+    const { pickTerminal } = await import("../matrix-terminal.mjs");
+    return pickTerminal(this.document);
+  }
+
+  static async #onNetEditor() {
+    const { openNetEditor } = await import("../matrix-net-editor.mjs");
+    return openNetEditor();
   }
 
   /** Running Silent (the system's persona flag). */

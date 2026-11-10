@@ -655,3 +655,47 @@ console.log("blast & summoning OK");
   assert.equal(FX.effectKind({ statuses: new Set(), flags: {}, parent: { name: "Armor" } }, actor), "item");
   console.log("effects OK");
 }
+{
+  // Stage 14: Matrix networks for the terminal.
+  const N = await import("../scripts/matrix-net-rules.mjs");
+  const net = N.presetOffice("n1");
+  assert.equal(Object.keys(net.nodes).length, 5);
+  const lift = net.nodes.lift;
+  // Access is held per network (a device behind a host or PAN), unless the node stands on its own.
+  assert.equal(N.accessKey(net, lift), "net_n1");
+  assert.equal(N.accessKey(net, { ...lift, own: true }), "net_n1_lift");
+  assert.equal(N.accessOn(net, lift, [{ key: "net_n1", access: "user", illegal: true }]).access, "user");
+  assert.equal(N.accessOn(net, lift, []).access, "outsider");
+  const t = N.targetFor(net, lift);
+  assert.deepEqual([t.key, t.kind, t.rating, t.access], ["net_n1", "host", 3, "outsider"]);
+  assert.equal(N.targetFor(net, { ...lift, own: true, rating: 2 }).kind, "device");
+  // Levels: Outsider < User < Admin.
+  assert.equal(N.allows("user", "admin"), true);
+  assert.equal(N.allows("admin", "user"), false);
+  // The surface: floors work for anyone, floor 13 is shown locked; controls above Outsider ask for a test by default.
+  const sc = N.surfaceControls(lift);
+  assert.deepEqual([sc.open.length, sc.locked.length], [3, 1]);
+  assert.equal(N.needsTest(sc.locked[0]), true);
+  assert.equal(N.needsTest(sc.open[0]), false);
+  assert.equal(N.needsTest({ access: "admin", test: false }), false, "the GM's choice wins");
+  // Scan finds visible neighbors; hidden ones (a hidden link or node) need Matrix Perception.
+  assert.deepEqual(N.scan(net, "root", ["root"]).sort(), ["cam", "lift", "lock"]);
+  assert.deepEqual(N.scan(net, "lock", ["lock", "root"]), []);
+  assert.deepEqual(N.reveal(net, "lock", ["lock"]), ["files"]);
+  // The map: known nodes, links between known ones, "?" stubs for visible unknown neighbors, nothing for hidden ones.
+  const map = N.visibleMap(net, ["root", "lift"], "lift");
+  assert.equal(map.nodes.length, 2);
+  assert.equal(map.links.length, 1);
+  assert.equal(map.stubs.length, 2);
+  assert.equal(N.visibleMap(net, ["lock"]).stubs.length, 1, "the host shows as a stub, the hidden server does not");
+  // Files by access, commands, names.
+  assert.equal(N.readable(net.nodes.files, "user")[0].ok, false);
+  assert.equal(N.readable(net.nodes.files, "admin")[0].ok, true);
+  assert.deepEqual(N.parseCommand("  Connect  lift b "), { cmd: "connect", args: ["lift", "b"], rest: "lift b" });
+  assert.equal(N.parseCommand("  "), null);
+  assert.equal(N.findByName(Object.values(net.nodes), "SRE.Net.Preset.li").id, "lift");
+  assert.equal(N.findByName([{ id: "a", label: "Unlock 13" }], "unlock", "label").id, "a");
+  // Tidy drops broken and duplicate links.
+  assert.equal(N.tidy({ ...net, links: [...net.links, { a: "root", b: "nope" }, { a: "lift", b: "root" }] }).links.length, net.links.length);
+  console.log("matrix networks OK");
+}

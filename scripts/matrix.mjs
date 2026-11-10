@@ -154,20 +154,22 @@ function checkText(action) {
 }
 
 /** A Matrix action from the Edge sheet. Actions without a test go straight to the system. */
-export async function openMatrixAction(actor, actionId) {
+export async function openMatrixAction(actor, actionId, { target: preset = null, terminal = null } = {}) {
   const action = CONFIG.SR6?.MATRIX_ACTIONS?.[actionId];
   if (!action) return;
   if (!action.skill) return rolls.rollMatrixAction(actor, actionId);
   const raw = matrixActionPool(action, actor.system);
   const name = L(ACTION_KEY(actionId));
   const targets = targetChoices(actor);
+  // From the Matrix terminal: the node's network is the target (added to the list when not yet recorded).
+  if (preset && !targets.some((t) => t.key === preset.key)) targets.unshift(preset);
   const needs = R.accessNeeded(action);
   const isBrute = actionId === "brute_force";
   const isBackdoor = actionId === "backdoor_entry";
   const kind = [L("SRE.Matrix.Kind"), L(action.illegal ? "SRE.Matrix.Illegal" : "SRE.Matrix.Legal"), L(action.major ? "SRE.Matrix.Major" : "SRE.Matrix.Minor"),
     R.actionLevels(action).map((l) => L(`SRE.Matrix.Access.${l}`)).join("/")].filter(Boolean).join(" · ");
   const targetOptions = [`<option value="">${esc(L("SRE.Matrix.NoTarget"))}</option>`,
-    ...targets.map((t) => `<option value="${esc(t.key)}">${esc(L(`SRE.Matrix.Kinds.${t.kind}`))}: ${esc(t.name)}${t.rating ? ` (${t.rating})` : ""}</option>`),
+    ...targets.map((t) => `<option value="${esc(t.key)}"${preset?.key === t.key ? " selected" : ""}>${esc(L(`SRE.Matrix.Kinds.${t.kind}`))}: ${esc(t.name)}${t.rating ? ` (${t.rating})` : ""}</option>`),
     `<option value="new">${esc(L("SRE.Matrix.NewTarget"))}</option>`].join("");
 
   const content = `<div class="sre-ed sre-matrix">
@@ -282,6 +284,7 @@ export async function openMatrixAction(actor, actionId) {
       target: target ? { key: target.key, name: target.name, kind: target.kind, rating: num(target.rating), access: target.access ?? "outsider", hostUuid: target.hostUuid ?? null } : null,
       want: isBrute ? result.want : null, jump, ar: num(actor.system?.attackrating?.matrix?.pool),
       defensePool: defensePoolGuess(target, jump), defenderHits: null,
+      terminal,
     },
   });
 }
@@ -346,6 +349,10 @@ registerTask("matrix", {
       const actor = fromUuidSync(task.actor);
       if (actor) parts.push(`<p><b>${L("SRE.Matrix.YourOS", { os: getOS(actor) })}</b></p>`);
     }
+    // From the Matrix terminal: a won Control Device runs the node's control, a won Matrix Perception reveals hidden nodes.
+    if (task.terminal?.op && net >= 0 && hits > 0) {
+      parts.push(`<p><b>${esc(task.terminal.label ?? "")}</b> ${task.applied ? `<em>${L("SRE.Matrix.Done")}</em>` : canEdit(message) ? `<button type="button" data-terminal>${L("SRE.Net.Execute")}</button>` : ""}</p>`);
+    }
     if (task.actionId === "jack_out" && net >= 0 && canEdit(message)) {
       parts.push(`<p>${task.applied ? `<em>${L("SRE.Matrix.Done")}</em>` : `<button type="button" data-jackout>${L("SRE.Matrix.JackOut")}</button>`}</p>`);
     }
@@ -380,6 +387,11 @@ registerTask("matrix", {
       await patchTask(message, { created: true });
     });
     root.querySelector("[data-soak]")?.addEventListener("click", (e) => resistMatrixDamage(num(e.currentTarget.dataset.soak), L(ACTION_KEY("data_spike"))));
+    root.querySelector("[data-terminal]")?.addEventListener("click", async () => {
+      const { runTerminalOp } = await import("./matrix-terminal.mjs");
+      await runTerminalOp({ ...task.terminal, actor: task.actor });
+      await patchTask(message, { applied: true });
+    });
     root.querySelector("[data-jackout]")?.addEventListener("click", async () => {
       const actor = await fromUuid(task.actor);
       if (!actor) return;

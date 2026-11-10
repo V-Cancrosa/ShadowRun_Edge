@@ -9,7 +9,7 @@ import * as vehicleRules from "./vehicle-rules.mjs";
 import { entryCost } from "./advancement-rules.mjs";
 
 const MODULE_ID = "shadowrun-edge";
-const SETTINGS = ["playersBreakRules", "rollEngine", "effectExpiry", "dicePools", "attackFx", "advancementApproval", "overwatchVisible", "welcomeSeen", "guideImported", "trackActions"];
+const SETTINGS = ["playersBreakRules", "rollEngine", "terminalCommands", "effectExpiry", "dicePools", "attackFx", "advancementApproval", "overwatchVisible", "welcomeSeen", "guideImported", "trackActions"];
 
 Hooks.on("quenchReady", (quench) => {
   quench.registerBatch(`${MODULE_ID}.setup`, (context) => {

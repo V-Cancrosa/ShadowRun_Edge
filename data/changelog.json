@@ -1,5 +1,21 @@
 [
   {
+    "version": "0.44.0",
+    "date": "2026-11-03",
+    "changes": [
+      "Terminal Matrycy (etap 14): hakowanie w oknie terminala. Każde urządzenie ma zwykły ekran (panel windy, klawiatura zamka, kiosk, kamera, komputer, własny obrazek), a po zdobyciu dostępu ekran glitchuje i pęka do warstwy Matrycy: zabezpieczenia Outsider → User → Admin, sterowanie, pliki, połączenia, mapa odkrytych węzłów, pasek namierzania (Overwatch), dziennik i linia komend albo przyciski akcji.",
+      "Zasady bez zmian: testy to akcje Matrixa modułu rzucane silnikiem Edge (dostęp, Overwatch, obrona hosta, Edge). Dostęp jest na sieć (host lub PAN); węzeł z własnymi zabezpieczeniami broni się sam. Sterowanie może wymagać testu Control Device; scan odsłania widoczne węzły, search to Percepcja matrycowa na ukryte.",
+      "Edytor sieci dla MG (/edge-net albo przycisk w zakładce Matrix): węzły do przeciągania i łączenia, ukryte połączenia i węzły, szablon powierzchni, sterowanie sceny (drzwi, status żetonu, wiadomość, notatka MG) z wymaganym dostępem, pliki z treścią, punkty wejścia, przypięcie węzła do żetonu (dwuklik otwiera terminal), podgląd jako gracz i gotowy szablon biura.",
+      "Wejście do terminala: przycisk Połącz w zakładce Matrix, komenda /edge-term albo dwuklik na żetonie urządzenia. Gorący VR zmienia terminal na czerwony; animacja glitcha szanuje poziom animacji i daje się pominąć kliknięciem."
+    ],
+    "changes_en": [
+      "Matrix terminal (stage 14): hacking in a terminal window. Every device has an ordinary screen (lift panel, lock keypad, kiosk, camera, computer, own image), and once access is gained the screen glitches and breaks into the Matrix layer: Outsider → User → Admin security, controls, files, links, a map of the nodes found, a trace bar (Overwatch), a log and a command line or action buttons.",
+      "No new rules: tests are the module's Matrix actions rolled with the Edge engine (access, Overwatch, host defense, Edge). Access is held per network (host or PAN); a node with its own security defends itself. Controls may need a Control Device test; scan shows visible nodes, search is Matrix Perception for hidden ones.",
+      "Network editor for the GM (/edge-net or the button on the Matrix tab): nodes to drag and link, hidden links and nodes, surface template, scene controls (door, token status, message, GM note) with the access they need, files with contents, entry points, binding a node to a token (double-click opens the terminal), preview as a player and a ready-made office.",
+      "Opening the terminal: the Connect button on the Matrix tab, the /edge-term command, or a double-click on a device token. Hot-sim VR turns the terminal red; the glitch animation follows the animation level and a click skips it."
+    ]
+  },
+  {
     "version": "0.43.1",
     "date": "2026-11-03",
     "changes": [

@@ -26,6 +26,8 @@ import "./roll-dialog.mjs";
 import "./dice/edge-roll.mjs";
 import "./dice/combat-chain.mjs";
 import "./integrations.mjs";
+import { openTerminal, pickTerminal } from "./matrix-terminal.mjs";
+import { openNetEditor } from "./matrix-net-editor.mjs";
 import { edgeAnytime } from "./dice/initiative.mjs";
 import { rollFromMacro } from "./dice/macros.mjs";
 import "./ui/conflict.mjs";
@@ -75,7 +77,7 @@ Hooks.once("init", () => {
   });
 
 
-  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote, openCharacterCreator, uiDump, edgeAnytime, roll: rollFromMacro };
+  game.modules.get(MODULE_ID).api = { openItemWizard, startKarmaVote, openCharacterCreator, uiDump, edgeAnytime, roll: rollFromMacro, openTerminal, pickTerminal, openNetEditor };
 });
 
 Hooks.once("ready", () => {

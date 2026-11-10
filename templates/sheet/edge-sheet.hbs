@@ -465,6 +465,9 @@
     <div class="sre-es-panel sre-es-gap">
       <div class="sre-es-row"><span class="sre-es-grow"><b>{{localize "SRE.Matrix.RunningSilent"}}</b> <small class="sre-es-dim">{{localize "SRE.Matrix.RunningSilentHint"}}</small></span>
         <button type="button" class="sre-es-toggle {{#if matrix.runningSilent}}on{{/if}}" data-action="runningSilent" {{#unless editable}}disabled{{/unless}}></button></div>
+      <div class="sre-es-row"><span class="sre-es-grow"><b>{{localize "SRE.Net.Terminal"}}</b> <small class="sre-es-dim">{{localize "SRE.Net.TerminalHint"}}</small></span>
+        <button type="button" class="sre-es-btn solid" data-action="matrixTerminal"><i class="fas fa-terminal"></i> {{localize "SRE.Net.Connect"}}</button>
+        {{#if matrix.edge.gm}}<button type="button" class="sre-es-btn" data-action="netEditor"><i class="fas fa-diagram-project"></i> {{localize "SRE.Net.Editor"}}</button>{{/if}}</div>
     </div>
     {{#if matrix.edge.visible}}
     <div class="sre-es-panel sre-mx-os">
