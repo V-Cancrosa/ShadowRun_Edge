@@ -60,8 +60,7 @@ class NetEditor extends ApplicationV2 {
     const head = `<header class="sre-term-head">
       <i class="fas fa-diagram-project"></i>
       <div><small>${esc(L("SRE.Net.EditorKicker"))}</small>
-        <select data-ed="pickNet">${Object.values(all).map((n) => `<option value="${esc(n.id)}"${n.id === this.netId ? " selected" : ""}>${esc(n.name)}</option>`).join("") || `<option value="">—</option>`}</select></div>
-      <span class="sre-term-dim">${net ? L("SRE.Net.EditorCount", { n: Object.keys(net.nodes).length }) : ""}</span>
+        <select data-ed="pickNet">${Object.values(all).map((n) => `<option value="${esc(n.id)}"${n.id === this.netId ? " selected" : ""}>${esc(n.name)} · ${esc(L("SRE.Net.EditorCount", { n: Object.keys(n.nodes ?? {}).length }))} · ${esc(L("SRE.Matrix.Rating"))} ${num(n.rating, 3)}</option>`).join("") || `<option value="">—</option>`}</select></div>
       <span class="spacer"></span>
       <button type="button" data-ed="newNet">+ ${esc(L("SRE.Net.NewNetwork"))}</button>
       <button type="button" data-ed="preset">${esc(L("SRE.Net.InsertPreset"))}</button>
@@ -115,6 +114,10 @@ class NetEditor extends ApplicationV2 {
         <label class="chk"><input type="checkbox" data-node-f="own"${node.own ? " checked" : ""}> ${esc(L("SRE.Net.Own"))}</label>
         ${node.own ? `<label>${esc(L("SRE.Matrix.Rating"))} <input type="number" class="short" min="1" max="12" data-node-f="rating" value="${num(node.rating, 1)}"></label>` : ""}
       </div>
+      <h4>${esc(L("SRE.Net.Links"))}</h4>
+      ${N.linksOf(net, node.id).map((x) => `<div class="row link" data-link-row="${x.index}"><span>${esc(node.name)} ↔ <b>${esc(x.other.name)}</b></span>
+        <button type="button" data-ed="toggleLink" class="${x.hidden ? "on" : ""}">${esc(L(x.hidden ? "SRE.Net.LinkHidden" : "SRE.Net.LinkVisible"))}</button>
+        <button type="button" class="danger" data-ed="delLink">×</button></div>`).join("") || `<em>${esc(L("SRE.Net.NoLinks"))}</em>`}
       <h4>${esc(L("SRE.Net.Controls"))} <button type="button" data-ed="addControl">+</button></h4>
       ${(node.controls ?? []).map(controlRow).join("") || `<em>${esc(L("SRE.Net.NoControls"))}</em>`}
       <h4>${esc(L("SRE.Net.Files"))} <button type="button" data-ed="addFile">+</button></h4>
@@ -204,11 +207,12 @@ class NetEditor extends ApplicationV2 {
   async #click(what, button) {
     const net = this.draft;
     const node = net?.nodes?.[this.nodeId];
-    const row = button.closest("[data-control], [data-file]");
+    const row = button.closest("[data-control], [data-file], [data-link-row]");
+    const names = () => Object.values(networks()).map((n) => n.name);
     const id = () => foundry.utils.randomID(8);
     switch (what) {
       case "newNet": {
-        const fresh = N.newNetwork(id(), L("SRE.Net.NewNetwork"));
+        const fresh = N.newNetwork(id(), N.uniqueName(L("SRE.Net.NewNetwork").toUpperCase(), names()));
         this.netId = fresh.id;
         this.nodeId = "root";
         await saveNetwork(fresh);
@@ -216,6 +220,7 @@ class NetEditor extends ApplicationV2 {
       }
       case "preset": {
         const fresh = N.presetOffice(id(), L);
+        fresh.name = fresh.nodes.root.name = N.uniqueName(fresh.name, names());
         this.netId = fresh.id;
         this.nodeId = "root";
         await saveNetwork(fresh);
@@ -234,12 +239,21 @@ class NetEditor extends ApplicationV2 {
         return openTerminal(actor, net.id, this.nodeId);
       }
       case "addNode": {
-        const n = N.newNode(id(), { name: L("SRE.Net.Node").toUpperCase(), x: 60 + Object.keys(net.nodes).length * 30, y: 320 });
+        // No silent link: the new node stands next to the selected one and the GM links it on purpose.
+        const name = N.uniqueName(L("SRE.Net.Node").toUpperCase(), Object.values(net.nodes).map((x) => x.name));
+        const n = N.newNode(id(), { name, x: node ? num(node.x) + 180 : 60, y: node ? num(node.y) + 90 : 320 });
         net.nodes[n.id] = n;
-        if (node) net.links.push({ a: node.id, b: n.id, hidden: false });
         this.nodeId = n.id;
         break;
       }
+      case "toggleLink": {
+        const l = net.links[Number(row.dataset.linkRow)];
+        if (l) l.hidden = !l.hidden;
+        break;
+      }
+      case "delLink":
+        net.links.splice(Number(row.dataset.linkRow), 1);
+        break;
       case "delNode":
         if (!node || Object.keys(net.nodes).length <= 1) return;
         delete net.nodes[node.id];

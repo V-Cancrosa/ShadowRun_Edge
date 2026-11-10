@@ -697,5 +697,9 @@ console.log("blast & summoning OK");
   assert.equal(N.findByName([{ id: "a", label: "Unlock 13" }], "unlock", "label").id, "a");
   // Tidy drops broken and duplicate links.
   assert.equal(N.tidy({ ...net, links: [...net.links, { a: "root", b: "nope" }, { a: "lift", b: "root" }] }).links.length, net.links.length);
+  // Unique names and a node's own link list.
+  assert.equal(N.uniqueName("HOST", ["host", "HOST 2"]), "HOST 3");
+  assert.equal(N.uniqueName("LAB", ["HOST"]), "LAB");
+  assert.deepEqual(N.linksOf(net, "lock").map((x) => [x.other.id, x.hidden]), [["root", false], ["files", true]]);
   console.log("matrix networks OK");
 }

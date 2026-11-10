@@ -255,16 +255,18 @@ export class MatrixTerminal extends ApplicationV2 {
     const xs = all.map((n) => n.x);
     const ys = all.map((n) => n.y);
     const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
-    const W = 200;
+    // One coordinate system for lines and labels: x in % of the map's width, y in px. (A stretched viewBox let lines
+    // drift away from the labels, so a line could seem to join nodes it does not.)
     const H = 190;
-    const px = (x) => 28 + ((x - x0) / Math.max(1, x1 - x0)) * (W - 56);
-    const py = (y) => 16 + ((y - y0) / Math.max(1, y1 - y0)) * (H - 36);
+    const r = (v) => Math.round(v * 10) / 10;
+    const px = (x) => r(14 + ((x - x0) / Math.max(1, x1 - x0)) * 72);
+    const py = (y) => r(16 + ((y - y0) / Math.max(1, y1 - y0)) * (H - 36));
     const at = Object.fromEntries(map.nodes.map((n) => [n.id, n]));
-    const lines = map.links.map((l) => `<line x1="${px(at[l.a].x)}" y1="${py(at[l.a].y)}" x2="${px(at[l.b].x)}" y2="${py(at[l.b].y)}"/>`).join("")
-      + map.stubs.map((st) => `<line class="stub" x1="${px(at[st.from].x)}" y1="${py(at[st.from].y)}" x2="${px(st.x)}" y2="${py(st.y)}"/>`).join("");
-    const nodes = map.nodes.map((n) => `<button type="button" class="${n.kind}${n.current ? " current" : ""}" style="left:${px(n.x)}px;top:${py(n.y)}px" data-term-connect="${esc(n.id)}" data-tooltip="${esc(n.name)}">${esc(n.name)}</button>`).join("")
-      + map.stubs.map((st) => `<span class="stub" style="left:${px(st.x)}px;top:${py(st.y)}px">?</span>`).join("");
-    return `<div class="sre-term-map" style="height:${H}px"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>${nodes}</div><small>${esc(L("SRE.Net.MapHint"))}</small>`;
+    const line = (a, b, cls = "") => `<line${cls ? ` class="${cls}"` : ""} x1="${px(a.x)}%" y1="${py(a.y)}" x2="${px(b.x)}%" y2="${py(b.y)}"/>`;
+    const lines = map.links.map((l) => line(at[l.a], at[l.b])).join("") + map.stubs.map((st) => line(at[st.from], st, "stub")).join("");
+    const nodes = map.nodes.map((n) => `<button type="button" class="${n.kind}${n.current ? " current" : ""}" style="left:${px(n.x)}%;top:${py(n.y)}px" data-term-connect="${esc(n.id)}" data-tooltip="${esc(n.name)}">${esc(n.name)}</button>`).join("")
+      + map.stubs.map((st) => `<span class="stub" style="left:${px(st.x)}%;top:${py(st.y)}px">?</span>`).join("");
+    return `<div class="sre-term-map" style="height:${H}px"><svg width="100%" height="${H}" aria-hidden="true">${lines}</svg>${nodes}</div><small>${esc(L("SRE.Net.MapHint"))}</small>`;
   }
 
   /** The device's ordinary screen: what any user sees. Controls without an access level work from here. */

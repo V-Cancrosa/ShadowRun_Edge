@@ -1,5 +1,21 @@
 [
   {
+    "version": "0.44.2",
+    "date": "2026-11-10",
+    "changes": [
+      "Mapa sieci w terminalu: linie i nazwy węzłów mają teraz jeden układ współrzędnych, więc linia zawsze łączy dokładnie te węzły, które są połączone (wcześniej rozciągnięta grafika potrafiła rozjechać linie względem nazw).",
+      "Edytor sieci: „+ Węzeł” nie łączy już nowego węzła po cichu z zaznaczonym — stawia go obok, a połączenie robisz świadomie przez „Połącz z…”.",
+      "Edytor sieci: w panelu węzła nowa sekcja „Połączenia” — lista wszystkich połączeń węzła z przełącznikiem jawne/ukryte i usuwaniem. Połączenie schowane pod innym węzłem nie umknie, a węzły na planszy są półprzezroczyste, więc widać linie pod nimi.",
+      "Edytor sieci: nowa sieć i wstawiony szablon dostają niepowtarzalną nazwę (np. „BIURO-HOST 2”), a lista sieci pokazuje liczbę węzłów i ocenę — dwie sieci o tej samej nazwie nie pomylą się już ze sobą."
+    ],
+    "changes_en": [
+      "Terminal network map: lines and node names now share one coordinate system, so a line always joins exactly the nodes that are linked (a stretched drawing could shift lines away from the names).",
+      "Network editor: “+ Node” no longer silently links the new node to the selected one; it places it beside it and you link it on purpose with “Link to…”.",
+      "Network editor: the node panel has a new “Links” section listing every link of the node with a shown/hidden switch and delete. A link hidden under another node can't slip by, and nodes on the board are semi-transparent so lines under them show.",
+      "Network editor: a new network and an inserted preset get a unique name (e.g. “OFFICE-HOST 2”), and the network list shows node count and rating, so two networks with the same name are no longer confused."
+    ]
+  },
+  {
     "version": "0.44.1",
     "date": "2026-11-03",
     "changes": [

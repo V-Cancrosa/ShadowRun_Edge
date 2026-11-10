@@ -139,6 +139,21 @@ export function presetOffice(id, L = (k) => k) {
   return net;
 }
 
+/** A network name not taken yet: "HOST", then "HOST 2", "HOST 3"… */
+export function uniqueName(name, taken = []) {
+  const have = new Set(taken.map((n) => String(n ?? "").trim().toLowerCase()));
+  if (!have.has(String(name).trim().toLowerCase())) return name;
+  let i = 2;
+  while (have.has(`${name} ${i}`.toLowerCase())) i++;
+  return `${name} ${i}`;
+}
+
+/** The links of one node, for the editor's list: [{ index, other, hidden }]. */
+export function linksOf(net, nodeId) {
+  return (net.links ?? []).map((l, index) => ({ index, l })).filter(({ l }) => l.a === nodeId || l.b === nodeId)
+    .map(({ index, l }) => ({ index, other: net.nodes?.[l.a === nodeId ? l.b : l.a] ?? null, hidden: !!l.hidden })).filter((x) => x.other);
+}
+
 /** Cleans a network after editing: drops links to missing nodes and duplicate links. */
 export function tidy(net) {
   const seen = new Set();
