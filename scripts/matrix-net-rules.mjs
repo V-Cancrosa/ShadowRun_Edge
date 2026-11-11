@@ -57,10 +57,21 @@ export function scan(net, nodeId, known = []) {
   return neighbors(net, nodeId).filter((n) => !n.hidden && !have.has(n.node.id)).map((n) => n.node.id);
 }
 
-/** What a successful Matrix Perception from a node adds: its hidden neighbors. */
+/** The key a found link is remembered by in the known list ("~a|b", ids sorted). */
+export const linkKey = (l) => `~${[l.a, l.b].sort().join("|")}`;
+
+/** What a successful Matrix Perception from a node adds: its hidden neighbors and the hidden links to them. */
 export function reveal(net, nodeId, known = []) {
   const have = new Set(known);
-  return neighbors(net, nodeId).filter((n) => n.hidden && !have.has(n.node.id)).map((n) => n.node.id);
+  const nodes = neighbors(net, nodeId).filter((n) => n.hidden && !have.has(n.node.id)).map((n) => n.node.id);
+  const links = (net.links ?? []).filter((l) => l.hidden && (l.a === nodeId || l.b === nodeId) && net.nodes?.[l.a] && net.nodes?.[l.b] && !have.has(linkKey(l))).map(linkKey);
+  return [...new Set(nodes)].concat(links);
+}
+
+/** Known ids with the given nodes / link keys taken out (the GM hid them again). */
+export function forget(known = [], ids = []) {
+  const drop = new Set(ids);
+  return known.filter((k) => !drop.has(k));
 }
 
 /** The map a persona sees: known nodes, links between two known nodes, and a "?" stub per unknown visible neighbor. */
@@ -73,7 +84,8 @@ export function visibleMap(net, known = [], current = null) {
     const a = net.nodes?.[l.a];
     const b = net.nodes?.[l.b];
     if (!a || !b) continue;
-    if (have.has(a.id) && have.has(b.id)) links.push({ a: a.id, b: b.id });
+    // A hidden link shows once found: its key is known, or it leads to a hidden node that was found through it.
+    if (have.has(a.id) && have.has(b.id)) { if (!l.hidden || have.has(linkKey(l)) || a.hidden || b.hidden) links.push({ a: a.id, b: b.id }); }
     else if (!l.hidden && (have.has(a.id) !== have.has(b.id))) {
       const [from, to] = have.has(a.id) ? [a, b] : [b, a];
       if (!to.hidden) stubs.push({ from: from.id, x: num(to.x), y: num(to.y) });

@@ -681,7 +681,14 @@ console.log("blast & summoning OK");
   // Scan finds visible neighbors; hidden ones (a hidden link or node) need Matrix Perception.
   assert.deepEqual(N.scan(net, "root", ["root"]).sort(), ["cam", "lift", "lock"]);
   assert.deepEqual(N.scan(net, "lock", ["lock", "root"]), []);
-  assert.deepEqual(N.reveal(net, "lock", ["lock"]), ["files"]);
+  assert.deepEqual(N.reveal(net, "lock", ["lock"]), ["files", "~files|lock"]);
+  // A secret link between two visible nodes stays off the map until found; hiding again makes personas forget.
+  const secret = { ...net, links: [...net.links, { a: "lift", b: "cam", hidden: true }] };
+  assert.equal(N.visibleMap(secret, ["lift", "cam"]).links.length, 0);
+  assert.deepEqual(N.reveal(secret, "lift", ["lift", "cam", "root"]), ["~cam|lift"]);
+  assert.equal(N.visibleMap(secret, ["lift", "cam", "~cam|lift"]).links.length, 1);
+  assert.equal(N.visibleMap(net, ["lock", "files"]).links.length, 1, "a found hidden node shows its hidden link");
+  assert.deepEqual(N.forget(["root", "lift", "~cam|lift"], ["root", "~cam|lift"]), ["lift"]);
   // The map: known nodes, links between known ones, "?" stubs for visible unknown neighbors, nothing for hidden ones.
   const map = N.visibleMap(net, ["root", "lift"], "lift");
   assert.equal(map.nodes.length, 2);

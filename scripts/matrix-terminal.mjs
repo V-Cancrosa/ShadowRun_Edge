@@ -60,6 +60,22 @@ async function learn(actor, netId, ids) {
   return add;
 }
 
+/**
+ * The GM hid a node or a link again: every persona that had found it forgets it (world actors and unlinked tokens on
+ * the scenes). GM only; the open terminals re-render through updateActor.
+ */
+export async function forgetEverywhere(netId, ids) {
+  if (!game.user.isGM || !ids?.length) return;
+  const actors = new Set(game.actors ?? []);
+  for (const scene of game.scenes ?? []) for (const t of scene.tokens ?? []) if (!t.actorLink && t.actor) actors.add(t.actor);
+  for (const actor of actors) {
+    const known = actor.getFlag?.(MODULE_ID, "netKnown")?.[netId];
+    if (!known?.length) continue;
+    const left = N.forget(known, ids);
+    if (left.length !== known.length) await actor.setFlag(MODULE_ID, "netKnown", { ...actor.getFlag(MODULE_ID, "netKnown"), [netId]: left });
+  }
+}
+
 // ───── Effects on the scene: run by the active GM ─────
 
 /** A terminal operation that changes the world: a node's control, or revealing hidden nodes. */
@@ -79,7 +95,8 @@ async function gmRun(op) {
     const ids = N.reveal(net, node.id, knownOf(actor, net.id));
     const all = { ...(actor.getFlag(MODULE_ID, "netKnown") ?? {}), [net.id]: [...knownOf(actor, net.id), ...ids] };
     await actor.setFlag(MODULE_ID, "netKnown", all);
-    return note(actor, ids.length ? L("SRE.Net.Revealed", { list: ids.map((i) => net.nodes[i].name).join(", ") }) : L("SRE.Net.NothingHidden"));
+    const label = (k) => (k.startsWith("~") ? k.slice(1).split("|").map((i) => net.nodes[i]?.name ?? "?").join(" ↔ ") : net.nodes[k]?.name ?? "?");
+    return note(actor, ids.length ? L("SRE.Net.Revealed", { list: ids.map(label).join(", ") }) : L("SRE.Net.NothingHidden"));
   }
   const control = node.controls?.find((c) => c.id === op.control);
   if (!control) return;

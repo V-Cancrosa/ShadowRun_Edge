@@ -5,7 +5,7 @@
  * shown to players by the Matrix terminal (scripts/matrix-terminal.mjs).
  */
 import * as N from "./matrix-net-rules.mjs";
-import { networks, saveNetwork, deleteNetwork, openTerminal } from "./matrix-terminal.mjs";
+import { networks, saveNetwork, deleteNetwork, openTerminal, forgetEverywhere } from "./matrix-terminal.mjs";
 
 const MODULE_ID = "shadowrun-edge";
 const L = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
@@ -156,6 +156,7 @@ class NetEditor extends ApplicationV2 {
       node[k] = el.type === "checkbox" ? el.checked : el.type === "number" ? num(el.value, 1) : el.value;
       if (k === "name" && node.kind === "host" && node.id === "root") net.name = node.name;
       commit();
+      if (k === "hidden" && node.hidden) forgetEverywhere(net.id, [node.id]);
     }));
     const bindRows = (sel, list) => content.querySelectorAll(sel).forEach((row) => {
       const item = list[Number(row.dataset.control ?? row.dataset.file)];
@@ -169,7 +170,7 @@ class NetEditor extends ApplicationV2 {
     bindRows("[data-file]", node?.files ?? []);
     // Links: click toggles hidden, right-click removes.
     content.querySelectorAll("line[data-link]").forEach((ln) => {
-      ln.addEventListener("click", () => { const l = net.links[Number(ln.dataset.link)]; l.hidden = !l.hidden; commit(); });
+      ln.addEventListener("click", () => { const l = net.links[Number(ln.dataset.link)]; l.hidden = !l.hidden; commit(); if (l.hidden) forgetEverywhere(net.id, [N.linkKey(l)]); });
       ln.addEventListener("contextmenu", (e) => { e.preventDefault(); net.links.splice(Number(ln.dataset.link), 1); commit(); });
     });
     // Nodes: click selects (or ends a link), drag moves.
@@ -249,6 +250,7 @@ class NetEditor extends ApplicationV2 {
       case "toggleLink": {
         const l = net.links[Number(row.dataset.linkRow)];
         if (l) l.hidden = !l.hidden;
+        if (l?.hidden) forgetEverywhere(net.id, [N.linkKey(l)]);
         break;
       }
       case "delLink":

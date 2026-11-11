@@ -1,5 +1,17 @@
 [
   {
+    "version": "0.44.3",
+    "date": "2026-11-11",
+    "changes": [
+      "Edytor sieci: zaznaczenie „ukryty” przy węźle (albo przełączenie połączenia na ukryte) zabiera go z mapy wszystkim postaciom, które już go odkryły — znów trzeba go znaleźć percepcją Matrycy. Wcześniej raz odkryty węzeł zostawał na mapie terminala na zawsze.",
+      "Percepcja Matrycy odkrywa teraz także ukryte połączenia między węzłami, które postać już zna; dopóki ich nie znajdzie, takie tajne połączenie nie jest rysowane na mapie terminala."
+    ],
+    "changes_en": [
+      "Network editor: ticking “hidden” on a node (or switching a link to hidden) takes it off the map of every persona that had found it — it must be found again with Matrix Perception. Before, a node once found stayed on the terminal map for good.",
+      "Matrix Perception now also finds hidden links between nodes the persona already knows; until then such a secret link is not drawn on the terminal map."
+    ]
+  },
+  {
     "version": "0.44.2",
     "date": "2026-11-10",
     "changes": [
