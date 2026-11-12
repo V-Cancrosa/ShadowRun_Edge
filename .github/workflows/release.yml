@@ -54,7 +54,8 @@ jobs:
         run: |
           jq --arg v "${TAG#v}" \
              --arg d "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/shadowrun-edge.zip" \
-             '.version = $v | .download = $d' module.json > module.tmp && mv module.tmp module.json
+             --arg t "${TAG}" \
+             '.version = $v | .download = $d | .media |= ((. // []) | map(.url |= sub("/main-tt074g/"; "/" + $t + "/")))' module.json > module.tmp && mv module.tmp module.json
 
       - name: Build zip
         if: steps.version.outputs.skip != 'true'

@@ -1,8 +1,18 @@
 {
   "id": "shadowrun-edge",
   "title": "Shadowrun Edge",
-  "description": "Moduł do systemu Shadowrun 6th Edition (shadowrun6-eden): polskie tłumaczenie, Karty Edge (postać, NPC, duch, pojazd, host), katalog sprzętu, magii i cech, kreatory postaci i przedmiotów, stany, toksyny, leczenie, granaty, duchy, Matrix, pojazdy i rozwój za Karmę — bez zmian w kodzie systemu. / Companion module for Shadowrun 6th Edition: Edge sheets, a catalog of gear, magic and qualities, creators, statuses, toxins, healing, grenades, spirits, Matrix, vehicles and Karma advancement; Polish translation, English UI.",
-  "version": "0.44.3",
+  "description": "<p><strong>Shadowrun Edge</strong> — moduł do systemu <em>Shadowrun 6th Edition</em> (shadowrun6-eden), który działa jak system w module: własne karty, rzuty, Edge, czat i przepływy walki, a system zostaje magazynem danych. Bez zmian w kodzie systemu.</p><ul><li><strong>Karty Edge</strong>: postać, NPC, duch, sprite, pojazd, host — z zakładką Efektów</li><li><strong>Silnik rzutów</strong>: okno puli, Edge, obrona, odporność, obrażenia, inicjatywa</li><li><strong>Katalog</strong> sprzętu, magii i cech; kreatory postaci i przedmiotów</li><li><strong>Matryca</strong>: terminal z mapą sieci i edytor węzłów dla MG</li><li>Stany, toksyny, leczenie, granaty, duchy, pojazdy, rozwój za Karmę</li><li>Polskie tłumaczenie, interfejs angielski; współpraca z Dice So Nice, Dice Tray, Carousel, Sequencer</li></ul><p><em>EN:</em> companion module that turns Shadowrun 6E into a full experience: Edge sheets, own dice engine, gear/magic/qualities catalog, creators, statuses, toxins, healing, grenades, spirits, Matrix terminal and network editor, vehicles and Karma advancement. Polish translation, English UI.</p>",
+  "media": [
+    {
+      "type": "cover",
+      "url": "https://raw.githubusercontent.com/V-Cancrosa/ShadowRun_Edge/main-tt074g/assets/media/cover.webp"
+    },
+    {
+      "type": "thumbnail",
+      "url": "https://raw.githubusercontent.com/V-Cancrosa/ShadowRun_Edge/main-tt074g/assets/media/thumbnail.webp"
+    }
+  ],
+  "version": "0.44.4",
   "compatibility": {
     "minimum": "13",
     "verified": "14"
